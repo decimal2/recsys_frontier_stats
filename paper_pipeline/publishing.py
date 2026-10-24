@@ -78,10 +78,6 @@ li{margin:5px 0}
 .insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
 .insight h4{margin-top:4px;color:var(--accent)}
 .insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
-details{margin-top:18px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
-summary{cursor:pointer;color:var(--accent)}
-blockquote{margin:8px 0 14px;padding:10px 14px;background:var(--bg);border-left:3px solid var(--line);
-  border-radius:0 8px 8px 0;overflow-wrap:anywhere;color:var(--muted)}
 .topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
 .topic a{color:var(--topic-link)}
 .archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:20px}
@@ -146,11 +142,6 @@ def source_links(ids, by_id):
                       if i in by_id else escape(i) for i in ids)
 
 
-def evidence_link(paper_id, ref, evidence):
-    label = "[" + escape(ref) + "]" if ref else ""
-    return f'<a href="#{anchor(paper_id)}-{escape(ref)}">{label}</a>' if ref and ref in evidence else label
-
-
 def render_daily(payload):
     items = payload["items"]
     by_id = {i["paper"]["arxiv_id"]: i for i in items}
@@ -208,23 +199,20 @@ def render_daily(payload):
         for result in analysis["key_results"]:
             ref = result["evidence_id"]
             lines.append(f"- {md(result['finding'])} [{md(ref)}]")
-            results.append(f'<li>{escape(result["finding"])} {evidence_link(paper["arxiv_id"], ref, evidence)}</li>')
+            results.append(f'<li>{escape(result["finding"])}</li>')
         if not results:
             lines += ["未提取到可引用的实验结果。"]
         lines += ["", "**工程 insight（分析推断）**", ""]
         for insight in analysis["insights"]:
             lines.append("- " + md(insight["idea"]) + " [" + ", ".join(md(r) for r in insight["evidence_ids"]) + "]")
-            refs = " ".join(evidence_link(paper["arxiv_id"], r, evidence) for r in insight["evidence_ids"])
-            insights.append(f'<li>{escape(insight["idea"])} {refs}</li>')
+            insights.append(f'<li>{escape(insight["idea"])}</li>')
         lines += ["", "**局限与阅读提醒**", ""]
         for limitation in analysis["limitations"]:
             lines.append("- " + md(limitation))
             limitations.append('<li>' + escape(limitation) + '</li>')
         lines += ["", "**证据定位**", ""]
-        references = []
         for key, ev in evidence.items():
             lines.append(f"- {md(key)} · {md(ev['block_id'])}：{md(ev['quote'])}")
-            references.append(f'<div id="{anchor(paper["arxiv_id"])}-{escape(key)}"><b>{escape(key)}</b> · {escape(ev["block_id"])}<blockquote>{escape(ev["quote"])}</blockquote></div>')
         lines += ["", "提取范围：" + item["insight"]["extraction"]["note"], ""]
         search_text = " ".join([paper["title"], analysis["title_zh"], organization_text,
                                 *item["companies"], *item["selection"]["tags"]])
@@ -235,8 +223,7 @@ def render_daily(payload):
 <h4>研究问题</h4><p>{escape(analysis['problem'])}</p><h4>核心方法</h4><p>{escape(analysis['method'])}</p>
 <h4>实验结果</h4><ul>{''.join(results) or '<li>未提取到可引用的实验结果。</li>'}</ul>
 <div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul>{''.join(insights)}</ul></div>
-<h4>局限与阅读提醒</h4><ul>{''.join(limitations)}</ul>
-<details><summary>证据定位与原文短片段</summary>{''.join(references)}<p class="muted">{escape(item['insight']['extraction']['note'])}</p></details></article>''')
+<h4>局限与阅读提醒</h4><ul>{''.join(limitations)}</ul></article>''')
     topic = payload["synthesis"].get("topic")
     topic_html = '<p class="muted">专题暂未生成。</p>'
     lines += ["## 今日专题", ""]
@@ -266,7 +253,7 @@ def publish_index(connection, directory):
                                 + " " + " ".join(item["companies"]) for item in edition["items"]] + teams)
         team_summary = " · ".join(teams[:4]) + (f" 等 {len(teams)} 家机构" if len(teams) > 4 else "")
         cards.append(f'<a class="edition" href="{escape(edition["date"])}.html" data-search="{escape(search_text)}"><span class="eyebrow">{escape(edition["date"])}</span><h2>{len(edition["items"])} 篇全文解读</h2><p>{escape(titles)}</p><span class="muted">{escape(team_summary)} · {escape(edition["status"])}</span></a>')
-    empty = '<div class="empty"><h2>从论文原文，到值得读的日报。</h2><p>配置 DeepSeek、Kimi 或 GLM 官方 API 后运行 daily。</p><p>系统会优先关注推荐与检索的大团队工作，读取全文并生成有证据定位的中文解读。</p><div class="steps">发现论文 → 全文提取 → Insight → 样本观察 → 日报归档</div><p class="muted">当前没有已生成的日报；这里没有填充虚构论文或模型结论。</p></div>'
+    empty = '<div class="empty"><h2>从论文原文，到值得读的日报。</h2><p>配置 DeepSeek、Kimi 或 GLM 官方 API 后运行 daily。</p><p>系统会优先关注推荐与检索的大团队工作，读取全文并生成结构化中文解读。</p><div class="steps">发现论文 → 全文提取 → Insight → 样本观察 → 日报归档</div><p class="muted">当前没有已生成的日报；这里没有填充虚构论文或模型结论。</p></div>'
     body = '<p class="lede">追踪推荐与检索的研究进展，理解方法背后的取舍。</p><input id="search" type="search" placeholder="按论文标题、机构查找日报…" aria-label="搜索历史日报">'
     body += '<div class="archive">' + (''.join(cards) if cards else empty) + '</div>'
     atomic_write(directory / "index.html", page("研究日报", body, "DAILY RESEARCH / 历史归档"))

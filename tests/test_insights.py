@@ -342,7 +342,7 @@ class InsightTests(unittest.TestCase):
             self.assertIn("unknown-paper&lt;script&gt;", webpage)
             self.assertNotIn('href="#paper-unknown', webpage)
             self.assertNotIn('-E999"', webpage)
-            self.assertIn("[E999]", webpage)
+            self.assertNotIn("[E999]", webpage)
             self.assertNotIn("已程序校验", payload["note"])
         finally:
             connection.close()
