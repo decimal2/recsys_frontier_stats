@@ -50,6 +50,8 @@ class PaperPagesTests(unittest.TestCase):
         self.assertIn('href="#intro"', page)
         self.assertIn('href="../../daily/index.html"', page)
         self.assertIn("中文全文测试", page)
+        self.assertNotIn("paper.zh.pdf", page)
+        self.assertFalse((daily.parent / "papers/2510.26104/paper.zh.pdf").exists())
         self.assertIn("PaperA", Path(result["homepage"]).read_text())
         self.assertNotIn("PaperB", Path(result["library"]).read_text())
 
@@ -113,13 +115,15 @@ class PaperPagesTests(unittest.TestCase):
             html = (self.output / "site/papers/2510.26104/index.html").read_text()
             self.assertIn("<math>", html)
             self.assertIn("<table>", html)
-            self.assertIn("已有中文 PDF", html)
+            self.assertNotIn("PDF", html)
             self.assertNotIn("页中文原稿", html)
             self.assertEqual(build_papers(self.source, self.output, self.catalog)["cached"], ["2510.26104"])
             (self.source / record["zh_pdf"]).write_bytes(b"updated PDF, unchanged TeX")
+            legacy_pdf = self.output / "site/papers/2510.26104/paper.zh.pdf"
+            legacy_pdf.write_bytes(b"old published PDF")
             self.assertEqual(build_papers(self.source, self.output, self.catalog)["cached"], ["2510.26104"])
-            self.assertEqual((self.output / "site/papers/2510.26104/paper.zh.pdf").read_bytes(),
-                             b"updated PDF, unchanged TeX")
+            self.assertFalse(legacy_pdf.exists())
+            self.assertEqual((self.source / record["zh_pdf"]).read_bytes(), b"updated PDF, unchanged TeX")
             self.assertEqual(renderer.call_count, 1)
             (project / "body.tex").write_text("中文正文已更新")
             self.assertEqual(build_papers(self.source, self.output, self.catalog)["built"], ["2510.26104"])

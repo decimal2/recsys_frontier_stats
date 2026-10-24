@@ -43,7 +43,7 @@ python -m http.server 8080 --bind 127.0.0.1 -d reports/site
 - 公司归属只能来自作者署名机构(`selection.py` 只做公司匹配,关键词打分体系已删除,不要恢复);规则文本只写在 `prompts/company_rule.txt`,其他 prompt 用 `{company_rule}` 占位符注入。
 - `publishing.py` 渲染日报、公共导航和双专栏首页；`paper_pages.py` 管理论文目录、页面与离线构建；`tex_html.py` 使用 LaTeXML 将翻译的源码转换为原生 MathML、HTML 表格和逐条文献引用；`paper_html.py` 保留旧中文 PDF 转换能力。日报不得覆盖 `site/papers/`。
 - `paper_catalog.json` 登记中文论文和英文 arXiv 版本，`papers` 不运行检索、不调用 LLM、不修改日报数据库。首批三篇使用 `tex_project` + `tex_entry`，源码和中文工程保留在 `/tmp/recsys-tex-html-bdqa9f70/`；配置的 TeX 缺失应报错，不能静默回退。旧 PDF 模式缺中文时跳过。必须保留全文、公式、图表、参考文献与附录，不能用 insight 替代。
-- CSS 内联，单篇图表和中文 PDF 位于 `site/papers/<id>/`。发布时递归复制 `reports/site/.` 到 `docs/`，不要只复制根目录 HTML；正文转换缓存 `reports/paper_cache/` 不发布。run 级报告仍已删除。
+- CSS 内联，单篇 HTML 和图形资源位于 `site/papers/<id>/`。论文专栏不复制或保留下载用 PDF，构建时删除旧 `paper.zh.pdf` / `paper_zh.pdf` 副本。发布时递归复制 `reports/site/.` 到 `docs/`，不要只复制根目录 HTML；正文转换缓存 `reports/paper_cache/` 不发布。run 级报告仍已删除。
 - CLI 进库前抢 fcntl 文件锁(`cli.py database_lock`),进锁后把残留 `status='running'` 的 run 标记为 failed。
 - `daily`/`digest` 的 partial/empty/insufficient/budget_exhausted 状态映射为退出码 1。
 

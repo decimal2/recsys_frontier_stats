@@ -73,17 +73,15 @@ def render_paper(paper, document):
     if not tex_source and document["stats"].get("pages"):
         metadata.append(f'{document["stats"]["pages"]} 页中文原稿')
     labels = " · ".join(metadata)
-    pdf_label = "已有中文 PDF" if tex_source else "中文 PDF"
-    pdf_link = f'<a href="paper.zh.pdf">{pdf_label}</a>' if paper.get("zh_pdf") else ""
     reading_note = "中文全文 · 章节、公式和参考文献支持直接跳转" if tex_source else "中文全文 · 公式与图表可点击查看大图"
     body = f'''<p class="paper-original-title">{escape(paper['title_en'])}</p>
 <p class="muted">{escape(labels)}</p>
 <div class="paper-actions"><a href="{escape(paper['arxiv_url'])}" target="_blank" rel="noopener">英文 arXiv ↗</a>
-{pdf_link}<a href="../index.html">全部论文</a></div>
+<a href="../index.html">全部论文</a></div>
 <p class="muted">{reading_note}</p>
 <div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
 <ol>{toc}</ol></details><article class="paper-fulltext" aria-label="论文全文">{document['body_html']}</article></div>
-<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a>{pdf_link}</div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
 <script>
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
@@ -144,14 +142,6 @@ def load_catalog(path):
         paper["arxiv_url"] = "https://arxiv.org/abs/" + identifier + paper["version"]
         seen.add(identifier)
     return papers
-
-
-def file_checksum(path):
-    digest = hashlib.sha256()
-    with Path(path).open("rb") as source:
-        for chunk in iter(lambda: source.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def project_checksum(directory):
@@ -244,12 +234,9 @@ def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json
                          "assets": sorted(path.name for path in assets.iterdir() if path.is_file()),
                          "document": document}, ensure_ascii=False))
             built.append(identifier)
-        if pdf_path and pdf_path.is_file():
-            published_pdf = destination / "paper.zh.pdf"
-            if not published_pdf.is_file() or file_checksum(pdf_path) != file_checksum(published_pdf):
-                shutil.copy2(pdf_path, published_pdf)
-        visible_paper = paper if pdf_path and pdf_path.is_file() else {key: value for key, value in paper.items() if key != "zh_pdf"}
-        atomic_write(destination / "index.html", render_paper(visible_paper, document))
+        atomic_write(destination / "index.html", render_paper(paper, document))
+        for legacy_pdf in ("paper.zh.pdf", "paper_zh.pdf"):
+            (destination / legacy_pdf).unlink(missing_ok=True)
         for warning in document["stats"].get("warnings", []):
             LOG.warning("%s 全文转换提示：%s", paper["short_name"], warning)
         public = {key: value for key, value in paper.items() if key not in {"zh_pdf", "tex_project", "tex_entry", "latexml_root"}}

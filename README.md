@@ -118,7 +118,8 @@ python -m http.server 8080 --bind 127.0.0.1 -d reports/site
 TeX 公式转换为浏览器原生 MathML，并保留对应的 TeX 标注；表格为可选择文字的 HTML 表格，
 图形使用源文件中的图片或矢量图。公式、图表和逐条参考文献均保留交叉引用。
 数学表达式、表格数据、图内文字、作者名与文献题名保留原文；标题、正文和图表说明译为中文。
-“已有中文 PDF”入口提供此前的中文稿对照，当前网页译文由 TeX 独立构建。
+论文专栏只发布 HTML 和必要的图形资源，不复制 PDF、不提供 PDF 下载入口。
+重新构建时会删除旧版页面目录中的 `paper.zh.pdf` / `paper_zh.pdf` 副本。
 
 `papers` 不调用模型、检索或日报数据库，不需要 API 密钥。转换缓存按整个 TeX 工程内容和转换器代码更新，
 重复执行会复用正文与图表，同时刷新页面样式、列表和导航。
@@ -156,7 +157,7 @@ git push origin main
 ```
 
 GitHub Pages 展示已生成的静态页面；采集和模型调用仍由 `pipeline.py daily` 执行。
-应递归复制整棵 `reports/site/`，以包含论文子目录、图表、中文 PDF 和目录 JSON。
+应递归复制整棵 `reports/site/`，以包含论文子目录、图表和目录 JSON。
 不需要上传 `.env`、数据库或 `reports/paper_cache/` 转换缓存。
 
 ## 目录
@@ -170,7 +171,7 @@ reports/daily/<日期>.md/.json  日报
 paper_catalog.json             中文论文目录（首批三篇）
 reports/site/                  双专栏首页与各期日报
 reports/site/daily/            日报归档
-reports/site/papers/           中文论文列表、全文、图表与中文 PDF
+reports/site/papers/           论文阅读列表、HTML 全文与图表
 reports/paper_cache/           中文正文转换缓存（不发布）
 docs/                          GitHub Pages 发布快照
 logs/<日期>/<时间>.log         每次运行的独立日志
