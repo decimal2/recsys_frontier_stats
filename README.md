@@ -195,9 +195,3 @@ logs/<日期>/<时间>.log         每次运行的独立日志
 CHROME_BIN="$(command -v google-chrome)" node tests/browser_audit.mjs \
   --site-dir docs --output-dir /tmp/paper-render-audit
 ```
-
-GitHub Actions 的 **Paper rendering** 会在相关页面、渲染代码或测试改动时自动运行。
-它按目录清单检查所有论文的 1440px / 390px 布局，检查表注与数据重叠、数字断行、意外溢出、
-超宽公式滚动、短公式基线，以及日期排序与筛选组合；失败时退出非零。
-在该次运行的 Artifacts 中下载 `paper-render-*`，查看 `report.json`、`geometry/` 和 `screenshots/`。
-单元测试、链接检查或 MathML 数量一致，均不能代替这些渲染检查。
