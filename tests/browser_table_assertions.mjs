@@ -4,7 +4,7 @@ export function collectTableGeometry() {
   const issues = [];
   const metrics = {tables: 0, outerTables: 0, nestedTables: 0, cells: 0, mergedCells: 0,
     numericCellsChecked: 0, numericTokensChecked: 0, horizontalScrollTables: 0, captionsChecked: 0,
-    highlightColorsChecked: 0};
+    highlightColorsChecked: 0, listingTextColorsChecked: 0};
   if (!article) return {issues: [{kind: 'paper_body_missing'}], metrics};
   const rect = element => {
     const r = element.getBoundingClientRect();
@@ -153,6 +153,42 @@ export function collectTableGeometry() {
     metrics.highlightColorsChecked++;
     if (contrast < 4.48) add('table_highlight_low_contrast', node.closest('.ltx_tabular'),
       {text: node.textContent.trim().slice(0, 100), foreground: style.color, background: style.backgroundColor, contrast});
+  }
+  const checkedListingNodes = new Set();
+  const listingFailures = new Map();
+  for (const [index, listing] of [...article.querySelectorAll('.ltx_listing')].entries()) {
+    if (!listing.style.backgroundColor || !rgb(getComputedStyle(listing).backgroundColor)) continue;
+    const walker = document.createTreeWalker(listing, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walker.nextNode())) {
+      if (!node.textContent.trim() || checkedListingNodes.has(node) ||
+          node.parentElement.closest('math,svg,annotation,script,style')) continue;
+      checkedListingNodes.add(node);
+      const range = document.createRange(); range.selectNodeContents(node);
+      if (![...range.getClientRects()].some(r => r.width && r.height)) continue;
+      const foregroundStyle = getComputedStyle(node.parentElement);
+      const foreground = rgb(foregroundStyle.color);
+      let background = null, backgroundStyle = null;
+      for (let parent = node.parentElement; parent; parent = parent.parentElement) {
+        backgroundStyle = getComputedStyle(parent).backgroundColor;
+        background = rgb(backgroundStyle);
+        if (background || parent === listing) break;
+      }
+      if (!foreground || !background) continue;
+      const fg = luminance(foreground), bg = luminance(background);
+      const contrast = (Math.max(bg, fg) + .05) / (Math.min(bg, fg) + .05);
+      metrics.listingTextColorsChecked++;
+      if (contrast < 4.48) {
+        const key = `${index}:${foregroundStyle.color}:${backgroundStyle}`;
+        if (listingFailures.has(key)) listingFailures.get(key).occurrences++;
+        else {
+          const issue = {kind: 'listing_text_low_contrast', selector: '.ltx_listing', listing: index,
+            text: node.textContent.trim().slice(0, 100), foreground: foregroundStyle.color,
+            background: backgroundStyle, contrast, occurrences: 1};
+          listingFailures.set(key, issue); issues.push(issue);
+        }
+      }
+    }
   }
   for (const caption of article.querySelectorAll('figcaption')) {
     const figure = caption.closest('figure');

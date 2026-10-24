@@ -1,4 +1,4 @@
-"""Adapt TeX table layout to a flowing HTML reader without changing its data."""
+"""Adapt TeX tables and explicitly shaded code to a readable HTML view."""
 import re
 
 from bs4 import BeautifulSoup, NavigableString
@@ -15,6 +15,7 @@ TABLE_STYLES = """
 .paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
 .paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
 .paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
+.paper-fulltext .ltx_listing.paper-table-ink-dark a,.paper-fulltext .ltx_listing.paper-table-ink-light a{color:inherit}
 """
 
 _TABLE_TAGS = (("ltx_tabular", "table"), ("ltx_thead", "thead"),
@@ -46,10 +47,20 @@ def _luminance(rgb):
 
 
 def _normalize_highlight_ink(article, factory):
-    for node in article.select(".ltx_tabular[style],.ltx_tabular [style]"):
+    for node in article.select(".ltx_tabular[style],.ltx_tabular [style],.ltx_listing[style],.ltx_listing [style]"):
         style = _style_values(node)
         background = _rgb(style.get("background-color", ""))
-        if background is None or node.find_parent("math") is not None:
+        if node.name == "svg" or node.find_parent(["math", "svg"]) is not None:
+            continue
+        # Source listings often set a light background only on their outer
+        # div. Keep readable keyword/comment colors; check an explicit token
+        # color against the nearest source background instead of the theme.
+        if background is None and "color" in style and node.find_parent(class_="ltx_listing"):
+            for parent in node.parents:
+                background = _rgb(_style_values(parent).get("background-color", ""))
+                if background is not None or "ltx_listing" in parent.get("class", []):
+                    break
+        if background is None:
             continue
         luminance = _luminance(background)
         foreground = _rgb(style.get("color", ""))
@@ -86,6 +97,7 @@ def _protected_content(article):
     return {
         "text": tuple(str(node) for node in article.descendants if isinstance(node, NavigableString)),
         "math": tuple(str(node) for node in article.find_all("math")),
+        "svg": tuple(str(node) for node in article.find_all("svg")),
         "ids": tuple(node["id"] for node in article.select("[id]")),
         "links": tuple((node.get("href"), tuple(sorted((key, str(value)) for key, value in node.attrs.items())))
                        for node in article.find_all("a")),

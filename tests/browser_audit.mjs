@@ -71,22 +71,23 @@ let browser, server;
 async function capture(page, name, selector, inlinePriority = null) {
   const path = join(output, 'screenshots', name + '.png');
   const result = await page.screenshot(path, selector);
-  report.screenshots.push({...result, file:relative(output, path)});
+  const entry={...result,file:relative(output,path)};report.screenshots.push(entry);
   if(inlineEvidenceEnabled && inlinePriority !== null) {
-    const jpeg = await page.call('Page.captureScreenshot', {format:'jpeg',quality:85,captureBeyondViewport:true,clip:result.clip});
-    inlineImages.push({name:name+'.jpg',priority:inlinePriority,data:jpeg.data});
+    const jpeg=await page.screenshotJpeg(result,75);
+    entry.jpeg={quality:jpeg.quality,beforeCapture:jpeg.beforeCapture,afterCapture:jpeg.afterCapture};
+    inlineImages.push({name:name+'.jpg',priority:inlinePriority,data:jpeg.data,quality:jpeg.quality});
   }
 }
 
 function emitInlineEvidence() {
-  const maxBytes=2_000_000;
+  const maxBytes=4_000_000;
   report.inlineEvidence={enabled:inlineEvidenceEnabled,maxBytes,emitted:[],skipped:[],imageLogBytes:0};
   if(!inlineEvidenceEnabled)return;
   // Reserve the final report and space for this small index. Image payloads
   // contain only screenshots of our public static reading pages.
   const budget=Math.max(0,maxBytes-Buffer.byteLength(JSON.stringify(report),'utf8')-20000);
   for(const image of inlineImages.sort((a,b)=>a.priority-b.priority||a.name.localeCompare(b.name))) {
-    const line=`PAPER_RENDER_IMAGE ${JSON.stringify({file:image.name,mime:'image/jpeg',base64:image.data})}`;
+    const line=`PAPER_RENDER_IMAGE ${JSON.stringify({file:image.name,mime:'image/jpeg',quality:image.quality,base64:image.data})}`;
     const bytes=Buffer.byteLength(line+'\n','utf8');
     if(report.inlineEvidence.imageLogBytes+bytes>budget) {report.inlineEvidence.skipped.push(image.name);continue;}
     console.log(line);
@@ -134,14 +135,14 @@ async function paperAudit(paper, width) {
     result.geometry = `geometry/${name}.json`; result.tables = tables.metrics; result.mathCount = math.mathCount;
     for (const example of cases.filter(c => c.id === paper.arxiv_id && (!c.widths || c.widths.includes(width)))) {
       const selector = example.selector || `[id=${JSON.stringify(example.target)}]`;
-      const priority=example.widths?0:width===390?1:2;
+      const priority=example.widths?0:width===390?1:3;
       await capture(page, `${example.name}-${width}-dark`, selector, priority);
       const scrolls = await page.eval(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),candidates=new Set([e,...e.querySelectorAll('*')]);
         for(let p=e.parentElement;p&&p.matches('article.paper-fulltext')===false;p=p.parentElement)candidates.add(p);
         return [...candidates].filter(s=>s.scrollWidth>s.clientWidth+2&&['auto','scroll'].includes(getComputedStyle(s).overflowX)).map(s=>{s.scrollLeft=s.scrollWidth;return {id:s.id,client:s.clientWidth,scroll:s.scrollWidth,scrollLeft:s.scrollLeft};});})()`);
       if (scrolls.length) {
         await page.settle();
-        await capture(page, `${example.name}-${width}-dark-scroll-end`, selector, priority+3);
+        await capture(page, `${example.name}-${width}-dark-scroll-end`, selector, width===390?2:4);
         await page.eval(`document.querySelectorAll('article.paper-fulltext *').forEach(e=>{if(e.scrollLeft)e.scrollLeft=0})`);
       }
       (result.focused || (result.focused=[])).push({name:example.name, selector, scrolls});

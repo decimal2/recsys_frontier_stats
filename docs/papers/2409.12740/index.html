@@ -213,9 +213,14 @@ li{margin:5px 0}
 .paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
 .paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
 .paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
+.paper-fulltext .ltx_listing.paper-table-ink-dark a,.paper-fulltext .ltx_listing.paper-table-ink-light a{color:inherit}
 
 .paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
 .paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
+.paper-fulltext svg.ltx_picture{background:#fff;color:#111;line-height:normal;overflow-wrap:normal;word-break:normal}
+.paper-fulltext svg.ltx_picture foreignObject{white-space:nowrap;line-height:normal;text-align:start}
+.paper-fulltext svg.ltx_picture foreignObject .ltx_minipage{white-space:normal}
+.paper-fulltext svg.ltx_picture foreignObject .ltx_p{margin:0;line-height:normal}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / HLLM</div><h1>HLLM：利用分层大语言模型进行物品与用户建模，增强序列推荐</h1><p class="paper-original-title">HLLM: Enhancing Sequential Recommendations via Hierarchical Large Language Models for Item and User Modeling</p>
@@ -1997,7 +2002,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <figure class="ltx_float ltx_float_algorithm ltx_framed ltx_framed_top" id="alg1">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_float"><span class="ltx_text ltx_font_bold">Algorithm 1</span> </span> 类 PyTorch 风格的时间戳处理伪代码。</figcaption><div class="ltx_flex_figure">
 <div class="ltx_flex_cell ltx_flex_size_1">
-<div class="ltx_listing ltx_figure_panel ltx_lst_language_python ltx_lst_numbers_left ltx_lstlisting ltx_listing" style="background-color:#FFFFFF;">
+<div class="ltx_listing ltx_figure_panel ltx_lst_language_python ltx_lst_numbers_left ltx_lstlisting ltx_listing paper-table-ink-dark" style="background-color:#FFFFFF;">
 <div class="ltx_listing_data"><a download="" href="data:text/plain;base64,Y2xhc3MgVFNFbWJlZGRpbmcobm4uTW9kdWxlKToKICAgIGRlZiBfX2luaXRfXyhzZWxmLCB0aW1lX251bT02LCB0aW1lX2RpbT01MTIsIHVzZXJfZGltPTIwNDgpOgogICAgICAgIHN1cGVyKCkuX19pbml0X18oKQogICAgICAgICMgQ29udHJvbCB0aGUgcHJlY2lzaW9uIG9mIHRpbWUsIHN1Y2ggYXMgNCB0byB0aGUgaG91ciwgYW5kIDYgdG8gdGhlIHNlY29uZC4KICAgICAgICBzZWxmLnRpbWVfbnVtID0gdGltZV9udW0KICAgICAgICBzZWxmLnRpbWVfZW1iZWRkaW5ncyA9IG5uLk1vZHVsZUxpc3Qobm4uRW1iZWRkaW5nKHgsIHRpbWVfZGltKSBmb3IgeCBpbiBbMjEwMCwgMTMsIDMyLCAyNCwgNjAsIDYwXSkKICAgICAgICAjIFByb2plY3Rpb24gZnJvbSB0aW1lX2RpbSB0byB1c2VyX2RpbQogICAgICAgIHNlbGYubWVyZ2VfdGltZSA9IE1MUCh0aW1lX2RpbSAqIHRpbWVfbnVtLCB1c2VyX2RpbSkKCiAgICBkZWYgc3BsaXRfdGltZShzZWxmLCB0aW1lc3RhbXBzOiBMaXN0KSAtPiBMaXN0OgogICAgICAgICMgU3BsaXQgdGltZXN0YW1wcyBpbnRvIHNwZWNpZmljIGNvbXBvbmVudHMuCiAgICAgICAgIyAoc2VxKSAtPiAoc2VxLCA2KQogICAgICAgIHNwbGl0X3RpbWUgPSBbXQogICAgICAgIGZvciB0aW1lIGluIHRpbWVzdGFtcHM6CiAgICAgICAgICAgIGR0ID0gZGF0ZXRpbWUuZGF0ZXRpbWUuZnJvbXRpbWVzdGFtcCh0aW1lKQogICAgICAgICAgICBzcGxpdF90aW1lLmFwcGVuZChbZHQueWVhciwgZHQubW9udGgsIGR0LmRheSwgZHQuaG91ciwgZHQubWludXRlLCBkdC5zZWNvbmRdKQogICAgICAgIHJldHVybiBzcGxpdF90aW1lCgogICAgZGVmIGZvcndhcmQoc2VsZiwgdGltZXN0YW1wczogTGlzdCkgLT4gdG9yY2gudGVuc29yOgogICAgICAgICMgVGltZXM6IHRpbWVzdGFtcCBvZiBlYWNoIGl0ZW0gaW4gTGlzdCBmb3JtYXQgKGJzLCBzZXEpCiAgICAgICAgIyAoYnMsIHNlcSkgLT4gKGJzLCBzZXEsIDYpCiAgICAgICAgdGltZV9zZXEgPSB0b3JjaC50ZW5zb3IoW3NlbGYuc3BsaXRfdGltZSh4KSBmb3IgeCBpbiB0aW1lc3RhbXBzXSkKICAgICAgICAjIChicywgc2VxLCA2KSAtPiBbKGJzLCBzZXEsIHRpbWVfZGltKV0gKiB0aW1lX251bQogICAgICAgIHRpbWVfZW1iID0gW3NlbGYudGltZV9lbWJlZGRpbmdzW2ldKHRpbWVfc2VxWy4uLixpXSkgZm9yIGkgaW4gcmFuZ2Uoc2VsZi50aW1lX251bSldCiAgICAgICAgIyBbKGJzLCBzZXEsIHRpbWVfZGltKV0gKiB0aW1lX251bSAtPiAoYnMsIHNlcSwgdGltZV9kaW0gKiB0aW1lX251bSkKICAgICAgICB0aW1lX2VtYiA9IHRvcmNoLmNhdCh0aW1lX2VtYiwgZGltPS0xKQogICAgICAgICMgKGJzLCBzZXEsIHRpbWVfZGltICogdGltZV9udW0pIC0+IChicywgc2VxLCB1c2VyX2RpbSkKICAgICAgICB0aW1lX2VtYiA9IHNlbGYubWVyZ2VfdGltZSh0aW1lX2VtYikKICAgICAgICByZXR1cm4gdGltZV9lbWI=">⬇</a></div>
 <div class="ltx_listingline" id="lstnumberx1">
 <span class="ltx_tag ltx_tag_listingline">1</span>

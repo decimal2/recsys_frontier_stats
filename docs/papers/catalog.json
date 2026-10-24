@@ -37,7 +37,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "2028cfec51f681e9e5c9b6652b2e77b46c08d9215c3ace3edb420e58ebdfd603"
+      "source_sha256": "bffadc01a2565f71597ac12fc2707198d2fe7900a47bcc83d219bcae8353fcd8"
     },
     {
       "short_name": "GEAR",
@@ -78,7 +78,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "74fb357c402671df2b46f3d67a19a68ca6f01e508743eec17b3f454cc1ab1813"
+      "source_sha256": "6a63c1fc811f9ea4eee8c8fcb6a01653f71100cb0c95ebd31b9c7814d8994288"
     },
     {
       "short_name": "HELIX",
@@ -117,7 +117,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "41cd683c0f1f8bf503c85a3627f4980050820dde364fa2d4e9cf49afd3c8116a"
+      "source_sha256": "42289a26f88c3be1101a1486f24a2bff6d1bcc6eb964cd7bd851ec6a66ab27ba"
     },
     {
       "short_name": "KuaFu",
@@ -190,7 +190,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "b150626e0bd48996db567a6bdff921cb18d60a0183b630fb56e77693375a5978"
+      "source_sha256": "0c56fa51267d8f115935f8c6415e6782b6254cca40d9d67519e31ae2db1e58ef"
     },
     {
       "short_name": "X-Rec",
@@ -252,7 +252,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "813b8adae097a2210928b0603ca612cb195a1c899f2f683e4e610307e2676bd7"
+      "source_sha256": "a82b39b8a5943a60f7eca45a12806c0d9a15933198375cccc1825dd1f0abd9e4"
     },
     {
       "short_name": "OneTrans-V2",
@@ -328,7 +328,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "5ede6ba8dfa530a683112e27ba363e6b746de86a64e955d4f112ab9350add352"
+      "source_sha256": "8111c6848631de456ecaca5b704b7fd155421301a6dc0a6ff8bed0ec637ef383"
     },
     {
       "short_name": "Score Centering",
@@ -369,7 +369,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "fcd8ca97ee77a1fb2017b80cc55ff76dd0ae40350a6d627a7ad7f0374d49582d"
+      "source_sha256": "997450fe917502400a88239c70e773fe4ec09b0b21ca105b751c4c428fcc410c"
     },
     {
       "short_name": "SequenceO1",
@@ -416,7 +416,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "1fa1c09ab8931d809914ec11f491553ebf46ee9afefcacbbcd99b65baf61519e"
+      "source_sha256": "7a6d42918d1e01ac5720f38e4d1e93887478ad0b7c9c1c0f42260afdf2a02ca4"
     },
     {
       "short_name": "Multi-Decoder OneRec",
@@ -457,7 +457,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "e3ccc1562408174cd6e28efcaaa76765b20c715c7a1a330cad6499e5f937e69c"
+      "source_sha256": "2a45e1f43b42e262e2479dbf6da3f4ba73a4e271cf91a535a16a1c58176e1f66"
     },
     {
       "short_name": "UniR2",
@@ -500,7 +500,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "54b54da0fc57f03c6964e9ca0aafa3e5ec7dfdc1c17ac7111b50d188f8d06273"
+      "source_sha256": "d602ec9ca4b158c37f34766ecd9a8c672c4987194b2d5dd2a8a7d3cc51f0d785"
     },
     {
       "short_name": "RecGPT-V3",
@@ -552,7 +552,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "dab8756efe12b4bf240a86f2fa17d40bdab54a3cad91b1cdd8d59a0299bdef0b"
+      "source_sha256": "08ba9ea0cac5a700b171e6b452bbbdf84c62a575b23cfbe290bb086afe60cf57"
     },
     {
       "short_name": "UniSGR",
@@ -589,7 +589,7 @@
         "warnings": [],
         "language": "zh-CN"
       },
-      "source_sha256": "64332fa6a7ea55fb5a1db0170ef76646b00e388e2c1bad9d688d0c4d4a72b2d2"
+      "source_sha256": "769933b076420e96126407338830e659bcdd527c924390052c765acb10f5823c"
     },
     {
       "short_name": "OneReason",
@@ -638,7 +638,7 @@
           "Warning:missing_file:bbding Can't find package bbding at bbding.sty.ltxml; line 18"
         ]
       },
-      "source_sha256": "3ce3a02b8803aa9a20d8ff792b43c1c18926aa4b9e604fee5070a778ad815d28"
+      "source_sha256": "74cee27ac8703c4d5905ecf992447b11d19cb7a8aa1dad70f80d1c682a2c8f09"
     },
     {
       "short_name": "UniPinRec",
@@ -695,7 +695,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "966a390f272f680ce5e87736b58e1d2a1e5095b75e90c95190ca93f7811c2425"
+      "source_sha256": "b7fa1fec48ae8d19238fc7e4564a656083eaecdc64aac8dad59264bf2d1a9d91"
     },
     {
       "short_name": "Quantized Inference for OneRec-V2",
@@ -734,7 +734,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "88dc52828bd6fbffe8a6fb87605e185dea8aa67799d246104b15cda7d864ba6b"
+      "source_sha256": "3c57c99b7f6f4f6c393591778b1c3dfe5144fe0ff426a104cbefbee4b01cd8e9"
     },
     {
       "short_name": "TokenMixer-Large",
@@ -771,7 +771,7 @@
         "warnings": [],
         "language": "zh-CN"
       },
-      "source_sha256": "d7d39c86b38697d5d99614cbd5779a9d0904fd1a41f552f6077cc69fae20d592"
+      "source_sha256": "30e22b81f8b7ecb3478cd4b78bdf5d4408b57457912225fd1c6e96e1352c7449"
     },
     {
       "short_name": "OPSD",
@@ -855,7 +855,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "5654a28b9b5d4c8ab023768b17a99e7050680cf98994f35e11baed8738459e11"
+      "source_sha256": "ebd83d0d5b061c56cc0558b402a9e8a2b69a68d588a184d3d2461669501c84d6"
     },
     {
       "short_name": "HyFormer",
@@ -1175,7 +1175,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "785a883247b2321dd8dbd1f3e5ef85299319eea33d16265c79153cd5131a4c53"
+      "source_sha256": "e8271721947ce5c271d4ef24c41d489e52fc1d1cd72a4da3dedddcb011b3a83b"
     },
     {
       "short_name": "OpenOneRec",
@@ -1225,7 +1225,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "f91e502c5da83fa8ac7b969c1012db23b519f654825948f8476a0ab07b4af0b1"
+      "source_sha256": "cece987d5b00c3cb6ab42972fff6837264f60dc03ab48878676ad4ce0f917a8c"
     },
     {
       "short_name": "OneTrans",
@@ -1267,7 +1267,7 @@
           "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 912 col 123"
         ]
       },
-      "source_sha256": "93c904c8164ce6904a80484febd579e3dc076ab27a649f100e74d229a4f5c55d"
+      "source_sha256": "0b40c74bd5dffe37eb2dc1b0edddba580fdfdf5b39f6a1ced03882906d0aaf97"
     },
     {
       "short_name": "OneRec-Think",
@@ -1324,7 +1324,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "dc912dc8e1061fe53987cfe46117a03c7eac62c6b6fe2e3843d6c7129d451d9a"
+      "source_sha256": "1468188c4a7008d740b589ebe57b6b1b42053dd45bb5f7ae016f18222bbfad56"
     },
     {
       "short_name": "OneSearch",
@@ -1367,7 +1367,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "95f87104d9453b002bde24b50ecdbae4a6559af08fec44b7c84297fa566a9ba4"
+      "source_sha256": "a0ea15b3aad73c9de41602b8d68cf56fb9aa5af47315349364ba141650ce0ad3"
     },
     {
       "short_name": "OneRec-V2",
@@ -1411,7 +1411,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "9ef57360178481852a5f8d70992e0a362c509a67cc2e0e583fb91abebfaa3d99"
+      "source_sha256": "820c6a6f6f51af98dba66f4c205ef17cfdaf82cbb630886fb4f7af3d2f4f7581"
     },
     {
       "short_name": "GSPO",
@@ -1476,7 +1476,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "4a82682063ff0cdb317586fcafbec8eb417fefa85f39ca80150630d17e959ab2"
+      "source_sha256": "c0e47e4f35d8ab39b0a820d185da8b7830f0a8c48f8ffda294c12813e3549563"
     },
     {
       "short_name": "RankMixer",
@@ -1515,7 +1515,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "127dbfae0fd2e83d2a7f3a1eb407e2104eb280804f5d77be60d513ff99456748"
+      "source_sha256": "24bc6c00d92c595d1287f913360885fe406ce4b058b94bcbf68354cc61e704c9"
     },
     {
       "short_name": "OneRec Technical Report",
@@ -1564,7 +1564,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "075a183751558cad4db2e5988515a2d41386ab1c9ca0e715637b283e95656eda"
+      "source_sha256": "66029b678c1857343215ae4dd8a59c59162f1c7605def0c7df6244dd4e1a157b"
     },
     {
       "short_name": "LONGER",
@@ -1884,7 +1884,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "33f831b1579ac1d051ad5f691c4492d4d76dd3bfd95ae683426e54804018fe05"
+      "source_sha256": "1dd39f95cf42a39ac80e23447b564266567b27e62c5114d75300192d1160bd57"
     },
     {
       "short_name": "DAPO",
@@ -1937,7 +1937,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "5e9f3ead4fb6dbdd52b5394e1423dcc97bde836a2099cd0d9b96a724ccbea3f4"
+      "source_sha256": "46acbce586baeb8adabf563a10ded0f3ff2d862a703953415bd63100707e1805"
     },
     {
       "short_name": "OneRec",
@@ -2268,7 +2268,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "c841a57616348338fa8ac35c431f237b876658e93d936dac9cda0a3eddbc7c4a"
+      "source_sha256": "5dcc60d9adde90c60bf07d3eaee619a70b6981c757f6731e6296427755613b59"
     },
     {
       "short_name": "HLLM",
@@ -2309,7 +2309,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "2fcc2e71be22a42f677f2b916ab07161d47495c8fe838db0e8c2a4a88da73033"
+      "source_sha256": "ccb5ee7c6801936d31c0111e65fd5be971182f7bea3892106949b6f2f94a1054"
     },
     {
       "short_name": "LETTER",
@@ -2362,7 +2362,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "bddc59576ee22342e202a51de650d736a4bca549effa5ad3129eae492735f53a"
+      "source_sha256": "0d798dd5d1b0d74540773b65a03ea4a1a679396bc4333aae67e2a673639a02b5"
     },
     {
       "short_name": "NoteLLM",
@@ -2399,7 +2399,7 @@
         "warnings": [],
         "language": "zh-CN"
       },
-      "source_sha256": "18395f300ab6d10bdd1a26dfd201c06ee3901a0e6e14118460bbead388364747"
+      "source_sha256": "79573e13d9d82a438c020f0e54e179595f8f9bb000552399dc4d6db39687d585"
     },
     {
       "short_name": "HSTU",
@@ -2441,7 +2441,7 @@
           "Warning:not_parsed:ADDOP.NUMBER.CLOSE>MULOP MathParser failed to match rule 'Anything' at sec_appendix.tex; line 552 col 13"
         ]
       },
-      "source_sha256": "aab89236abfb67dfc90af8a6aa596825f1ec4cbca64fa71945e7e6bb068b2c20"
+      "source_sha256": "5eb21357f16dddfbbb913b6ca4933bd0b9b0c39d01a9b96e834f27eda1e40902"
     },
     {
       "short_name": "Trinity",
@@ -2486,7 +2486,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "a3f5570ee498c672c41a1cc503a3992dbc0f53c420e6557812546cfcc44fe91e"
+      "source_sha256": "8960092168c41ea6f10c0b9f630fc8eda528566217cd1706f061b5249eab2b24"
     },
     {
       "short_name": "GRPO / DeepSeekMath",
@@ -2541,7 +2541,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "874548a71f07aecb6b33ff8915a19eae4442e8b2a71577134f093f5bd28a3f79"
+      "source_sha256": "e413bb5164d71f2b4ef30869e2d063835f8cab5e27a47a71b1d7148be992d833"
     },
     {
       "short_name": "OPD / GKD",
@@ -2608,7 +2608,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "180fc3cc1eaf97e0cde67975d21462350ac6d6f823b27bf8696c5779d4ef2893"
+      "source_sha256": "dc94d51d558052dbb572118821ffd8708a39a8c3bfcf0c276e577e16ade28c9a"
     },
     {
       "short_name": "TIGER",
@@ -2649,7 +2649,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "5c2fc099b501cf5f999112d29e7aa962406b1d4fa7322e60444f7ae8211d7713"
+      "source_sha256": "f2992d182cd90ac69e47e3dc5370f33a39b35bb2cb07c5659b9108ce1d7fdfca"
     },
     {
       "short_name": "PPO",
@@ -2694,7 +2694,7 @@
         "language": "zh-CN",
         "table_cells": 0
       },
-      "source_sha256": "d3872563265793540b0d1c8c93115063b12c2e043eb2a061b591d472043568ac"
+      "source_sha256": "bc79e57158782db219095544e92b4222e2a30d0a24cfe0d1f33ab69453361f62"
     }
   ]
 }

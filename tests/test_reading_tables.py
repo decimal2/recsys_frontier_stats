@@ -119,6 +119,39 @@ class ReadingTablesTests(unittest.TestCase):
         normalize_reading_tables(article)
         self.assertEqual(str(article), first_pass)
 
+    def test_shaded_listing_gets_readable_base_ink_and_keeps_syntax_colors(self):
+        article = self.parse('<div class="ltx_listing ltx_minipage" style="background-color:#F7F7F7;">'
+            '<a download="" href="data:text/plain;base64,eA==">⬇</a>'
+            '<span class="ltx_lst_identifier">weighted_logp</span> = '
+            '<span id="keyword" style="color:#008000;">lambda</span> '
+            '<span id="number" style="color:#666666;">0.5</span>'
+            '<span id="faint" style="color:#CCCCCC;">comment</span>'
+            '<math><mi>x</mi></math>'
+            '<svg><text style="background-color:#FFFFFF;color:#CCCCCC;">drawing</text></svg>'
+            '</div>')
+        original_text, original_math, original_svg = article.get_text(), str(article.math), str(article.svg)
+        original_link = str(article.a)
+        original_styles = [node['style'] for node in article.select('[style]')]
+        normalize_reading_tables(article)
+        self.assertIn('paper-table-ink-dark', article.select_one('.ltx_listing')['class'])
+        self.assertNotIn('paper-table-ink-dark', article.find(id='keyword').get('class', []))
+        self.assertNotIn('paper-table-ink-dark', article.find(id='number').get('class', []))
+        self.assertIn('paper-table-ink-dark', article.find(id='faint')['class'])
+        self.assertEqual(article.get_text(), original_text)
+        self.assertEqual(str(article.math), original_math)
+        self.assertEqual(str(article.svg), original_svg)
+        self.assertEqual(str(article.a), original_link)
+        self.assertEqual([node['style'] for node in article.select('[style]')], original_styles)
+        first_pass = str(article)
+        normalize_reading_tables(article)
+        self.assertEqual(str(article), first_pass)
+
+    def test_listing_without_explicit_background_keeps_original_colors(self):
+        article = self.parse('<div class="ltx_listing"><span style="color:#CCCCCC;">comment</span></div>')
+        original = str(article)
+        normalize_reading_tables(article)
+        self.assertEqual(str(article), original)
+
 
 if __name__ == "__main__":
     unittest.main()

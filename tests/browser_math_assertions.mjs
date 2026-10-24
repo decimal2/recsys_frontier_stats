@@ -46,7 +46,62 @@ export function collectMathEvidence() {
   const regions=[...article.querySelectorAll('svg.ltx_picture,.ltx_listing')]
     .filter(e=>!e.parentElement?.closest('svg'))
     .map(e=>({id:e.id,kind:e.tagName.toLowerCase()==='svg'?'diagram':'listing',rect:rect(e),article:rect(article),...protection(e)}));
-  return {viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,mathCount:math.length,wrappers,math,regions,justifiedParagraphs:[...article.querySelectorAll('.ltx_p,.paper-paragraph')].filter(p=>getComputedStyle(p).textAlign==='justify').length};
+  const rgb=value=>{
+    const match=/^rgba?\(([^)]+)\)$/.exec(value||'');
+    if(!match)return null;
+    const parts=match[1].split(/[,\s/]+/).filter(Boolean).map(Number);
+    return parts.length>=3?[...parts.slice(0,3),parts[3]??1]:null;
+  };
+  const blend=(top,bottom)=>top.slice(0,3).map((v,i)=>v*top[3]+bottom[i]*(1-top[3])).concat(1);
+  const luminance=c=>c.slice(0,3).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;}).reduce((n,v,i)=>n+v*[.2126,.7152,.0722][i],0);
+  const contrast=(a,b)=>{const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
+  const diagramReadability=[...article.querySelectorAll('svg.ltx_picture')].filter(s=>!s.parentElement?.closest('svg')).map(svg=>{
+    let background=[255,255,255,1];
+    const ancestors=[];for(let p=svg;p;p=p.parentElement)ancestors.unshift(p);
+    for(const p of ancestors){const c=rgb(getComputedStyle(p).backgroundColor);if(c)background=blend(c,background);}
+    const shapes=[...svg.querySelectorAll('rect,path,polygon,circle,ellipse')].reverse();
+    const result={id:svg.id,background:background.slice(0,3),textNodesChecked:0,lowContrast:[],wrappedWords:[],multilineLabels:[]};
+    const walker=document.createTreeWalker(svg,NodeFilter.SHOW_TEXT);
+    for(let node=walker.nextNode();node;node=walker.nextNode()){
+      const el=node.parentElement;
+      if(!node.textContent.trim()||el.closest('annotation,annotation-xml,title,desc,style,script'))continue;
+      const range=document.createRange();range.selectNodeContents(node);
+      const bounds=range.getBoundingClientRect();if(bounds.width<=0||bounds.height<=0)continue;
+      const style=getComputedStyle(el),isSvgText=!!el.closest('text');
+      const foreground=rgb(isSvgText?style.fill:style.color);if(!foreground)continue;
+      const point=new DOMPoint(bounds.x+bounds.width/2,bounds.y+bounds.height/2);
+      let actualBackground=background;
+      // SVG node fills are not HTML/CSS ancestors of foreignObject labels.
+      // Find the last painted filled shape behind the actual text position.
+      for(const shape of shapes){
+        if(!(shape.compareDocumentPosition(node)&Node.DOCUMENT_POSITION_FOLLOWING))continue;
+        const fill=rgb(getComputedStyle(shape).fill);if(!fill||fill[3]===0)continue;
+        try{if(shape.isPointInFill(point.matrixTransform(shape.getScreenCTM().inverse()))){actualBackground=blend(fill,background);break;}}catch{}
+      }
+      const ratio=contrast(blend(foreground,actualBackground),actualBackground);
+      result.textNodesChecked++;
+      // Preserve source colors, but catch white-on-white and black-on-dark
+      // labels that geometric overflow assertions alone cannot detect.
+      if(ratio<2.5)result.lowContrast.push({text:node.textContent.trim().slice(0,80),math:el.closest('math')?.id,color:foreground.slice(0,3),background:actualBackground.slice(0,3),ratio});
+      if(el.closest('foreignObject')&&!el.closest('math')){
+        for(const match of node.textContent.matchAll(/[A-Za-z][A-Za-z0-9_-]{2,}/g)){
+          range.setStart(node,match.index);range.setEnd(node,match.index+match[0].length);
+          const boxes=[...range.getClientRects()].filter(r=>r.width>0&&r.height>0);
+          if(boxes.some(r=>Math.abs(r.y-boxes[0].y)>2))result.wrappedWords.push({word:match[0],lines:boxes.length});
+        }
+      }
+    }
+    for(const fo of svg.querySelectorAll('foreignObject')){
+      if(fo.querySelector('.ltx_minipage,br,.ltx_break'))continue;
+      for(const label of fo.children){
+        if(label.namespaceURI!=='http://www.w3.org/1999/xhtml'||label.tagName.toLowerCase()!=='span')continue;
+        const boxes=[...label.getClientRects()].filter(r=>r.width>0&&r.height>0),font=parseFloat(getComputedStyle(label).fontSize);
+        if(boxes.some(r=>Math.abs(r.y-boxes[0].y)>font*.6))result.multilineLabels.push({text:label.textContent.trim().slice(0,80),lines:boxes.length});
+      }
+    }
+    return result;
+  });
+  return {viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,mathCount:math.length,wrappers,math,regions,diagramReadability,justifiedParagraphs:[...article.querySelectorAll('.ltx_p,.paper-paragraph')].filter(p=>getComputedStyle(p).textAlign==='justify').length};
 }
 
 export function assertMathEvidence(report) {
@@ -63,6 +118,11 @@ export function assertMathEvidence(report) {
   for(const r of report.regions||[]){
     if(r.clipping)errors.push({id:r.id,problem:`${r.kind} is clipped`,ancestor:r.clipping});
     if(!r.scrolling&&(r.rect.right>r.article.right+3||r.rect.x<r.article.x-3))errors.push({id:r.id,problem:`${r.kind} escapes the reading area without a scroll container`});
+  }
+  for(const d of report.diagramReadability||[]){
+    for(const detail of d.lowContrast)errors.push({id:d.id,problem:'diagram text has insufficient contrast',...detail});
+    for(const detail of d.wrappedWords)errors.push({id:d.id,problem:'diagram word is split across lines',...detail});
+    for(const detail of d.multilineLabels)errors.push({id:d.id,problem:'single-line diagram label wrapped',...detail});
   }
   for(const w of report.wrappers){
     if(!['auto','scroll'].includes(w.overflowX))errors.push({id:w.diagram||w.math,problem:'wrapper does not allow horizontal scrolling'});

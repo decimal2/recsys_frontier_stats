@@ -187,17 +187,57 @@ export class Page {
     await this.call('Page.setDocumentContent', {frameId:frameTree.frame.id, html});
     await this.settle();
   }
+  async frameGeometry(selector) {
+    return this.eval(`(()=>{
+      const rect=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom};};
+      const e=${selector ? `document.querySelector(${JSON.stringify(selector)})` : 'null'};
+      if(${!!selector}&&!e)throw Error('Screenshot target missing');
+      const targetRect=e?rect(e):null;
+      let visible=targetRect?{left:Math.max(0,targetRect.x),top:Math.max(0,targetRect.y),right:Math.min(innerWidth,targetRect.right),bottom:Math.min(innerHeight,targetRect.bottom)}:null;
+      if(e)for(let p=e.parentElement;p;p=p.parentElement){
+        const style=getComputedStyle(p),r=rect(p);
+        if(['auto','scroll','hidden','clip'].includes(style.overflowX)){visible.left=Math.max(visible.left,r.x+p.clientLeft);visible.right=Math.min(visible.right,r.x+p.clientLeft+p.clientWidth);}
+        if(['auto','scroll','hidden','clip'].includes(style.overflowY)){visible.top=Math.max(visible.top,r.y+p.clientTop);visible.bottom=Math.min(visible.bottom,r.y+p.clientTop+p.clientHeight);}
+      }
+      if(visible){visible.width=Math.max(0,visible.right-visible.left);visible.height=Math.max(0,visible.bottom-visible.top);}
+      return {width:innerWidth,height:innerHeight,clientWidth:document.documentElement.clientWidth,
+        documentHeight:document.documentElement.scrollHeight,scrollX,scrollY,targetRect,visible,
+        target:e?{id:e.id,tag:e.tagName,text:e.textContent.trim().slice(0,120)}:null};
+    })()`);
+  }
+  assertFrameStable(before, after) {
+    const keys=['width','height','clientWidth','documentHeight','scrollX','scrollY'];
+    const moved=keys.some(key=>Math.abs(before[key]-after[key])>1)||
+      (before.targetRect&&['x','y','width','height'].some(key=>Math.abs(before.targetRect[key]-after.targetRect?.[key])>1));
+    if(moved)throw Error('Screenshot changed layout: '+JSON.stringify({before,after}));
+  }
   async screenshot(file, selector = null, maxHeight = 2000) {
     mkdirSync(resolve(file, '..'), {recursive:true});
-    let clip;
     if (selector) {
-      clip = await this.eval(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});if(!e)throw Error('Screenshot target missing');
-        const r=e.getBoundingClientRect(),y=Math.max(0,r.top+scrollY-160);window.scrollTo({left:0,top:y,behavior:'instant'});
-        return {x:0,y,width:innerWidth,height:Math.max(1,Math.min(${maxHeight},r.height+320,document.documentElement.scrollHeight-y)),scale:1};})()`);
+      const initial=await this.frameGeometry(selector);
+      const height=Math.ceil(Math.min(maxHeight,Math.max(600,initial.targetRect.height+160)));
+      // Resize first, then measure/scroll again. Never reuse document-space
+      // crop coordinates across captureBeyondViewport's virtual viewport.
+      await this.resize(this.width,height);await this.settle();
+      await this.eval(`(()=>{const r=document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect();window.scrollTo({left:0,top:Math.max(0,r.top+scrollY-80),behavior:'instant'});})()`);
+      await this.settle();
     }
-    const result = await this.call('Page.captureScreenshot', {format:'png', captureBeyondViewport:true, ...(clip ? {clip} : {})});
+    const before=await this.frameGeometry(selector);
+    if(selector) {
+      const requiredHeight=Math.min(before.targetRect.height,before.height-160);
+      if(before.visible.width<1||before.visible.height<requiredHeight-2)throw Error('Screenshot target is not visible: '+JSON.stringify(before));
+    }
+    const result = await this.call('Page.captureScreenshot', {format:'png', captureBeyondViewport:false});
     writeFileSync(file, Buffer.from(result.data, 'base64'));
-    return {file:basename(file), clip:clip || {width:this.width, height:this.height}};
+    const after=await this.frameGeometry(selector);this.assertFrameStable(before,after);
+    return {file:basename(file),selector,mode:'visible-viewport',beforeCapture:before,afterCapture:after};
+  }
+  async screenshotJpeg(frame, quality=75) {
+    const before=await this.frameGeometry(frame.selector);
+    this.assertFrameStable(frame.afterCapture,before);
+    const result=await this.call('Page.captureScreenshot',{format:'jpeg',quality,captureBeyondViewport:false});
+    const after=await this.frameGeometry(frame.selector);this.assertFrameStable(before,after);
+    return {...result,quality,beforeCapture:before,afterCapture:after};
   }
   runtimeErrors() { return this.browser.events.filter(e => e.sessionId === this.session).map(e => e.params.exceptionDetails); }
   async close() { await this.browser.call('Target.closeTarget', {targetId:this.target}); }
