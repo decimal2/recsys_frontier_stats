@@ -235,8 +235,7 @@ def digest(args, config, connection):
                    "paper_window": paper_window, "coverage": coverage,
                    "discovery": state["previous_discovery"] + state["collections"],
                    "provider": client.provider, "model": client.model, "items": items, "synthesis": synthesis,
-                   "errors": errors, "rejected": state["rejected"],
-                   "note": "基于提取到的全文文字生成；图片未做视觉分析。解读由模型生成，数字与引用请结合原文确认。"}
+                   "errors": errors, "rejected": state["rejected"]}
         return {"payload": payload, "synthesis_ok": synthesis_ok}
 
     def publish(state):

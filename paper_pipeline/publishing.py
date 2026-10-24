@@ -161,9 +161,9 @@ def render_daily(payload, paper_links=None):
     items = payload["items"]
     by_id = {i["paper"]["arxiv_id"]: i for i in items}
     day = payload["date"]
-    lines = [f"# 推荐研究日报 · {day}", "", payload["note"], "",
+    lines = [f"# 推荐研究日报 · {day}", "",
              f"模型：{payload['provider']} / {payload['model']}；状态：{payload['status']}。", "", "## 当日样本观察", ""]
-    intro = f'<p class="lede">{escape(payload["note"])}</p><div class="metrics"><div><strong>{len(items)}</strong>全文解读</div><div><strong>{sum(bool(i["preferred_companies"]) for i in items)}</strong>优先团队</div><div><strong>{len(payload["errors"])}</strong>待重试</div></div>'
+    intro = f'<div class="metrics"><div><strong>{len(items)}</strong>全文解读</div><div><strong>{sum(bool(i["preferred_companies"]) for i in items)}</strong>优先团队</div><div><strong>{len(payload["errors"])}</strong>待重试</div></div>'
     coverage = payload.get("coverage", {})
     if coverage.get("shortfall"):
         message = (f"本期已完成 {len(items)} 篇工业界论文，最低要求 {coverage['minimum']} 篇，"
