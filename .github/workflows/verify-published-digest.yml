@@ -1,0 +1,43 @@
+name: Verify published daily digest
+on:
+  push:
+    branches: [publish-verify-20261025-2b3ace6]
+    paths: ['.github/workflows/verify-published-digest.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Verify published page hashes and removed note
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, time, urllib.request
+          expected = {"2026-10-24.html":"c4d383ece28c038ac4d091a9f87504980de4452c0aeb219df60f773a0c9b0e36","2026-10-25.html":"d6ed4a62ecf27b89e756ad8d123131e05e72b434dd1e837dda2ca4669f8d10eb"}
+          forbidden = '基于提取到的全文文字生成；图片未做视觉分析。解读由模型生成，数字与引用请结合原文确认。'
+          results = []
+          for path, sha256 in expected.items():
+              url = 'https://decimal2.github.io/recsys_frontier_stats/' + path
+              last_error = ''
+              for attempt in range(12):
+                  try:
+                      request = urllib.request.Request(url, headers={'User-Agent': 'recsys-pages-verification', 'Cache-Control': 'no-cache'})
+                      with urllib.request.urlopen(request, timeout=20) as response:
+                          body = response.read()
+                          actual = hashlib.sha256(body).hexdigest()
+                          status = response.status
+                      if status == 200 and actual == sha256:
+                          assert forbidden not in body.decode('utf-8')
+                          results.append({'path': path, 'status': status, 'sha256': actual, 'removed_note': True})
+                          print('VERIFIED ' + json.dumps(results[-1]), flush=True)
+                          break
+                      last_error = 'HTTP ' + str(status) + ', sha256=' + actual
+                  except Exception as error:
+                      last_error = str(error)
+                  if attempt < 11: time.sleep(10)
+              else:
+                  raise RuntimeError(url + ': ' + last_error)
+          print('PUBLISHED_DIGEST_REPORT ' + json.dumps({'status': 'passed', 'commit': 'd2516f01a7de04ba807c24e9a8739a88573d6b67', 'pages': results}))
+          PY
