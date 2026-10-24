@@ -1,0 +1,1680 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>UniR2：在单一仅解码器序列中统一生成式召回与多目标排序</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style><style>
+.paper-reader main,.paper-reader>header{max-width:1180px}
+.paper-original-title{font-size:16px;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.paper-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.paper-actions a{padding:8px 14px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:14px}
+.paper-actions a:first-child{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paper-reading-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:36px;align-items:start;margin-top:30px}
+.paper-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;border-right:1px solid var(--line);padding-right:14px;font-size:13px}
+.paper-toc summary{font-size:14px;font-weight:600;cursor:pointer;padding:4px 0 10px}
+.paper-toc ol{list-style:none;padding:0;margin:0}
+.paper-toc li{margin:0;padding:4px 0;line-height:1.5}
+.paper-toc a{color:var(--muted);display:block;padding:2px 4px;border-radius:4px}
+.paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
+.paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
+.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
+.paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
+.paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
+.paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
+.paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
+.paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
+.paper-fulltext figure a{display:block}
+.paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
+.paper-fulltext .paper-equation{padding:8px 0}
+.paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
+.paper-fulltext .paper-inline-math{display:inline-block;vertical-align:middle;max-height:2.3em;width:auto;background:white;max-width:100%}
+.paper-fulltext .paper-reference{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.paper-fulltext .paper-source-page{display:block;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin:32px 0 18px;padding-top:8px;text-align:right}
+.paper-fulltext table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:14px}
+.paper-fulltext td,.paper-fulltext th{padding:6px 10px;border:1px solid var(--line)}
+.paper-bottom{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+.paper-library{display:grid;gap:0;margin:24px 0}
+.paper-entry{padding:26px 0;border-top:1px solid var(--line)}
+.paper-entry h2{display:block;font-size:21px;margin:6px 0}
+.paper-entry .original{display:block;margin-bottom:12px}
+.paper-entry .paper-actions{margin-bottom:0}
+.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+@media(max-width:800px){
+ .paper-reading-layout{display:block;margin-top:20px}
+ .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
+ .paper-toc[open] ol{max-height:55vh;overflow:auto}
+ .paper-fulltext{font-size:16px;line-height:1.9}
+ .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
+ .paper-reader h1{font-size:26px}
+}
+@media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
+</style><style>
+.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}
+.tex-paper .ltx_title_document{display:none}
+.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}
+.tex-paper .ltx_creator{display:inline-block;margin-right:1em}
+.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
+.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_para{margin:0}
+.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
+.tex-paper .ltx_title_paragraph{font-size:17px}
+.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}
+.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}
+.tex-paper .ltx_font_sansserif{font-family:sans-serif}
+.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}
+.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}
+.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}
+.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}
+.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}
+.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}
+.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}
+.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}
+.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}
+.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}
+.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}
+.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}
+.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}
+.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}
+.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+.tex-paper math{font-size:1em;line-height:normal;font-family:math}
+.tex-paper math[display="block"]{margin:.2em 0;white-space:nowrap}
+.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}
+.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}
+.tex-paper .ltx_bibblock{display:block}
+.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}
+.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}
+.tex-paper .ltx_toc{display:none}
+.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}
+.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
+.tex-paper .ltx_tag{margin-right:.35em}
+.tex-paper [id]{scroll-margin-top:24px}
+</style></head><body class="paper-reader">
+<header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
+<main><div class="eyebrow">PAPER LIBRARY / UniR2</div><h1>UniR2：在单一仅解码器序列中统一生成式召回与多目标排序</h1><p class="paper-original-title">Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence</p>
+<p class="muted">Kuaishou · arXiv 2607.24439 · 译文对应 v1</p>
+<div class="paper-actions"><a href="https://arxiv.org/abs/2607.24439v1" target="_blank" rel="noopener">英文 arXiv ↗</a>
+<a href="../index.html">全部论文</a></div>
+<p class="muted">中文全文 · 章节、公式和参考文献支持直接跳转</p>
+<div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
+<ol><li class="toc-level-1"><a href="#tex-section-1">摘要</a></li><li class="toc-level-1"><a href="#S1">1. 引言</a></li><li class="toc-level-1"><a href="#S2">2. 相关工作</a></li><li class="toc-level-2"><a href="#S2.SS1">2.1. 生成式推荐</a></li><li class="toc-level-2"><a href="#S2.SS2">2.2. 基于 Transformer 的排序</a></li><li class="toc-level-2"><a href="#S2.SS3">2.3. 统一的召回与排序</a></li><li class="toc-level-1"><a href="#S3">3. 预备知识</a></li><li class="toc-level-1"><a href="#S4">4. 方法</a></li><li class="toc-level-2"><a href="#S4.SS1">4.1. 统一序列构成</a></li><li class="toc-level-2"><a href="#S4.SS2">4.2. 双查询前缀因果注意力</a></li><li class="toc-level-2"><a href="#S4.SS3">4.3. 生成式召回</a></li><li class="toc-level-2"><a href="#S4.SS4">4.4. 多目标排序</a></li><li class="toc-level-1"><a href="#S5">5. 部署</a></li><li class="toc-level-2"><a href="#S5.SS1">5.1. 训练策略</a></li><li class="toc-level-2"><a href="#S5.SS2">5.2. 推理流水线</a></li><li class="toc-level-1"><a href="#S6">6. 实验</a></li><li class="toc-level-2"><a href="#S6.SS1">6.1. 实验设置</a></li><li class="toc-level-3"><a href="#S6.SS1.SSS1">6.1.1. 数据集。</a></li><li class="toc-level-3"><a href="#S6.SS1.SSS2">6.1.2. 评估指标。</a></li><li class="toc-level-3"><a href="#S6.SS1.SSS3">6.1.3. 基线。</a></li><li class="toc-level-2"><a href="#S6.SS2">6.2. 整体实验（RQ1）</a></li><li class="toc-level-3"><a href="#S6.SS2.SSS1">6.2.1. 召回性能</a></li><li class="toc-level-3"><a href="#S6.SS2.SSS2">6.2.2. 排序性能</a></li><li class="toc-level-2"><a href="#S6.SS3">6.3. 深入分析（RQ2）</a></li><li class="toc-level-3"><a href="#S6.SS3.SSS1">6.3.1. 组件消融</a></li><li class="toc-level-3"><a href="#S6.SS3.SSS2">6.3.2. 注意力分析</a></li><li class="toc-level-3"><a href="#S6.SS3.SSS3">6.3.3. 统一架构的扩展</a></li><li class="toc-level-3"><a href="#S6.SS3.SSS4">6.3.4. 推理延迟</a></li><li class="toc-level-2"><a href="#S6.SS4">6.4. 在线 A/B 测试（RQ3）</a></li><li class="toc-level-1"><a href="#S7">7. 结论</a></li><li class="toc-level-1"><a href="#bib">参考文献</a></li></ol></details><article class="paper-fulltext" aria-label="论文全文"><article class="ltx_document ltx_authors_1line ltx_leqno tex-paper">
+<h1 class="ltx_title ltx_title_document">将生成式召回与多目标排序统一
+<br class="ltx_break"/>于单个仅解码器序列中</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Ruochen Yang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Institute of Information Engineering, Chinese Academy of Sciences 
+<br class="ltx_break"/>School of Cyber Security, University of Chinese Academy of Sciences</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:yangruochen@iie.ac.cn">yangruochen@iie.ac.cn</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Shuang Wen
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Kuaishou Technology</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:wenshuang@kuaishou.com">wenshuang@kuaishou.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Pengbo Xu
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Kuaishou Technology</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:xupengbo@kuaishou.com">xupengbo@kuaishou.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Yusheng Huang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Kuaishou Technology</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:huangyusheng@kuaishou.com">huangyusheng@kuaishou.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jiangxia Cao
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Kuaishou Technology</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:caojiangxia@kuaishou.com">caojiangxia@kuaishou.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Shuang Yang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Kuaishou Technology</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:yangshuang08@kuaishou.com">yangshuang08@kuaishou.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Zhaojie Liu
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Kuaishou Technology</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:zhaotianxing@kuaishou.com">zhaotianxing@kuaishou.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jiawei Sheng
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Institute of Information Engineering, Chinese Academy of Sciences 
+<br class="ltx_break"/>School of Cyber Security, University of Chinese Academy of Sciences</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:shengjiawei@iie.ac.cn">shengjiawei@iie.ac.cn</a>
+</span></span></span>
+<span class="ltx_author_before"> and </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Tingwen Liu
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Institute of Information Engineering, Chinese Academy of Sciences 
+<br class="ltx_break"/>School of Cyber Security, University of Chinese Academy of Sciences</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:liutingwen@iie.ac.cn">liutingwen@iie.ac.cn</a>
+</span></span></span>
+</div>
+<div class="ltx_dates">(2026)</div>
+<div class="ltx_abstract" id="tex-section-1">
+<h6 class="ltx_title ltx_title_abstract">摘要</h6>
+<p class="ltx_p">现代工业推荐系统通常将召回与排序分为两个独立阶段。
+尽管这种级联结构支持语料库级召回和细粒度多目标打分，但它会导致目标不一致、候选交接处的信息损失，以及用户侧上下文的冗余计算。
+与此同时，生成式召回与排序的规模化共享相同的基于 Transformer 的建模理念，其中架构一致性为统一集成创造了天然机会。
+然而，直接共享仍然具有挑战性，因为这两项任务需要不同的信息可见性和优化方法。
+因此，我们提出 <span class="ltx_text ltx_font_bold">UniR<sup class="ltx_sup"><span class="ltx_text ltx_font_medium">2</span></sup></span>，这是一个 <span class="ltx_text ltx_font_bold">Uni</span>fied 仅解码器 Transformer，在包含用户上下文、SID 轨迹和物品特征的单个异构序列中统一了生成式 <span class="ltx_text ltx_font_bold">R</span>ecall 与多目标 <span class="ltx_text ltx_font_bold">R</span>anking。
+在该序列中，生成的轨迹作为召回与排序之间的表征桥梁，其中 Dual-Query Prefix-Causal Attention 提供任务特定的可见性。
+两项任务共享基础注意力权重，但保留各自的优化边界，排序侧的 LoRA 在保持排序适应性的同时不破坏生成式主干。
+在大规模工业数据上的大量离线实验证明了 UniR<sup class="ltx_sup">2</sup> 在召回和排序两方面的有效性和效率。
+在快手平台上的长期在线 A/B 测试进一步显示出一致的正向收益，验证了统一模型在大规模推荐系统中的实用性。</p>
+</div>
+<div class="ltx_keywords">生成式推荐、多目标排序
+</div>
+<span class="ltx_note ltx_note_frontmatter ltx_role_copyright"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">copyright: </span>acmcopyright</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_journalyear"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">journalyear: </span>2026</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_doi"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">doi: </span>XXXXXXX</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_conference"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">conference: </span>请确保输入正确的
+会议名称（来自您的权利确认邮件）；6月03日至05日，
+2018年；纽约州伍德斯托克</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_ccs"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">ccs: </span>信息系统 推荐系统</span></span></span>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1. </span>引言</h2>
+<figure class="ltx_figure" id="S1.F1"><a href="assets/0f44d3e3f426371c.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S1.F1.g1" loading="lazy" src="assets/0f44d3e3f426371c.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1. </span>级联架构与 UniR<sup class="ltx_sup">2</sup> 之间的架构对比。
+使用独立模型进行串行生成和打分会导致目标错位和冗余的用户上下文计算。
+UniR<sup class="ltx_sup">2</sup> 在单个异构仅解码器序列中统一了两项任务，实现了表征复用并弥合了跨阶段差距。</figcaption>
+</figure>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p">现代工业推荐系统通常组织为多阶段级联结构。
+给定一个用户请求，召回阶段 <cite class="ltx_cite ltx_citemacro_citep">(Covington<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib65" title="Deep neural networks for youtube recommendations">2016</a>; Ying<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib66" title="Graph convolutional neural networks for web-scale recommender systems">2018</a>)</cite> 首先从包含数十亿物品的语料库中召回到数千个候选，随后排序模型 <cite class="ltx_cite ltx_citemacro_citep">(Ma<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib49" title="Modeling task relationships in multi-task learning with multi-gate mixture-of-experts">2018</a>; Yang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib29" title="SARM: llm-augmented semantic anchor for end-to-end live-streaming ranking">2026</a>)</cite> 在多个业务目标下执行细粒度的用户-物品匹配。
+这种分工多年来支撑了大规模推荐，因为召回强调高效搜索和覆盖，而排序强调对每个候选的准确区分。
+然而，这种分离也在两个阶段之间引入了根本性差距。
+召回和排序通常使用不同的目标进行优化，消费组织方式不同的特征，并在独立的参数空间中产生表征。
+结果，候选生成阶段捕获的信息在阶段边界处被压缩为离散的候选列表，而用户上下文被不同模型反复编码。
+这些问题导致目标不一致、表征损失，以及训练和服务中的冗余计算。</p>
+</div>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p">与此同时，该级联结构的两个阶段都在经历类似的面向 Transformer 的架构更新 <cite class="ltx_cite ltx_citemacro_citep">(Vaswani<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib61" title="Attention is all you need">2017</a>)</cite>。
+在召回侧，生成式推荐用分层语义 ID（SID）表示每个物品，并将大规模召回转化为自回归下一词元预测 <cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib7" title="Recommender systems with generative retrieval">2023</a>; Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>)</cite>。
+Transformer 通过在以用户行为上下文为条件生成 SID 轨迹，学习物品语料库上的分布，从而避免了对物品逐个穷举打分。
+在排序侧，近期模型越来越多地将异构字段、行为序列和上下文特征进行词元化，并使用多层注意力作为可扩展的特征交互主干 <cite class="ltx_cite ltx_citemacro_citep">(Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib46" title="Onetrans: unified feature interaction and sequence modeling with one transformer in industrial recommender">2026b</a>; Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib58" title="TokenFormer: unify the multi-field and sequential recommendation worlds">2026</a>)</cite>。
+尽管两项任务保留不同的输出，它们现在共享若干重要的计算原语：词元化输入、用户上下文建模、基于注意力的特征融合，以及深层 Transformer 堆叠。
+这种趋同自然引出一个问题：
+<span class="ltx_text ltx_font_bold ltx_font_italic">能否将生成式召回与多目标排序表述为一个 Transformer 序列，而非两个孤立模型？</span></p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p">这样一个统一的 Transformer 提供了若干潜在好处。
+首先，共同的序列空间可以保留召回期间产生的信息，并将其直接暴露给排序，从而缩小级联边界处的语义差距。
+此外，两项任务可以共享用户侧上下文计算，因为在候选生成和打分之间复用中间键/值缓存，可以消除对长历史记录和个性化画像的重复编码。
+再者，扩展这样一个单一的 Transformer 主干可以让召回和排序共同受益，而不是独立维护两个日益增大的模型。</p>
+</div>
+<div class="ltx_para" id="S1.p4">
+<p class="ltx_p">然而，直接组合这两项任务并非易事。
+生成式召回是一个结构化分布拟合问题，其中每个 SID 词元必须遵守自回归因果性并保持分层语义。
+多目标排序则是一个判别式特征交互问题，其中所有物品侧特征同时可用，并且每个候选必须在稠密和稀疏目标（如点击、长观看和礼物）下进行评估。
+因此，这两项任务需要不同的信息可见性和优化方法。简单地在单个序列中共享所有参数将导致召回质量与排序精度之间严重的跷跷板效应。</p>
+</div>
+<div class="ltx_para" id="S1.p5">
+<p class="ltx_p">现有的召回与排序协作尝试并未完全解决这些问题。
+一些方法在生成之后附加一个轻量打分器，或在原本分离的模块之间传递表征 <cite class="ltx_cite ltx_citemacro_citep">(Fu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib40" title="RankGR: rank-enhanced generative retrieval with listwise direct preference optimization in recommendation">2026</a>; Sun<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib41" title="OneRanker: unified generation and ranking with one model in industrial advertising recommendation">2026a</a>)</cite>；其他方法共享一个 Transformer 编码器或统一输入格式，同时保留任务特定的计算路径 <cite class="ltx_cite ltx_citemacro_citep">(Dai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib39" title="Onepiece: bringing context engineering and reasoning to industrial cascade ranking system">2025</a>; Li<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib64" title="UniPinRec: unifying generative retrieval and ranking at pinterest scale">2026</a>; Liu and Cao, <a class="ltx_ref" href="#bib.bib67" title="Harmonizing generative retrieval and ranking in chain-of-recommendation">2026</a>)</cite>。
+这些方法改善了跨阶段协作，但生成的 SID 轨迹和细粒度排序特征仍然没有被组织在单个序列中以进行逐层交互。
+因此，排序要么消费压缩后的生成后表征，要么需要额外的特征融合网络，而用户上下文可能仍被冗余处理。
+因此，关键挑战不是简单地共享一个编码器或损失函数，而是构建一个在正向传播中提供表征耦合、同时保持两个目标之间优化隔离的单一序列。</p>
+</div>
+<div class="ltx_para" id="S1.p6">
+<p class="ltx_p">为应对这一挑战，我们提出 <span class="ltx_text ltx_font_bold">UniR<sup class="ltx_sup"><span class="ltx_text ltx_font_medium">2</span></sup></span>，这是一个 <span class="ltx_text ltx_font_bold">Uni</span>fied 仅解码器 Transformer，在单个异构序列中执行生成式 <span class="ltx_text ltx_font_bold">R</span>ecall 与多目标 <span class="ltx_text ltx_font_bold">R</span>anking。
+UniR<sup class="ltx_sup">2</sup> 在一个 Transformer 主干中组织用户上下文、SID 轨迹和物品特征，使排序能够消费召回决策过程，而不仅仅是其离散的候选输出。
+Dual-Query Prefix-Causal Attention 机制为因果生成和排序特征融合提供任务特定的可见性，同时
+两阶段的不同优化目标保持了排序适应性，而不会破坏生成式主干的稳定性。
+因此，UniR<sup class="ltx_sup">2</sup> 在一次训练正向传播中实现了表征耦合与优化隔离，并在在线推理期间以单一服务同时支持召回和排序。</p>
+</div>
+<div class="ltx_para" id="S1.p7">
+<p class="ltx_p">我们的主要贡献总结如下：</p>
+<ul class="ltx_itemize" id="S1.I1">
+<li class="ltx_item" id="S1.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i1.p1">
+<p class="ltx_p">我们为生成式召回与多目标排序引入了一个单序列统一的视角。通过将用户上下文、SID 轨迹和物品特征组织在一个仅解码器序列中，该框架将召回轨迹转变为用于逐层排序特征交互的表征桥梁。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i2.p1">
+<p class="ltx_p">我们设计了 UniR<sup class="ltx_sup">2</sup>，这是一个配备 DQ-PCA 和 LoRA 平衡优化隔离的统一架构。UniR<sup class="ltx_sup">2</sup> 在正向表征学习中耦合两项任务，同时防止排序梯度破坏自回归召回主干，并通过共享上下文计算支持高效的单服务推理部署。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i3.p1">
+<p class="ltx_p">我们在大规模工业数据上进行了大量实验。UniR<sup class="ltx_sup">2</sup> 在生成式召回和多目标排序上均持续优于已部署基线，并在真实快手服务的在线 A/B 测试中取得显著收益，证明了其对工业界的有效性和实用性。</p>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2. </span>相关工作</h2>
+<section class="ltx_subsection" id="S2.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.1. </span>生成式推荐</h3>
+<div class="ltx_para" id="S2.SS1.p1">
+<p class="ltx_p">生成式推荐将序列推荐重构为一个以用户历史交互序列为条件的后续 SID 预测与生成任务。
+它能够从用户上下文直接分层搜索海量物品候选，而无需对整个物品语料库逐一打分，使其天然适合工业推荐系统中的大规模召回。
+该范式最早由 TIGER <cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib7" title="Recommender systems with generative retrieval">2023</a>)</cite> 以物品分词器和编码器-解码器架构确立，随后由 OneRec 系列 <cite class="ltx_cite ltx_citemacro_citep">(Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>; Wei<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib22" title="Oneloc: geo-aware generative recommender systems for local life service">2026</a>; Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib11" title="OneLive: dynamically unified generative framework for live-streaming recommendation">2026b</a>; Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib23" title="OneMall: one model, more scenarios–end-to-end generative recommender family at kuaishou e-commerce">2026a</a>)</cite> 扩展，后者引入了强化学习以进行个性化偏好对齐。然而，简单的自回归生成和束搜索并不能完全满足直接比较候选并探索更高价值候选的需求。
+PROMISE <cite class="ltx_cite ltx_citemacro_citep">(Guo<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib10" title="PROMISE: process reward models unlock test-time scaling laws in generative recommendations">2026</a>)</cite> 引入过程奖励模型，对中间生成路径进行细粒度评估。RankGR <cite class="ltx_cite ltx_citemacro_citep">(Fu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib40" title="RankGR: rank-enhanced generative retrieval with listwise direct preference optimization in recommendation">2026</a>)</cite> 使用轻量打分模型对候选进行精炼。V-Star <cite class="ltx_cite ltx_citemacro_citep">(Jiang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib24" title="Spend search where it pays: value-guided structured sampling and optimization for generative recommendation">2026</a>)</cite> 通过结构化采样策略将搜索聚焦于关键 SID 分支。尽管如此，这些方法本质上依赖单一偏好信号，并未显式建模排序阶段所需的候选多目标分数。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S2.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.2. </span>基于 Transformer 的排序</h3>
+<div class="ltx_para" id="S2.SS2.p1">
+<p class="ltx_p">工业排序模型长期以来依赖多任务塔式架构 <cite class="ltx_cite ltx_citemacro_citep">(Ma<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib49" title="Modeling task relationships in multi-task learning with multi-gate mixture-of-experts">2018</a>; Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib53" title="Home: hierarchy of multi-gate experts for multi-task learning at kuaishou">2025</a>; Tang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib55" title="Progressive layered extraction (ple): a novel multi-task learning (mtl) model for personalized recommendations">2020</a>)</cite>，通过人工设计的特征交互机制 <cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib56" title="Deep &amp; cross network for ad click predictions">2017</a>; Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib57" title="Deep interest network for click-through rate prediction">2018</a>)</cite> 取得强大性能。然而，用独立网络从不同角度建模用户兴趣，往往导致异构信息之间的交互浅层化、计算图碎片化，以及模型容量可扩展性受限。
+近年来，受 Transformer 架构启发 <cite class="ltx_cite ltx_citemacro_citep">(Vaswani<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib61" title="Attention is all you need">2017</a>)</cite>，工业排序模型开始将离散字段、上下文特征和用户行为序列统一表示为词元。随后使用多层注意力同时执行跨字段特征交互和兴趣建模，逐步赋予排序模型类似 LLM 的统一主干和可扩展的模型容量 <cite class="ltx_cite ltx_citemacro_citep">(Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib62" title="Wukong: towards a scaling law for large-scale recommendation">2024</a>; Chai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib63" title="Longer: scaling up long sequence modeling in industrial recommenders">2025</a>)</cite>。OneTrans <cite class="ltx_cite ltx_citemacro_citep">(Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib46" title="Onetrans: unified feature interaction and sequence modeling with one transformer in industrial recommender">2026b</a>)</cite> 通过 Transformer 主干联合建模序列和非序列特征。MixFormer <cite class="ltx_cite ltx_citemacro_citep">(Huang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib60" title="MixFormer: co-scaling up dense and sequence in industrial recommenders">2026</a>)</cite> 在单个参数空间内协同扩展稠密特征交互和序列建模。SORT <cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib59" title="SORT: a systematically optimized ranking transformer for industrial-scale recommenders">2026a</a>)</cite> 通过系统级优化显著提升排序 Transformer 模型的计算效率。TokenFormer <cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib58" title="TokenFormer: unify the multi-field and sequential recommendation worlds">2026</a>)</cite> 进一步解决了序列表征坍缩问题，在保持序列建模能力的同时增强了多字段特征表征的可判别性。
+尽管如此，这些方法仍然仅在排序阶段运作。由于它们与生成式召回共享基于 Transformer 的建模范式，在统一模型中弥合召回与排序仍存在巨大潜力。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S2.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.3. </span>统一的召回与排序</h3>
+<div class="ltx_para" id="S2.SS3.p1">
+<p class="ltx_p">召回与排序的协同建模近来已成为一个与工业界相关的研究方向，其演进从目标对齐与参数共享走向模型与计算流水线的融合。早期工作如 RankGR <cite class="ltx_cite ltx_citemacro_citep">(Fu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib40" title="RankGR: rank-enhanced generative retrieval with listwise direct preference optimization in recommendation">2026</a>)</cite> 将候选打分模块引入生成式召回并联合优化稀疏参数，但两个阶段在模型层面仍然分离，这本质上只是将召回与排序映射到同一表示空间。
+后续研究越来越多地探索统一架构。OnePiece <cite class="ltx_cite ltx_citemacro_citep">(Dai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib39" title="Onepiece: bringing context engineering and reasoning to industrial cascade ranking system">2025</a>)</cite> 将统一的词元化输入、Transformer 架构与上下文推理同时应用于召回和排序。OneRanker <cite class="ltx_cite ltx_citemacro_citep">(Sun<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib41" title="OneRanker: unified generation and ranking with one model in industrial advertising recommendation">2026a</a>)</cite> 通过生成与排序之间的键/值传递，并配合分布一致性约束，实现由粗到细的协同优化。UniPinRec <cite class="ltx_cite ltx_citemacro_citep">(Li<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib64" title="UniPinRec: unifying generative retrieval and ranking at pinterest scale">2026</a>)</cite> 通过共享一个 Transformer 统一了输入格式与模型训练。
+然而，现有方法通常依赖生成后打分或跨模块信息传递，尚未将召回轨迹与细粒度排序特征组织在同一序列中进行逐层交互。相比之下，UniR<sup class="ltx_sup">2</sup> 在召回与排序目标之间共享主干网络的同时，将用户上下文编码、SID 生成轨迹与特征交互整合进单个解码器序列，从而在词元序列层面和逐层计算层面都实现了统一。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3. </span>预备知识</h2>
+<div class="ltx_para" id="S3.p1">
+<p class="ltx_p">令 <math alttext="\mathcal{U}" class="ltx_Math" display="inline" id="S3.p1.m1"><semantics><mi class="ltx_font_mathcaligraphic">𝒰</mi><annotation encoding="application/x-tex">\mathcal{U}</annotation></semantics></math> 和 <math alttext="\mathcal{V}" class="ltx_Math" display="inline" id="S3.p1.m2"><semantics><mi class="ltx_font_mathcaligraphic">𝒱</mi><annotation encoding="application/x-tex">\mathcal{V}</annotation></semantics></math> 分别表示用户集合与物品集合。
+每个用户 <math alttext="u\in\mathcal{U}" class="ltx_Math" display="inline" id="S3.p1.m3"><semantics><mrow><mi>u</mi><mo>∈</mo><mi class="ltx_font_mathcaligraphic">𝒰</mi></mrow><annotation encoding="application/x-tex">u\in\mathcal{U}</annotation></semantics></math> 关联有个性化画像以及多个不同行为的历史序列。
+此外，每个物品 <math alttext="v\in\mathcal{V}" class="ltx_Math" display="inline" id="S3.p1.m4"><semantics><mrow><mi>v</mi><mo>∈</mo><mi class="ltx_font_mathcaligraphic">𝒱</mi></mrow><annotation encoding="application/x-tex">v\in\mathcal{V}</annotation></semantics></math> 由一组原始特征描述，其中包含语义 ID（SID）<math alttext="s_{v}=\{q_{1},q_{2},\dots,q_{L}\}" class="ltx_Math" display="inline" id="S3.p1.m5"><semantics><mrow><msub><mi>s</mi><mi>v</mi></msub><mo>=</mo><mrow><mo stretchy="false">{</mo><msub><mi>q</mi><mn>1</mn></msub><mo>,</mo><msub><mi>q</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>q</mi><mi>L</mi></msub><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">s_{v}=\{q_{1},q_{2},\dots,q_{L}\}</annotation></semantics></math>，它通过离散量化 <cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib7" title="Recommender systems with generative retrieval">2023</a>; Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>; Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib11" title="OneLive: dynamically unified generative framework for live-streaming recommendation">2026b</a>)</cite> 得到，这里 <math alttext="q_{l}" class="ltx_Math" display="inline" id="S3.p1.m6"><semantics><msub><mi>q</mi><mi>l</mi></msub><annotation encoding="application/x-tex">q_{l}</annotation></semantics></math> 是第 <math alttext="l" class="ltx_Math" display="inline" id="S3.p1.m7"><semantics><mi>l</mi><annotation encoding="application/x-tex">l</annotation></semantics></math> 层的编码。在我们的场景中，我们采用 Res-Kmeans <cite class="ltx_cite ltx_citemacro_citep">(Luo<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib32" title="Qarm: quantitative alignment multi-modal recommendation at kuaishou">2025</a>)</cite>，层数为 <math alttext="L=3" class="ltx_Math" display="inline" id="S3.p1.m8"><semantics><mrow><mi>L</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">L=3</annotation></semantics></math>，码本大小为 <math alttext="8129" class="ltx_Math" display="inline" id="S3.p1.m9"><semantics><mn>8129</mn><annotation encoding="application/x-tex">8129</annotation></semantics></math>。
+对于每一个观测到的交互对 <math alttext="(u,v)" class="ltx_Math" display="inline" id="S3.p1.m10"><semantics><mrow><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(u,v)</annotation></semantics></math>，我们根据相应行为是否发生，收集一个多目标标签向量 <math alttext="\mathbf{y}=(y_{1},\dots,y_{T})\!\in\!\{0,1\}^{T}" class="ltx_Math" display="inline" id="S3.p1.m11"><semantics><mrow><mi>𝐲</mi><mo>=</mo><mrow><mo stretchy="false">(</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>y</mi><mi>T</mi></msub><mo stretchy="false">)</mo></mrow><mo lspace="0.108em" rspace="0.108em">∈</mo><msup><mrow><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">}</mo></mrow><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{y}=(y_{1},\dots,y_{T})\!\in\!\{0,1\}^{T}</annotation></semantics></math>（<math alttext="e.g." class="ltx_Math" display="inline" id="S3.p1.m12"><semantics><mrow><mrow><mi>e</mi><mo lspace="0em" rspace="0.167em">.</mo><mi>g</mi></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">e.g.</annotation></semantics></math>、点击、长观看、礼品）。</p>
+</div>
+<div class="ltx_para" id="S3.p2">
+<p class="ltx_p">因此，我们的目标是在同一模型基础上完成两项任务。
+<span class="ltx_text ltx_font_bold">生成式召回</span>任务学习以用户侧上下文为条件的、关于 SID 的自回归分布：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(1)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="p_{\theta}\bigl{(}s_{v}\,\big{|}\,u)=\prod_{i=1}^{L}p_{\theta}\bigl{(}q_{i}\,% \big{|}\,u,q_{&lt;i})." class="ltx_Math" display="block" id="S3.E1.m1"><semantics><mrow><mrow><mrow><msub><mi>p</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><msub><mi>s</mi><mi>v</mi></msub><mo fence="false" mathsize="120%" rspace="0.448em">|</mo><mi>u</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false">∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mrow><msub><mi>p</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><msub><mi>q</mi><mi>i</mi></msub><mo fence="false" mathsize="120%" rspace="0.448em">|</mo><mrow><mi>u</mi><mo>,</mo><msub><mi>q</mi><mrow><mi></mi><mo>&lt;</mo><mi>i</mi></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">p_{\theta}\bigl{(}s_{v}\,\big{|}\,u)=\prod_{i=1}^{L}p_{\theta}\bigl{(}q_{i}\,% \big{|}\,u,q_{&lt;i}).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">训练时采用 NTP 损失，而在服务时执行束搜索。
+<span class="ltx_text ltx_font_bold">多目标排序</span>任务则学习给定 <math alttext="(u,v)" class="ltx_Math" display="inline" id="S3.p2.m1"><semantics><mrow><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(u,v)</annotation></semantics></math> 对时各目标的概率。
+形式化地，我们寻求一个打分函数：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E2">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(2)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\hat{y}=f_{\phi}\bigl{(}u,v)\in[0,1]^{T}," class="ltx_Math" display="block" id="S3.E2.m1"><semantics><mrow><mrow><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo>=</mo><mrow><msub><mi>f</mi><mi>ϕ</mi></msub><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow><mo>∈</mo><msup><mrow><mo stretchy="false">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><mi>T</mi></msup></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\hat{y}=f_{\phi}\bigl{(}u,v)\in[0,1]^{T},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其第 <math alttext="t" class="ltx_Math" display="inline" id="S3.p2.m2"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> 个坐标 <math alttext="\hat{y}_{t}" class="ltx_Math" display="inline" id="S3.p2.m3"><semantics><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\hat{y}_{t}</annotation></semantics></math> 估计 <math alttext="P(y_{t}=1\mid u,v)" class="ltx_Math" display="inline" id="S3.p2.m4"><semantics><mrow><mi>P</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>t</mi></msub><mo>=</mo><mrow><mn>1</mn><mo>∣</mo><mrow><mi>u</mi><mo>,</mo><mi>v</mi></mrow></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">P(y_{t}=1\mid u,v)</annotation></semantics></math>。
+排序器的训练基于多目标 BCE 损失。</p>
+</div>
+<div class="ltx_para" id="S3.p3">
+<p class="ltx_p">传统级联方法用相互独立的参数集 <math alttext="\theta" class="ltx_Math" display="inline" id="S3.p3.m1"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> 和 <math alttext="\phi" class="ltx_Math" display="inline" id="S3.p3.m2"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math> 实例化这两项任务，并将生成任务产生的候选列表传递给排序任务以进行多目标估计。
+本文研究一种替代形式，即学习一个以 <math alttext="\Theta" class="ltx_Math" display="inline" id="S3.p3.m3"><semantics><mi mathvariant="normal">Θ</mi><annotation encoding="application/x-tex">\Theta</annotation></semantics></math> 为参数的单一模型，该模型能够在流水线的单个阶段内同时产生生成分布和排序分数。
+这样一来，候选及其对应分数可以在一次服务调用中获得。</p>
+</div>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4. </span>方法</h2>
+<figure class="ltx_figure" id="S4.F2"><a href="assets/ec1d6869e435bdfc.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F2.g1" loading="lazy" src="assets/ec1d6869e435bdfc.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2. </span>我们模型的整体架构。</figcaption>
+</figure>
+<div class="ltx_para" id="S4.p1">
+<p class="ltx_p">UniR<sup class="ltx_sup">2</sup> 是一个仅解码器的 Transformer，它在单个序列中统一了生成式召回与多目标排序，
+从而最大化模型复用并减少计算冗余。
+如图 <a class="ltx_ref" href="#S4.F2" title="Figure 2 ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">2</span></a> 所示，UniR<sup class="ltx_sup">2</sup> 的输入是一个按顺序排列的异构词元序列，涵盖用户侧与物品侧信息。
+通过精心设计的策略，不同片段的输出分别用于生成任务和排序任务。</p>
+</div>
+<section class="ltx_subsection" id="S4.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1. </span>统一序列构成</h3>
+<div class="ltx_para" id="S4.SS1.p1">
+<p class="ltx_p">对于每个可观测的 <math alttext="(u,v)" class="ltx_Math" display="inline" id="S4.SS1.p1.m1"><semantics><mrow><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(u,v)</annotation></semantics></math> 交互对，训练时所有相关特征均可用。因此我们将这些特征组装成单个统一序列 <math alttext="\mathcal{S}=[\mathcal{P}\,\|\,\mathcal{T}_{\mathrm{gen}}\,\|\,\mathcal{T}_{% \mathrm{rank}}]" class="ltx_Math" display="inline" id="S4.SS1.p1.m2"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒮</mi><mo>=</mo><mrow><mo stretchy="false">[</mo><mrow><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo lspace="0.170em">⁢</mo><mrow><mo rspace="0.170em" stretchy="false">‖</mo><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi></msub><mo stretchy="false">‖</mo></mrow><mo lspace="0.170em">⁢</mo><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>rank</mi></msub></mrow><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{S}=[\mathcal{P}\,\|\,\mathcal{T}_{\mathrm{gen}}\,\|\,\mathcal{T}_{% \mathrm{rank}}]</annotation></semantics></math>，它拼接了三组词元作为模型输入。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">用户片段 <math alttext="\mathcal{P}" class="ltx_Math" display="inline" id="S4.SS1.p2.m1"><semantics><mi class="ltx_font_mathcaligraphic">𝒫</mi><annotation encoding="application/x-tex">\mathcal{P}</annotation></semantics></math>。</span>
+我们将 <math alttext="u" class="ltx_Math" display="inline" id="S4.SS1.p2.m2"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math> 的侧信息视为一组异构的行为块与画像块 <math alttext="\{\mathbf{x}_{u}^{(0)},\mathbf{x}_{u}^{(1)},\dots,\mathbf{x}_{u}^{(K-1)},% \mathbf{x}_{u}^{(K)}\}" class="ltx_Math" display="inline" id="S4.SS1.p2.m3"><semantics><mrow><mo stretchy="false">{</mo><msubsup><mi>𝐱</mi><mi>u</mi><mrow><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo></mrow></msubsup><mo>,</mo><msubsup><mi>𝐱</mi><mi>u</mi><mrow><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msubsup><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msubsup><mi>𝐱</mi><mi>u</mi><mrow><mo stretchy="false">(</mo><mrow><mi>K</mi><mo>−</mo><mn>1</mn></mrow><mo stretchy="false">)</mo></mrow></msubsup><mo>,</mo><msubsup><mi>𝐱</mi><mi>u</mi><mrow><mo stretchy="false">(</mo><mi>K</mi><mo stretchy="false">)</mo></mrow></msubsup><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{\mathbf{x}_{u}^{(0)},\mathbf{x}_{u}^{(1)},\dots,\mathbf{x}_{u}^{(K-1)},% \mathbf{x}_{u}^{(K)}\}</annotation></semantics></math>，其中 <math alttext="\mathbf{x}_{u}^{(K)}" class="ltx_Math" display="inline" id="S4.SS1.p2.m4"><semantics><msubsup><mi>𝐱</mi><mi>u</mi><mrow><mo stretchy="false">(</mo><mi>K</mi><mo stretchy="false">)</mo></mrow></msubsup><annotation encoding="application/x-tex">\mathbf{x}_{u}^{(K)}</annotation></semantics></math> 编码 <math alttext="u" class="ltx_Math" display="inline" id="S4.SS1.p2.m5"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math> 的静态画像，而 <math alttext="\mathbf{x}_{u}^{(b)}" class="ltx_Math" display="inline" id="S4.SS1.p2.m6"><semantics><msubsup><mi>𝐱</mi><mi>u</mi><mrow><mo stretchy="false">(</mo><mi>b</mi><mo stretchy="false">)</mo></mrow></msubsup><annotation encoding="application/x-tex">\mathbf{x}_{u}^{(b)}</annotation></semantics></math>（<math alttext="0\leq\!b\!\leq K-1" class="ltx_Math" display="inline" id="S4.SS1.p2.m7"><semantics><mrow><mn>0</mn><mo rspace="0.108em">≤</mo><mi>b</mi><mo lspace="0.108em">≤</mo><mrow><mi>K</mi><mo>−</mo><mn>1</mn></mrow></mrow><annotation encoding="application/x-tex">0\leq\!b\!\leq K-1</annotation></semantics></math>）是行为 <math alttext="b\in\{\text{Click},\text{Long-View},\text{Gift},\dots\}" class="ltx_Math" display="inline" id="S4.SS1.p2.m8"><semantics><mrow><mi>b</mi><mo>∈</mo><mrow><mo stretchy="false">{</mo><mtext>Click</mtext><mo>,</mo><mtext>Long-View</mtext><mo>,</mo><mtext>Gift</mtext><mo>,</mo><mi mathvariant="normal">…</mi><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">b\in\{\text{Click},\text{Long-View},\text{Gift},\dots\}</annotation></semantics></math> 下的变长交互历史序列。
+每个块被投影到 <math alttext="d" class="ltx_Math" display="inline" id="S4.SS1.p2.m9"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>，并加上从表 <math alttext="E_{\mathcal{P}}\!\in\!\mathbb{R}^{(K+1)\times d}" class="ltx_Math" display="inline" id="S4.SS1.p2.m10"><semantics><mrow><msub><mi>E</mi><mi class="ltx_font_mathcaligraphic">𝒫</mi></msub><mo lspace="0.108em" rspace="0.108em">∈</mo><msup><mi>ℝ</mi><mrow><mrow><mo stretchy="false">(</mo><mrow><mi>K</mi><mo>+</mo><mn>1</mn></mrow><mo rspace="0.055em" stretchy="false">)</mo></mrow><mo rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">E_{\mathcal{P}}\!\in\!\mathbb{R}^{(K+1)\times d}</annotation></semantics></math> 中取出的自身的类型嵌入进行偏移：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E3">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(3)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{P}_{k}=\mathrm{Proj}_{k}(\mathbf{x}_{u}^{(k)})+E_{\mathcal{P}}[k],% \quad\mathcal{P}=[\mathcal{P}_{0};\mathcal{P}_{1};\dots;\mathcal{P}_{K-1};% \mathcal{P}_{K}]." class="ltx_Math" display="block" id="S4.E3.m1"><semantics><mrow><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mi>k</mi></msub><mo>=</mo><mrow><mrow><msub><mi>Proj</mi><mi>k</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msubsup><mi>𝐱</mi><mi>u</mi><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msubsup><mo stretchy="false">)</mo></mrow></mrow><mo>+</mo><mrow><msub><mi>E</mi><mi class="ltx_font_mathcaligraphic">𝒫</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mi>k</mi><mo stretchy="false">]</mo></mrow></mrow></mrow></mrow><mo rspace="1.167em">,</mo><mrow><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo>=</mo><mrow><mo stretchy="false">[</mo><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mn>0</mn></msub><mo>;</mo><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mn>1</mn></msub><mo>;</mo><mi mathvariant="normal">…</mi><mo>;</mo><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mrow><mi>K</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>;</mo><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mi>K</mi></msub><mo stretchy="false">]</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\mathcal{P}_{k}=\mathrm{Proj}_{k}(\mathbf{x}_{u}^{(k)})+E_{\mathcal{P}}[k],% \quad\mathcal{P}=[\mathcal{P}_{0};\mathcal{P}_{1};\dots;\mathcal{P}_{K-1};% \mathcal{P}_{K}].</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">由于 <math alttext="\mathcal{P}" class="ltx_Math" display="inline" id="S4.SS1.p2.m11"><semantics><mi class="ltx_font_mathcaligraphic">𝒫</mi><annotation encoding="application/x-tex">\mathcal{P}</annotation></semantics></math> 表示稳定的用户侧信息且在不同物品之间保持不变，它充当由每个下游目标词元读取的共享记忆，起到编码器键/值缓存的作用。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">生成片段 <math alttext="\mathcal{T}_{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.SS1.p3.m1"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi></msub><annotation encoding="application/x-tex">\mathcal{T}_{\mathrm{gen}}</annotation></semantics></math>。</span>
+给定目标物品 <math alttext="v" class="ltx_Math" display="inline" id="S4.SS1.p3.m2"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>，其分层 SID 为 <math alttext="s_{v}=(q_{1},q_{2},q_{3})" class="ltx_Math" display="inline" id="S4.SS1.p3.m3"><semantics><mrow><msub><mi>s</mi><mi>v</mi></msub><mo>=</mo><mrow><mo stretchy="false">(</mo><msub><mi>q</mi><mn>1</mn></msub><mo>,</mo><msub><mi>q</mi><mn>2</mn></msub><mo>,</mo><msub><mi>q</mi><mn>3</mn></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">s_{v}=(q_{1},q_{2},q_{3})</annotation></semantics></math>，该片段是生成式召回任务的教师强制输入：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E4">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(4)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{T}_{\mathrm{gen}}=[\textsc{[bos]},e(q_{1}),e(q_{2}),e(q_{3})]," class="ltx_Math" display="block" id="S4.E4.m1"><semantics><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi></msub><mo>=</mo><mrow><mo stretchy="false">[</mo><mtext class="ltx_font_smallcaps">[bos]</mtext><mo>,</mo><mrow><mi>e</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>q</mi><mn>1</mn></msub><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><mi>e</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>q</mi><mn>2</mn></msub><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><mi>e</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>q</mi><mn>3</mn></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{T}_{\mathrm{gen}}=[\textsc{[bos]},e(q_{1}),e(q_{2}),e(q_{3})],</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="e(\cdot)" class="ltx_Math" display="inline" id="S4.SS1.p3.m4"><semantics><mrow><mi>e</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">e(\cdot)</annotation></semantics></math> 是码本嵌入查找，<span class="ltx_text ltx_markedasmath ltx_font_smallcaps">[bos]</span> 是一个学习得到的特殊词元。
+第 <math alttext="i" class="ltx_Math" display="inline" id="S4.SS1.p3.m6"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> 个位置（位于 <math alttext="\mathcal{T}_{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.SS1.p3.m7"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi></msub><annotation encoding="application/x-tex">\mathcal{T}_{\mathrm{gen}}</annotation></semantics></math> 中）被训练为按标准 NTP 模式预测下一层的编码 <math alttext="q_{i}" class="ltx_Math" display="inline" id="S4.SS1.p3.m8"><semantics><msub><mi>q</mi><mi>i</mi></msub><annotation encoding="application/x-tex">q_{i}</annotation></semantics></math>。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">排序片段 <math alttext="\mathcal{T}_{\mathrm{rank}}" class="ltx_Math" display="inline" id="S4.SS1.p4.m1"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>rank</mi></msub><annotation encoding="application/x-tex">\mathcal{T}_{\mathrm{rank}}</annotation></semantics></math>。</span>
+仅靠 SID 不足以完整建模物品特性或 <math alttext="(u,v)" class="ltx_Math" display="inline" id="S4.SS1.p4.m2"><semantics><mrow><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(u,v)</annotation></semantics></math> 对之间的特征交叉。因此，除了 <math alttext="v" class="ltx_Math" display="inline" id="S4.SS1.p4.m3"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> 的 SID 之外，我们还追加一组有序的物品特征词元：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E5">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(5)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{T}_{\mathrm{rank}}=[e_{1}(v),\,e_{2}(v),\,\dots,\,e_{M}(v)]," class="ltx_Math" display="block" id="S4.E5.m1"><semantics><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>rank</mi></msub><mo>=</mo><mrow><mo stretchy="false">[</mo><mrow><msub><mi>e</mi><mn>1</mn></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.337em">,</mo><mrow><msub><mi>e</mi><mn>2</mn></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.337em">,</mo><mi mathvariant="normal">…</mi><mo rspace="0.337em">,</mo><mrow><msub><mi>e</mi><mi>M</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{T}_{\mathrm{rank}}=[e_{1}(v),\,e_{2}(v),\,\dots,\,e_{M}(v)],</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">它从互补视角概括了 <math alttext="v" class="ltx_Math" display="inline" id="S4.SS1.p4.m4"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>，<span class="ltx_text ltx_font_italic">例如</span>物品画像、内容嵌入、<math alttext="(u,v)" class="ltx_Math" display="inline" id="S4.SS1.p4.m5"><semantics><mrow><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(u,v)</annotation></semantics></math>交叉统计量以及上游先验。
+每个 <math alttext="e_{m}(v)" class="ltx_Math" display="inline" id="S4.SS1.p4.m6"><semantics><mrow><msub><mi>e</mi><mi>m</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">e_{m}(v)</annotation></semantics></math> 由其原始特征块经独立的轻量投影产生，并加上一个位置类型嵌入进行偏移。
+这些词元充当可学习的排序查询，其上下文化表示被用作充分的特征融合结果，传递给多目标排序塔。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p5">
+<p class="ltx_p">因此，完整的输入单序列为：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E6">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(6)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{S}=\bigl{[}\underbrace{\mathcal{P}_{0},\dots,\mathcal{P}_{K-1},% \mathcal{P}_{K}}_{\text{User segment}}\;\bigl{\|}\;\underbrace{\textsc{[bos]},% e(q_{1}),e(q_{2}),e(q_{3})}_{\text{Generative segment}}\;\bigl{\|}\;% \underbrace{e_{1}(v),\dots,e_{M}(v)}_{\text{Ranking segment}}\bigr{]}." class="ltx_math_unparsed" display="block" id="S4.E6.m1"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒮</mi><mo>=</mo><mrow><mo maxsize="120%" minsize="120%">[</mo><munder><munder accentunder="true"><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mn>0</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mrow><mi>K</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mi>K</mi></msub></mrow><mo>⏟</mo></munder><mtext>User segment</mtext></munder><mrow><mo fence="true" lspace="0em" mathsize="120%" rspace="0em">∥</mo><munder><munder accentunder="true"><mrow><mtext class="ltx_font_smallcaps">[bos]</mtext><mo>,</mo><mrow><mi>e</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>q</mi><mn>1</mn></msub><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><mi>e</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>q</mi><mn>2</mn></msub><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><mi>e</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>q</mi><mn>3</mn></msub><mo stretchy="false">)</mo></mrow></mrow></mrow><mo>⏟</mo></munder><mtext>Generative segment</mtext></munder><mrow><mo fence="true" lspace="0em" mathsize="120%" rspace="0em">∥</mo><munder><munder accentunder="true"><mrow><mrow><msub><mi>e</mi><mn>1</mn></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mrow><msub><mi>e</mi><mi>M</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><mo>⏟</mo></munder><mtext>Ranking segment</mtext></munder><mo maxsize="120%" minsize="120%">]</mo></mrow><mo lspace="0em">.</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{S}=\bigl{[}\underbrace{\mathcal{P}_{0},\dots,\mathcal{P}_{K-1},% \mathcal{P}_{K}}_{\text{User segment}}\;\bigl{\|}\;\underbrace{\textsc{[bos]},% e(q_{1}),e(q_{2}),e(q_{3})}_{\text{Generative segment}}\;\bigl{\|}\;% \underbrace{e_{1}(v),\dots,e_{M}(v)}_{\text{Ranking segment}}\bigr{]}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">这种统一序列构成设计使得召回目标与排序目标被送入同一个仅解码器 Transformer 块，它们位于同一堆叠中，并共享模型参数与不变内容的上下文记忆。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2. </span>双查询前缀因果注意力</h3>
+<div class="ltx_para" id="S4.SS2.p1">
+<p class="ltx_p">对于基于 Transformer 的生成式召回 <cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib21" title="Onerec-v2 technical report">2025</a>; Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib19" title="Nezha: a zero-sacrifice and hyperspeed decoding architecture for generative recommendations">2026c</a>)</cite> 或排序 <cite class="ltx_cite ltx_citemacro_citep">(Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib46" title="Onetrans: unified feature interaction and sequence modeling with one transformer in industrial recommender">2026b</a>; Tang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib47" title="LoopCTR: unlocking the loop scaling power for click-through rate prediction">2026</a>)</cite>，一种朴素做法是在整个统一序列上应用因果自注意力。
+这种做法虽然概念上简单直接，但在计算上是浪费的。
+首先，用户片段通常远长于两个目标片段，迫使完整序列在每一层都执行注意力是高度冗余的。
+其次，两个目标片段的作用不同，因为 <math alttext="\mathcal{T}_{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.SS2.p1.m1"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi></msub><annotation encoding="application/x-tex">\mathcal{T}_{\mathrm{gen}}</annotation></semantics></math> 遵循自回归任务，因而无法访问未来位置，而 <math alttext="\mathcal{T}_{\mathrm{rank}}" class="ltx_Math" display="inline" id="S4.SS2.p1.m2"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>rank</mi></msub><annotation encoding="application/x-tex">\mathcal{T}_{\mathrm{rank}}</annotation></semantics></math> 由同步加入的物品侧信息构成，因此可以相互可见。
+为此，UniR<sup class="ltx_sup">2</sup> 引入了双查询前缀因果注意力机制（DQ-PCA），它在序列轴上将两个目标分离，同时共享所有基础注意力权重。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">可见性受限的双查询。</span>
+在每一层，对于两个不同的目标片段，该块使用两个具有不同可见性模式的独立查询来消费统一序列：</p>
+<ul class="ltx_itemize" id="S4.I1">
+<li class="ltx_item" id="S4.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I1.i1.p1">
+<p class="ltx_p">生成查询 <math alttext="Q^{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.I1.i1.p1.m1"><semantics><msup><mi>Q</mi><mi>gen</mi></msup><annotation encoding="application/x-tex">Q^{\mathrm{gen}}</annotation></semantics></math> 携带 SID 词元 <math alttext="\mathcal{T}_{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.I1.i1.p1.m2"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi></msub><annotation encoding="application/x-tex">\mathcal{T}_{\mathrm{gen}}</annotation></semantics></math>。与标准生成式召回一致，预测可能的 SID 仅依赖于用户侧上下文。因此 <math alttext="Q^{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.I1.i1.p1.m3"><semantics><msup><mi>Q</mi><mi>gen</mi></msup><annotation encoding="application/x-tex">Q^{\mathrm{gen}}</annotation></semantics></math> 关注完整用户片段及其自身的前置位置，从而实现前缀因果模式：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E7">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(7)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="Q^{\mathrm{gen}}=[\mathcal{T}_{\mathrm{gen}}],\quad K^{\mathrm{gen}}=V^{% \mathrm{gen}}=[\mathcal{P},\mathcal{T}_{\mathrm{gen}}]." class="ltx_Math" display="block" id="S4.E7.m1"><semantics><mrow><mrow><mrow><msup><mi>Q</mi><mi>gen</mi></msup><mo>=</mo><mrow><mo stretchy="false">[</mo><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi></msub><mo stretchy="false">]</mo></mrow></mrow><mo rspace="1.167em">,</mo><mrow><msup><mi>K</mi><mi>gen</mi></msup><mo>=</mo><msup><mi>V</mi><mi>gen</mi></msup><mo>=</mo><mrow><mo stretchy="false">[</mo><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi></msub><mo stretchy="false">]</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">Q^{\mathrm{gen}}=[\mathcal{T}_{\mathrm{gen}}],\quad K^{\mathrm{gen}}=V^{% \mathrm{gen}}=[\mathcal{P},\mathcal{T}_{\mathrm{gen}}].</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">形式化地，用 <math alttext="i\!\in\![1,L]" class="ltx_Math" display="inline" id="S4.I1.i1.p1.m4"><semantics><mrow><mi>i</mi><mo lspace="0.108em" rspace="0.108em">∈</mo><mrow><mo stretchy="false">[</mo><mn>1</mn><mo>,</mo><mi>L</mi><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">i\!\in\![1,L]</annotation></semantics></math> 索引 SID 查询位置、用 <math alttext="j\!\in\![1,|\mathcal{P}|+L]" class="ltx_Math" display="inline" id="S4.I1.i1.p1.m5"><semantics><mrow><mi>j</mi><mo lspace="0.108em" rspace="0.108em">∈</mo><mrow><mo stretchy="false">[</mo><mn>1</mn><mo>,</mo><mrow><mrow><mo stretchy="false">|</mo><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo stretchy="false">|</mo></mrow><mo>+</mo><mi>L</mi></mrow><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">j\!\in\![1,|\mathcal{P}|+L]</annotation></semantics></math> 索引键位置，注意力掩码为：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E8">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(8)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathbf{M}^{\mathrm{gen}}_{i,j}=\begin{cases}0,&amp;j\leq|\mathcal{P}|\ \ \text{or% }\ \ |\mathcal{P}|&lt;j\leq|\mathcal{P}|+i,\\[2.0pt] -\infty,&amp;|\mathcal{P}|+i&lt;j\leq|\mathcal{P}|+L.\end{cases}" class="ltx_Math" display="block" id="S4.E8.m1"><semantics><mrow><msubsup><mi>𝐌</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mi>gen</mi></msubsup><mo>=</mo><mrow><mo>{</mo><mtable columnspacing="5pt" displaystyle="true" rowspacing="0pt"><mtr><mtd class="ltx_align_left" columnalign="left"><mrow><mn>0</mn><mo>,</mo></mrow></mtd><mtd class="ltx_align_left" columnalign="left"><mrow><mrow><mrow><mi>j</mi><mo>≤</mo><mrow><mrow><mo stretchy="false">|</mo><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo stretchy="false">|</mo></mrow><mspace width="1em"></mspace><mtext>or</mtext></mrow></mrow><mspace width="1em"></mspace><mrow><mrow><mo stretchy="false">|</mo><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo stretchy="false">|</mo></mrow><mo>&lt;</mo><mi>j</mi><mo>≤</mo><mrow><mrow><mo stretchy="false">|</mo><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo stretchy="false">|</mo></mrow><mo>+</mo><mi>i</mi></mrow></mrow></mrow><mo>,</mo></mrow></mtd></mtr><mtr><mtd class="ltx_align_left" columnalign="left"><mrow><mrow><mo>−</mo><mi mathvariant="normal">∞</mi></mrow><mo>,</mo></mrow></mtd><mtd class="ltx_align_left" columnalign="left"><mrow><mrow><mrow><mrow><mo stretchy="false">|</mo><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo stretchy="false">|</mo></mrow><mo>+</mo><mi>i</mi></mrow><mo>&lt;</mo><mi>j</mi><mo>≤</mo><mrow><mrow><mo stretchy="false">|</mo><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo stretchy="false">|</mo></mrow><mo>+</mo><mi>L</mi></mrow></mrow><mo lspace="0em">.</mo></mrow></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\mathbf{M}^{\mathrm{gen}}_{i,j}=\begin{cases}0,&amp;j\leq|\mathcal{P}|\ \ \text{or% }\ \ |\mathcal{P}|&lt;j\leq|\mathcal{P}|+i,\\[2.0pt] -\infty,&amp;|\mathcal{P}|+i&lt;j\leq|\mathcal{P}|+L.\end{cases}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I1.i2.p1">
+<p class="ltx_p">排序查询 <math alttext="Q^{\mathrm{rank}}" class="ltx_Math" display="inline" id="S4.I1.i2.p1.m1"><semantics><msup><mi>Q</mi><mi>rank</mi></msup><annotation encoding="application/x-tex">Q^{\mathrm{rank}}</annotation></semantics></math> 携带物品侧特征词元 <math alttext="\mathcal{T}_{\mathrm{rank}}" class="ltx_Math" display="inline" id="S4.I1.i2.p1.m2"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>rank</mi></msub><annotation encoding="application/x-tex">\mathcal{T}_{\mathrm{rank}}</annotation></semantics></math>。由于统一序列中的每个元素原则上都对打分具有相互信息，双向自注意力是特征融合中最具表达力的选择。
+然而，考虑到长用户历史已在生成阶段被摊销，且诸如 GSU <cite class="ltx_cite ltx_citemacro_citep">(Pi<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib50" title="Search-based user interest modeling with lifelong sequential behavior data for click-through rate prediction">2020</a>)</cite> 结果等序列召回信号已作为词元编码在 <math alttext="\mathcal{T}_{\mathrm{rank}}" class="ltx_Math" display="inline" id="S4.I1.i2.p1.m3"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>rank</mi></msub><annotation encoding="application/x-tex">\mathcal{T}_{\mathrm{rank}}</annotation></semantics></math> 本身之中。因此，<math alttext="Q^{\mathrm{rank}}" class="ltx_Math" display="inline" id="S4.I1.i2.p1.m4"><semantics><msup><mi>Q</mi><mi>rank</mi></msup><annotation encoding="application/x-tex">Q^{\mathrm{rank}}</annotation></semantics></math> 对用户片段内部分序列的注意力被舍弃，仅保留用户画像：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E9">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(9)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="Q^{\mathrm{rank}}=[\mathcal{T}_{\mathrm{rank}}],\quad K^{\mathrm{rank}}=V^{% \mathrm{rank}}=[\mathcal{P}_{K},\mathcal{T}_{\mathrm{gen}},\mathcal{T}_{% \mathrm{rank}}]." class="ltx_Math" display="block" id="S4.E9.m1"><semantics><mrow><mrow><mrow><msup><mi>Q</mi><mi>rank</mi></msup><mo>=</mo><mrow><mo stretchy="false">[</mo><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>rank</mi></msub><mo stretchy="false">]</mo></mrow></mrow><mo rspace="1.167em">,</mo><mrow><msup><mi>K</mi><mi>rank</mi></msup><mo>=</mo><msup><mi>V</mi><mi>rank</mi></msup><mo>=</mo><mrow><mo stretchy="false">[</mo><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mi>K</mi></msub><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi></msub><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>rank</mi></msub><mo stretchy="false">]</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">Q^{\mathrm{rank}}=[\mathcal{T}_{\mathrm{rank}}],\quad K^{\mathrm{rank}}=V^{% \mathrm{rank}}=[\mathcal{P}_{K},\mathcal{T}_{\mathrm{gen}},\mathcal{T}_{% \mathrm{rank}}].</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">加性掩码在受限范围内统一为零：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E10">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(10)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathbf{M}^{\mathrm{rank}}_{i,j}=0,\quad\forall\,i\!\in\![1,M],\ j\!\in\![1,|% \mathcal{P}_{K}|+L+M]." class="ltx_Math" display="block" id="S4.E10.m1"><semantics><mrow><mrow><mrow><msubsup><mi>𝐌</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mi>rank</mi></msubsup><mo>=</mo><mn>0</mn></mrow><mo rspace="1.167em">,</mo><mrow><mrow><mrow><mo rspace="0.337em">∀</mo><mi>i</mi></mrow><mo lspace="0.108em" rspace="0.108em">∈</mo><mrow><mo stretchy="false">[</mo><mn>1</mn><mo>,</mo><mi>M</mi><mo stretchy="false">]</mo></mrow></mrow><mo rspace="0.667em">,</mo><mrow><mi>j</mi><mo lspace="0.108em" rspace="0.108em">∈</mo><mrow><mo stretchy="false">[</mo><mn>1</mn><mo>,</mo><mrow><mrow><mo stretchy="false">|</mo><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mi>K</mi></msub><mo stretchy="false">|</mo></mrow><mo>+</mo><mi>L</mi><mo>+</mo><mi>M</mi></mrow><mo stretchy="false">]</mo></mrow></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\mathbf{M}^{\mathrm{rank}}_{i,j}=0,\quad\forall\,i\!\in\![1,M],\ j\!\in\![1,|% \mathcal{P}_{K}|+L+M].</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="S4.SS2.p3">
+<p class="ltx_p">可以看出，前缀用户片段中的个性化身份信息被两个查询共同读取，这避免了单次前向传播中的冗余计算。
+此外，排序片段关注完整的生成片段，因此排序输出始终来自一个已经纳入目标物品对应召回轨迹的表示。
+这些特性使 UniR<sup class="ltx_sup">2</sup> 成为一个真正统一的模型，而不是两个共享同一编码器的并列子模型，并且它在构造上就实现了表示耦合。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">权重共享。</span>
+与常规仅解码器架构类似，UniR<sup class="ltx_sup">2</sup> 的每个块由一个注意力机制和一个前馈网络组成。
+前者基于多头注意力，并使用 DQ-PCA 为不同目标构造相应输入：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E11">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(11)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="O=\text{MultiHead}(W_{q}Q,W_{k}K,W_{v}V)W_{o}," class="ltx_Math" display="block" id="S4.E11.m1"><semantics><mrow><mrow><mi>O</mi><mo>=</mo><mrow><mtext>MultiHead</mtext><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>W</mi><mi>q</mi></msub><mo>⁢</mo><mi>Q</mi></mrow><mo>,</mo><mrow><msub><mi>W</mi><mi>k</mi></msub><mo>⁢</mo><mi>K</mi></mrow><mo>,</mo><mrow><msub><mi>W</mi><mi>v</mi></msub><mo>⁢</mo><mi>V</mi></mrow><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mi>W</mi><mi>o</mi></msub></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">O=\text{MultiHead}(W_{q}Q,W_{k}K,W_{v}V)W_{o},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">基础投影 <math alttext="W_{q},W_{k},W_{v},W_{o}\in\mathbb{R}^{d\times d}" class="ltx_Math" display="inline" id="S4.SS2.p4.m2"><semantics><mrow><mrow><msub><mi>W</mi><mi>q</mi></msub><mo>,</mo><msub><mi>W</mi><mi>k</mi></msub><mo>,</mo><msub><mi>W</mi><mi>v</mi></msub><mo>,</mo><msub><mi>W</mi><mi>o</mi></msub></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>d</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">W_{q},W_{k},W_{v},W_{o}\in\mathbb{R}^{d\times d}</annotation></semantics></math> 在两个分支之间以及所有记忆分区之间共享。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p5">
+<p class="ltx_p">不同查询对应的输出随后经过任务特定的前馈块 <math alttext="\text{FFN}_{gen}" class="ltx_Math" display="inline" id="S4.SS2.p5.m1"><semantics><msub><mtext>FFN</mtext><mrow><mi>g</mi><mo>⁢</mo><mi>e</mi><mo>⁢</mo><mi>n</mi></mrow></msub><annotation encoding="application/x-tex">\text{FFN}_{gen}</annotation></semantics></math> 和 <math alttext="\text{FFN}_{rank}" class="ltx_Math" display="inline" id="S4.SS2.p5.m2"><semantics><msub><mtext>FFN</mtext><mrow><mi>r</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>n</mi><mo>⁢</mo><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">\text{FFN}_{rank}</annotation></semantics></math>，从而在每一层为两个目标建立任务级屏障 <cite class="ltx_cite ltx_citemacro_citep">(Diao<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib68" title="Sensenova-u1: unifying multimodal understanding and generation with neo-unify architecture">2026</a>)</cite>。
+堆叠 <math alttext="N" class="ltx_Math" display="inline" id="S4.SS2.p5.m3"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math> 层这样的块，即得到用于召回头的 <math alttext="\mathbf{h}^{\mathrm{gen}}\!\in\!\mathbb{R}^{L\times d}" class="ltx_Math" display="inline" id="S4.SS2.p5.m4"><semantics><mrow><msup><mi>𝐡</mi><mi>gen</mi></msup><mo lspace="0.108em" rspace="0.108em">∈</mo><msup><mi>ℝ</mi><mrow><mi>L</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{h}^{\mathrm{gen}}\!\in\!\mathbb{R}^{L\times d}</annotation></semantics></math> 和用于排序头的 <math alttext="\mathbf{h}^{\mathrm{rank}}\!\in\!\mathbb{R}^{M\times d}" class="ltx_Math" display="inline" id="S4.SS2.p5.m5"><semantics><mrow><msup><mi>𝐡</mi><mi>rank</mi></msup><mo lspace="0.108em" rspace="0.108em">∈</mo><msup><mi>ℝ</mi><mrow><mi>M</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{h}^{\mathrm{rank}}\!\in\!\mathbb{R}^{M\times d}</annotation></semantics></math>。
+这样一来，该架构完整保留了共享主干以及单次前向传播的不变性，二者共同构成了统一的基础。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.3. </span>生成式召回</h3>
+<div class="ltx_para" id="S4.SS3.p1">
+<p class="ltx_p">生成分支旨在将生成隐藏状态 <math alttext="\mathbf{h}^{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.SS3.p1.m1"><semantics><msup><mi>𝐡</mi><mi>gen</mi></msup><annotation encoding="application/x-tex">\mathbf{h}^{\mathrm{gen}}</annotation></semantics></math> 转化为分层 SID 码本上的分布。为了让每个 SID 位置专门对应其自身的码本层级，同时仍共享 Transformer 主干，我们附加 <math alttext="L" class="ltx_Math" display="inline" id="S4.SS3.p1.m2"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math> 个独立的输出投影 <math alttext="W_{gen}^{(1)},\dots,W_{gen}^{(L)}\!\in\!\mathbb{R}^{V\times d}" class="ltx_Math" display="inline" id="S4.SS3.p1.m3"><semantics><mrow><mrow><msubsup><mi>W</mi><mrow><mi>g</mi><mo>⁢</mo><mi>e</mi><mo>⁢</mo><mi>n</mi></mrow><mrow><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msubsup><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msubsup><mi>W</mi><mrow><mi>g</mi><mo>⁢</mo><mi>e</mi><mo>⁢</mo><mi>n</mi></mrow><mrow><mo stretchy="false">(</mo><mi>L</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><mo rspace="0.108em">∈</mo><msup><mi>ℝ</mi><mrow><mi>V</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">W_{gen}^{(1)},\dots,W_{gen}^{(L)}\!\in\!\mathbb{R}^{V\times d}</annotation></semantics></math>，它们位于 <math alttext="\mathbf{h}^{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.SS3.p1.m4"><semantics><msup><mi>𝐡</mi><mi>gen</mi></msup><annotation encoding="application/x-tex">\mathbf{h}^{\mathrm{gen}}</annotation></semantics></math> 之上，并由前一个隐藏状态预测下一层级 <math alttext="i" class="ltx_Math" display="inline" id="S4.SS3.p1.m5"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> 的编码：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E12">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(12)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="p_{\Theta}\bigl{(}q_{i}\,\big{|}\,u,q_{&lt;i}\bigr{)}=\mathrm{softmax}\bigl{(}W_{% gen}^{(i)}\,\mathbf{h}^{\mathrm{gen}}_{i-1}\bigr{)}." class="ltx_Math" display="block" id="S4.E12.m1"><semantics><mrow><mrow><mrow><msub><mi>p</mi><mi mathvariant="normal">Θ</mi></msub><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><msub><mi>q</mi><mi>i</mi></msub><mo fence="false" mathsize="120%" rspace="0.448em">|</mo><mrow><mi>u</mi><mo>,</mo><msub><mi>q</mi><mrow><mi></mi><mo>&lt;</mo><mi>i</mi></mrow></msub></mrow></mrow><mo maxsize="120%" minsize="120%">)</mo></mrow></mrow><mo>=</mo><mrow><mi>softmax</mi><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><msubsup><mi>W</mi><mrow><mi>g</mi><mo>⁢</mo><mi>e</mi><mo>⁢</mo><mi>n</mi></mrow><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>⁢</mo><msubsup><mi>𝐡</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mi>gen</mi></msubsup></mrow><mo maxsize="120%" minsize="120%">)</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">p_{\Theta}\bigl{(}q_{i}\,\big{|}\,u,q_{&lt;i}\bigr{)}=\mathrm{softmax}\bigl{(}W_{% gen}^{(i)}\,\mathbf{h}^{\mathrm{gen}}_{i-1}\bigr{)}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">生成任务基于加权交叉熵进行优化：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E13">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(13)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\mathrm{gen}}(\Theta)=\sum_{i=1}^{L}\alpha_{i}\bigl{[}-\log p_{% \Theta}\bigl{(}q_{i}\,\big{|}\,u,q_{&lt;i}\bigr{)}]," class="ltx_Math" display="block" id="S4.E13.m1"><semantics><mrow><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>gen</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi mathvariant="normal">Θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">[</mo><mrow><mo rspace="0.167em">−</mo><mrow><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><msub><mi>p</mi><mi mathvariant="normal">Θ</mi></msub></mrow><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><msub><mi>q</mi><mi>i</mi></msub><mo fence="false" mathsize="120%" rspace="0.448em">|</mo><mrow><mi>u</mi><mo>,</mo><msub><mi>q</mi><mrow><mi></mi><mo>&lt;</mo><mi>i</mi></mrow></msub></mrow></mrow><mo maxsize="120%" minsize="120%">)</mo></mrow></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{gen}}(\Theta)=\sum_{i=1}^{L}\alpha_{i}\bigl{[}-\log p_{% \Theta}\bigl{(}q_{i}\,\big{|}\,u,q_{&lt;i}\bigr{)}],</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">权重为 <math alttext="\alpha_{1}\!\geq\!\cdots\!\geq\!\alpha_{L}\!&gt;\!0" class="ltx_Math" display="inline" id="S4.SS3.p1.m6"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><mo lspace="0.108em" rspace="0.108em">≥</mo><mi mathvariant="normal">⋯</mi><mo lspace="0.108em" rspace="0.108em">≥</mo><msub><mi>α</mi><mi>L</mi></msub><mo rspace="0.108em">&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha_{1}\!\geq\!\cdots\!\geq\!\alpha_{L}\!&gt;\!0</annotation></semantics></math>，因为前置的编码可以从更高维度决定生成物品的属性。
+由于 <math alttext="\mathcal{L}_{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.SS3.p1.m7"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>gen</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{gen}}</annotation></semantics></math> 仅读取 <math alttext="\mathbf{h}^{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.SS3.p1.m8"><semantics><msup><mi>𝐡</mi><mi>gen</mi></msup><annotation encoding="application/x-tex">\mathbf{h}^{\mathrm{gen}}</annotation></semantics></math>，其梯度只流经 <math alttext="Q^{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.SS3.p1.m9"><semantics><msup><mi>Q</mi><mi>gen</mi></msup><annotation encoding="application/x-tex">Q^{\mathrm{gen}}</annotation></semantics></math> 的注意力路径，永远不会到达物品侧组件。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.4. </span>多目标排序</h3>
+<div class="ltx_para" id="S4.SS4.p1">
+<p class="ltx_p">排序分支使用上下文化的排序隐藏状态 <math alttext="\mathbf{h}^{\mathrm{rank}}" class="ltx_Math" display="inline" id="S4.SS4.p1.m1"><semantics><msup><mi>𝐡</mi><mi>rank</mi></msup><annotation encoding="application/x-tex">\mathbf{h}^{\mathrm{rank}}</annotation></semantics></math> 来估计候选物品的多个业务目标。
+由于推荐中的排序模型期望多源互补信号作为输入，<math alttext="\mathbf{h}^{\mathrm{rank}}" class="ltx_Math" display="inline" id="S4.SS4.p1.m2"><semantics><msup><mi>𝐡</mi><mi>rank</mi></msup><annotation encoding="application/x-tex">\mathbf{h}^{\mathrm{rank}}</annotation></semantics></math> 仅保留目标感知的深层交互表示。
+因此，我们额外引入原始用户特征与作者特征，以防止浅层信号被平滑掉。
+此外，我们还拼接最后一个 SID 位置 <math alttext="\mathbf{h}^{\mathrm{rank}}_{L}" class="ltx_Math" display="inline" id="S4.SS4.p1.m3"><semantics><msubsup><mi>𝐡</mi><mi>L</mi><mi>rank</mi></msubsup><annotation encoding="application/x-tex">\mathbf{h}^{\mathrm{rank}}_{L}</annotation></semantics></math> 处的输出。
+尽管该位置的真实 SID 对生成任务中的自回归计算而言是冗余的，但该隐藏状态观测到了整个生成轨迹，因而从不同于判别式表示的视角提供了目标语义。
+因此，排序器的最终输入由以下部分组成：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E14">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(14)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="z=\text{Concat}(u,v,\mathbf{h}^{\mathrm{gen}}_{L},\mathbf{h}^{\mathrm{rank}})." class="ltx_Math" display="block" id="S4.E14.m1"><semantics><mrow><mrow><mi>z</mi><mo>=</mo><mrow><mtext>Concat</mtext><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>,</mo><msubsup><mi>𝐡</mi><mi>L</mi><mi>gen</mi></msubsup><mo>,</mo><msup><mi>𝐡</mi><mi>rank</mi></msup><mo stretchy="false">)</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">z=\text{Concat}(u,v,\mathbf{h}^{\mathrm{gen}}_{L},\mathbf{h}^{\mathrm{rank}}).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">向量 <math alttext="z" class="ltx_Math" display="inline" id="S4.SS4.p1.m4"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math> 被送入 MMoE <cite class="ltx_cite ltx_citemacro_citep">(Ma<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib49" title="Modeling task relationships in multi-task learning with multi-gate mixture-of-experts">2018</a>)</cite> 模型，其中每个任务特定的塔输出 <math alttext="\hat{y}_{t}" class="ltx_Math" display="inline" id="S4.SS4.p1.m5"><semantics><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\hat{y}_{t}</annotation></semantics></math>，对应于目标 <math alttext="t" class="ltx_Math" display="inline" id="S4.SS4.p1.m6"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>。整个排序器使用 BCE 损失训练：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E15">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(15)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\mathrm{rank}}(\Theta)=\sum_{t=1}^{T}\omega_{t}\cdot\mathrm{BCE}% \bigl{(}\hat{y}_{t},y_{t}\bigr{)}," class="ltx_Math" display="block" id="S4.E15.m1"><semantics><mrow><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>rank</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi mathvariant="normal">Θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><mrow><mrow><msub><mi>ω</mi><mi>t</mi></msub><mo lspace="0.222em" rspace="0.222em">⋅</mo><mi>BCE</mi></mrow><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mi>y</mi><mi>t</mi></msub><mo maxsize="120%" minsize="120%">)</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{rank}}(\Theta)=\sum_{t=1}^{T}\omega_{t}\cdot\mathrm{BCE}% \bigl{(}\hat{y}_{t},y_{t}\bigr{)},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="\omega_{t}" class="ltx_Math" display="inline" id="S4.SS4.p1.m7"><semantics><msub><mi>ω</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\omega_{t}</annotation></semantics></math> 是目标权重。</p>
+</div>
+<div class="ltx_para" id="S4.SS4.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">梯度纠缠。</span>
+这样，UniR<sup class="ltx_sup">2</sup> 在单个统一序列上的单次前向传播内完成了生成式召回与排序两项预测。
+然而，如果我们简单地将整体训练目标定义为两项任务之和：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E16">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(16)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}(\Theta)=\mathcal{L}_{\mathrm{gen}}(\Theta)+\mathcal{L}_{\mathrm{% rank}}(\Theta)," class="ltx_Math" display="block" id="S4.E16.m1"><semantics><mrow><mrow><mrow><mi class="ltx_font_mathcaligraphic">ℒ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi mathvariant="normal">Θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>gen</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi mathvariant="normal">Θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>+</mo><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>rank</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi mathvariant="normal">Θ</mi><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}(\Theta)=\mathcal{L}_{\mathrm{gen}}(\Theta)+\mathcal{L}_{\mathrm{% rank}}(\Theta),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">来自生成式召回与排序的梯度都会被传播到共享参数中，这可能会引入优化干扰。</p>
+</div>
+<div class="ltx_para" id="S4.SS4.p3">
+<p class="ltx_p">一个直接的解决方案是在排序头之前应用停止梯度：<math alttext="\tilde{z}=\mathrm{sg}(z)" class="ltx_Math" display="inline" id="S4.SS4.p3.m1"><semantics><mrow><mover accent="true"><mi>z</mi><mo>~</mo></mover><mo>=</mo><mrow><mi>sg</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\tilde{z}=\mathrm{sg}(z)</annotation></semantics></math>。
+这阻止了 <math alttext="\mathcal{L}_{\mathrm{rank}}" class="ltx_Math" display="inline" id="S4.SS4.p3.m2"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>rank</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{rank}}</annotation></semantics></math> 反向传播到 Transformer 主干，从而保护了生成路径。然而，它也冻结了排序侧的特征融合：排序头只能在主要针对 SID 预测优化的表示之上学习。
+这往往会放大跷跷板效应，因为更强的目标会主导排序头，而较弱或延迟的目标无法调整注意力层面的交互。
+因此，UniR<sup class="ltx_sup">2</sup> 保留停止梯度边界以确保安全，但增加了一条仅为排序视图激活的可学习低秩路径。</p>
+</div>
+<div class="ltx_para" id="S4.SS4.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">LoRA 平衡的排序适配。</span>
+我们将 LoRA <cite class="ltx_cite ltx_citemacro_citep">(Hu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib48" title="Lora: low-rank adaptation of large language models.">2022</a>)</cite> 注入排序分支所使用的注意力投影中。基础投影 <math alttext="W_{q},W_{k},W_{v}" class="ltx_Math" display="inline" id="S4.SS4.p4.m1"><semantics><mrow><msub><mi>W</mi><mi>q</mi></msub><mo>,</mo><msub><mi>W</mi><mi>k</mi></msub><mo>,</mo><msub><mi>W</mi><mi>v</mi></msub></mrow><annotation encoding="application/x-tex">W_{q},W_{k},W_{v}</annotation></semantics></math> 仍与生成分支共享，但当其输出被排序查询消费时会被分离（detach）。
+形式上，排序特定的适配由低秩残差矩阵承载：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E17">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(17)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\Delta W^{\mathrm{rank}}_{X}=B^{\mathrm{rank}}_{X}A^{\mathrm{rank}}_{X},\quad X% ^{\mathrm{rank}}=\mathrm{sg}(WX)+\Delta W^{\mathrm{rank}}_{X}X," class="ltx_Math" display="block" id="S4.E17.m1"><semantics><mrow><mrow><mrow><mrow><mi mathvariant="normal">Δ</mi><mo>⁢</mo><msubsup><mi>W</mi><mi>X</mi><mi>rank</mi></msubsup></mrow><mo>=</mo><mrow><msubsup><mi>B</mi><mi>X</mi><mi>rank</mi></msubsup><mo>⁢</mo><msubsup><mi>A</mi><mi>X</mi><mi>rank</mi></msubsup></mrow></mrow><mo rspace="1.167em">,</mo><mrow><msup><mi>X</mi><mi>rank</mi></msup><mo>=</mo><mrow><mrow><mi>sg</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>W</mi><mo>⁢</mo><mi>X</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mo>+</mo><mrow><mi mathvariant="normal">Δ</mi><mo>⁢</mo><msubsup><mi>W</mi><mi>X</mi><mi>rank</mi></msubsup><mo>⁢</mo><mi>X</mi></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\Delta W^{\mathrm{rank}}_{X}=B^{\mathrm{rank}}_{X}A^{\mathrm{rank}}_{X},\quad X% ^{\mathrm{rank}}=\mathrm{sg}(WX)+\Delta W^{\mathrm{rank}}_{X}X,</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="X\in\{Q,K,V\}" class="ltx_Math" display="inline" id="S4.SS4.p4.m2"><semantics><mrow><mi>X</mi><mo>∈</mo><mrow><mo stretchy="false">{</mo><mi>Q</mi><mo>,</mo><mi>K</mi><mo>,</mo><mi>V</mi><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">X\in\{Q,K,V\}</annotation></semantics></math> 是排序分支的输入，<math alttext="B^{\mathrm{rank}}_{X}\in\mathbb{R}^{d\times r},A^{\mathrm{rank}}_{X}\in\mathbb% {R}^{r\times d}" class="ltx_Math" display="inline" id="S4.SS4.p4.m3"><semantics><mrow><mrow><msubsup><mi>B</mi><mi>X</mi><mi>rank</mi></msubsup><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>d</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>r</mi></mrow></msup></mrow><mo>,</mo><mrow><msubsup><mi>A</mi><mi>X</mi><mi>rank</mi></msubsup><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>r</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow></mrow><annotation encoding="application/x-tex">B^{\mathrm{rank}}_{X}\in\mathbb{R}^{d\times r},A^{\mathrm{rank}}_{X}\in\mathbb% {R}^{r\times d}</annotation></semantics></math> 是低秩参数。这些模块仅在每一层的排序视图注意力中生效。生成查询仍使用原始基础投影，从不激活排序 LoRA 分支。因此，LoRA 被放置在决定排序侧特征融合的 Q/K/V 投影处，在使基础生成骨干与排序梯度隔离的同时，赋予排序器足够的自适应能力。</p>
+</div>
+<div class="ltx_para" id="S4.SS4.p5">
+<p class="ltx_p">总体而言，可训练参数被划分为生成部分、排序部分和共享稀疏嵌入部分：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E18">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(18)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\Theta_{\mathrm{gen}}\cap\Theta_{\mathrm{rank}}=\varnothing,\quad\Theta=\Theta% _{\mathrm{gen}}\cup\Theta_{\mathrm{rank}}\cup\Theta_{\mathrm{emb}}." class="ltx_Math" display="block" id="S4.E18.m1"><semantics><mrow><mrow><mrow><mrow><msub><mi mathvariant="normal">Θ</mi><mi>gen</mi></msub><mo>∩</mo><msub><mi mathvariant="normal">Θ</mi><mi>rank</mi></msub></mrow><mo>=</mo><mi mathvariant="normal">∅</mi></mrow><mo rspace="1.167em">,</mo><mrow><mi mathvariant="normal">Θ</mi><mo>=</mo><mrow><msub><mi mathvariant="normal">Θ</mi><mi>gen</mi></msub><mo>∪</mo><msub><mi mathvariant="normal">Θ</mi><mi>rank</mi></msub><mo>∪</mo><msub><mi mathvariant="normal">Θ</mi><mi>emb</mi></msub></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\Theta_{\mathrm{gen}}\cap\Theta_{\mathrm{rank}}=\varnothing,\quad\Theta=\Theta% _{\mathrm{gen}}\cup\Theta_{\mathrm{rank}}\cup\Theta_{\mathrm{emb}}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p"><math alttext="\Theta_{\mathrm{gen}}" class="ltx_Math" display="inline" id="S4.SS4.p5.m1"><semantics><msub><mi mathvariant="normal">Θ</mi><mi>gen</mi></msub><annotation encoding="application/x-tex">\Theta_{\mathrm{gen}}</annotation></semantics></math> 包含基础 Transformer 投影、生成 FFN 和召回头；<math alttext="\Theta_{\mathrm{rank}}" class="ltx_Math" display="inline" id="S4.SS4.p5.m2"><semantics><msub><mi mathvariant="normal">Θ</mi><mi>rank</mi></msub><annotation encoding="application/x-tex">\Theta_{\mathrm{rank}}</annotation></semantics></math> 包含排序 LoRA 矩阵、排序侧 FFN 参数和多任务塔；<math alttext="\Theta_{\mathrm{emb}}" class="ltx_Math" display="inline" id="S4.SS4.p5.m3"><semantics><msub><mi mathvariant="normal">Θ</mi><mi>emb</mi></msub><annotation encoding="application/x-tex">\Theta_{\mathrm{emb}}</annotation></semantics></math> 包含两个任务共享的稀疏嵌入 <cite class="ltx_cite ltx_citemacro_citep">(Sun<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib54" title="GRank: towards target-aware and streamlined industrial retrieval with a generate-rank framework">2026b</a>)</cite>。
+因此，UniR<sup class="ltx_sup">2</sup> 在前向传播中保持表示耦合，同时在优化和模块上将任务分离。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5. </span>部署</h2>
+<section class="ltx_subsection" id="S5.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.1. </span>训练策略</h3>
+<div class="ltx_para" id="S5.SS1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">数据样本。</span>
+主流的生成式召回方法本质上是在线曝光分布上的最大似然拟合。它们的训练集通常只包含曝光样本或正反馈样本，而不包含显式的判别性负样本。
+然而，UniR<sup class="ltx_sup">2</sup> 内部的排序器与生成分支在同一次前向传播中联合训练。
+如果我们直接沿用生成式召回的采样策略，每个 XTR 目标都将缺乏负样本对比，从而导致打分能力下降。</p>
+</div>
+<div class="ltx_para" id="S5.SS1.p2">
+<p class="ltx_p">因此，我们采用全样本流配合目标自适应掩码的策略。
+所有输入模型的 <math alttext="(u,v)" class="ltx_Math" display="inline" id="S5.SS1.p2.m1"><semantics><mrow><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(u,v)</annotation></semantics></math> 对样本对排序器均可见，而每个判别性目标使用独立的样本掩码，仅在与该目标语义相关的子集上贡献损失。
+这为同一批次内的所有目标提供了充分的对比。
+在排序器样本流之上，生成分支进一步执行降采样，保留所有点击样本和随机曝光样本作为 GRM 损失的正样本，
+从而保持召回侧拟合在线曝光分布的语义。
+这两种采样策略在同一次前向传播中共存，并通过各自的掩码控制是否参与损失，从而平衡排序所需的判别性对比与召回所需的分布拟合目标。</p>
+</div>
+<div class="ltx_para" id="S5.SS1.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">两阶段训练。</span>
+我们采用两阶段联合训练策略。在第一阶段，仅启用式<a class="ltx_ref" href="#S4.E13" title="In 4.3. Generative Recall ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">13</span></a>中的 GRM 损失，以获得具有稳定分布拟合能力的骨干。在第二阶段，从该检查点热启动训练，并在同一序列上追加与式<a class="ltx_ref" href="#S4.E16" title="In 4.4. Multi-Objective Ranking ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">16</span></a>相同的排序器损失进行联合训练。</p>
+</div>
+<div class="ltx_para" id="S5.SS1.p4">
+<p class="ltx_p">这一设计的主要动机在于：排序器的判别性输入依赖于生成分支产生的 SID 表示。
+如果在 SID 语义尚不稳定、仍在漂移的早期阶段引入排序器，它可能会被大量噪声误导并形成错误的决策边界，从而导致负迁移。
+因此，两阶段设计在优化空间中将分布拟合与判别性对齐解耦，为多任务学习施加了一种课程先验。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S5.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.2. </span>推理流水线</h3>
+<figure class="ltx_figure" id="S5.F3"><a href="assets/7f18c65839d901bb.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S5.F3.g1" loading="lazy" src="assets/7f18c65839d901bb.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3. </span>UniR<sup class="ltx_sup">2</sup> 的推理流水线。GPU 缓存召回期间计算的用户上下文和 SID 轨迹 KV 状态，以便在排序中直接复用，而策略过滤和排序并行执行。</figcaption>
+</figure>
+<figure class="ltx_table" id="S5.T1">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 1. </span>不同模型在直播离线数据集上的整体召回性能对比。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示，次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>表示，相对提升记为<span class="ltx_text ltx_font_italic">Imprv.<math alttext="\uparrow" class="ltx_Math" display="inline" id="S5.T1.m2"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span>。</figcaption>
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_tt" rowspan="2"><span class="ltx_text ltx_font_bold">Models</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="4"><span class="ltx_text ltx_font_bold">Show</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="4"><span class="ltx_text ltx_font_bold">Click</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">HR@64</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">MRR@64</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">HR@128</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">MRR@128</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">HR@64</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">MRR@64</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">HR@128</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">MRR@128</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_tt">KuaiFormer</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">0.4176</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">0.1328</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">0.4907</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">0.1337</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">0.4479</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">0.1499</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">0.5164</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">0.1507</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">GNN</td>
+<td class="ltx_td ltx_align_center">0.4552</td>
+<td class="ltx_td ltx_align_center">0.1532</td>
+<td class="ltx_td ltx_align_center">0.5269</td>
+<td class="ltx_td ltx_align_center">0.1540</td>
+<td class="ltx_td ltx_align_center">0.5463</td>
+<td class="ltx_td ltx_align_center">0.1941</td>
+<td class="ltx_td ltx_align_center">0.6197</td>
+<td class="ltx_td ltx_align_center">0.1949</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t">OneRec</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.6844</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.3224</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.7261</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.3230</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.7494</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.3987</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.7789</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.3992</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">OneLive</td>
+<td class="ltx_td ltx_align_center">0.7177</td>
+<td class="ltx_td ltx_align_center">0.3254</td>
+<td class="ltx_td ltx_align_center">0.7742</td>
+<td class="ltx_td ltx_align_center">0.3260</td>
+<td class="ltx_td ltx_align_center">0.7799</td>
+<td class="ltx_td ltx_align_center">0.4046</td>
+<td class="ltx_td ltx_align_center">0.8284</td>
+<td class="ltx_td ltx_align_center">0.4051</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">NEZHA</td>
+<td class="ltx_td ltx_align_center">0.7244</td>
+<td class="ltx_td ltx_align_center">0.3221</td>
+<td class="ltx_td ltx_align_center">0.7794</td>
+<td class="ltx_td ltx_align_center">0.3228</td>
+<td class="ltx_td ltx_align_center">0.7848</td>
+<td class="ltx_td ltx_align_center">0.4062</td>
+<td class="ltx_td ltx_align_center">0.8312</td>
+<td class="ltx_td ltx_align_center">0.4067</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">PROMISE</td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_framed ltx_framed_underline">0.7329</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_framed ltx_framed_underline">0.3391</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_framed ltx_framed_underline">0.7874</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_framed ltx_framed_underline">0.3396</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_framed ltx_framed_underline">0.7932</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_framed ltx_framed_underline">0.4286</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_framed ltx_framed_underline">0.8416</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_framed ltx_framed_underline">0.4289</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t">UniR<sup class="ltx_sup">2</sup>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">0.7662</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">0.3506</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">0.8114</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">0.3563</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">0.8309</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">0.4441</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">0.8741</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">0.4516</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_italic">Imprv.<math alttext="\uparrow" class="ltx_Math" display="inline" id="S5.T1.m4"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+4.54%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+3.39%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+3.05%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+4.92%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+4.75%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+3.62%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+3.86%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+5.29%</td>
+</tr>
+</table>
+</figure>
+<figure class="ltx_table" id="S5.T2">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 2. </span>UniR<sup class="ltx_sup">2</sup> 与基线在直播离线数据集上的整体排序性能对比。</figcaption>
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_tt" rowspan="2"><span class="ltx_text ltx_font_bold">Models</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="2"><span class="ltx_text ltx_font_bold">CTR</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="2"><span class="ltx_text ltx_font_bold">LVTR</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="2"><span class="ltx_text ltx_font_bold">GTR</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">AUC</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">UAUC</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">AUC</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">UAUC</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">AUC</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">UAUC</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t">Base</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.8450</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.6635</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.8994</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.7591</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.9541</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.6589</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">UniR<sup class="ltx_sup">2</sup>
+</td>
+<td class="ltx_td ltx_align_center">0.8513</td>
+<td class="ltx_td ltx_align_center">0.6731</td>
+<td class="ltx_td ltx_align_center">0.9096</td>
+<td class="ltx_td ltx_align_center">0.7623</td>
+<td class="ltx_td ltx_align_center">0.9556</td>
+<td class="ltx_td ltx_align_center">0.6601</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_italic">Imprv.<math alttext="\uparrow" class="ltx_Math" display="inline" id="S5.T2.m4"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+0.75%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+1.45%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+1.13%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+0.42%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+0.16%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+0.18%</td>
+</tr>
+</table>
+</figure>
+<div class="ltx_para" id="S5.SS2.p1">
+<p class="ltx_p">在传统的工业推荐系统中，用户请求首先由召回模型处理，从整个物品库中检索出数百个候选。
+在提取候选级特征后，独立的排序模型评估每个用户-物品对并产生多目标分数。
+在召回与排序过程之间，生成的候选还需经过资质审核、去重和内容过滤等商业策略的进一步处理，然后才能传递到下游阶段。
+该流水线在 CPU 与 GPU 执行之间交替进行。
+特征提取和服务编排主要在 CPU 上执行，而召回模型和排序模型的前向传播在 GPU 上执行。
+由于召回和排序被部署为独立服务，排序阶段需要重建用户上下文并再执行一次完整的模型前向传播，从而引入冗余的用户侧计算、跨服务数据传输以及额外的调度开销。</p>
+</div>
+<div class="ltx_para" id="S5.SS2.p2">
+<p class="ltx_p">UniR<sup class="ltx_sup">2</sup> 用一个单一服务实例取代级联的召回和排序模型。
+给定用户请求，服务首先提取用户画像和历史行为特征，然后执行自回归 SID 生成。
+在召回期间，用户前缀的键和值表示，以及每个候选 <math alttext="v" class="ltx_Math" display="inline" id="S5.SS2.p2.m2"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> 的 SID 生成轨迹所对应的 KV 状态，都被存储到 GPU KV 缓存中：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S5.E19">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(19)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{C}_{u,v}=\left\{K_{\ell}(\mathcal{P}),V_{\ell}(\mathcal{P})\right\}_{% \ell=1}^{N}\cup\left\{K_{\ell}(\mathcal{T}_{\mathrm{gen}}^{v}),V_{\ell}(% \mathcal{T}_{\mathrm{gen}}^{v})\right\}_{\ell=1}^{N}," class="ltx_Math" display="block" id="S5.E19.m1"><semantics><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒞</mi><mrow><mi>u</mi><mo>,</mo><mi>v</mi></mrow></msub><mo>=</mo><mrow><msubsup><mrow><mo>{</mo><mrow><msub><mi>K</mi><mi mathvariant="normal">ℓ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><msub><mi>V</mi><mi mathvariant="normal">ℓ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo stretchy="false">)</mo></mrow></mrow><mo>}</mo></mrow><mrow><mi mathvariant="normal">ℓ</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></msubsup><mo>∪</mo><msubsup><mrow><mo>{</mo><mrow><msub><mi>K</mi><mi mathvariant="normal">ℓ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msubsup><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi><mi>v</mi></msubsup><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><msub><mi>V</mi><mi mathvariant="normal">ℓ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msubsup><mi class="ltx_font_mathcaligraphic">𝒯</mi><mi>gen</mi><mi>v</mi></msubsup><mo stretchy="false">)</mo></mrow></mrow><mo>}</mo></mrow><mrow><mi mathvariant="normal">ℓ</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></msubsup></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{C}_{u,v}=\left\{K_{\ell}(\mathcal{P}),V_{\ell}(\mathcal{P})\right\}_{% \ell=1}^{N}\cup\left\{K_{\ell}(\mathcal{T}_{\mathrm{gen}}^{v}),V_{\ell}(% \mathcal{T}_{\mathrm{gen}}^{v})\right\}_{\ell=1}^{N},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="N" class="ltx_Math" display="inline" id="S5.SS2.p2.m3"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math> 是 Transformer 层数。</p>
+</div>
+<div class="ltx_para" id="S5.SS2.p3">
+<p class="ltx_p">召回之后，CPU 提取所检索候选的物品侧属性。
+这些属性被投影为排序词元并追加到缓存中的统一序列。
+因此，排序查询可以直接关注缓存中的用户上下文和相应的 SID 轨迹，而无需重新计算任一段。
+候选排序阶段只需计算新追加的物品特征词元和排序特定的 LoRA 路径。
+此外，由于具备全局视图，无需自回归，只需一次序列计算。</p>
+</div>
+<div class="ltx_para" id="S5.SS2.p4">
+<p class="ltx_p">一种直接的实现方式是按顺序执行召回、策略过滤和排序。
+然而，在我们的生产场景中，外部策略服务耗时超过 UniR<sup class="ltx_sup">2</sup> 排序前向传播，这使得顺序执行会抵消模型统一带来的延迟收益。
+为避免这段冗余时间，我们复制召回的候选集，并将其分派到两个并行分支。
+策略分支将候选属性传输给过滤服务，并为每个候选生成一个二值过滤标志。
+与此同时，排序分支提取物品侧特征，并在一次批处理的 GPU 前向传播中为所有候选计算多目标分数。
+排序完成后，它只需等待过滤标志并移除违反策略约束的候选，从而将排序计算隐藏在策略延迟背后。
+这种单服务部署同时消除了重复的用户上下文计算，保留了供排序使用的召回轨迹，并将模型推理与外部策略执行重叠。
+该流水线如图 <a class="ltx_ref" href="#S5.F3" title="Figure 3 ‣ 5.2. Inference Pipeline ‣ 5. Deployment ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">3</span></a> 所示。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S6">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">6. </span>实验</h2>
+<div class="ltx_para" id="S6.p1">
+<p class="ltx_p">在本节中，我们进行了大量的离线与在线实验，以回答以下问题：</p>
+<ul class="ltx_itemize" id="S6.I1">
+<li class="ltx_item" id="S6.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S6.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">RQ1：</span>与召回和排序基线相比，我们的统一模型表现如何？</p>
+</div>
+</li>
+<li class="ltx_item" id="S6.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S6.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">RQ2：</span>所提出的关键结构组件如何影响整体模型性能？</p>
+</div>
+</li>
+<li class="ltx_item" id="S6.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S6.I1.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">RQ3：</span>我们的统一模型在在线服务中表现如何？</p>
+</div>
+</li>
+</ul>
+</div>
+<section class="ltx_subsection" id="S6.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">6.1. </span>实验设置</h3>
+<section class="ltx_subsubsection" id="S6.SS1.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">6.1.1. </span><span class="ltx_text ltx_font_bold">数据集。</span>
+</h4>
+<div class="ltx_para" id="S6.SS1.SSS1.p1">
+<p class="ltx_p">我们基于快手 App 的大规模工业直播平台日志开展评估。
+该数据集包含 400 百万用户和 3 百万作者，以及他们之间数十亿次多样的交互。
+对于生成式召回任务，我们主要使用曝光（展示）和点击记录进行测试。
+对于多目标排序任务，我们主要报告点击、长观看和礼物等核心目标，对应的转化率分别记为 CTR、LVTR 和 GTR。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S6.SS1.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">6.1.2. </span><span class="ltx_text ltx_font_bold">评估指标。</span>
+</h4>
+<div class="ltx_para" id="S6.SS1.SSS2.p1">
+<p class="ltx_p">评估同时考虑召回和排序性能，因此我们针对召回任务采用准确率（ACC）、命中率（HR）和平均倒数排名（MRR），针对排序任务采用 AUC 和 UAUC，这些都是先前工作中广泛使用的离线评估指标 <cite class="ltx_cite ltx_citemacro_citep">(Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>; Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib11" title="OneLive: dynamically unified generative framework for live-streaming recommendation">2026b</a>; Pi<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib50" title="Search-based user interest modeling with lifelong sequential behavior data for click-through rate prediction">2020</a>; Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib46" title="Onetrans: unified feature interaction and sequence modeling with one transformer in industrial recommender">2026b</a>)</cite>。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S6.SS1.SSS3">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">6.1.3. </span><span class="ltx_text ltx_font_bold">基线。</span>
+</h4>
+<div class="ltx_para" id="S6.SS1.SSS3.p1">
+<p class="ltx_p">对于召回任务，我们将 UniR<sup class="ltx_sup">2</sup> 与两组基线进行比较：(i) 传统召回方法，包括长序列模型 KuaiFormer <cite class="ltx_cite ltx_citemacro_citep">(Liu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib51" title="Kuaiformer: transformer-based retrieval at kuaishou">2024</a>)</cite> 和图结构模型 GNN <cite class="ltx_cite ltx_citemacro_citep">(He<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib52" title="Lightgcn: simplifying and powering graph convolution network for recommendation">2020</a>)</cite>；(ii) 生成式方法，包括 OneRec <cite class="ltx_cite ltx_citemacro_citep">(Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>)</cite> 和 OneLive <cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib11" title="OneLive: dynamically unified generative framework for live-streaming recommendation">2026b</a>)</cite>，以及高效解码框架 NEZHA <cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib19" title="Nezha: a zero-sacrifice and hyperspeed decoding architecture for generative recommendations">2026c</a>)</cite> 和过程奖励模型 PROMISE <cite class="ltx_cite ltx_citemacro_citep">(Guo<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib10" title="PROMISE: process reward models unlock test-time scaling laws in generative recommendations">2026</a>)</cite>。后两个基线和 UniR<sup class="ltx_sup">2</sup> 均基于 OneLive 修改而来。
+对于排序任务，我们的基线是采用传统特征融合的 MMoE 风格多目标排序模型 HoME <cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib53" title="Home: hierarchy of multi-gate experts for multi-task learning at kuaishou">2025</a>)</cite>，该模型已在线部署，并作为我们平台的基础。我们直接将统一模型与在线生产模型进行比较。</p>
+</div>
+<figure class="ltx_table" id="S6.T3">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 3. </span>不同组件消融变体的整体性能对比。</figcaption>
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_tt" rowspan="2"><span class="ltx_text ltx_font_bold">Branch</span></td>
+<td class="ltx_td ltx_align_left ltx_border_tt" rowspan="2"><span class="ltx_text ltx_font_bold">Variants</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="3"><span class="ltx_text ltx_font_bold">Recall</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="3"><span class="ltx_text ltx_font_bold">Ranking</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="2"><span class="ltx_text ltx_font_bold">Efficiency</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_t"><math alttext="\mathcal{L}_{gen}\downarrow" class="ltx_Math" display="inline" id="S6.T3.m1"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mrow><mi>g</mi><mo>⁢</mo><mi>e</mi><mo>⁢</mo><mi>n</mi></mrow></msub><mo stretchy="false">↓</mo><mi></mi></mrow><annotation encoding="application/x-tex">\mathcal{L}_{gen}\downarrow</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center ltx_border_t">HR@1<math alttext="\uparrow" class="ltx_Math" display="inline" id="S6.T3.m2"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t">ACC@all<math alttext="\uparrow" class="ltx_Math" display="inline" id="S6.T3.m3"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t"><math alttext="\mathcal{L}_{rank}\downarrow" class="ltx_Math" display="inline" id="S6.T3.m4"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mrow><mi>r</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>n</mi><mo>⁢</mo><mi>k</mi></mrow></msub><mo stretchy="false">↓</mo><mi></mi></mrow><annotation encoding="application/x-tex">\mathcal{L}_{rank}\downarrow</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center ltx_border_t">AUC@CTR<math alttext="\uparrow" class="ltx_Math" display="inline" id="S6.T3.m5"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t">AUC@GTR<math alttext="\uparrow" class="ltx_Math" display="inline" id="S6.T3.m6"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t">Params</td>
+<td class="ltx_td ltx_align_center ltx_border_t">FLOPs</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_border_t"></td>
+<td class="ltx_td ltx_align_left ltx_border_t">UniR<sup class="ltx_sup">2</sup>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t">6.8260</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.1826</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.6249</td>
+<td class="ltx_td ltx_align_center ltx_border_t">5.9528</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.8450</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.9541</td>
+<td class="ltx_td ltx_align_center ltx_border_t">75M</td>
+<td class="ltx_td ltx_align_center ltx_border_t">9.37G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t" rowspan="2"><span class="ltx_text ltx_font_bold">Recall</span></td>
+<td class="ltx_td ltx_align_left ltx_border_t">
+<span class="ltx_text ltx_font_italic">w</span>. lazy decoder-only</td>
+<td class="ltx_td ltx_align_center ltx_border_t">+0.92%</td>
+<td class="ltx_td ltx_align_center ltx_border_t">-1.92%</td>
+<td class="ltx_td ltx_align_center ltx_border_t">-0.46%</td>
+<td class="ltx_td ltx_align_center ltx_border_t">-</td>
+<td class="ltx_td ltx_align_center ltx_border_t">-</td>
+<td class="ltx_td ltx_align_center ltx_border_t">-</td>
+<td class="ltx_td ltx_align_center ltx_border_t">74M</td>
+<td class="ltx_td ltx_align_center ltx_border_t">7.42G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">
+<span class="ltx_text ltx_font_italic">w</span>. causal self-attention</td>
+<td class="ltx_td ltx_align_center">-0.89%</td>
+<td class="ltx_td ltx_align_center">+2.85%</td>
+<td class="ltx_td ltx_align_center">+0.46%</td>
+<td class="ltx_td ltx_align_center">-</td>
+<td class="ltx_td ltx_align_center">-</td>
+<td class="ltx_td ltx_align_center">-</td>
+<td class="ltx_td ltx_align_center">75M</td>
+<td class="ltx_td ltx_align_center">45.09G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" rowspan="3"><span class="ltx_text ltx_font_bold">Ranking</span></td>
+<td class="ltx_td ltx_align_left ltx_border_t">
+<span class="ltx_text ltx_font_italic">w</span>/<span class="ltx_text ltx_font_italic">o</span>. DQ-PCA &amp; sg</td>
+<td class="ltx_td ltx_align_center ltx_border_t">+30.10%</td>
+<td class="ltx_td ltx_align_center ltx_border_t">-44.39%</td>
+<td class="ltx_td ltx_align_center ltx_border_t">-10.57%</td>
+<td class="ltx_td ltx_align_center ltx_border_t">-3.83%</td>
+<td class="ltx_td ltx_align_center ltx_border_t">+3.97%</td>
+<td class="ltx_td ltx_align_center ltx_border_t">+5.82%</td>
+<td class="ltx_td ltx_align_center ltx_border_t">72M</td>
+<td class="ltx_td ltx_align_center ltx_border_t">7.43G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">
+<span class="ltx_text ltx_font_italic">w</span>/<span class="ltx_text ltx_font_italic">o</span>. history discard</td>
+<td class="ltx_td ltx_align_center">+0.01%</td>
+<td class="ltx_td ltx_align_center">+0.00%</td>
+<td class="ltx_td ltx_align_center">-0.01%</td>
+<td class="ltx_td ltx_align_center">-0.34%</td>
+<td class="ltx_td ltx_align_center">+2.38%</td>
+<td class="ltx_td ltx_align_center">+2.87%</td>
+<td class="ltx_td ltx_align_center">75M</td>
+<td class="ltx_td ltx_align_center">15.39G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb">
+<span class="ltx_text ltx_font_italic">w</span>/<span class="ltx_text ltx_font_italic">o</span>. LoRA</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">-0.02%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+0.01%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+0.04%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+7.05%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">-13.79%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">-31.29%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">75M</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">9.27G</td>
+</tr>
+</table>
+</figure>
+</section>
+</section>
+<section class="ltx_subsection" id="S6.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">6.2. </span>整体实验（RQ1）</h3>
+<section class="ltx_subsubsection" id="S6.SS2.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">6.2.1. </span><span class="ltx_text ltx_font_bold">召回性能</span>
+</h4>
+<div class="ltx_para" id="S6.SS2.SSS1.p1">
+<p class="ltx_p">如表 <a class="ltx_ref" href="#S5.T1" title="Table 1 ‣ 5.2. Inference Pipeline ‣ 5. Deployment ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">1</span></a> 所示的结果，UniR<sup class="ltx_sup">2</sup> 在生成式召回方面始终优于传统基线和生成式基线，表明统一序列公式并未牺牲模型生成 SID 的核心能力。
+这一提升可归因于两个关键因素。
+首先，我们精心设计的注意力机制使召回分支中的 SID 能够通过前缀交叉注意力有效感知由历史交互编码的丰富用户兴趣表示。
+其次，双分支设计解耦了模型参数的梯度，从而减轻排序目标对生成能力的冲突影响。
+同时，保留的共享嵌入仍使浅层信号能够通过正负样本对比受益于细粒度优化，这可能进一步解释了生成式召回性能的大幅提升。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S6.SS2.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">6.2.2. </span><span class="ltx_text ltx_font_bold">排序性能</span>
+</h4>
+<div class="ltx_para" id="S6.SS2.SSS2.p1">
+<p class="ltx_p">我们将 UniR<sup class="ltx_sup">2</sup> 与在线排序模型进行比较，结果见表 <a class="ltx_ref" href="#S5.T2" title="Table 2 ‣ 5.2. Inference Pipeline ‣ 5. Deployment ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">2</span></a>。可以看出，UniR<sup class="ltx_sup">2</sup> 在稀疏目标和稠密目标上均提升了 XTR 预测性能，表明共享的仅解码器序列架构可以作为特征融合的有效骨干。
+排序模块并非仅仅被动复用生成骨干，而是通过基于 LoRA 的适配为排序保留任务特定的特征交互。
+此外，统一设计还受益于生成的 SID 轨迹作为一种额外的目标感知语义视图，在保留排序所需判别性对比的同时补充了原始排序特征。</p>
+</div>
+<div class="ltx_para" id="S6.SS2.SSS2.p2">
+<p class="ltx_p">总体而言，离线结果验证了 UniR<sup class="ltx_sup">2</sup> 在生成式召回和多目标排序两方面的有效性。
+它在实现更强候选检索质量的同时有效提升了 XTR 预测性能。
+这表明共享的仅解码器序列架构可以在单一模型中整合生成的分布拟合与排序的对比驱动。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S6.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">6.3. </span>深入分析（RQ2）</h3>
+<section class="ltx_subsubsection" id="S6.SS3.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">6.3.1. </span>组件消融</h4>
+<div class="ltx_para" id="S6.SS3.SSS1.p1">
+<p class="ltx_p">我们对 UniR<sup class="ltx_sup">2</sup> 的核心组件进行了大量实验，以量化这些设计的贡献。结果如表 <a class="ltx_ref" href="#S6.T3" title="Table 3 ‣ 6.1.3. Baselines. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">3</span></a> 所示。
+我们将观察结果总结如下：</p>
+<ul class="ltx_itemize" id="S6.I2">
+<li class="ltx_item" id="S6.I2.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S6.I2.i1.p1">
+<p class="ltx_p">对于生成式召回分支，由于基线中的惰性仅解码器架构<cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib21" title="Onerec-v2 technical report">2025</a>; Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib11" title="OneLive: dynamically unified generative framework for live-streaming recommendation">2026b</a>)</cite>将用户历史编码与 SID 生成解耦，这导致学习碎片化和表示共享。
+应用全序列因果自注意力仅带来有限提升，同时引入显著更高的计算开销。
+相比之下，UniR<sup class="ltx_sup">2</sup>通过前缀交叉注意力实现了更有利的效能与效率权衡，无需在每一层对完整用户历史序列进行密集编码即可充分访问历史兴趣。</p>
+</div>
+</li>
+<li class="ltx_item" id="S6.I2.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S6.I2.i2.p1">
+<p class="ltx_p">对于排序分支，移除 DQ-PCA 及相应的梯度截断会导致模型在长时间联合训练后强烈偏向排序，此时排序指标提升但生成性能显著下降。
+该现象源于两个任务之间的优化不对称性。
+排序由多个稠密判别式目标监督，能够提供更频繁的梯度，而 SID 生成是一个结构化的自回归任务，需要保持词元级语义一致性。
+若没有双查询可见性控制和停止梯度隔离，排序梯度会直接重塑共享注意力表示，使骨干网络日益针对判别式评分进行优化，而非稳定的 SID 生成。</p>
+</div>
+</li>
+<li class="ltx_item" id="S6.I2.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S6.I2.i3.p1">
+<p class="ltx_p">在排序查询中舍弃长历史序列可大幅降低 FLOPs，同时对排序性能造成的退化很小。
+这表明排序分支不需要反复关注完整用户历史。
+生成的 SID 轨迹已从召回分支中浓缩了用户-物品匹配过程，而 GSU 信号等物品侧序列特征进一步汇总了相似兴趣。
+因此，关注 SID 轨迹并结合紧凑的排序特征已足以进行特征融合。</p>
+</div>
+</li>
+<li class="ltx_item" id="S6.I2.i4" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S6.I2.i4.p1">
+<p class="ltx_p">LoRA 旨在在优化隔离下提供排序专用的适配能力。
+梯度截断保护了生成骨干，但冻结了排序器可用的注意力级特征交互。
+通过仅向排序视图的注意力投影添加低秩残差路径，UniR<sup class="ltx_sup">2</sup>使排序器能够学习任务特定的特征融合，而无需修改基础生成参数，且仅引入少量参数和计算负载。
+其对礼物等稀疏目标的影响尤为显著。</p>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S6.SS3.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">6.3.2. </span>注意力分析</h4>
+<figure class="ltx_figure" id="S6.F4">
+<figure class="ltx_figure ltx_align_center" id="S6.F4.sf1"><a href="assets/fc1e6c7c37d5b916.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics" id="S6.F4.sf1.g1" loading="lazy" src="assets/fc1e6c7c37d5b916.svg"/></a>
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_figure">(a) </span>召回的注意力权重</figcaption>
+</figure>
+<figure class="ltx_figure ltx_align_center" id="S6.F4.sf2"><a href="assets/8e0bfe2553922b88.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics" id="S6.F4.sf2.g1" loading="lazy" src="assets/8e0bfe2553922b88.svg"/></a>
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_figure">(b) </span>排序的注意力权重
+<br class="ltx_break"/> <span class="ltx_text ltx_font_italic">不</span><span class="ltx_text ltx_font_italic">使用</span> LoRA</figcaption>
+</figure>
+<figure class="ltx_figure ltx_align_center" id="S6.F4.sf3"><a href="assets/989a6db0e0678660.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics" id="S6.F4.sf3.g1" loading="lazy" src="assets/989a6db0e0678660.svg"/></a>
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_figure">(c) </span>排序的注意力权重
+<br class="ltx_break"/> <span class="ltx_text ltx_font_italic">使用</span> LoRA</figcaption>
+</figure>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4. </span>中间层召回与排序注意力权重的可视化。</figcaption>
+</figure>
+<div class="ltx_para" id="S6.SS3.SSS2.p1">
+<p class="ltx_p">我们在图<a class="ltx_ref" href="#S6.F4" title="Figure 4 ‣ 6.3.2. Attention Analysis ‣ 6.3. In-depth Analysis (RQ2) ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">4</span></a>中可视化了统一序列中召回查询和排序查询对应的注意力权重。
+对于生成式召回，SID 查询广泛关注行为前缀。
+该模式与分层生成过程一致：历史行为提供动态兴趣的细粒度证据，画像特征提供稳定的个性化先验，而先前生成的 SID 词元约束下一码的语义。</p>
+</div>
+<div class="ltx_para" id="S6.SS3.SSS2.p2">
+<p class="ltx_p">排序侧的比较进一步揭示了基于 LoRA 的适配的作用。
+在没有 LoRA 的情况下，从面向召回的基投影继承的注意力相对分散，并将大量权重分配给作者特征。
+启用排序专用 LoRA 后，分布围绕用户画像和生成轨迹变得更为集中。
+因此，排序器学会强调已被召回过程提炼的目标感知用户-物品匹配信号，而不仅仅是重用为 SID 预测学到的通用表示。
+这验证了生成轨迹可作为有效的表示桥梁，且 LoRA 在不扰动生成骨干的情况下恢复了排序专用特征融合。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S6.SS3.SSS3">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">6.3.3. </span>统一架构的扩展</h4>
+<figure class="ltx_figure" id="S6.F5">
+<figure class="ltx_figure ltx_align_center" id="S6.F5.sf1"><a href="assets/3b5f885c059efe6d.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics" id="S6.F5.sf1.g1" loading="lazy" src="assets/3b5f885c059efe6d.svg"/></a>
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_figure">(a) </span>深度扩展</figcaption>
+</figure>
+<figure class="ltx_figure ltx_align_center" id="S6.F5.sf2"><a href="assets/e64a7eac8db6a345.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics" id="S6.F5.sf2.g1" loading="lazy" src="assets/e64a7eac8db6a345.svg"/></a>
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_figure">(b) </span>宽度扩展</figcaption>
+</figure>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 5. </span>通过扩展统一架构的深度和宽度获得的性能提升。</figcaption>
+</figure>
+<div class="ltx_para" id="S6.SS3.SSS3.p1">
+<p class="ltx_p">统一架构背后的一个关键直觉是，召回和排序目标都能从扩展共享骨干中受益。
+因此，我们进行了深度和宽度扩展实验，结果如图<a class="ltx_ref" href="#S6.F5" title="Figure 5 ‣ 6.3.3. Scaling Unified Architecture ‣ 6.3. In-depth Analysis (RQ2) ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">5</span></a>所示。
+可以看出，两者均带来生成能力和排序能力的大幅提升，这验证了 UniR<sup class="ltx_sup">2</sup>的强大可扩展性。
+值得注意的是，更大的统一骨干同时增强了分布拟合和判别式预测，且未在两者之间引入失衡的权衡。这表明优化隔离机制可能防止额外的共享容量被单一任务独占。
+然而，提升也表现出明显的收益递减。因此，我们最终选择3层和640的隐藏维度用于在线服务，以平衡模型性能和资源消耗。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S6.SS3.SSS4">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">6.3.4. </span>推理延迟</h4>
+<figure class="ltx_figure" id="S6.F6"><a href="assets/65b524d2843d7fe3.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S6.F6.g1" loading="lazy" src="assets/65b524d2843d7fe3.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 6. </span>系统推理时间的比较。</figcaption>
+</figure>
+<div class="ltx_para" id="S6.SS3.SSS4.p1">
+<p class="ltx_p">我们比较了在线流水线与 UniR<sup class="ltx_sup">2</sup>之间的端到端延迟分解，结果如图<a class="ltx_ref" href="#S6.F6" title="Figure 6 ‣ 6.3.4. Inference Latency ‣ 6.3. In-depth Analysis (RQ2) ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">6</span></a>所示。
+在基线中，召回和排序由两个独立模型执行，其中排序阶段主导了整体推理时间。加之重复的初始化、特征准备以及跨流水线的信息传递，导致冗余的时间消耗。
+UniR<sup class="ltx_sup">2</sup>则对两个任务重用相同的用户上下文和仅解码器架构，并在生成的 SID 轨迹之后追加排序所需的特征融合。
+因此，重用缓存的表示大幅降低了整体流水线延迟。
+此外，我们精心设计的并行化策略和排序方案进一步减少了端到端推理时间。
+该结果表明，统一不仅提供表示和目标一致性，还通过消除冗余计算并在现有流水线调度中隐藏排序延迟，带来具体的服务优势。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S6.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">6.4. </span>在线 A/B 测试（RQ3）</h3>
+<div class="ltx_para" id="S6.SS4.p1">
+<p class="ltx_p">为评估 UniR<sup class="ltx_sup">2</sup>在真实业务中的影响，我们将其部署到快手和快手极速版两个应用的直播服务中。
+UniR<sup class="ltx_sup">2</sup>同时替换了原有的基于 OneLive 的召回模型和已部署的生产粗排模型，二者共同构成以级联架构组装的基线。
+在线 A/B 测试于2026年6月启动，持续两周，并覆盖5%的在线流量。</p>
+</div>
+<div class="ltx_para" id="S6.SS4.p2">
+<p class="ltx_p">如在线结果所示，UniR<sup class="ltx_sup">2</sup>在两大平台上均带来一致的增益。
+在快手应用上，播放量提升<span class="ltx_text ltx_font_bold">+1.177%</span>，关注率提升<span class="ltx_text ltx_font_bold">+0.655%</span>，点赞率提升<span class="ltx_text ltx_font_bold">+2.560%</span>。
+在快手极速版应用上，送礼用户数提升<span class="ltx_text ltx_font_bold">+0.717%</span>，送礼意向提升<span class="ltx_text ltx_font_bold">+1.567%</span>，送礼总额提升<span class="ltx_text ltx_font_bold">+2.569%</span>。
+多个行为指标上的正向提升表明，UniR<sup class="ltx_sup">2</sup>能够在单一模型内既召回合适的候选，又产出高质量的用户-物品对评分。
+这些在线增益进一步验证了统一召回与排序在大规模工业推荐系统中的实用性和有效性。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S7">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">7. </span>结论</h2>
+<div class="ltx_para" id="S7.p1">
+<p class="ltx_p">在本工作中，我们提出了 UniR<sup class="ltx_sup">2</sup>，一个统一的仅解码器 Transformer，将用户上下文、SID 轨迹和物品特征组织在单一异构序列中。其双查询前缀因果注意力在任务特定的可见性下实现了因果 SID 生成和富有表现力的排序特征融合，而任务特定的前向路径和排序侧 LoRA 则平衡了前向表示共享与优化隔离。
+大量离线实验证明了在生成式召回和多目标排序上的一致提升，并进一步验证了 SID 轨迹作为两个任务之间有效表示桥梁的作用。
+通过重用缓存的用户上下文和 SID 状态，UniR<sup class="ltx_sup">2</sup>还降低了端到端推理时间。
+长期在线 A/B 测试显示出一致的正向增益，验证了其在大规模工业推荐系统中的有效性和实用性。</p>
+</div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">参考文献</h2>
+<ul class="ltx_biblist" id="bib.L1">
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib63">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Chai, Q. Ren, X. Xiao, H. Yang, B. Han, S. Zhang, D. Chen, H. Lu, W. Zhao, L. Yu, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Longer: scaling up long sequence modeling in industrial recommenders</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the Nineteenth ACM Conference on Recommender Systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 247–256</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib65">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">P. Covington, J. Adams, and E. Sargin (2016)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep neural networks for youtube recommendations</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 10th ACM conference on recommender systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 191–198</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib39">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">S. Dai, J. Tang, J. Wu, K. Wang, Y. Zhu, B. Chen, B. Hong, Y. Zhao, C. Fu, K. Wu, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onepiece: bringing context engineering and reasoning to industrial cascade ranking system</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2509.18091</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p5" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Unified Recall and Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib20">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Deng, S. Wang, K. Cai, L. Ren, Q. Hu, W. Ding, Q. Luo, and G. Zhou (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2502.18965</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Recommendation ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a class="ltx_ref" href="#S3.p1" title="3. Preliminary ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§3</span></a>,
+<a class="ltx_ref" href="#S6.SS1.SSS2.p1" title="6.1.2. Evaluation Metrics. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.2</span></a>,
+<a class="ltx_ref" href="#S6.SS1.SSS3.p1" title="6.1.3. Baselines. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib68">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Diao, P. Wu, H. Deng, J. Wang, S. Bai, S. Wu, W. Fan, W. Ye, W. Tong, X. Fan, <span class="ltx_text ltx_bib_etal">et al.</span> (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Sensenova-u1: unifying multimodal understanding and generation with neo-unify architecture</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2605.12500</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS2.p5" title="4.2. Dual-Query Prefix-Causal Attention ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§4.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib40">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">K. Fu, C. Wu, K. Yuan, B. Cao, D. Huang, Y. Yan, J. Zheng, J. Zhang, S. Zhou, J. Wu, <span class="ltx_text ltx_bib_etal">et al.</span> (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">RankGR: rank-enhanced generative retrieval with listwise direct preference optimization in recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2602.08575</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p5" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Recommendation ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Unified Recall and Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib10">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">C. Guo, K. Cai, Y. Zhou, Q. Luo, R. Tang, H. Li, K. Gai, and G. Zhou (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">PROMISE: process reward models unlock test-time scaling laws in generative recommendations</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2601.04674</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Recommendation ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a class="ltx_ref" href="#S6.SS1.SSS3.p1" title="6.1.3. Baselines. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib52">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">X. He, K. Deng, X. Wang, Y. Li, Y. Zhang, and M. Wang (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Lightgcn: simplifying and powering graph convolution network for recommendation</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 43rd International ACM SIGIR conference on research and development in Information Retrieval</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 639–648</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S6.SS1.SSS3.p1" title="6.1.3. Baselines. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib48">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, W. Chen, <span class="ltx_text ltx_bib_etal">et al.</span> (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Lora: low-rank adaptation of large language models.</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Iclr</span> <span class="ltx_text ltx_bib_volume">1</span> (<span class="ltx_text ltx_bib_number">2</span>), <span class="ltx_text ltx_bib_pages"> pp. 3</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS4.p4" title="4.4. Multi-Objective Ranking ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§4.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib60">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">X. Huang, H. Zhang, Z. Fan, Y. Huang, Z. Wei, Z. Chai, J. Ni, Y. Zheng, and Q. Chen (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">MixFormer: co-scaling up dense and sequence in industrial recommenders</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2602.14110</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib24">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Jiang, Y. Huang, Z. Wang, C. Wang, Y. Xiong, J. Zhang, and H. Yu (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Spend search where it pays: value-guided structured sampling and optimization for generative recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2602.10699</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Recommendation ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib64">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Li, Y. Hsu, A. Mantha, P. Agarwal, L. Bhasin, J. Wang, H. Lin, B. Huang, Y. Li, X. Li, <span class="ltx_text ltx_bib_etal">et al.</span> (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">UniPinRec: unifying generative retrieval and ranking at pinterest scale</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2606.00422</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p5" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Unified Recall and Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib51">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">C. Liu, J. Cao, R. Huang, K. Zheng, Q. Luo, K. Gai, and G. Zhou (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Kuaiformer: transformer-based retrieval at kuaishou</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2411.10057</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S6.SS1.SSS3.p1" title="6.1.3. Baselines. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib67">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Liu and J. Cao (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Harmonizing generative retrieval and ranking in chain-of-recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2604.25787</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p5" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib32">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">X. Luo, J. Cao, T. Sun, J. Yu, R. Huang, W. Yuan, H. Lin, Y. Zheng, S. Wang, Q. Hu, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Qarm: quantitative alignment multi-modal recommendation at kuaishou</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 34th ACM International Conference on Information and Knowledge Management</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 5915–5922</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.p1" title="3. Preliminary ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib49">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Ma, Z. Zhao, X. Yi, J. Chen, L. Hong, and E. H. Chi (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Modeling task relationships in multi-task learning with multi-gate mixture-of-experts</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 24th ACM SIGKDD international conference on knowledge discovery &amp; data mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1930–1939</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>,
+<a class="ltx_ref" href="#S4.SS4.p1" title="4.4. Multi-Objective Ranking ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§4.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib50">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Q. Pi, G. Zhou, Y. Zhang, Z. Wang, L. Ren, Y. Fan, X. Zhu, and K. Gai (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Search-based user interest modeling with lifelong sequential behavior data for click-through rate prediction</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 29th ACM International Conference on Information &amp; Knowledge Management</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 2685–2692</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.I1.i2.p1" title="In 4.2. Dual-Query Prefix-Causal Attention ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">2nd item</span></a>,
+<a class="ltx_ref" href="#S6.SS1.SSS2.p1" title="6.1.2. Evaluation Metrics. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib7">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">S. Rajput, N. Mehta, A. Singh, R. Hulikal Keshavan, T. Vu, L. Heldt, L. Hong, Y. Tay, V. Tran, J. Samost, <span class="ltx_text ltx_bib_etal">et al.</span> (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Recommender systems with generative retrieval</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in Neural Information Processing Systems</span> <span class="ltx_text ltx_bib_volume">36</span>, <span class="ltx_text ltx_bib_pages"> pp. 10299–10315</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Recommendation ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a class="ltx_ref" href="#S3.p1" title="3. Preliminary ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib41">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">D. Sun, Y. Liu, J. Zhou, X. Liu, C. Yu, Y. Li, J. Zhang, H. Yu, and J. Jiang (2026a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">OneRanker: unified generation and ranking with one model in industrial advertising recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2603.02999</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p5" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Unified Recall and Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib54">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Sun, S. Huang, Z. Guan, Q. Luo, R. Tang, K. Gai, and G. Zhou (2026b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">GRank: towards target-aware and streamlined industrial retrieval with a generate-rank framework</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the ACM Web Conference 2026</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 7798–7808</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS4.p5" title="4.4. Multi-Objective Ranking ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§4.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib55">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Tang, J. Liu, M. Zhao, and X. Gong (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Progressive layered extraction (ple): a novel multi-task learning (mtl) model for personalized recommendations</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 14th ACM conference on recommender systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 269–278</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib47">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Tang, R. Zhang, W. Wang, Y. Liu, C. Wang, X. Chen, Y. Yang, J. Wu, Y. Jiang, and B. Zheng (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">LoopCTR: unlocking the loop scaling power for click-through rate prediction</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2604.19550</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS2.p1" title="4.2. Dual-Query Prefix-Causal Attention ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§4.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib61">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin (2017)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Attention is all you need</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in neural information processing systems</span> <span class="ltx_text ltx_bib_volume">30</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib59">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">C. Wang, B. Wu, T. Pang, J. Wang, J. Yang, J. Liu, H. Zhang, H. Zhu, L. Shen, S. Wang, <span class="ltx_text ltx_bib_etal">et al.</span> (2026a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">SORT: a systematically optimized ranking transformer for industrial-scale recommenders</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2603.03988</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_incollection" id="bib.bib56">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">R. Wang, B. Fu, G. Fu, and M. Wang (2017)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep &amp; cross network for ad click predictions</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the ADKDD’17</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1–7</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib11">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">S. Wang, Y. Huang, R. Yang, S. Wen, P. Xu, J. Cao, Y. Liu, K. Cai, C. Guo, S. Wang, <span class="ltx_text ltx_bib_etal">et al.</span> (2026b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">OneLive: dynamically unified generative framework for live-streaming recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2602.08612</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Recommendation ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a class="ltx_ref" href="#S3.p1" title="3. Preliminary ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§3</span></a>,
+<a class="ltx_ref" href="#S6.I2.i1.p1" title="In 6.3.1. Components Ablation ‣ 6.3. In-depth Analysis (RQ2) ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">1st item</span></a>,
+<a class="ltx_ref" href="#S6.SS1.SSS2.p1" title="6.1.2. Evaluation Metrics. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.2</span></a>,
+<a class="ltx_ref" href="#S6.SS1.SSS3.p1" title="6.1.3. Baselines. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib53">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">X. Wang, J. Cao, Z. Fu, K. Gai, and G. Zhou (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Home: hierarchy of multi-gate experts for multi-task learning at kuaishou</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V. 1</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 2638–2647</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>,
+<a class="ltx_ref" href="#S6.SS1.SSS3.p1" title="6.1.3. Baselines. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib19">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Wang, S. Zhou, J. Lu, Z. Liu, L. Liu, M. Wang, W. Zhang, F. Li, W. Su, P. Wang, <span class="ltx_text ltx_bib_etal">et al.</span> (2026c)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Nezha: a zero-sacrifice and hyperspeed decoding architecture for generative recommendations</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the ACM Web Conference 2026</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 8073–8082</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS2.p1" title="4.2. Dual-Query Prefix-Causal Attention ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§4.2</span></a>,
+<a class="ltx_ref" href="#S6.SS1.SSS3.p1" title="6.1.3. Baselines. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib22">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Wei, K. Cai, J. She, J. Chen, M. Chen, Y. Zeng, Q. Luo, W. Zeng, R. Tang, K. Gai, <span class="ltx_text ltx_bib_etal">et al.</span> (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Oneloc: geo-aware generative recommender systems for local life service</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the Nineteenth ACM International Conference on Web Search and Data Mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 735–744</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Recommendation ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib29">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">R. Yang, Y. Liu, Z. Zhuang, C. Lao, Y. Zhang, J. Cao, J. Xu, X. Chen, H. Xiao, X. Wu, <span class="ltx_text ltx_bib_etal">et al.</span> (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">SARM: llm-augmented semantic anchor for end-to-end live-streaming ranking</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2602.09401</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib66">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">R. Ying, R. He, K. Chen, P. Eksombatchai, W. L. Hamilton, and J. Leskovec (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Graph convolutional neural networks for web-scale recommender systems</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 24th ACM SIGKDD international conference on knowledge discovery &amp; data mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 974–983</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib62">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">B. Zhang, L. Luo, Y. Chen, J. Nie, X. Liu, D. Guo, Y. Zhao, S. Li, Y. Hao, Y. Yao, <span class="ltx_text ltx_bib_etal">et al.</span> (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Wukong: towards a scaling law for large-scale recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2403.02545</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib23">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">K. Zhang, J. Zhang, W. Cheng, Y. Cheng, J. Zhang, H. Lu, X. Zhang, H. Gan, J. Cao, T. Wang, <span class="ltx_text ltx_bib_etal">et al.</span> (2026a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">OneMall: one model, more scenarios–end-to-end generative recommender family at kuaishou e-commerce</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2601.21770</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Recommendation ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib46">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Zhang, H. Pei, J. Guo, T. Wang, Y. Feng, H. Sun, S. Liu, and A. Sun (2026b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onetrans: unified feature interaction and sequence modeling with one transformer in industrial recommender</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the ACM Web Conference 2026</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 8162–8170</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>,
+<a class="ltx_ref" href="#S4.SS2.p1" title="4.2. Dual-Query Prefix-Causal Attention ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§4.2</span></a>,
+<a class="ltx_ref" href="#S6.SS1.SSS2.p1" title="6.1.2. Evaluation Metrics. ‣ 6.1. Experimental Settings ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§6.1.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib21">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhou, H. Hu, H. Cheng, H. Wang, J. Deng, J. Zhang, K. Cai, L. Ren, L. Ren, L. Yu, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onerec-v2 technical report</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2508.20900</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS2.p1" title="4.2. Dual-Query Prefix-Causal Attention ‣ 4. Methodology ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§4.2</span></a>,
+<a class="ltx_ref" href="#S6.I2.i1.p1" title="In 6.3.1. Components Ablation ‣ 6.3. In-depth Analysis (RQ2) ‣ 6. Experiments ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">1st item</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib57">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhou, X. Zhu, C. Song, Y. Fan, H. Zhu, X. Ma, Y. Yan, J. Jin, H. Li, and K. Gai (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep interest network for click-through rate prediction</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 24th ACM SIGKDD international conference on knowledge discovery &amp; data mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1059–1068</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib58">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Zhou, Y. Hu, Z. Feng, J. Pan, K. Wu, H. Li, S. Zhang, S. Huang, Z. Zhu, C. Yin, <span class="ltx_text ltx_bib_etal">et al.</span> (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">TokenFormer: unify the multi-field and sequential recommendation worlds</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2604.13737</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Transformer-Based Ranking ‣ 2. Related Work ‣ Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+</ul>
+</section>
+</article></article></div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{"format": "arxiv_tex", "toc": [{"id": "tex-section-1", "title": "摘要", "level": 1}, {"id": "S1", "title": "1. 引言", "level": 1}, {"id": "S2", "title": "2. 相关工作", "level": 1}, {"id": "S2.SS1", "title": "2.1. 生成式推荐", "level": 2}, {"id": "S2.SS2", "title": "2.2. 基于 Transformer 的排序", "level": 2}, {"id": "S2.SS3", "title": "2.3. 统一的召回与排序", "level": 2}, {"id": "S3", "title": "3. 预备知识", "level": 1}, {"id": "S4", "title": "4. 方法", "level": 1}, {"id": "S4.SS1", "title": "4.1. 统一序列构成", "level": 2}, {"id": "S4.SS2", "title": "4.2. 双查询前缀因果注意力", "level": 2}, {"id": "S4.SS3", "title": "4.3. 生成式召回", "level": 2}, {"id": "S4.SS4", "title": "4.4. 多目标排序", "level": 2}, {"id": "S5", "title": "5. 部署", "level": 1}, {"id": "S5.SS1", "title": "5.1. 训练策略", "level": 2}, {"id": "S5.SS2", "title": "5.2. 推理流水线", "level": 2}, {"id": "S6", "title": "6. 实验", "level": 1}, {"id": "S6.SS1", "title": "6.1. 实验设置", "level": 2}, {"id": "S6.SS1.SSS1", "title": "6.1.1. 数据集。", "level": 3}, {"id": "S6.SS1.SSS2", "title": "6.1.2. 评估指标。", "level": 3}, {"id": "S6.SS1.SSS3", "title": "6.1.3. 基线。", "level": 3}, {"id": "S6.SS2", "title": "6.2. 整体实验（RQ1）", "level": 2}, {"id": "S6.SS2.SSS1", "title": "6.2.1. 召回性能", "level": 3}, {"id": "S6.SS2.SSS2", "title": "6.2.2. 排序性能", "level": 3}, {"id": "S6.SS3", "title": "6.3. 深入分析（RQ2）", "level": 2}, {"id": "S6.SS3.SSS1", "title": "6.3.1. 组件消融", "level": 3}, {"id": "S6.SS3.SSS2", "title": "6.3.2. 注意力分析", "level": 3}, {"id": "S6.SS3.SSS3", "title": "6.3.3. 统一架构的扩展", "level": 3}, {"id": "S6.SS3.SSS4", "title": "6.3.4. 推理延迟", "level": 3}, {"id": "S6.SS4", "title": "6.4. 在线 A/B 测试（RQ3）", "level": 2}, {"id": "S7", "title": "7. 结论", "level": 1}, {"id": "bib", "title": "参考文献", "level": 1}], "stats": {"format": "arxiv_tex", "converter": "LaTeXML", "text_chars": 31977, "sections": 31, "figures": 6, "tables": 3, "table_cells": 184, "mathml": 117, "graphics": 9, "references": 37, "warnings": ["Warning:missing_file:mathalfa Can't find binding for package mathalfa at sample-sigconf.tex; line 19 col 11", "Warning:unsupported:multirow Fractional row sizes for \\multirow are not yet supported. at sample-sigconf.tex; line 477 col 38", "Warning:unsupported:multirow Fractional row sizes for \\multirow are not yet supported. at sample-sigconf.tex; line 505 col 38", "Warning:unsupported:multirow Fractional row sizes for \\multirow are not yet supported. at sample-sigconf.tex; line 592 col 38", "Warning:unsupported:multirow Fractional row sizes for \\multirow are not yet supported. at sample-sigconf.tex; line 592 col 77", "Warning:not_parsed:UNKNOWN>RELOP MathParser failed to match rule 'Anything' at sample-sigconf.tex; line 314 col 0"], "language": "zh-CN"}, "extra_head": "\u003cstyle>\n.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}\n.tex-paper .ltx_title_document{display:none}\n.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}\n.tex-paper .ltx_creator{display:inline-block;margin-right:1em}\n.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}\n.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}\n.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}\n.tex-paper .ltx_para{margin:0}\n.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}\n.tex-paper .ltx_title_paragraph{font-size:17px}\n.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}\n.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}\n.tex-paper .ltx_font_sansserif{font-family:sans-serif}\n.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}\n.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}\n.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}\n.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}\n.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}\n.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}\n.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}\n.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}\n.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}\n.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}\n.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}\n.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}\n.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}\n.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}\n.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}\n.tex-paper math{font-size:1em;line-height:normal;font-family:math}\n.tex-paper math[display=\"block\"]{margin:.2em 0;white-space:nowrap}\n.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}\n.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}\n.tex-paper .ltx_bibblock{display:block}\n.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}\n.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}\n.tex-paper .ltx_toc{display:none}\n.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}\n.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}\n.tex-paper .ltx_tag{margin-right:.35em}\n.tex-paper [id]{scroll-margin-top:24px}\n\u003c/style>"}</script>
+<script>
+const tocPanel=document.querySelector('.paper-toc');
+if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
+tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

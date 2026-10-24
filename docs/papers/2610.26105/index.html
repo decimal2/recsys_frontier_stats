@@ -1,0 +1,1432 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>不要重写 SID 映射：动态电商搜索中生成式检索的拓扑保持</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style><style>
+.paper-reader main,.paper-reader>header{max-width:1180px}
+.paper-original-title{font-size:16px;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.paper-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.paper-actions a{padding:8px 14px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:14px}
+.paper-actions a:first-child{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paper-reading-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:36px;align-items:start;margin-top:30px}
+.paper-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;border-right:1px solid var(--line);padding-right:14px;font-size:13px}
+.paper-toc summary{font-size:14px;font-weight:600;cursor:pointer;padding:4px 0 10px}
+.paper-toc ol{list-style:none;padding:0;margin:0}
+.paper-toc li{margin:0;padding:4px 0;line-height:1.5}
+.paper-toc a{color:var(--muted);display:block;padding:2px 4px;border-radius:4px}
+.paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
+.paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
+.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
+.paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
+.paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
+.paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
+.paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
+.paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
+.paper-fulltext figure a{display:block}
+.paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
+.paper-fulltext .paper-equation{padding:8px 0}
+.paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
+.paper-fulltext .paper-inline-math{display:inline-block;vertical-align:middle;max-height:2.3em;width:auto;background:white;max-width:100%}
+.paper-fulltext .paper-reference{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.paper-fulltext .paper-source-page{display:block;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin:32px 0 18px;padding-top:8px;text-align:right}
+.paper-fulltext table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:14px}
+.paper-fulltext td,.paper-fulltext th{padding:6px 10px;border:1px solid var(--line)}
+.paper-bottom{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+.paper-library{display:grid;gap:0;margin:24px 0}
+.paper-entry{padding:26px 0;border-top:1px solid var(--line)}
+.paper-entry h2{display:block;font-size:21px;margin:6px 0}
+.paper-entry .original{display:block;margin-bottom:12px}
+.paper-entry .paper-actions{margin-bottom:0}
+.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+@media(max-width:800px){
+ .paper-reading-layout{display:block;margin-top:20px}
+ .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
+ .paper-toc[open] ol{max-height:55vh;overflow:auto}
+ .paper-fulltext{font-size:16px;line-height:1.9}
+ .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
+ .paper-reader h1{font-size:26px}
+}
+@media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
+</style><style>
+.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}
+.tex-paper .ltx_title_document{display:none}
+.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}
+.tex-paper .ltx_creator{display:inline-block;margin-right:1em}
+.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
+.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_para{margin:0}
+.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
+.tex-paper .ltx_title_paragraph{font-size:17px}
+.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}
+.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}
+.tex-paper .ltx_font_sansserif{font-family:sans-serif}
+.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}
+.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}
+.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}
+.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}
+.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}
+.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}
+.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}
+.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}
+.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}
+.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}
+.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}
+.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}
+.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}
+.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}
+.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+.tex-paper math{font-size:1em;line-height:normal;font-family:math}
+.tex-paper math[display="block"]{margin:.2em 0;white-space:nowrap}
+.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}
+.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}
+.tex-paper .ltx_bibblock{display:block}
+.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}
+.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}
+.tex-paper .ltx_toc{display:none}
+.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}
+.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
+.tex-paper .ltx_tag{margin-right:.35em}
+.tex-paper [id]{scroll-margin-top:24px}
+</style></head><body class="paper-reader">
+<header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
+<main><div class="eyebrow">PAPER LIBRARY / Don&#x27;t Rewrite the SID Map</div><h1>不要重写 SID 映射：动态电商搜索中生成式检索的拓扑保持</h1><p class="paper-original-title">Don&#x27;t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search</p>
+<p class="muted">Alibaba · arXiv 2610.26105 · 译文对应 v1</p>
+<div class="paper-actions"><a href="https://arxiv.org/abs/2610.26105v1" target="_blank" rel="noopener">英文 arXiv ↗</a>
+<a href="../index.html">全部论文</a></div>
+<p class="muted">中文全文 · 章节、公式和参考文献支持直接跳转</p>
+<div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
+<ol><li class="toc-level-1"><a href="#tex-section-1">摘要</a></li><li class="toc-level-1"><a href="#S1">1. 引言</a></li><li class="toc-level-1"><a href="#S2">2. 相关工作</a></li><li class="toc-level-2"><a href="#S2.SS1">2.1. 生成式检索</a></li><li class="toc-level-2"><a href="#S2.SS2">2.2. 语义标识符构建</a></li><li class="toc-level-2"><a href="#S2.SS3">2.3. 动态更新与持续学习</a></li><li class="toc-level-1"><a href="#S3">3. 方法</a></li><li class="toc-level-2"><a href="#S3.SS1">3.1. 问题形式化</a></li><li class="toc-level-2"><a href="#S3.SS2">3.2. SID构建</a></li><li class="toc-level-2"><a href="#S3.SS3">3.3. 检索器模型</a></li><li class="toc-level-2"><a href="#S3.SS4">3.4. 更新策略</a></li><li class="toc-level-1"><a href="#S4">4. 实验</a></li><li class="toc-level-2"><a href="#S4.SS1">4.1. 实验设置</a></li><li class="toc-level-2"><a href="#S4.SS2">4.2. 碰撞并非瓶颈</a></li><li class="toc-level-2"><a href="#S4.SS3">4.3. 宽束搜索掩盖映射漂移</a></li><li class="toc-level-2"><a href="#S4.SS4">4.4. 重映射率预测性能下降</a></li><li class="toc-level-2"><a href="#S4.SS5">4.5. 热启动无法修复重映射</a></li><li class="toc-level-2"><a href="#S4.SS6">4.6. 权重混合没有收益</a></li><li class="toc-level-2"><a href="#S4.SS7">4.7. 在线 A/B 测试</a></li><li class="toc-level-1"><a href="#S5">5. 讨论</a></li><li class="toc-level-1"><a href="#S6">6. 结论</a></li><li class="toc-level-1"><a href="#bib">参考文献</a></li></ol></details><article class="paper-fulltext" aria-label="论文全文"><article class="ltx_document ltx_authors_1line ltx_leqno tex-paper"><span class="ltx_note ltx_role_footnote"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup>通讯作者：Jianbo Zhu。</span></span></span>
+<h1 class="ltx_title ltx_title_document">不要重写 SID 映射：动态电子商务搜索中生成式检索的拓扑保持</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jianbo Zhu
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Taobao &amp; Tmall Group of Alibaba</span><span class="ltx_text ltx_affiliation_city">Hangzhou</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:zhujianbo.zjb@taobao.com">zhujianbo.zjb@taobao.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Xing Fang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Nankai University</span><span class="ltx_text ltx_affiliation_city">Tianjin</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Taobao &amp; Tmall Group of Alibaba</span><span class="ltx_text ltx_affiliation_city">Hangzhou</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:fangxing.fx@taobao.com">fangxing.fx@taobao.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Xiaopeng Chu
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">University of Science and Technology of China</span><span class="ltx_text ltx_affiliation_city">Hefei</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:cxphhh@mail.ustc.edu.cn">cxphhh@mail.ustc.edu.cn</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Mingmin Jin
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Taobao &amp; Tmall Group of Alibaba</span><span class="ltx_text ltx_affiliation_city">Hangzhou</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:jimmy.jmm@taobao.com">jimmy.jmm@taobao.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jing Wang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Taobao &amp; Tmall Group of Alibaba</span><span class="ltx_text ltx_affiliation_city">Hangzhou</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:jing.wangj1@taobao.com">jing.wangj1@taobao.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Bokang Wang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Taobao &amp; Tmall Group of Alibaba</span><span class="ltx_text ltx_affiliation_city">Hangzhou</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:wangbokang.wbk@taobao.com">wangbokang.wbk@taobao.com</a>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jiaqi Ye
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Taobao &amp; Tmall Group of Alibaba</span><span class="ltx_text ltx_affiliation_city">Hangzhou</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:guike.yjq@taobao.com">guike.yjq@taobao.com</a>
+</span></span></span>
+<span class="ltx_author_before"> and </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Xiang Zhang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Taobao &amp; Tmall Group of Alibaba</span><span class="ltx_text ltx_affiliation_city">Hangzhou</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span>
+<span class="ltx_contact ltx_role_email"><a href="mailto:heiqiang.zx@taobao.com">heiqiang.zx@taobao.com</a>
+</span></span></span>
+</div>
+<div class="ltx_dates">(2018)</div>
+<div class="ltx_abstract" id="tex-section-1">
+<h6 class="ltx_title ltx_title_abstract">摘要</h6>
+<p class="ltx_p">生成式检索为每个物品分配一个离散的语义标识符（SID），并通过自回归生成 SID 序列来检索物品。在电子商务等动态环境中，新物品持续到达，业务信号不断演变，需要定期更新 SID 到物品的映射和模型，以保持检索的时效性。然而，每次映射更新都可能使检索器模型已经学到的搜索路径失效，而映射变化程度与检索质量之间的定量关系尚未被系统性地刻画。我们通过对 67 天大规模电子商务搜索日志进行大量受控实验来研究这一问题，并获得三个核心发现。（1）SID 语义漂移会导致严重的检索性能下降，而这种下降可能被较大的束宽所掩盖：映射更新使 HitRate 下降 41.78-62.05%（束宽 1），但仅下降 8.33-10.85%（束宽 1000），因为冗余的候选生成掩盖了漂移的真实严重程度。（2）发生变化的 SID 比例与检索质量严格单调相关：随着旧物品 SID 的重新映射比例从 0% 增加到 72.75%，HitRate 单调下降，降幅最高可达 42.66%，对应束宽 1。在相同的热启动训练流程下，完全重映射仍然显著劣于保持策略，这表明模型已经内化了 SID 空间的隐式拓扑结构，且仅靠短预算的持续训练无法修复拓扑破坏。（3）SID 拓扑保持原则使最简单的热启动策略也极为有效，并且从先前检查点微调得到的模型优于朴素的模型汤（model souping）：固定旧物品 SID、插入新物品，并从先前模型进行热启动，可使旧物品 HitRate 提升约 10%、新物品 HitRate 提升约 109%，并在两个不重叠的更新周期上得到验证。这些发现可提炼为一条简洁的部署原则：插入新物品，冻结旧物品；尽可能热启动，否则冻结；绝不更改模型已经学到的 SID。该原则在移动电子商务平台 TmallAPP 上进行的三周在线 A/B 测试显示 UCTCVR +0.29%、GMV +1.16%。</p>
+</div>
+<div class="ltx_keywords">生成式检索、语义标识符、电商搜索、语义漂移、动态更新
+</div>
+<span class="ltx_note ltx_note_frontmatter ltx_role_copyright"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">copyright: </span>cc</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_journalyear"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">journalyear: </span>2018</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_conference"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">conference: </span>确保从您的权利确认邮件中输入正确的会议名称；03–05 年 6 月，2018；Woodstock, NY</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_isbn"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">isbn: </span>978-1-4503-XXXX-X/2018/06</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_doi"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">doi: </span>XXXXXXX.XXXXXXX</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_ccs"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">ccs: </span>信息系统 信息检索</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_ccs"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">ccs: </span>信息系统 检索模型与排序</span></span></span>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1. </span>引言</h2>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p">生成式检索将物品检索重新表述为序列生成任务：给定用户查询，语言模型自回归地生成一个短的离散词元序列，称为语义标识符（SID），并通过外部映射将其解析为一个或多个物品。自可微分搜索索引 <cite class="ltx_cite ltx_citemacro_citep">(Tay<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib2" title="Transformer memory as a differentiable search index">2022</a>)</cite> 被提出以来，这一范式已在许多场景中展现出优势 <cite class="ltx_cite ltx_citemacro_citep">(Cao<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib8" title="Autoregressive entity retrieval">2021</a>; Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib3" title="Recommender systems with generative retrieval">2023</a>; D’Amico<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib9" title="Deploying semantic id-based generative retrieval for large-scale podcast discovery at spotify">2026</a>; Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib4" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>; Chen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Onesearch: a preliminary exploration of the unified end-to-end generative framework for e-commerce search">2025</a>; Zhu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Efficient generative retrieval for e-commerce search with semantic cluster ids and expert-guided rl">2026</a>)</cite>，提供了端到端训练、免去大规模向量索引维护以及多目标排序信号的自然集成。</p>
+</div>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p">除了初始的物品 SID 构建之外，动态环境中更为紧迫的挑战是如何随时间保持 SID 到物品的映射。在电子商务搜索中，检索环境高度动态，物品集每日扩张：新物品上架、价格波动、转化率演变，所有这些都需要定期更新检索器模型和 SID 到物品的映射。特别是在生产级系统中，SID 编码通常包含业务价值维度 <cite class="ltx_cite ltx_citemacro_citep">(Ling<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib7" title="Beyond semantic ids: encoding business-value ranking into document identifiers for generative retrieval">2026</a>)</cite>，使得映射不可避免地随时间变化。模型在历史映射上训练后，可能在推理时生成相同的 SID，但该 SID 在更新后的映射下现在解析为不同的物品——我们将这一现象称为 <em class="ltx_emph ltx_font_italic">语义漂移</em>。更深层的问题是，先前的工作主要追求无冲突的 SID 分配；然而在动态环境中，持续增长的物品集不可避免地会与现有物品产生冲突。强制进行完全重映射以消除这些冲突会改变许多现有物品的 SID，从而触发严重的语义漂移。</p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p">在实践中，语义漂移很容易被忽视。在较大的束宽下，即使高概率路径已经过时，模型仍可通过探索许多替代分支来恢复目标物品；因此，在单一宽束下的离线评估可能表明映射更新是安全的，而在延迟受限的服务中采用窄束则会遭受大得多的损失。同时，人们常假设重新训练可以修复刷新后的映射。然而，这一假设忽略了模型在训练期间已经编码的结构知识，特别是已学到的 SID 空间拓扑结构。</p>
+</div>
+<div class="ltx_para" id="S1.p4">
+<p class="ltx_p">这些考虑引出了若干面向部署的问题。SID 映射刷新会造成多大损害，观察到的损害如何依赖于束宽？检索质量是否会随 SID 发生变化的旧物品比例而系统性变化？热启动训练能否修复重映射造成的损害，还是系统应保持旧 SID 拓扑结构、仅插入新物品？</p>
+</div>
+<div class="ltx_para" id="S1.p5">
+<p class="ltx_p">我们没有提出另一种算法补救方案，而是退后一步，通过对 67 天大规模电子商务搜索日志进行大量受控实验，从经验上回答这些问题。与先前针对基线评估单一提出方法的研究不同，我们将映射策略作为实验因子进行系统性变化，涵盖从完全重映射到完全冻结的完整范围。通过独立控制训练策略，这一设计能够清晰地将映射引起的损害与训练引起的修复区分开来。我们的贡献如下：</p>
+</div>
+<div class="ltx_para" id="S1.p6">
+<ul class="ltx_itemize" id="S1.I1">
+<li class="ltx_item" id="S1.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">语义漂移的损害与掩盖效应。</span> 我们系统性地量化了 SID 映射演变所导致的性能下降，并揭示宽束评估掩盖了漂移的真实严重程度。具体而言，虽然映射更新在束宽 1000 时导致 HitRate 和 MRR 显著下降，但在束宽 1 时下降要严重得多。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">单调效应与拓扑不可修复性。</span> 我们发现，发生变化的旧物品 SID 比例 <math alttext="\gamma" class="ltx_Math" display="inline" id="S1.I1.i2.p1.m1"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math> 与检索质量之间存在严格的单调负相关关系。在相同的热启动预算下，完全重映射仍然显著劣于保持策略，这表明模型已经内化了 SID 空间的隐式拓扑结构，且简单的热启动机制无法修复拓扑破坏。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">拓扑保持原则与最优更新策略。</span> 我们发现拓扑保持是比单纯重新训练更根本的决定因素，并提出了一种可在工业规模上实施的简单增量热启动策略（冻结旧物品、插入新物品、定期对模型进行热启动）。实验显示旧物品上约提升 9%、新物品上约提升 109%；三周在线 A/B 测试得到 UCTCVR +0.29%、GMV +1.16%。</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="S1.p7">
+<p class="ltx_p">有四个发现格外反直觉。第一，在宽束下进行的评估可能掩盖绝大部分实际的漂移严重程度，这意味着许多生产系统可能是在虚假的安全感下运行。第二，重映射比例与质量损失之间的关系严格单调，在完全重映射与完全冻结之间不存在有用的中间地带。第三，热启动训练——大多数持续学习方法所假设的默认修复策略——无法从拓扑破坏中恢复：热启动后的完全重映射仍然不如不重新训练的冻结基线。第四，与其通过混合新旧模型来创建“模型汤”，不如直接使用从旧模型训练得到的新模型更为有效。总而言之，这些发现表明，先前工作一直在解决的问题，即如何修复映射引起的损害，最好通过从一开始就不产生损害来解决。</p>
+</div>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2. </span>相关工作</h2>
+<section class="ltx_subsection" id="S2.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.1. </span>生成式检索</h3>
+<div class="ltx_para" id="S2.SS1.p1">
+<p class="ltx_p">可微分搜索索引 <cite class="ltx_cite ltx_citemacro_citep">(Tay<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib2" title="Transformer memory as a differentiable search index">2022</a>)</cite> 和 GENRE <cite class="ltx_cite ltx_citemacro_citep">(Cao<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib8" title="Autoregressive entity retrieval">2021</a>)</cite> 确立了直接生成文档或实体标识符的范式，以自回归序列生成取代最近邻搜索。此后，生成式检索已被应用于文档和段落检索 <cite class="ltx_cite ltx_citemacro_citep">(Tay<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib2" title="Transformer memory as a differentiable search index">2022</a>; Cao<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib8" title="Autoregressive entity retrieval">2021</a>)</cite>、播客发现 <cite class="ltx_cite ltx_citemacro_citep">(D’Amico<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib9" title="Deploying semantic id-based generative retrieval for large-scale podcast discovery at spotify">2026</a>)</cite>、推荐排序 <cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib3" title="Recommender systems with generative retrieval">2023</a>; Singh<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib10" title="Better generalization with semantic ids: a case study in ranking for recommendations">2024</a>; Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib4" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>)</cite> 和电子商务搜索 <cite class="ltx_cite ltx_citemacro_citep">(Chen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Onesearch: a preliminary exploration of the unified end-to-end generative framework for e-commerce search">2025</a>; Zhu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Efficient generative retrieval for e-commerce search with semantic cluster ids and expert-guided rl">2026</a>; Ling<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib7" title="Beyond semantic ids: encoding business-value ranking into document identifiers for generative retrieval">2026</a>; Zhan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib11" title="TSGR: taobao search generative retrieval">2026</a>)</cite>。TIGER <cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib3" title="Recommender systems with generative retrieval">2023</a>)</cite> 证明了残差量化语义标识符能够有效捕捉物品语义用于检索，自其提出以来，大量工作开始在电子商务中采用语义 ID。OneRec <cite class="ltx_cite ltx_citemacro_citep">(Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib4" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>)</cite> 和 OneSearch <cite class="ltx_cite ltx_citemacro_citep">(Chen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Onesearch: a preliminary exploration of the unified end-to-end generative framework for e-commerce search">2025</a>)</cite> 提出了端到端框架。在电子商务搜索场景中，CQ-SID <cite class="ltx_cite ltx_citemacro_citep">(Zhu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Efficient generative retrieval for e-commerce search with semantic cluster ids and expert-guided rl">2026</a>)</cite> 引入了查询-物品对比学习和面向搜索相关簇的 EG-GRPO。Ling 等人 <cite class="ltx_cite ltx_citemacro_citep">(Ling<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib7" title="Beyond semantic ids: encoding business-value ranking into document identifiers for generative retrieval">2026</a>)</cite> 将业务价值排序编码到 SID 分配中，Zhan 等人 <cite class="ltx_cite ltx_citemacro_citep">(Zhan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib11" title="TSGR: taobao search generative retrieval">2026</a>)</cite> 提出了一个统一的生成式框架，将检索和粗排集成在单一模型内。这些工作聚焦于初始模型设计；不断演变物品集合在更新时的影响仍是一个开放问题。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S2.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.2. </span>语义标识符构建</h3>
+<div class="ltx_para" id="S2.SS2.p1">
+<p class="ltx_p">语义标识符的质量是生成式检索性能的一阶决定因素。基于 RQ-VAE 的方法 <cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib3" title="Recommender systems with generative retrieval">2023</a>; Chen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Onesearch: a preliminary exploration of the unified end-to-end generative framework for e-commerce search">2025</a>; Zhu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Efficient generative retrieval for e-commerce search with semantic cluster ids and expert-guided rl">2026</a>)</cite> 通过对物品嵌入进行残差向量量化来产生层次化编码。其他方法包括 RQ-KMeans <cite class="ltx_cite ltx_citemacro_citep">(Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib4" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>)</cite>、多标识符预训练 <cite class="ltx_cite ltx_citemacro_citep">(Zheng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib12" title="Pre-training generative recommender with multi-identifier item tokenization">2025</a>)</cite> 和自改进词元化 <cite class="ltx_cite ltx_citemacro_citep">(Chen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib13" title="Enhancing item tokenization for generative recommendation through self-improvement">2024</a>)</cite>。一个关键关注点是量化如何扭曲邻域结构：拓扑感知词元化 <cite class="ltx_cite ltx_citemacro_citep">(Liu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib14" title="Topology-aware tokenization for generative recommendation">2026a</a>)</cite>、资格感知冲突处理 <cite class="ltx_cite ltx_citemacro_citep">(Hu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib15" title="Stop treating collisions equally: qualification-aware semantic id learning for recommendation at industrial scale">2026</a>)</cite> 和拓扑保持词元化 <cite class="ltx_cite ltx_citemacro_citep">(Zheng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib16" title="TopoGR: revealing and preserving latent structure of semantic id in generative recommendation">2026</a>)</cite> 都表明标识符结构会影响下游检索。混合语义/哈希标识符 <cite class="ltx_cite ltx_citemacro_citep">(Liu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib17" title="The best of the two worlds: harmonizing semantic and hash ids for sequential recommendation">2026b</a>)</cite> 和约束解码 <cite class="ltx_cite ltx_citemacro_citep">(Su<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib18" title="Vectorizing the trie: efficient constrained decoding for llm-based generative retrieval on accelerators">2026</a>)</cite> 解决了服务效率问题，而 FORGE <cite class="ltx_cite ltx_citemacro_citep">(Fu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib19" title="FORGE: forming semantic identifiers for generative retrieval in industrial datasets">2026</a>)</cite> 为评估 SID 构建方法提供了系统性基准。DREAM <cite class="ltx_cite ltx_citemacro_citep">(Guan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="DREAM: dynamic refinement of early assignment mappings">2026</a>)</cite> 进一步将过早的静态 SID 固化识别为冷启动瓶颈，并提出反事实对比学习以实现渐进式细化。这些工作聚焦于构建更高质量的初始 SID；然而，即使初始设计有效，后续映射演变对检索质量的影响仍未被充分刻画。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S2.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.3. </span>动态更新与持续学习</h3>
+<div class="ltx_para" id="S2.SS3.p1">
+<p class="ltx_p">DSI++ <cite class="ltx_cite ltx_citemacro_citep">(Mehta<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib21" title="DSI++: updating transformer memory with new documents">2023</a>)</cite> 将文档添加视为持续学习，并记录了顺序更新过程中的灾难性遗忘。CLEVER <cite class="ltx_cite ltx_citemacro_citep">(Chen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib23" title="Continual learning for generative retrieval over dynamic corpora">2023</a>)</cite> 和 PromptDSI <cite class="ltx_cite ltx_citemacro_citep">(Huynh<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib22" title="PromptDSI: prompt-based rehearsal-free continual learning for document retrieval">2025</a>)</cite> 在有限回放的条件下处理动态语料库。更近期的工作直接针对语义 ID 过时问题：Baikalov 等人 <cite class="ltx_cite ltx_citemacro_citep">(Baikalov<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib24" title="Mitigating collaborative semantic id staleness in generative retrieval">2026</a>)</cite> 提出双射对齐映射以缓解协同 SID 漂移，Feng 等人 <cite class="ltx_cite ltx_citemacro_citep">(Feng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib25" title="Drift-aware continual tokenization for generative recommendation">2026</a>)</cite> 引入基于漂移置信度的选择性词元化以尽量减少不必要的编码变化。替代范式完全避免权重更新：Den 等人 <cite class="ltx_cite ltx_citemacro_citep">(Den<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib26" title="ICICLE: expanding retrieval with in-context documents">2026</a>)</cite> 将增量检索重新表述为上下文生成问题，Mekonnen 等人 <cite class="ltx_cite ltx_citemacro_citep">(Mekonnen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib27" title="A parametric memory head for continual generative retrieval">2026</a>)</cite> 将参数化记忆头附加到冻结模型上，Huynh 等人 <cite class="ltx_cite ltx_citemacro_citep">(Huynh<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib28" title="MixLoRA-dsi: dynamically expandable mixture-of-lora experts for rehearsal-free generative retrieval over dynamic corpora">2026</a>)</cite> 使用可动态扩展的 LoRA 专家。这些方法通过日益复杂的算法设计（如对齐求解器、选择性重新分配和参数高效适配器）来缓解映射过时问题。然而，这些方法大多引入了额外的架构复杂性。</p>
+</div>
+<div class="ltx_para" id="S2.SS3.p2">
+<p class="ltx_p">尽管近期方法已认识到漂移问题并提出了算法补救方案，但尚无研究将映射策略作为独立的实验因子，以区分映射变化本身造成的损害与修复算法的有效性。发生变化映射的比例与检索质量之间的单调关系也尚未被确立。更根本地，一个更简单却更前提性的问题——映射是否应该被改变——在很大程度上被忽视了。</p>
+</div>
+<figure class="ltx_figure" id="S2.F1"><a href="assets/bb938afa2e1d6d0b.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S2.F1.g1" loading="lazy" src="assets/bb938afa2e1d6d0b.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1. </span><span class="ltx_text ltx_font_bold">框架概览。</span> <span class="ltx_text ltx_font_bold">顶部：</span> 三级 SID 构建，来自 RQ-VAE 的两个语义层结合 QI 对比学习产生前缀 <math alttext="(s_{1},s_{2})" class="ltx_Math" display="inline" id="S2.F1.m3"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>s</mi><mn>1</mn></msub><mo>,</mo><msub><mi>s</mi><mn>2</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(s_{1},s_{2})</annotation></semantics></math>；业务价值层通过参与度信号对物品排序追加 <math alttext="s_{3}" class="ltx_Math" display="inline" id="S2.F1.m4"><semantics><msub><mi>s</mi><mn>3</mn></msub><annotation encoding="application/x-tex">s_{3}</annotation></semantics></math>。<span class="ltx_text ltx_font_bold">底部：</span> 检索流水线，从嵌入到 SID 构建、LLM 自回归生成、束搜索和 SID 到物品映射解析。存在两种不同的更新路径类型：红色路径重写旧物品 SID 并使用模型汤（混合新旧模型），这会降低指标；绿色路径冻结旧 SID、插入新物品，并直接应用从旧模型微调得到的新模型，在旧物品和新物品上均提升性能。</figcaption>
+</figure>
+</section>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3. </span>方法</h2>
+<div class="ltx_para" id="S3.p1">
+<p class="ltx_p">我们研究当商品集合扩大且商业价值信号发生变化时，如何更新部署在电商搜索中的生成式检索系统。在真实环境的长期运行中，随着新商品到达以及现有商品商业重要性的变化，已部署的检索器会逐渐过时。直接刷新Item-SID映射以追赶变化，会破坏模型学习到的自回归解码路径，导致检索质量下降。我们的目标是确定能够容纳新商品和不断演化的价值信号、同时尽可能保持现有商品已学习映射稳定的更新策略，避免完整的重建与重训流程。</p>
+</div>
+<section class="ltx_subsection" id="S3.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.1. </span>问题形式化</h3>
+<div class="ltx_para" id="S3.SS1.p1">
+<p class="ltx_p">令<math alttext="\mathcal{I}" class="ltx_Math" display="inline" id="S3.SS1.p1.m1"><semantics><mi class="ltx_font_mathcaligraphic">ℐ</mi><annotation encoding="application/x-tex">\mathcal{I}</annotation></semantics></math>表示商品集合。每个商品<math alttext="i\in\mathcal{I}" class="ltx_Math" display="inline" id="S3.SS1.p1.m2"><semantics><mrow><mi>i</mi><mo>∈</mo><mi class="ltx_font_mathcaligraphic">ℐ</mi></mrow><annotation encoding="application/x-tex">i\in\mathcal{I}</annotation></semantics></math>被分配一个三词元语义标识符</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(1)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\operatorname{SID}(i)=[s_{1},s_{2},s_{3}]." class="ltx_Math" display="block" id="S3.E1.m1"><semantics><mrow><mrow><mrow><mi>SID</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mo stretchy="false">[</mo><msub><mi>s</mi><mn>1</mn></msub><mo>,</mo><msub><mi>s</mi><mn>2</mn></msub><mo>,</mo><msub><mi>s</mi><mn>3</mn></msub><mo stretchy="false">]</mo></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\operatorname{SID}(i)=[s_{1},s_{2},s_{3}].</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">给定查询<math alttext="q" class="ltx_Math" display="inline" id="S3.SS1.p1.m3"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>和用户画像<math alttext="u" class="ltx_Math" display="inline" id="S3.SS1.p1.m4"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>，检索模型<math alttext="f_{\theta}" class="ltx_Math" display="inline" id="S3.SS1.p1.m5"><semantics><msub><mi>f</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">f_{\theta}</annotation></semantics></math>以自回归方式生成目标商品的SID，并通过最小化以下目标进行训练</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E2">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(2)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}(q,u,i)=-\sum_{k=1}^{3}\log P_{\theta}(s_{k}\mid s_{&lt;k},q,u)." class="ltx_Math" display="block" id="S3.E2.m1"><semantics><mrow><mrow><mrow><mi class="ltx_font_mathcaligraphic">ℒ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>q</mi><mo>,</mo><mi>u</mi><mo>,</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mo>−</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mn>3</mn></munderover><mrow><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><msub><mi>P</mi><mi>θ</mi></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>s</mi><mi>k</mi></msub><mo>∣</mo><mrow><msub><mi>s</mi><mrow><mi></mi><mo>&lt;</mo><mi>k</mi></mrow></msub><mo>,</mo><mi>q</mi><mo>,</mo><mi>u</mi></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}(q,u,i)=-\sum_{k=1}^{3}\log P_{\theta}(s_{k}\mid s_{&lt;k},q,u).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">在推理时，束搜索产生前K个SID序列，服务时的映射<math alttext="M:\operatorname{SID}\rightarrow\mathcal{I}" class="ltx_Math" display="inline" id="S3.SS1.p1.m6"><semantics><mrow><mi>M</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mi>SID</mi><mo stretchy="false">→</mo><mi class="ltx_font_mathcaligraphic">ℐ</mi></mrow></mrow><annotation encoding="application/x-tex">M:\operatorname{SID}\rightarrow\mathcal{I}</annotation></semantics></math>将每个序列解析为一个或多个商品。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p2">
+<p class="ltx_p">检索器通过其词元嵌入和输出分布，本质上与SID空间绑定。令<math alttext="M_{t_{0}}" class="ltx_Math" display="inline" id="S3.SS1.p2.m1"><semantics><msub><mi>M</mi><msub><mi>t</mi><mn>0</mn></msub></msub><annotation encoding="application/x-tex">M_{t_{0}}</annotation></semantics></math>为用于标注训练数据的映射，<math alttext="M_{t_{1}}" class="ltx_Math" display="inline" id="S3.SS1.p2.m2"><semantics><msub><mi>M</mi><msub><mi>t</mi><mn>1</mn></msub></msub><annotation encoding="application/x-tex">M_{t_{1}}</annotation></semantics></math>为推理时的映射。当<math alttext="M_{t_{0}}\neq M_{t_{1}}" class="ltx_Math" display="inline" id="S3.SS1.p2.m3"><semantics><mrow><msub><mi>M</mi><msub><mi>t</mi><mn>0</mn></msub></msub><mo>≠</mo><msub><mi>M</mi><msub><mi>t</mi><mn>1</mn></msub></msub></mrow><annotation encoding="application/x-tex">M_{t_{0}}\neq M_{t_{1}}</annotation></semantics></math>时发生漂移事件。我们在旧商品上将其程度度量为</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E3">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(3)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\gamma=\delta(M_{t_{0}},M_{t_{1}})=\frac{1}{|\mathcal{I}|}\sum_{i\in\mathcal{I%
+}}\mathbb{I}\!\left[M_{t_{0}}^{-1}(i)\neq M_{t_{1}}^{-1}(i)\right]." class="ltx_Math" display="block" id="S3.E3.m1"><semantics><mrow><mrow><mi>γ</mi><mo>=</mo><mrow><mi>δ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>M</mi><msub><mi>t</mi><mn>0</mn></msub></msub><mo>,</mo><msub><mi>M</mi><msub><mi>t</mi><mn>1</mn></msub></msub><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><mi class="ltx_font_mathcaligraphic">ℐ</mi><mo stretchy="false">|</mo></mrow></mfrac><mo>⁢</mo><mrow><munder><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>∈</mo><mi class="ltx_font_mathcaligraphic">ℐ</mi></mrow></munder><mrow><mpadded width="0.219em"><mi>𝕀</mi></mpadded><mo>⁢</mo><mrow><mo>[</mo><mrow><mrow><msubsup><mi>M</mi><msub><mi>t</mi><mn>0</mn></msub><mrow><mo>−</mo><mn>1</mn></mrow></msubsup><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><mo>≠</mo><mrow><msubsup><mi>M</mi><msub><mi>t</mi><mn>1</mn></msub><mrow><mo>−</mo><mn>1</mn></mrow></msubsup><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><mo>]</mo></mrow></mrow></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\gamma=\delta(M_{t_{0}},M_{t_{1}})=\frac{1}{|\mathcal{I}|}\sum_{i\in\mathcal{I%
+}}\mathbb{I}\!\left[M_{t_{0}}^{-1}(i)\neq M_{t_{1}}^{-1}(i)\right].</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">在实验中，我们将观测到的重映射比例记作<math alttext="\gamma" class="ltx_Math" display="inline" id="S3.SS1.p2.m4"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>，并在旧商品集合上评估。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p3">
+<p class="ltx_p">核心张力在于稳定性与新鲜度之间。若干常规操作都可能触发映射漂移：刷新基于价值的位置以跟踪变化的市场条件；在大批量新商品改变码本后重新训练RQ-VAE或其他商品到SID的聚类模型；或者更一般地，任何将现有商品重新分配到不同SID的过程。这些操作中的每一项都会使<math alttext="f_{\theta}" class="ltx_Math" display="inline" id="S3.SS1.p3.m1"><semantics><msub><mi>f</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">f_{\theta}</annotation></semantics></math>学习到的部分映射失效。与扁平的类别标签不同，生成式检索模型中的每个SID都对应一系列自回归解码决策：模型首先选择<math alttext="s_{1}" class="ltx_Math" display="inline" id="S3.SS1.p3.m2"><semantics><msub><mi>s</mi><mn>1</mn></msub><annotation encoding="application/x-tex">s_{1}</annotation></semantics></math>，然后选择<math alttext="s_{2}" class="ltx_Math" display="inline" id="S3.SS1.p3.m3"><semantics><msub><mi>s</mi><mn>2</mn></msub><annotation encoding="application/x-tex">s_{2}</annotation></semantics></math>，以<math alttext="s_{1}" class="ltx_Math" display="inline" id="S3.SS1.p3.m4"><semantics><msub><mi>s</mi><mn>1</mn></msub><annotation encoding="application/x-tex">s_{1}</annotation></semantics></math>为条件，依此类推，直到产生完整标识符。因此，每个Item-SID关联都不是单个标签，而是通过树状输出空间的一条已学习解码路径。当映射更新将商品重新分配到不同SID时，它不仅仅重新标记训练数据；它会在先前学习到的路径上重新分配输出概率，可能使解码树的整个分支失效。<em class="ltx_emph ltx_font_italic">拓扑保持</em>，即保持商品到SID的分配不变，确保这些已学习路径仍然有效。宽束搜索可能通过探索额外分支部分补偿漂移，而窄束搜索更早做出决定，因而更脆弱。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.2. </span>SID构建</h3>
+<div class="ltx_para" id="S3.SS2.p1">
+<p class="ltx_p">前两个词元<math alttext="(s_{1},s_{2})" class="ltx_Math" display="inline" id="S3.SS2.p1.m1"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>s</mi><mn>1</mn></msub><mo>,</mo><msub><mi>s</mi><mn>2</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(s_{1},s_{2})</annotation></semantics></math>构成语义前缀，其通过使用在CQ-SID查询-商品（QI）对比框架<cite class="ltx_cite ltx_citemacro_citep">(Zhu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Efficient generative retrieval for e-commerce search with semantic cluster ids and expert-guided rl">2026</a>)</cite>下训练的RQ-VAE对商品内容嵌入进行量化而获得。QI目标在标准VQ-VAE重建损失和承诺损失的基础上增加了一个双向InfoNCE项，在共享嵌入空间中对齐商品内容和查询表示，从而使所得码本捕获与搜索相关的语义簇，而不仅仅是内容邻域。码本大小设为8192x8192。</p>
+</div>
+<div class="ltx_para" id="S3.SS2.p2">
+<p class="ltx_p">在每个语义前缀内，第三个词元<math alttext="s_{3}" class="ltx_Math" display="inline" id="S3.SS2.p2.m1"><semantics><msub><mi>s</mi><mn>3</mn></msub><annotation encoding="application/x-tex">s_{3}</annotation></semantics></math>编码商业价值先验。遵循<cite class="ltx_cite ltx_citemacro_citep">(Ling<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib7" title="Beyond semantic ids: encoding business-value ranking into document identifiers for generative retrieval">2026</a>)</cite>，我们计算</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E4">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(4)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="v(i)=\frac{0.1\cdot\mathrm{Click}(i)+0.3\cdot\mathrm{Cart}(i)+1.0\cdot\mathrm{%
+Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10," class="ltx_Math" display="block" id="S3.E4.m1"><semantics><mrow><mrow><mrow><mrow><mi>v</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mfrac><mrow><mrow><mrow><mn>0.1</mn><mo lspace="0.222em" rspace="0.222em">⋅</mo><mi>Click</mi></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><mo>+</mo><mrow><mrow><mn>0.3</mn><mo lspace="0.222em" rspace="0.222em">⋅</mo><mi>Cart</mi></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><mo>+</mo><mrow><mrow><mn>1.0</mn><mo lspace="0.222em" rspace="0.222em">⋅</mo><mi>Buy</mi></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><mrow><mrow><mi>Exp</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><mo>+</mo><mi>ϵ</mi></mrow></mfrac></mrow><mo rspace="1.167em">,</mo><mrow><mi>ϵ</mi><mo>=</mo><mn>10</mn></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">v(i)=\frac{0.1\cdot\mathrm{Click}(i)+0.3\cdot\mathrm{Cart}(i)+1.0\cdot\mathrm{%
+Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="\mathrm{Exp}(i)" class="ltx_Math" display="inline" id="S3.SS2.p2.m2"><semantics><mrow><mi>Exp</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathrm{Exp}(i)</annotation></semantics></math>表示商品<math alttext="i" class="ltx_Math" display="inline" id="S3.SS2.p2.m3"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>的曝光次数，<math alttext="\mathrm{Click}" class="ltx_Math" display="inline" id="S3.SS2.p2.m4"><semantics><mi>Click</mi><annotation encoding="application/x-tex">\mathrm{Click}</annotation></semantics></math>、<math alttext="\mathrm{Cart}" class="ltx_Math" display="inline" id="S3.SS2.p2.m5"><semantics><mi>Cart</mi><annotation encoding="application/x-tex">\mathrm{Cart}</annotation></semantics></math>和<math alttext="\mathrm{Buy}" class="ltx_Math" display="inline" id="S3.SS2.p2.m6"><semantics><mi>Buy</mi><annotation encoding="application/x-tex">\mathrm{Buy}</annotation></semantics></math>分别表示点击、加入购物车和购买次数。每个前缀内的商品按<math alttext="v(i)" class="ltx_Math" display="inline" id="S3.SS2.p2.m7"><semantics><mrow><mi>v</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">v(i)</annotation></semantics></math>排序，使得第三级词元直接反映商业重要性。</p>
+</div>
+<section class="ltx_paragraph" id="S3.SS2.SSS0.Px1">
+<h4 class="ltx_title ltx_title_paragraph">混合碰撞感知分配。</h4>
+<div class="ltx_para" id="S3.SS2.SSS0.Px1.p1">
+<p class="ltx_p">在持续摄入的生产商品集合中，每个语义前缀下的商品数量随时间单调增长。因此，在有限词表内维持双射的商品到词元映射是不可行的：随着新商品累积，无论初始码本大小如何，碰撞（多个商品共享同一标识符）都不可避免。我们不是试图通过不断扩展词表来消除所有碰撞，而是采用混合碰撞感知（HC）设计，将精确解析集中在最重要的地方。对于每个前缀<math alttext="P=(s_{1},s_{2})" class="ltx_Math" display="inline" id="S3.SS2.SSS0.Px1.p1.m1"><semantics><mrow><mi>P</mi><mo>=</mo><mrow><mo stretchy="false">(</mo><msub><mi>s</mi><mn>1</mn></msub><mo>,</mo><msub><mi>s</mi><mn>2</mn></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">P=(s_{1},s_{2})</annotation></semantics></math>，商品按<math alttext="v(i)" class="ltx_Math" display="inline" id="S3.SS2.SSS0.Px1.p1.m2"><semantics><mrow><mi>v</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">v(i)</annotation></semantics></math>排序，前<math alttext="K" class="ltx_Math" display="inline" id="S3.SS2.SSS0.Px1.p1.m3"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>个商品获得唯一的第三级词元，即<math alttext="s_{3}(i_{j})=j" class="ltx_Math" display="inline" id="S3.SS2.SSS0.Px1.p1.m4"><semantics><mrow><mrow><msub><mi>s</mi><mn>3</mn></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>i</mi><mi>j</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mi>j</mi></mrow><annotation encoding="application/x-tex">s_{3}(i_{j})=j</annotation></semantics></math>，对应于<math alttext="j\in\{1,\ldots,K\}" class="ltx_Math" display="inline" id="S3.SS2.SSS0.Px1.p1.m5"><semantics><mrow><mi>j</mi><mo>∈</mo><mrow><mo stretchy="false">{</mo><mn>1</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mi>K</mi><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">j\in\{1,\ldots,K\}</annotation></semantics></math>；其余商品以固定大小分组共享桶标识符。我们设<math alttext="K=100" class="ltx_Math" display="inline" id="S3.SS2.SSS0.Px1.p1.m6"><semantics><mrow><mi>K</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">K=100</annotation></semantics></math>，并为尾部最多分配1024个额外碰撞桶。作为参考，全稀疏（FS）设计为每个商品分配一个唯一标识符，最多需要8192个第三级桶。HC为高价值头部保留精确解析，同时优雅地容纳长尾。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S3.SS2.SSS0.Px2">
+<h4 class="ltx_title ltx_title_paragraph">非侵入式新商品插入。</h4>
+<div class="ltx_para" id="S3.SS2.SSS0.Px2.p1">
+<p class="ltx_p">一旦新商品积累足够曝光以有资格进入商品池，它首先从RQ-VAE量化器获得语义前缀，然后被插入其对应簇的价值排序中。该商品直接插入其价值排名位置，无论该位置落在前<math alttext="K" class="ltx_Math" display="inline" id="S3.SS2.SSS0.Px2.p1.m1"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>头部还是碰撞分桶的尾部。前<math alttext="K" class="ltx_Math" display="inline" id="S3.SS2.SSS0.Px2.p1.m2"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>的专用分配仅在训练时的SID集合中维护；在插入时，落入头部的新商品可能与现有商品共享先前专用的词元，且不修改任何旧商品的SID。这确保新商品插入对现有SID空间零影响。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S3.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.3. </span>检索器模型</h3>
+<div class="ltx_para" id="S3.SS3.p1">
+<p class="ltx_p">检索器建立在Qwen2.5-0.5B<cite class="ltx_cite ltx_citemacro_citep">(Qwen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="Qwen2.5 technical report">2025</a>)</cite>之上，训练遵循CQ-SID<cite class="ltx_cite ltx_citemacro_citep">(Zhu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Efficient generative retrieval for e-commerce search with semantic cluster ids and expert-guided rl">2026</a>)</cite>的三阶段流程：</p>
+<ol class="ltx_enumerate" id="S3.I1">
+<li class="ltx_item" id="S3.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(1)</span>
+<div class="ltx_para" id="S3.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">商品<math alttext="\rightarrow" class="ltx_Math" display="inline" id="S3.I1.i1.p1.m1"><semantics><mo stretchy="false">→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>SID。</span>模型学习仅以商品内容为条件生成商品SID，建立从内容表示到SID空间的基本映射。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(2)</span>
+<div class="ltx_para" id="S3.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">查询<math alttext="\rightarrow" class="ltx_Math" display="inline" id="S3.I1.i2.p1.m1"><semantics><mo stretchy="false">→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>SID。</span>将查询文本作为输入纳入，以训练模型生成目标商品SID。这通过利用源自大多数用户查询-商品交互序列的查询-SID关联来实现。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(3)</span>
+<div class="ltx_para" id="S3.I1.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">用户+查询<math alttext="\rightarrow" class="ltx_Math" display="inline" id="S3.I1.i3.p1.m1"><semantics><mo stretchy="false">→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>SID。</span>将用户画像和交互历史前置到查询，使个性化检索能够以用户上下文和查询意图为条件生成SID。</p>
+</div>
+</li>
+</ol>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.4. </span>更新策略</h3>
+<div class="ltx_para" id="S3.SS4.p1">
+<p class="ltx_p">每个更新周期提出两个独立决策：<em class="ltx_emph ltx_font_italic">哪些</em>商品获得新SID（映射策略），以及<em class="ltx_emph ltx_font_italic">是否</em>重训模型以适应更新后的映射（训练策略）。我们有意聚焦于简单、可解释的选项，而非复杂的持续学习方法，原因有二。第一，生产系统更青睐可靠、可调试的解决方案，而非算法复杂性。第二，由于自回归检索器学习查询到SID路径的关联，任何映射变化都会在结构上使这些已学习关联的一部分失效；因此映射策略预计是主导因素，而训练过程起辅助作用。</p>
+</div>
+<section class="ltx_paragraph" id="S3.SS4.SSS0.Px1">
+<h4 class="ltx_title ltx_title_paragraph">映射策略。</h4>
+<div class="ltx_para" id="S3.SS4.SSS0.Px1.p1">
+<p class="ltx_p">我们考虑三种跨越稳定性–新鲜度谱系的策略。<em class="ltx_emph ltx_font_italic">全量重映射</em>（Full-Re）使用最新价值排名为每个前缀内的所有商品重新分配第三级词元；大量终端词元分配发生变化。<em class="ltx_emph ltx_font_italic">冻结映射</em>保持每个旧商品的SID不变；符合条件的新商品在其RQ-VAE前缀下获得可用的唯一或共享桶词元，而不修改任何现有分配。<em class="ltx_emph ltx_font_italic">阈值重映射</em>在两者之间插值：仅当旧商品的排名位移超过阈值<math alttext="t" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m1"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>时才重映射该商品，</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E5">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(5)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="|\operatorname{rank}_{t_{1}}(i)-\operatorname{rank}_{t_{0}}(i)|&gt;t." class="ltx_Math" display="block" id="S3.E5.m1"><semantics><mrow><mrow><mrow><mo stretchy="false">|</mo><mrow><mrow><msub><mi>rank</mi><msub><mi>t</mi><mn>1</mn></msub></msub><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow><mo>−</mo><mrow><msub><mi>rank</mi><msub><mi>t</mi><mn>0</mn></msub></msub><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><mo stretchy="false">|</mo></mrow><mo>&gt;</mo><mi>t</mi></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">|\operatorname{rank}_{t_{1}}(i)-\operatorname{rank}_{t_{0}}(i)|&gt;t.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">将<math alttext="t" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m2"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>从<math alttext="0" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m3"><mn>0</mn></math>变化到<math alttext="\infty" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m4"><semantics><mi mathvariant="normal">∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math>，描绘出从全量重映射到冻结映射的连续谱，使我们能够研究重映射比例<math alttext="\gamma" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m5"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>与检索质量之间的剂量–响应关系。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S3.SS4.SSS0.Px2">
+<h4 class="ltx_title ltx_title_paragraph">训练策略。</h4>
+<div class="ltx_para" id="S3.SS4.SSS0.Px2.p1">
+<p class="ltx_p">给定任何映射策略，模型要么保持不变（<em class="ltx_emph ltx_font_italic">不重训</em>），要么从先前检查点继续（<em class="ltx_emph ltx_font_italic">热启动</em>）并在以更新后映射标注的累积新查询–SID对上进行训练。热启动训练使模型能够学习涉及新插入商品的关联，并在当前映射下强化现有关联。在热启动更新期间，仅重新执行检索器模型训练阶段3，参见第<a class="ltx_ref" href="#S3.SS3" title="3.3. Retriever Model ‣ 3. Method ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">3.3</span></a>节。</p>
+</div>
+<div class="ltx_para" id="S3.SS4.SSS0.Px2.p2">
+<p class="ltx_p">这两个维度独立组合，允许在有或无热启动训练的情况下评估不同的映射策略。图<a class="ltx_ref" href="#S2.F1" title="Figure 1 ‣ 2.3. Dynamic Updates and Continual Learning ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">1</span></a>对比了两个极端：全量重映射（红色路径）重写现有解码器消费的终端词元分配，造成拓扑破坏并降低HitRate和MRR；冻结映射加热启动训练（绿色路径）仅用新商品扩展映射，并利用热启动训练提升新旧商品的检索质量。</p>
+</div>
+<figure class="ltx_table" id="S3.T1">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 1. </span>FS与HC标识符的第1天比较：HitRate、MRR以及每个查询解析到的商品数。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_th ltx_th_row ltx_border_tt"></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" colspan="5"><span class="ltx_text" style="font-size:90%;">Retrieval Quality</span></th>
+<th class="ltx_td ltx_th ltx_th_column ltx_border_tt"></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" colspan="4"><span class="ltx_text" style="font-size:90%;">Resolved Items</span></th>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row"><span class="ltx_text" style="font-size:90%;">SID</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:90%;">HR@1</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:90%;">HR@10</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:90%;">HR@1000</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:90%;">MRR</span></th>
+<th class="ltx_td ltx_th ltx_th_column"></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:90%;">Avg@B1</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:90%;">Med@B1</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:90%;">Avg@B1000</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:90%;">Med@B1000</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t"><span class="ltx_text" style="font-size:90%;">FS</span></th>
+<td class="ltx_td ltx_align_right ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.0584</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.2409</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.5134</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.7175</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.1181</span></td>
+<td class="ltx_td ltx_border_t"></td>
+<td class="ltx_td ltx_align_right ltx_border_t"><span class="ltx_text" style="font-size:90%;">1</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t"><span class="ltx_text" style="font-size:90%;">1</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t"><span class="ltx_text" style="font-size:90%;">925</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t"><span class="ltx_text" style="font-size:90%;">966</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb"><span class="ltx_text" style="font-size:90%;">HC</span></th>
+<td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0589</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2457</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.5215</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.7183</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1199</span></td>
+<td class="ltx_td ltx_border_bb"></td>
+<td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text" style="font-size:90%;">1</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text" style="font-size:90%;">1</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text" style="font-size:90%;">1200</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text" style="font-size:90%;">986</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+</section>
+</section>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4. </span>实验</h2>
+<section class="ltx_subsection" id="S4.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1. </span>实验设置</h3>
+<section class="ltx_paragraph" id="S4.SS1.SSS0.Px1">
+<h4 class="ltx_title ltx_title_paragraph">数据集</h4>
+<div class="ltx_para" id="S4.SS1.SSS0.Px1.p1">
+<p class="ltx_p">所有实验使用来自大规模电商搜索平台的查询–商品交互日志。观测窗口跨越67天。前30天训练初始模型，接下来的30天构成第一个更新与评估周期，最后7天构成后续的非重叠更新周期，该周期从第30天模型初始化。训练交互严格在其评估事件之前划分。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S4.SS1.SSS0.Px2">
+<h4 class="ltx_title ltx_title_paragraph">实现细节</h4>
+<div class="ltx_para" id="S4.SS1.SSS0.Px2.p1">
+<p class="ltx_p">全稀疏（FS）码本在三个SID级别上的总大小为<math alttext="8192\times 8192\times 8192" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px2.p1.m1"><semantics><mrow><mn>8192</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>8192</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>8192</mn></mrow><annotation encoding="application/x-tex">8192\times 8192\times 8192</annotation></semantics></math>；混合碰撞感知为<math alttext="8192\times 8192\times 1124" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px2.p1.m2"><semantics><mrow><mn>8192</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>8192</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>1124</mn></mrow><annotation encoding="application/x-tex">8192\times 8192\times 1124</annotation></semantics></math>。RQ-VAE使用指数移动平均（EMA）更新和码本重置策略进行训练，以稳定量化器训练。LLM检索器使用约90 × 百万条日志训练（30天周期），以及20 × 百万条日志（7天周期）。所有训练在64块GPU上运行，批大小为<math alttext="64" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px2.p1.m3"><semantics><mn>64</mn><annotation encoding="application/x-tex">64</annotation></semantics></math>，梯度累积<math alttext="4" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px2.p1.m4"><semantics><mn>4</mn><annotation encoding="application/x-tex">4</annotation></semantics></math>步（有效批大小为<math alttext="256" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px2.p1.m5"><semantics><mn>256</mn><annotation encoding="application/x-tex">256</annotation></semantics></math>）。初始模型训练<math alttext="10000" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px2.p1.m6"><semantics><mn>10000</mn><annotation encoding="application/x-tex">10000</annotation></semantics></math>步，学习率为<math alttext="4\times 10^{-5}" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px2.p1.m7"><semantics><mrow><mn>4</mn><mo lspace="0.222em" rspace="0.222em">×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>5</mn></mrow></msup></mrow><annotation encoding="application/x-tex">4\times 10^{-5}</annotation></semantics></math>；热启动更新使用较低的学习率<math alttext="1\times 10^{-5}" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px2.p1.m8"><semantics><mrow><mn>1</mn><mo lspace="0.222em" rspace="0.222em">×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>5</mn></mrow></msup></mrow><annotation encoding="application/x-tex">1\times 10^{-5}</annotation></semantics></math>，其中训练<math alttext="5000" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px2.p1.m9"><semantics><mn>5000</mn><annotation encoding="application/x-tex">5000</annotation></semantics></math>步对应30天周期，训练<math alttext="1200" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px2.p1.m10"><semantics><mn>1200</mn><annotation encoding="application/x-tex">1200</annotation></semantics></math>步对应7天周期。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S4.SS1.SSS0.Px3">
+<h4 class="ltx_title ltx_title_paragraph">评估</h4>
+<div class="ltx_para" id="S4.SS1.SSS0.Px3.p1">
+<p class="ltx_p">对于每个查询，束搜索生成候选SID序列，当前映射将其解析为商品，HitRate记录目标商品是否存在。我们报告<math alttext="\mathrm{HR}@B" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px3.p1.m1"><semantics><mrow><mi>HR</mi><mo>⁢</mo><mi mathvariant="normal">@</mi><mo>⁢</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">\mathrm{HR}@B</annotation></semantics></math>，对应<math alttext="B\in\{1,10,100,1000\}" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px3.p1.m2"><semantics><mrow><mi>B</mi><mo>∈</mo><mrow><mo stretchy="false">{</mo><mn>1</mn><mo>,</mo><mn>10</mn><mo>,</mo><mn>100</mn><mo>,</mo><mn>1000</mn><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">B\in\{1,10,100,1000\}</annotation></semantics></math>和<math alttext="\mathrm{MRR}@1000" class="ltx_Math" display="inline" id="S4.SS1.SSS0.Px3.p1.m3"><semantics><mrow><mi>MRR</mi><mo>⁢</mo><mi mathvariant="normal">@</mi><mo>⁢</mo><mn>1000</mn></mrow><annotation encoding="application/x-tex">\mathrm{MRR}@1000</annotation></semantics></math>。第1天表示在先前30天数据上训练的模型之后的第1天，其对应于整个周期的第31天。后续引用如第30天和第37天均相对于该第1天基线计算。所有时间变体使用相同的SID扩展和指标计算。实验围绕SID设计、映射漂移、变化率敏感性、模型适应、权重混合以及周期到周期的可复现性进行组织。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S4.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2. </span>碰撞并非瓶颈</h3>
+<div class="ltx_para" id="S4.SS2.p1">
+<p class="ltx_p">在研究映射漂移之前，我们首先验证SID设计本身，特别是生产规模系统中固有的受控碰撞，并未主导检索质量。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p2">
+<p class="ltx_p">我们使用第1天评估比较全稀疏（FS）和混合碰撞（HC）设计。如表<a class="ltx_ref" href="#S3.T1" title="Table 1 ‣ Training strategies. ‣ 3.4. Update Policies ‣ 3. Method ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">1</span></a>所示，HC在所有束大小上始终优于FS，达到HR@1 = 0.0589（+0.86%）、HR@1000 = 0.7183（+0.11%）以及MRR = 0.1199（+1.52%）。表中还报告了每个查询解析到的商品数。结合一致更高的HitRate和MRR，这些结果表明碰撞机制有效地将概率质量集中在相关SID路径上，而尾部商品的桶结构在选定这些路径后能恢复额外候选。此外，HC在束1下的检索商品数中位数与FS相同（均为1），在束1000下仅略高（986对966，该数值小于1,000是因为某些检索到的SID没有关联商品），这表明可控碰撞并不会导致模型不加区分地偏向大簇。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.3. </span>宽束搜索掩盖映射漂移</h3>
+<div class="ltx_para" id="S4.SS3.p1">
+<p class="ltx_p">接下来，我们保持商品集合固定，研究更新每个商品的第三级 SID 词元（基于第 30 天观察到的业务价值）是否会影响检索性能。我们将两个可独立刷新的组件解耦：<em class="ltx_emph ltx_font_italic">Map</em>，即服务时的 SID 到商品查找表；以及 <em class="ltx_emph ltx_font_italic">Feat</em>，即模型输入交互序列中的 SID 表示。在结果表中，对勾表示组件已刷新至最新版本，叉号表示其保持冻结。</p>
+</div>
+<figure class="ltx_table" id="S4.T2">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 2. </span>第30天在不添加新商品情况下的旧商品指标。<math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.T2.m3"><semantics><mi mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math>：已刷新；<math alttext="\times" class="ltx_Math" display="inline" id="S4.T2.m4"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>：冻结。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">SID</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">Map</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">Feat</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">HR@1</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">HR@10</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">HR@1000</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">MRR</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">FS</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\times" class="ltx_Math" display="inline" id="S4.T2.m5"><semantics><mo mathsize="90%">×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\times" class="ltx_Math" display="inline" id="S4.T2.m6"><semantics><mo mathsize="90%">×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0585</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2324</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.4927</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.7002</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1158</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">FS</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.T2.m7"><semantics><mi mathsize="90%" mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.T2.m8"><semantics><mi mathsize="90%" mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.0319</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.1268</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.3262</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.6333</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.0647</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">FS</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.T2.m9"><semantics><mi mathsize="90%" mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\times" class="ltx_Math" display="inline" id="S4.T2.m10"><semantics><mo mathsize="90%">×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.0222</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.0982</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.2890</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.6242</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.0492</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">HC</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\times" class="ltx_Math" display="inline" id="S4.T2.m11"><semantics><mo mathsize="90%">×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\times" class="ltx_Math" display="inline" id="S4.T2.m12"><semantics><mo mathsize="90%">×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0584</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2344</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.5005</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.7035</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1164</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">HC</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.T2.m13"><semantics><mi mathsize="90%" mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.T2.m14"><semantics><mi mathsize="90%" mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.0340</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.1394</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.3535</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.6449</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.0706</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">HC</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.T2.m15"><semantics><mi mathsize="90%" mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.2pt;padding-right:3.2pt;"><math alttext="\times" class="ltx_Math" display="inline" id="S4.T2.m16"><semantics><mo mathsize="90%">×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.0226</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.1056</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.3172</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.6373</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.0519</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div class="ltx_para" id="S4.SS3.p2">
+<p class="ltx_p">表 <a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.3. Wide Beams Mask Mapping Drift ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">2</span></a> 比较了完全冻结的基线（映射表和特征表示均保持静态）与两种部分刷新配置。同时刷新两个组件会显著降低性能，HC HR@1 从 0.0584 下降到 0.0340（-41.78%），MRR 从 0.1164 下降到 0.0706（-39.35%）。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.p3">
+<p class="ltx_p">值得注意的是，仅刷新映射表而保持输入序列特征冻结，甚至比同时刷新两者更具破坏性。这两种配置的区别在于不一致性所在的位置。当两者都刷新时（<math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.SS3.p3.m1"><semantics><mi mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math>/<math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.SS3.p3.m2"><semantics><mi mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math>），模型的条件上下文与解析表相互一致，因此新生成的 SID 和解析它们的映射表描述的是相同的价值排序；残余损失仅源于与模型已学习权重的不匹配。当仅刷新映射表时（<math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.SS3.p3.m3"><semantics><mi mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math>/<math alttext="\times" class="ltx_Math" display="inline" id="S4.SS3.p3.m4"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>），模型仍然输出与陈旧输入特征一致的 SID，但服务时的映射表现在在新的价值排序下解析这些 SID——因此，一个在旧特征下连贯的解码路径被重新指向了不同的商品，在权重–映射不匹配的基础上又叠加了特征–映射不匹配。因此，额外的性能下降隔离出了输入表示与解析表之间内部不一致的代价，并强化了我们的核心论点：驱动漂移的是已学习路径的重新分配，而非价值信号本身的新鲜度。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.p4">
+<p class="ltx_p">同样的比较揭示出在 beam 大小 1000 下性能下降幅度要小得多：两种 HC 刷新配置的 HR@1000 下降分别为 8.33% 和 9.41%。在 FS 和 HC 上，窄 beam 的 HR@1 下降为 41.78–62.05%，而宽 beam 的下降仅为 8.33–10.85%。MRR 是对 beam 1000 内所有排名取平均，显示出介于中间的下降幅度 39.35–55.41%，证实漂移主要损害高置信度路径。这些观察结果与宽 beam 通过冗余探索恢复部分陈旧路径、从而掩盖了部分失效模式相一致。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.p5">
+<p class="ltx_p">由于 HC 始终优于 FS，我们在后续所有实验中采用 HC 作为默认的 SID 设计。在确立了受控碰撞不会降低检索质量之后，动态设置中剩余的性能损失来源就是映射更新本身，我们接下来对此进行研究。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.4. </span>重映射率预测性能下降</h3>
+<div class="ltx_para" id="S4.SS4.p1">
+<p class="ltx_p">在研究重映射如何影响旧商品之前，我们首先确认这两种策略是否会对新商品检索产生不同影响。</p>
+</div>
+<div class="ltx_para" id="S4.SS4.p2">
+<p class="ltx_p">我们在不重新训练模型的情况下考察新商品检索。表 <a class="ltx_ref" href="#S4.T3" title="Table 3 ‣ 4.4. Remapping Rate Predicts Degradation ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">3</span></a> 比较了 Full-Re（所有商品按第 30 天价值重新映射）与 Frozen（旧 SID 冻结，新商品按价值插入）。这两种策略在所有 beam 大小和 MRR 上产生的指标几乎相同，表明新商品检索对输入特征中旧商品 SID 的表示方式不敏感。</p>
+</div>
+<figure class="ltx_table" id="S4.T3">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 3. </span>新商品命中率和 MRR（第30天）。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">Policy</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">HR@1</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">HR@10</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">HR@1000</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">MRR</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">Full-Re</span></th>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.0187</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.0828</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.2499</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.5133</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.0417</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">Frozen</span></th>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.0180</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.0835</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.2507</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.5127</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.0415</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div class="ltx_para" id="S4.SS4.p3">
+<p class="ltx_p">然后我们改变阈值 <math alttext="t" class="ltx_Math" display="inline" id="S4.SS4.p3.m1"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> 来控制旧商品的重映射比例 <math alttext="\gamma" class="ltx_Math" display="inline" id="S4.SS4.p3.m2"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>。SID 映射表和输入序列特征被一致地刷新。表 <a class="ltx_ref" href="#S4.T4" title="Table 4 ‣ 4.4. Remapping Rate Predicts Degradation ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">4</span></a> 显示出严格的单调模式：随着 <math alttext="\gamma" class="ltx_Math" display="inline" id="S4.SS4.p3.m3"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math> 从 72.75% 降低到 0%，每个 beam 大小下的命中率和 MRR 都增加。即使是中等阈值 <math alttext="t=10" class="ltx_Math" display="inline" id="S4.SS4.p3.m4"><semantics><mrow><mi>t</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">t=10</annotation></semantics></math>，仍比完全冻结低 12.4%，对应 beam 大小 1。在测试的策略中，部分重映射并未能产生有用的稳定性–新鲜度折衷。</p>
+</div>
+<div class="ltx_para" id="S4.SS4.p4">
+<p class="ltx_p">在完全重映射（Full-Re）下，所有指标单调下降：HR@1 下降 42.66%，MRR 下降 40.34%，而 HR@1000 的下降幅度最小，仅为 8.35%，这与第 <a class="ltx_ref" href="#S4.SS3" title="4.3. Wide Beams Mask Mapping Drift ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">4.3</span></a> 节中观察到的掩盖效应一致。</p>
+</div>
+<div class="ltx_para" id="S4.SS4.p5">
+<p class="ltx_p">值得注意的是，在旧 SID 冻结的情况下插入新商品（Frozen，<math alttext="\gamma=0" class="ltx_Math" display="inline" id="S4.SS4.p5.m1"><semantics><mrow><mi>γ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\gamma=0</annotation></semantics></math>）将旧商品 HR@1000 从 0.7035（表 <a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.3. Wide Beams Mask Mapping Drift ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">2</span></a>，不含新商品）提升到 0.7043，证实了向特征序列中添加新商品信号也有益于旧商品检索。</p>
+</div>
+<figure class="ltx_table" id="S4.T4">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 4. </span>旧商品指标与重映射比例 <math alttext="\gamma" class="ltx_Math" display="inline" id="S4.T4.m2"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math> 的关系。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Policy</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><math alttext="\gamma" class="ltx_Math" display="inline" id="S4.T4.m3"><semantics><mi mathsize="90%">γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">HR@1</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">HR@10</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">HR@1000</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">MRR</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Full-Re</span></th>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">72.75%</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.0332</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.1368</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.3523</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.6455</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.0692</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.5pt;padding-right:3.5pt;"><math alttext="t=10" class="ltx_Math" display="inline" id="S4.T4.m4"><semantics><mrow><mi mathsize="90%">t</mi><mo mathsize="90%">=</mo><mn mathsize="90%">10</mn></mrow><annotation encoding="application/x-tex">t=10</annotation></semantics></math></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">29.08%</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.0507</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.1996</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.4332</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.6568</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.1004</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.5pt;padding-right:3.5pt;"><math alttext="t=100" class="ltx_Math" display="inline" id="S4.T4.m5"><semantics><mrow><mi mathsize="90%">t</mi><mo mathsize="90%">=</mo><mn mathsize="90%">100</mn></mrow><annotation encoding="application/x-tex">t=100</annotation></semantics></math></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">7.36%</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.0553</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.2196</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.4694</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.6712</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.1097</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.5pt;padding-right:3.5pt;"><math alttext="t=500" class="ltx_Math" display="inline" id="S4.T4.m6"><semantics><mrow><mi mathsize="90%">t</mi><mo mathsize="90%">=</mo><mn mathsize="90%">500</mn></mrow><annotation encoding="application/x-tex">t=500</annotation></semantics></math></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">1.65%</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.0557</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.2217</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.4749</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.6769</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.1106</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Frozen</span></th>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0%</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0579</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2343</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.5011</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.7043</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1160</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure class="ltx_figure" id="S4.F2"><a href="assets/06637c4d6b33bd8a.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F2.g1" loading="lazy" src="assets/06637c4d6b33bd8a.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2. </span><span class="ltx_text ltx_font_bold">单调重映射效应。</span>随着重映射阈值变得更加激进，相对于冻结基线的指标下降率（%）。</figcaption>
+</figure>
+</section>
+<section class="ltx_subsection" id="S4.SS5">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.5. </span>热启动无法修复重映射</h3>
+<div class="ltx_para" id="S4.SS5.p1">
+<p class="ltx_p">我们现在从同一个第 1 天模型对 Full-Re 和 Frozen 都进行热启动，并在相同的累积第1天–30 天数据上训练。只有映射策略不同。表 <a class="ltx_ref" href="#S4.T5" title="Table 5 ‣ 4.5. Warm-Start Does Not Repair Remapping ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">5</span></a> 显示 Frozen 在旧商品和新商品上都观察到更高的命中率和 MRR。在 beam 大小 1 下，Frozen 的命中率在旧商品上比 Full-Re 提高 36.70%，在新商品上提高 13.94%；MRR 也显示出很大差距（旧/新商品分别为 35.50%/+9.56%）。对于旧商品，训练后的 Full-Re 在 beam 大小 1000 下仍不如不重新训练的 Frozen 基线（0.6923 对 0.7043，见表 <a class="ltx_ref" href="#S4.T4" title="Table 4 ‣ 4.4. Remapping Rate Predicts Degradation ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">4</span></a>），在 MRR 上也是如此（0.0941 对 0.1160）。</p>
+</div>
+<div class="ltx_para" id="S4.SS5.p2">
+<p class="ltx_p">与不重新训练的策略相比，Frozen 将旧商品 HR@1000 从 0.7043 提升到 0.7272，MRR 从 0.1160 提升到 0.1276；新商品 HR@1000 从 0.5127 上升到 0.6200，MRR 从 0.0415 上升到 0.0779。这些观察结果与以下观点一致：映射保持保护了已建立的路径，而热启动训练则学习新的 Query-SID 关联。</p>
+</div>
+<figure class="ltx_table" id="S4.T5">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 5. </span>30 天周期后的热启动比较。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Items</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Policy</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">HR@1</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">HR@10</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">HR@1000</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">MRR</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" rowspan="2" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Old</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Full-Re</span></th>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.0466</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.1867</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.4309</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.6923</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.0941</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Frozen</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0637</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2597</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.5355</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.7272</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1276</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb ltx_border_t" rowspan="2" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">New</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Full-Re</span></th>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.0330</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.1474</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.3684</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.6193</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">0.0711</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Frozen</span></th>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0376</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1590</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.3833</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.6200</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0779</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure class="ltx_figure" id="S4.F3"><a href="assets/cff7fa4f40ccdcb7.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F3.g1" loading="lazy" src="assets/cff7fa4f40ccdcb7.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3. </span><span class="ltx_text ltx_font_bold">热启动训练相对于冻结基线的改进（第 30 天）。</span> Full-Re 和 Frozen 相对于冻结（不重新训练）策略的相对变化（%）。</figcaption>
+</figure>
+<div class="ltx_para" id="S4.SS5.p3">
+<p class="ltx_p">这些结果支持一种结构性而非纯粹基于优化的解释。在 Frozen 和 Full-Re 下，初始化和累积的训练数据保持固定，而映射策略是主要的实验差异。Frozen 保留了已建立的 Query2SID 关联，而 Full-Re 重写了许多 SID 分配。因此，有限的热启动运行必须在学习新商品的同时重新学习许多旧 SID 决策。这一解释与两个经验观察一致：性能下降随 <math alttext="\gamma" class="ltx_Math" display="inline" id="S4.SS5.p3.m1"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math> 单调增长，这符合更大重映射比例使更多已学习 SID 决策失效的预期；以及在较大 beam 下较小的性能下降，这与替代路径探索补偿了部分映射错误相一致。</p>
+</div>
+<div class="ltx_para" id="S4.SS5.p4">
+<p class="ltx_p">热启动训练的效果可以从图 <a class="ltx_ref" href="#S4.F3" title="Figure 3 ‣ 4.5. Warm-Start Does Not Repair Remapping ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">3</span></a> 中看出。对于旧商品（左），Full-Re 使 HR@1 下降 <math alttext="-19.5\%" class="ltx_Math" display="inline" id="S4.SS5.p4.m1"><semantics><mrow><mo>−</mo><mrow><mn>19.5</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">-19.5\%</annotation></semantics></math>，MRR 下降 <math alttext="-18.9\%" class="ltx_Math" display="inline" id="S4.SS5.p4.m2"><semantics><mrow><mo>−</mo><mrow><mn>18.9</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">-18.9\%</annotation></semantics></math>，而 Frozen 改善了所有三个指标。对于新商品（右），Frozen 在每个指标上都优于 Full-Re，HR@1 相对于冻结提升 <math alttext="+108.9\%" class="ltx_Math" display="inline" id="S4.SS5.p4.m3"><semantics><mrow><mo>+</mo><mrow><mn>108.9</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+108.9\%</annotation></semantics></math>，而 Full-Re 为 <math alttext="+83.3\%" class="ltx_Math" display="inline" id="S4.SS5.p4.m4"><semantics><mrow><mo>+</mo><mrow><mn>83.3</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+83.3\%</annotation></semantics></math>（不重新训练的基线对应 <math alttext="\alpha=1.0" class="ltx_Math" display="inline" id="S4.SS5.p4.m5"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1.0</mn></mrow><annotation encoding="application/x-tex">\alpha=1.0</annotation></semantics></math>，见表 <a class="ltx_ref" href="#S4.T6" title="Table 6 ‣ 4.6. No Benefit from Weight Mixing ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">6</span></a>）。</p>
+</div>
+<section class="ltx_paragraph" id="S4.SS5.SSS0.Px1">
+<h4 class="ltx_title ltx_title_paragraph">本论断的范围。</h4>
+<div class="ltx_para" id="S4.SS5.SSS0.Px1.p1">
+<p class="ltx_p">在实际工业环境中，人们通常偏好简单可靠的方法。因此，我们的热启动机制采用了一种直接的训练策略：加载先前训练模型的参数，然后在新到达的数据上对其进行微调。因此，我们并不声称拓扑变化本质上是不可逆的；一个更稳健的持续学习框架可能会部分恢复性能。尽管如此，在当前背景下，保持原始拓扑仍然是最优解决方案。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S4.SS6">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.6. </span>权重混合没有收益</h3>
+<div class="ltx_para" id="S4.SS6.p1">
+<p class="ltx_p">热启动训练自然地在参数层面引出一个后续问题。先前的检查点 <math alttext="\theta_{old}" class="ltx_Math" display="inline" id="S4.SS6.p1.m1"><semantics><msub><mi>θ</mi><mrow><mi>o</mi><mo>⁢</mo><mi>l</mi><mo>⁢</mo><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\theta_{old}</annotation></semantics></math> 编码了旧商品的稳定关联，而热启动后的检查点 <math alttext="\theta_{new}" class="ltx_Math" display="inline" id="S4.SS6.p1.m2"><semantics><msub><mi>θ</mi><mrow><mi>n</mi><mo>⁢</mo><mi>e</mi><mo>⁢</mo><mi>w</mi></mrow></msub><annotation encoding="application/x-tex">\theta_{new}</annotation></semantics></math> 还编码了新插入商品的新鲜关联。一种标准的、无需训练的方式来权衡这种稳定性–可塑性张力，是在推理时对两个检查点进行插值，其思想类似于 model-soup <cite class="ltx_cite ltx_citemacro_citep">(Wortsman<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib29" title="Model soups: averaging weights of multiple fine-tuned models improves accuracy without increasing inference time">2022a</a>)</cite> 和 WiSE-FT 风格的权重平均 <cite class="ltx_cite ltx_citemacro_citep">(Wortsman<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib30" title="Robust fine-tuning of zero-shot models">2022b</a>)</cite>；这种插值在生产中很有吸引力，因为它不需要额外训练，并且只需一个标量来调节。我们测试权重混合是否提供任何额外收益——也就是说，在参数层面是否存在有用的中间地带。对于 Frozen 策略，我们在推理时对旧参数和新训练的参数的进行插值：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.E6">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(6)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\theta(\alpha)=\alpha\theta_{\mathrm{old}}+(1-\alpha)\theta_{\mathrm{new}}." class="ltx_Math" display="block" id="S4.E6.m1"><semantics><mrow><mrow><mrow><mi>θ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>α</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mrow><mi>α</mi><mo>⁢</mo><msub><mi>θ</mi><mi>old</mi></msub></mrow><mo>+</mo><mrow><mrow><mo stretchy="false">(</mo><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mi>θ</mi><mi>new</mi></msub></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\theta(\alpha)=\alpha\theta_{\mathrm{old}}+(1-\alpha)\theta_{\mathrm{new}}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">表 <a class="ltx_ref" href="#S4.T6" title="Table 6 ‣ 4.6. No Benefit from Weight Mixing ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">6</span></a> 报告了 30 天周期的结果。旧商品质量在不同插值权重下变化适中，而新商品质量强烈依赖于新检查点。一个合理的解释是，未改变的旧商品 SID 在两个检查点中都有表示，而新的 Query-SID 关联仅在更新期间出现；需要预测分布分析来验证这一假设。纯新检查点（<math alttext="\alpha=0" class="ltx_Math" display="inline" id="S4.SS6.p1.m3"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha=0</annotation></semantics></math>）在每个报告的 beam 和两个商品组的 MRR 上都达到最高或接近最高的观测值。在 beam 大小 1 下，相对于冻结的旧模型，它将新商品命中率从 0.0180 提升到 0.0376，提升超过两倍。所测试的插值设置没有提供任何观察到的收益。</p>
+</div>
+<figure class="ltx_table" id="S4.T6">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 6. </span>Frozen 在 30 天后的权重混合消融实验。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Items</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><math alttext="\alpha" class="ltx_Math" display="inline" id="S4.T6.m1"><semantics><mi mathsize="90%">α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">HR@1</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">HR@10</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">HR@1000</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">MRR</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" rowspan="4" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Old</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0</span></th>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0637</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2597</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.5355</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.7272</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1276</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0631</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.2590</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5321</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.7270</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1276</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0628</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.2502</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5228</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.7193</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1243</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">1.0</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0579</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.2343</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5011</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.7043</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1160</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb ltx_border_t" rowspan="4" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">New</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0</span></th>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0376</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1590</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.3833</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.6200</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0779</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0339</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1503</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.3744</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.6153</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0727</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0233</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1089</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.3141</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5752</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0534</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">1.0</span></th>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0180</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0835</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.2507</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5127</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0415</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div class="ltx_para" id="S4.SS6.p2">
+<p class="ltx_p">表 <a class="ltx_ref" href="#S4.T7" title="Table 7 ‣ 4.6. No Benefit from Weight Mixing ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">7</span></a> 报告了从第 30 天模型初始化的后续七天周期中的相同消融实验，并可在图 <a class="ltx_ref" href="#S4.F3" title="Figure 3 ‣ 4.5. Warm-Start Does Not Repair Remapping ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">3</span></a> 中看到。定性模式相似：新商品质量强烈依赖于新检查点，而旧商品质量相对稳定。在 <math alttext="\alpha=0.1" class="ltx_Math" display="inline" id="S4.SS6.p2.m1"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\alpha=0.1</annotation></semantics></math> 处，少数旧商品指标（HR@10、HR@100、MRR）略微超过 <math alttext="\alpha=0" class="ltx_Math" display="inline" id="S4.SS6.p2.m2"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha=0</annotation></semantics></math> 值。这表明，在较短的周期内，保留一小部分旧模型的权重可以略微改善较旧商品的性能。然而，增益是边际的且几乎持平，可能是因为短周期内可用的数据多样性较低，而旧模型已经从大量历史数据中学习过。因此，这种有限的改进并不与以下总体结论相矛盾：直接使用新检查点是最优或接近最优的。</p>
+</div>
+<figure class="ltx_table" id="S4.T7">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 7. </span>Frozen 在额外 7 天周期后（第37天）的权重混合消融实验。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Items</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><math alttext="\alpha" class="ltx_Math" display="inline" id="S4.T7.m1"><semantics><mi mathsize="90%">α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">HR@1</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">HR@10</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">HR@1000</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">MRR</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" rowspan="4" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Old</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0</span></th>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0687</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline" style="font-size:90%;">0.2754</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline" style="font-size:90%;">0.5490</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline" style="font-size:90%;">0.7328</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1357</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline" style="font-size:90%;">0.0686</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2756</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.5491</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.7329</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline" style="font-size:90%;">0.1356</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0674</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.2714</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5443</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.7306</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1335</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.9</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0647</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.2631</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5348</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.7248</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1291</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb ltx_border_t" rowspan="4" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">New</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0</span></th>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0492</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2114</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.4468</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.6551</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1021</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0466</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.2043</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.4434</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.6535</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0983</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5</span></th>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0341</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1549</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.3795</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.6126</span></td>
+<td class="ltx_td ltx_align_right" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0747</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.9</span></th>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0301</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.1319</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.3269</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.5619</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0644</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure class="ltx_figure" id="S4.F4"><a href="assets/ef25e5f92f9d852e.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F4.g1" loading="lazy" src="assets/ef25e5f92f9d852e.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4. </span><span class="ltx_text ltx_font_bold">对模型混合的非对称敏感性：HR@1000。</span>第 30 天（左）和第 37 天（右）的权重混合消融。横轴是新模型权重 <math alttext="(1-\alpha)" class="ltx_Math" display="inline" id="S4.F4.m3"><semantics><mrow><mo stretchy="false">(</mo><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(1-\alpha)</annotation></semantics></math>。实线显示 HR@1000（左轴），虚线显示 MRR（右轴）。两个指标都随新模型权重单调上升，证实纯新检查点（<math alttext="1-\alpha=1" class="ltx_Math" display="inline" id="S4.F4.m4"><semantics><mrow><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1-\alpha=1</annotation></semantics></math>）是最优或接近最优的。</figcaption>
+</figure>
+</section>
+<section class="ltx_subsection" id="S4.SS7">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.7. </span>在线 A/B 测试</h3>
+<div class="ltx_para" id="S4.SS7.p1">
+<p class="ltx_p">我们在天猫APP这一主要移动电商平台的搜索系统召回阶段部署了生成式检索，它与其他召回通道协同工作。生成式检索器以 7 天为周期进行热启动训练。初始 SID 使用混合碰撞方法构建，并每日更新。我们采用拓扑保持策略，保持现有商品的 SID 不变。对于新添加的商品，SID 的前两层通过 RQ-VAE 生成，而第三层根据业务价值排序确定。系统以 [50, 200, 1000] 范围内的动态 beam 大小运行，维持约 50 毫秒的平均端到端延迟。与 2 个月前训练的、冻结旧商品并在不进行循环训练的情况下插入新商品的基线相比，在 20% 的真实流量上进行的为期三周的在线 A/B 测试验证了所提出策略的有效性，在关键指标上展示了持续增益：UCTCVR 提升 0.29%，GMV 提升 1.16%。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5. </span>讨论</h2>
+<div class="ltx_para" id="S5.p1">
+<p class="ltx_p">我们的物品 SID 刻意嵌入了一个随时间变化的商业价值维度（第三个词元 <math alttext="s_{3}" class="ltx_Math" display="inline" id="S5.p1.m1"><semantics><msub><mi>s</mi><mn>3</mn></msub><annotation encoding="application/x-tex">s_{3}</annotation></semantics></math>），这使得价值排序刷新成为频繁且幅度较大的漂移来源；从这个意义上说，我们报告的严重程度是价值感知型 SID 方案的特征。然而，其底层机制并非特定于价值维度：任何将已有物品重新分配到不同 SID 的操作——刷新价值位置、在大量摄入批次后重新训练 RQ-VAE 码本，或对冲突进行去重——都会使部分已学习的解码路径失效，正如 <math alttext="\delta(M_{t_{0}},M_{t_{1}})" class="ltx_Math" display="inline" id="S5.p1.m2"><semantics><mrow><mi>δ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>M</mi><msub><mi>t</mi><mn>0</mn></msub></msub><mo>,</mo><msub><mi>M</mi><msub><mi>t</mi><mn>1</mn></msub></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\delta(M_{t_{0}},M_{t_{1}})</annotation></semantics></math> 在公式 <a class="ltx_ref" href="#S3.E3" title="In 3.1. Problem Formulation ‣ 3. Method ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">3</span></a> 中所形式化的那样。更一般地，漂移幅度与其说取决于价值维度本身的存在，不如说取决于 SID 分配模型被重新训练的程度：完全重新训练量化器/码本会产生一个全新的 SID 空间，因而漂移最大；而仅微调一部分参数则重新分配的标识符少得多，并产生成比例更小的漂移。在整个这一谱系上，效应的方向和保持原则都不变。因此，我们将拓扑保持定位为一条通用的运行原则，其紧迫性随给定更新重新分配映射的程度而变化。</p>
+</div>
+<div class="ltx_para" id="S5.p2">
+<p class="ltx_p">所提出的策略——包括冻结已有物品、插入新物品以及采用热启动——是有意为了操作简便而设计的。我们认为，这种简便性是一个明显的优势，而非局限。在生产检索系统中，更新策略本质上必须可靠、易于调试，并能广泛适用于各类物品类别。此外，现实部署通常涉及服务模型更新与物品索引表刷新之间的时间解耦。在这一过渡期内，更新中的模型与物品索引之间的任何不对齐都可能导致推理输出在映射回其对应物品时失败。这一运行约束也促成了我们为已有物品保留原始 SID 的策略。因此，本工作的主要贡献超越了策略本身；它提供了稳健的经验证据，表明这种直截了当的方法在实践中是足够的。</p>
+</div>
+</section>
+<section class="ltx_section" id="S6">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">6. </span>结论</h2>
+<div class="ltx_para" id="S6.p1">
+<p class="ltx_p">我们研究了在物品不断增加且商业价值信号持续演化的电商环境中更新生成式检索系统的策略。我们的实验表明，完全重新映射标识符会引发严重的语义漂移，而宽束评估显示退化显著更小。在所有测试的更新策略中，HitRate 和 MRR 都随已有物品被重新映射标识符比例的增大而单调下降。在相同的热启动条件下，为已有物品保留原始标识符、同时仅选择性插入合格的新物品，比完全重新映射获得更高的 HitRate——这一趋势在随后的依赖更新周期中保持一致。此外，从先前检查点微调的模型优于简单的模型汤（model souping）。这些发现可提炼为一条简洁的运行原则：插入新物品但冻结已有物品；在可行时应用热启动，否则冻结模型；并严格避免改动模型已经学到的语义标识符（SID）。在移动电商平台 TmallAPP 搜索系统上进行的三周在线 A/B 测试以 UCTCVR +0.29% 和 GMV +1.16% 验证了该原则。</p>
+</div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">参考文献</h2>
+<ul class="ltx_biblist" id="bib.L1">
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib24">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">V. Baikalov, I. Bagautdinov, and S. Muravyov (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Mitigating collaborative semantic id staleness in generative retrieval</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 49th International ACM SIGIR Conference on Research and Development in Information Retrieval</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 3602–3608</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref ltx_bib_external" href="http://dx.doi.org/10.1145/3805712.3809877" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3805712.3809877" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Dynamic Updates and Continual Learning ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib8">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">N. D. Cao, G. Izacard, S. Riedel, and F. Petroni (2021)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Autoregressive entity retrieval</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2010.00904</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2010.00904" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Retrieval ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib5">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">B. Chen, X. Guo, S. Wang, Z. Liang, Y. Lv, Y. Ma, X. Xiao, B. Xue, X. Zhang, Y. Yang, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onesearch: a preliminary exploration of the unified end-to-end generative framework for e-commerce search</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2509.03236</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Retrieval ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib23">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Chen, R. Zhang, J. Guo, M. de Rijke, W. Chen, Y. Fan, and X. Cheng (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Continual learning for generative retrieval over dynamic corpora</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 32nd ACM International Conference on Information and Knowledge Management</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 306–315</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref ltx_bib_external" href="http://dx.doi.org/10.1145/3583780.3614821" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3583780.3614821" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Dynamic Updates and Continual Learning ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib13">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">R. Chen, M. Ju, N. Bui, D. Antypas, S. Cai, X. Wu, L. Neves, Z. Wang, N. Shah, and T. Zhao (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Enhancing item tokenization for generative recommendation through self-improvement</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2412.17171</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2412.17171" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib9">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">E. D’Amico, M. D. Nadai, P. Chandar, D. Vohra, S. Lin, M. Lefarov, P. Gigioli, G. Penha, I. Kopysitsky, I. J. Senese, D. Mei, F. Fabbri, O. Semerci, Y. Zhao, V. Tang, B. St. Thomas, A. Ranieri, M. N. K. Smith, A. Bernkopf, B. Leung, G. Fazelnia, M. VanMiddlesworth, T. C. Heath, P. P. Skiden, A. Y. Wang, D. J. Cole, A. Damianou, M. Hristakeva, R. Wilbur, T. Chillara, V. Radosavljevic, P. Chitkara, S. Adapa, J. Elenter, B. Huber, J. Wood, S. Vedantam, J. Stypka, S. Ghael, M. D. Gould, D. Murgatroyd, Y. Raimond, M. Lalmas, and P. N. Bennett (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deploying semantic id-based generative retrieval for large-scale podcast discovery at spotify</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2603.17540</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2603.17540" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Retrieval ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib26">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Den, Y. Shih, Z. R. Tam, K. Chen, P. Cheng, Y. Chen, and E. Yang (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">ICICLE: expanding retrieval with in-context documents</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2605.26902</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2605.26902" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Dynamic Updates and Continual Learning ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib4">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Deng, S. Wang, K. Cai, L. Ren, Q. Hu, W. Ding, Q. Luo, and G. Zhou (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2502.18965</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Retrieval ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib25">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Feng, J. Liu, M. Han, D. Li, H. Gu, P. Zhang, T. Lu, and N. Gu (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Drift-aware continual tokenization for generative recommendation</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2603.29705</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2603.29705" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Dynamic Updates and Continual Learning ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib19">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">K. Fu, T. Zhang, S. Xiao, Z. Wang, X. Zhang, C. Zhang, Y. Yan, J. Zheng, X. Kong, S. Zhang, K. Kuang, and Y. Jiang (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">FORGE: forming semantic identifiers for generative retrieval in industrial datasets</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2509.20904</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2509.20904" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib20">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">L. Guan, H. Wang, H. Zhang, L. Chen, and Z. Liu (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">DREAM: dynamic refinement of early assignment mappings</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2606.06947</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2606.06947" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib15">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Hu, Y. Chen, Y. Pan, X. Yuan, Y. Yin, D. Wang, B. Xia, Z. Luo, H. Wang, S. Ni, D. Liang, J. Wang, S. Cai, T. Zhou, F. Ren, and W. Ou (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Stop treating collisions equally: qualification-aware semantic id learning for recommendation at industrial scale</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2603.00632</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2603.00632" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib28">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">T. Huynh, T. Vu, W. Wang, T. Le, D. Gašević, Y. Li, and T. Do (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">MixLoRA-dsi: dynamically expandable mixture-of-lora experts for rehearsal-free generative retrieval over dynamic corpora</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2507.09924</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2507.09924" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Dynamic Updates and Continual Learning ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib22">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">T. Huynh, T. Vu, W. Wang, Y. Wei, T. Le, D. Gasevic, Y. Li, and T. Do (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">PromptDSI: prompt-based rehearsal-free continual learning for document retrieval</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2406.12593</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2406.12593" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Dynamic Updates and Continual Learning ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib7">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Ling, Z. Chen, Y. Li, T. Xiong, K. Lin, K. Zhang, Y. Yan, D. Ou, H. Tang, and B. Zheng (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Beyond semantic ids: encoding business-value ranking into document identifiers for generative retrieval</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2607.11392</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2607.11392" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Retrieval ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a class="ltx_ref" href="#S3.SS2.p2" title="3.2. SID Construction ‣ 3. Method ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§3.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib14">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Liu, Y. Liu, Z. Yue, G. Lee, Z. Li, R. Yao, and D. Wang (2026a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Topology-aware tokenization for generative recommendation</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2607.18600</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2607.18600" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib17">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Liu, Y. Wang, W. Wang, W. Zejian, Q. Liu, Z. Zhang, C. Chen, W. Huang, and X. Zhao (2026b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">The best of the two worlds: harmonizing semantic and hash ids for sequential recommendation</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2512.10388</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2512.10388" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib21">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">S. V. Mehta, J. Gupta, Y. Tay, M. Dehghani, V. Q. Tran, J. Rao, M. Najork, E. Strubell, and D. Metzler (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">DSI++: updating transformer memory with new documents</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2212.09744</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2212.09744" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Dynamic Updates and Continual Learning ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib27">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">K. A. Mekonnen, Y. Tang, and M. de Rijke (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">A parametric memory head for continual generative retrieval</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 49th International ACM SIGIR Conference on Research and Development in Information Retrieval</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1347–1358</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref ltx_bib_external" href="http://dx.doi.org/10.1145/3805712.3809725" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3805712.3809725" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS3.p1" title="2.3. Dynamic Updates and Continual Learning ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib1">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Qwen, :, A. Yang, B. Yang, B. Zhang, B. Hui, B. Zheng, B. Yu, C. Li, D. Liu, F. Huang, H. Wei, H. Lin, J. Yang, J. Tu, J. Zhang, J. Yang, J. Yang, J. Zhou, J. Lin, K. Dang, K. Lu, K. Bao, K. Yang, L. Yu, M. Li, M. Xue, P. Zhang, Q. Zhu, R. Men, R. Lin, T. Li, T. Tang, T. Xia, X. Ren, X. Ren, Y. Fan, Y. Su, Y. Zhang, Y. Wan, Y. Liu, Z. Cui, Z. Zhang, and Z. Qiu (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Qwen2.5 technical report</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2412.15115</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2412.15115" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS3.p1" title="3.3. Retriever Model ‣ 3. Method ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§3.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib3">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">S. Rajput, N. Mehta, A. Singh, R. Hulikal Keshavan, T. Vu, L. Heldt, L. Hong, Y. Tay, V. Tran, J. Samost, <span class="ltx_text ltx_bib_etal">et al.</span> (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Recommender systems with generative retrieval</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in Neural Information Processing Systems</span> <span class="ltx_text ltx_bib_volume">36</span>, <span class="ltx_text ltx_bib_pages"> pp. 10299–10315</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Retrieval ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib10">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">A. Singh, T. Vu, N. Mehta, R. Keshavan, M. Sathiamoorthy, Y. Zheng, L. Hong, L. Heldt, L. Wei, D. Tandon, E. H. Chi, and X. Yi (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Better generalization with semantic ids: a case study in ranking for recommendations</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2306.08121</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2306.08121" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Retrieval ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib18">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Su, I. Katsman, Y. Wang, R. He, L. Heldt, R. Keshavan, S. Wang, X. Yi, M. Gao, O. Dalal, L. Hong, E. H. Chi, and N. Han (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Vectorizing the trie: efficient constrained decoding for llm-based generative retrieval on accelerators</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 8009–8020</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref ltx_bib_external" href="http://dx.doi.org/10.1145/3770855.3818506" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3770855.3818506" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib2">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Tay, V. Tran, M. Dehghani, J. Ni, D. Bahri, H. Mehta, Z. Qin, K. Hui, Z. Zhao, J. Gupta, <span class="ltx_text ltx_bib_etal">et al.</span> (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Transformer memory as a differentiable search index</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in neural information processing systems</span> <span class="ltx_text ltx_bib_volume">35</span>, <span class="ltx_text ltx_bib_pages"> pp. 21831–21843</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Retrieval ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib29">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">M. Wortsman, G. Ilharco, S. Y. Gadre, R. Roelofs, R. Gontijo-Lopes, A. S. Morcos, H. Namkoong, A. Farhadi, Y. Carmon, S. Kornblith, and L. Schmidt (2022a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Model soups: averaging weights of multiple fine-tuned models improves accuracy without increasing inference time</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2203.05482</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2203.05482" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS6.p1" title="4.6. No Benefit from Weight Mixing ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§4.6</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib30">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">M. Wortsman, G. Ilharco, J. W. Kim, M. Li, S. Kornblith, R. Roelofs, R. Gontijo-Lopes, H. Hajishirzi, A. Farhadi, H. Namkoong, and L. Schmidt (2022b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Robust fine-tuning of zero-shot models</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2109.01903</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2109.01903" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS6.p1" title="4.6. No Benefit from Weight Mixing ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§4.6</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib11">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">T. Zhan, G. Ling, T. Xiong, K. Lin, Y. Wang, K. Zhang, Z. Chen, Y. Yan, D. Ou, S. Zhang, H. Tang, and B. Zheng (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">TSGR: taobao search generative retrieval</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2607.18796</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2607.18796" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Retrieval ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib12">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">B. Zheng, E. Liu, Z. Chen, Z. Ma, Y. Wang, W. X. Zhao, and J. Wen (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Pre-training generative recommender with multi-identifier item tokenization</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2504.04400</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2504.04400" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib16">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Zheng, Z. Du, Y. Yang, B. Tong, G. Wang, M. Yan, Z. Guan, and W. Zhao (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">TopoGR: revealing and preserving latent structure of semantic id in generative recommendation</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2607.25216</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2607.25216" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib6">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Zhu, X. Fang, J. Wang, M. Jin, B. Wang, G. Song, Z. Xie, and J. Bai (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Efficient generative retrieval for e-commerce search with semantic cluster ids and expert-guided rl</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2605.14434</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2605.14434" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Generative Retrieval ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Semantic Identifier Construction ‣ 2. Related Work ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§2.2</span></a>,
+<a class="ltx_ref" href="#S3.SS2.p1" title="3.2. SID Construction ‣ 3. Method ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§3.2</span></a>,
+<a class="ltx_ref" href="#S3.SS3.p1" title="3.3. Retriever Model ‣ 3. Method ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">§3.3</span></a>.
+</span>
+</li>
+</ul>
+</section>
+</article></article></div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{"format": "arxiv_tex", "toc": [{"id": "tex-section-1", "title": "摘要", "level": 1}, {"id": "S1", "title": "1. 引言", "level": 1}, {"id": "S2", "title": "2. 相关工作", "level": 1}, {"id": "S2.SS1", "title": "2.1. 生成式检索", "level": 2}, {"id": "S2.SS2", "title": "2.2. 语义标识符构建", "level": 2}, {"id": "S2.SS3", "title": "2.3. 动态更新与持续学习", "level": 2}, {"id": "S3", "title": "3. 方法", "level": 1}, {"id": "S3.SS1", "title": "3.1. 问题形式化", "level": 2}, {"id": "S3.SS2", "title": "3.2. SID构建", "level": 2}, {"id": "S3.SS3", "title": "3.3. 检索器模型", "level": 2}, {"id": "S3.SS4", "title": "3.4. 更新策略", "level": 2}, {"id": "S4", "title": "4. 实验", "level": 1}, {"id": "S4.SS1", "title": "4.1. 实验设置", "level": 2}, {"id": "S4.SS2", "title": "4.2. 碰撞并非瓶颈", "level": 2}, {"id": "S4.SS3", "title": "4.3. 宽束搜索掩盖映射漂移", "level": 2}, {"id": "S4.SS4", "title": "4.4. 重映射率预测性能下降", "level": 2}, {"id": "S4.SS5", "title": "4.5. 热启动无法修复重映射", "level": 2}, {"id": "S4.SS6", "title": "4.6. 权重混合没有收益", "level": 2}, {"id": "S4.SS7", "title": "4.7. 在线 A/B 测试", "level": 2}, {"id": "S5", "title": "5. 讨论", "level": 1}, {"id": "S6", "title": "6. 结论", "level": 1}, {"id": "bib", "title": "参考文献", "level": 1}], "stats": {"format": "arxiv_tex", "converter": "LaTeXML", "text_chars": 27120, "sections": 22, "figures": 4, "tables": 7, "table_cells": 300, "mathml": 105, "graphics": 4, "references": 30, "warnings": ["Warning:missing_file:compat.ltxml Can't find package compat.ltxml at String; line 0 col 0"], "language": "zh-CN"}, "extra_head": "\u003cstyle>\n.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}\n.tex-paper .ltx_title_document{display:none}\n.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}\n.tex-paper .ltx_creator{display:inline-block;margin-right:1em}\n.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}\n.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}\n.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}\n.tex-paper .ltx_para{margin:0}\n.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}\n.tex-paper .ltx_title_paragraph{font-size:17px}\n.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}\n.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}\n.tex-paper .ltx_font_sansserif{font-family:sans-serif}\n.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}\n.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}\n.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}\n.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}\n.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}\n.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}\n.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}\n.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}\n.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}\n.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}\n.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}\n.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}\n.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}\n.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}\n.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}\n.tex-paper math{font-size:1em;line-height:normal;font-family:math}\n.tex-paper math[display=\"block\"]{margin:.2em 0;white-space:nowrap}\n.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}\n.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}\n.tex-paper .ltx_bibblock{display:block}\n.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}\n.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}\n.tex-paper .ltx_toc{display:none}\n.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}\n.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}\n.tex-paper .ltx_tag{margin-right:.35em}\n.tex-paper [id]{scroll-margin-top:24px}\n\u003c/style>"}</script>
+<script>
+const tocPanel=document.querySelector('.paper-toc');
+if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
+tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

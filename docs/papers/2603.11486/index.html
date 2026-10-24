@@ -1,0 +1,848 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>OneRec-V2 的量化推理</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style><style>
+.paper-reader main,.paper-reader>header{max-width:1180px}
+.paper-original-title{font-size:16px;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.paper-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.paper-actions a{padding:8px 14px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:14px}
+.paper-actions a:first-child{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paper-reading-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:36px;align-items:start;margin-top:30px}
+.paper-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;border-right:1px solid var(--line);padding-right:14px;font-size:13px}
+.paper-toc summary{font-size:14px;font-weight:600;cursor:pointer;padding:4px 0 10px}
+.paper-toc ol{list-style:none;padding:0;margin:0}
+.paper-toc li{margin:0;padding:4px 0;line-height:1.5}
+.paper-toc a{color:var(--muted);display:block;padding:2px 4px;border-radius:4px}
+.paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
+.paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
+.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
+.paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
+.paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
+.paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
+.paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
+.paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
+.paper-fulltext figure a{display:block}
+.paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
+.paper-fulltext .paper-equation{padding:8px 0}
+.paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
+.paper-fulltext .paper-inline-math{display:inline-block;vertical-align:middle;max-height:2.3em;width:auto;background:white;max-width:100%}
+.paper-fulltext .paper-reference{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.paper-fulltext .paper-source-page{display:block;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin:32px 0 18px;padding-top:8px;text-align:right}
+.paper-fulltext table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:14px}
+.paper-fulltext td,.paper-fulltext th{padding:6px 10px;border:1px solid var(--line)}
+.paper-bottom{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+.paper-library{display:grid;gap:0;margin:24px 0}
+.paper-entry{padding:26px 0;border-top:1px solid var(--line)}
+.paper-entry h2{display:block;font-size:21px;margin:6px 0}
+.paper-entry .original{display:block;margin-bottom:12px}
+.paper-entry .paper-actions{margin-bottom:0}
+.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+@media(max-width:800px){
+ .paper-reading-layout{display:block;margin-top:20px}
+ .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
+ .paper-toc[open] ol{max-height:55vh;overflow:auto}
+ .paper-fulltext{font-size:16px;line-height:1.9}
+ .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
+ .paper-reader h1{font-size:26px}
+}
+@media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
+</style><style>
+.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}
+.tex-paper .ltx_title_document{display:none}
+.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}
+.tex-paper .ltx_creator{display:inline-block;margin-right:1em}
+.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
+.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_para{margin:0}
+.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
+.tex-paper .ltx_title_paragraph{font-size:17px}
+.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}
+.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}
+.tex-paper .ltx_font_sansserif{font-family:sans-serif}
+.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}
+.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}
+.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}
+.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}
+.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}
+.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}
+.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}
+.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}
+.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}
+.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}
+.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}
+.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}
+.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}
+.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}
+.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+.tex-paper math{font-size:1em;line-height:normal;font-family:math}
+.tex-paper math[display="block"]{margin:.2em 0;white-space:nowrap}
+.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}
+.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}
+.tex-paper .ltx_bibblock{display:block}
+.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}
+.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}
+.tex-paper .ltx_toc{display:none}
+.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}
+.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
+.tex-paper .ltx_tag{margin-right:.35em}
+.tex-paper [id]{scroll-margin-top:24px}
+</style></head><body class="paper-reader">
+<header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
+<main><div class="eyebrow">PAPER LIBRARY / Quantized Inference for OneRec-V2</div><h1>OneRec-V2 的量化推理</h1><p class="paper-original-title">Quantized Inference for OneRec-V2</p>
+<p class="muted">Kuaishou · arXiv 2603.11486 · 译文对应 v1</p>
+<div class="paper-actions"><a href="https://arxiv.org/abs/2603.11486v1" target="_blank" rel="noopener">英文 arXiv ↗</a>
+<a href="../index.html">全部论文</a></div>
+<p class="muted">中文全文 · 章节、公式和参考文献支持直接跳转</p>
+<div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
+<ol><li class="toc-level-1"><a href="#tex-section-1">摘要</a></li><li class="toc-level-1"><a href="#S1">1 引言</a></li><li class="toc-level-1"><a href="#S2">2 相关工作</a></li><li class="toc-level-2"><a href="#S2.SS1">2.1 低精度量化</a></li><li class="toc-level-2"><a href="#S2.SS2">2.2 推荐模型与生成式推荐</a></li><li class="toc-level-1"><a href="#S3">3 预备知识</a></li><li class="toc-level-2"><a href="#S3.SS1">3.1 量化背景</a></li><li class="toc-level-2"><a href="#S3.SS2">3.2 模型权重与激活的分布特性</a></li><li class="toc-level-1"><a href="#S4">4 方法</a></li><li class="toc-level-2"><a href="#S4.SS1">4.1 量化策略</a></li><li class="toc-level-2"><a href="#S4.SS2">4.2 基础设施优化</a></li><li class="toc-level-1"><a href="#S5">5 实验</a></li><li class="toc-level-2"><a href="#S5.SS1">5.1 设置</a></li><li class="toc-level-2"><a href="#S5.SS2">5.2 系统性能评估</a></li><li class="toc-level-2"><a href="#S5.SS3">5.3 在线 A/B 评估</a></li><li class="toc-level-2"><a href="#S5.SS4">5.4 分析与讨论</a></li><li class="toc-level-1"><a href="#S6">6 结论</a></li><li class="toc-level-1"><a href="#Sx1">局限性</a></li><li class="toc-level-1"><a href="#Sx2">致谢</a></li><li class="toc-level-1"><a href="#bib">参考文献</a></li><li class="toc-level-1"><a href="#A1">Appendix A 示例附录</a></li></ol></details><article class="paper-fulltext" aria-label="论文全文"><article class="ltx_document ltx_authors_1line tex-paper">
+<h1 class="ltx_title ltx_title_document">OneRec-V2 的量化推理</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">
+<span class="ltx_text ltx_font_bold">Yi Su</span>,
+<span class="ltx_text ltx_font_bold">Xinchen Luo</span>,
+<span class="ltx_text ltx_font_bold">Hongtao Cheng</span>,
+<span class="ltx_text ltx_font_bold">Ziteng Shu</span>,
+<span class="ltx_text ltx_font_bold">Yunfeng Zhao</span>,
+
+<br class="ltx_break"/><span class="ltx_text ltx_font_bold">Fangyu Zhang</span>,
+<span class="ltx_text ltx_font_bold">Jiaqiang Liu</span>,
+<span class="ltx_text ltx_font_bold">Xiao Liang</span>,
+<span class="ltx_text ltx_font_bold">Yiwu Liu</span>,
+<span class="ltx_text ltx_font_bold">Ruiming Tang</span>
+<br class="ltx_break"/>Kuaishou Inc., Beijing, China
+
+<br class="ltx_break"/>tangruiming@kuaishou.com
+</span></span>
+</div>
+<div class="ltx_abstract" id="tex-section-1">
+<h6 class="ltx_title ltx_title_abstract">摘要</h6>
+<p class="ltx_p">量化推理已在大语言模型中展现出显著的系统级收益，同时保持模型质量。相比之下，在工业环境中将低精度量化可靠地应用于推荐系统仍然具有挑战性。这一困难源于训练范式、架构模式和计算特性的差异，这些差异导致权重和激活表现出不同的数值行为。传统推荐模型往往表现出高幅度、高方差的权重和激活，使其对量化引起的扰动更加敏感。此外，推荐工作负载经常受限于有限的硬件利用率，从而限制了低精度计算的实际收益。
+在本工作中，我们在生成式推荐的背景下重新审视低精度推理。通过经验分布分析，我们表明 OneRec-V2 的权重和激活统计量显著更受控，并且比传统推荐模型更接近大语言模型的统计量。此外，OneRec-V2 表现出更加计算密集的推理模式，并具有显著更高的硬件利用率，从而使低精度计算能够带来更多的端到端吞吐量收益。利用这一特性，我们开发了一个 FP8 后训练量化框架，并将其集成到优化的推理基础设施中。所提出的联合优化实现了端到端推理延迟降低 49%，吞吐量提升 92%。广泛的在线 A/B 测试进一步证实，FP8 推理不会导致核心指标下降。
+这些结果表明，随着推荐系统向大语言模型的范式演进，LLM 领域中建立的算法级和系统级优化技术可以有效地适配到大规模推荐工作负载中。</p>
+</div>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1 </span>引言</h2>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p">量化推理已成为提升大规模神经网络效率的一项关键技术。在大语言模型（LLM）中，低精度格式已展现出显著的系统级收益，同时保持模型质量 <cite class="ltx_cite ltx_citemacro_citep">(Micikevicius<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Fp8 formats for deep learning">2022</a>; Xiao<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Smoothquant: accurate and efficient post-training quantization for large language models">2023</a>; Dettmers<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib7" title="Gpt3. int8 (): 8-bit matrix multiplication for transformers at scale">2022</a>; Micikevicius<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib8" title="Mixed precision training">2017</a>)</cite>。这些成功与基于 Transformer 的架构所具有的密集、计算密集的执行模式以及相对良好受控的数值行为密切相关。</p>
+</div>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p">相比之下，在工业实践中，将低精度量化可靠地应用于推荐系统长期以来一直具有挑战性。传统推荐模型通常针对细粒度排序任务进行优化，并且在训练范式和架构结构上都与 LLM 存在显著差异 <cite class="ltx_cite ltx_citemacro_citep">(Naumov<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib9" title="Deep learning recommendation model for personalization and recommendation systems">2019</a>; Lee and Lee, <a class="ltx_ref" href="#bib.bib11" title="Scalable deep learning-based recommendation systems">2019</a>; Batmaz<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib12" title="A review on deep learning for recommender systems: challenges and remedies">2019</a>)</cite>。从经验上看，它们的权重和激活往往表现出高幅度和大方差，这使得这些模型对量化引起的扰动更加敏感。从系统角度来看，经典推荐推理工作负载经常受限于内存或控制，并且表现出相对较低的硬件利用率 <cite class="ltx_cite ltx_citemacro_citep">(Naumov<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib9" title="Deep learning recommendation model for personalization and recommendation systems">2019</a>; Ivchenko<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib10" title="Torchrec: a pytorch domain library for recommendation systems">2022</a>; Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="OneRec technical report">2025b</a>)</cite>。因此，即使硬件平台支持低精度计算，实际的端到端收益也可能有限。这些数值和系统因素在历史上阻碍了低精度推理在传统推荐流水线中的有效部署。</p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p">生成式推荐模型的最新进展已开始缩小这一差距。OneRec 引入了一个统一的生成式框架，将召回和排序集成在一起 <cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="OneRec technical report">2025b</a>)</cite>，而 OneRec-V2 等后续扩展通过架构扩展和训练改进进一步完善了这一范式 <cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib2" title="Onerec-v2 technical report">2025c</a>; Liu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib3" title="Onerec-think: in-text reasoning for generative recommendation">2025</a>; Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib4" title="OpenOneRec technical report">2025a</a>)</cite>。与经典推荐架构相比，这些模型更依赖密集且结构受限的计算路径，从而提高了计算强度并改善了推理期间的硬件利用率。同时，它们的训练范式对激活幅度和方差施加了更强的隐式正则化。</p>
+</div>
+<div class="ltx_para" id="S1.p4">
+<p class="ltx_p">在本工作中，我们研究了 OneRec-V2 的量化推理。通过经验分布分析，我们表明 OneRec-V2 的权重和激活统计量显著更受控，并且比传统推荐模型更接近 LLM 的统计量。此外，其计算密集的推理模式使低精度计算能够更有效地转化为端到端系统改进。利用这些特性，我们开发了一个 FP8 后训练量化框架，并与优化的推理基础设施集成。
+大量实验表明，所提出的系统实现了端到端推理延迟降低 49%，吞吐量提升 92%。在线 A/B 测试进一步证实，我们的量化推理不会导致核心指标下降。这些结果表明，随着推荐系统向大语言模型的范式演进，LLM 领域中建立的低精度技术可以安全且有效地适配到现代推荐工作负载中。</p>
+</div>
+<div class="ltx_para" id="S1.p5">
+<p class="ltx_p">本文的主要贡献总结如下：</p>
+</div>
+<div class="ltx_para" id="S1.p6">
+<ul class="ltx_itemize" id="S1.I1">
+<li class="ltx_item" id="S1.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i1.p1">
+<p class="ltx_p">我们分析了历史上限制低精度推理在传统推荐系统中有效性的数值因素和系统因素。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i2.p1">
+<p class="ltx_p">我们通过经验证明，OneRec-V2 中架构和训练范式的转变带来了更受控的权重和激活统计量以及更高的硬件利用率，显著提高了量化推理的可行性。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i3.p1">
+<p class="ltx_p">我们开发了一个 FP8 后训练量化框架，并与优化的推理基础设施集成，在在线性能没有任何下降的情况下实现了显著的延迟降低和吞吐量提升。</p>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2 </span>相关工作</h2>
+<section class="ltx_subsection" id="S2.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.1 </span>低精度量化</h3>
+<div class="ltx_para" id="S2.SS1.p1">
+<p class="ltx_p">低精度量化旨在通过以更低的数值精度表示权重和激活来降低计算和内存成本，同时控制由此产生的近似误差。近年来，大量研究表明，低精度量化可以有效地应用于大语言模型，在质量下降极小的情况下实现显著的推理加速 <cite class="ltx_cite ltx_citemacro_citep">(Dettmers<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib7" title="Gpt3. int8 (): 8-bit matrix multiplication for transformers at scale">2022</a>; Xiao<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Smoothquant: accurate and efficient post-training quantization for large language models">2023</a>; Jacob<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib18" title="Quantization and training of neural networks for efficient integer-arithmetic-only inference">2018</a>; Wu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib19" title="Integer quantization for deep learning inference: principles and empirical evaluation">2020</a>; Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="Post-training quantization for neural networks with provable guarantees">2023</a>)</cite>。</p>
+</div>
+<div class="ltx_para" id="S2.SS1.p2">
+<p class="ltx_p">这些进展凸显了将量化策略与模型架构和激活统计量对齐的重要性。当数值分布受到良好调控且计算是密集且计算受限时，低精度计算可以转化为显著的系统级收益 <cite class="ltx_cite ltx_citemacro_citep">(Lin<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib22" title="Awq: activation-aware weight quantization for on-device llm compression and acceleration">2024</a>; Frantar<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib23" title="Gptq: accurate post-training quantization for generative pre-trained transformers">2022</a>; Micikevicius<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Fp8 formats for deep learning">2022</a>)</cite>。然而，大多数现有结果是在大语言模型的背景下建立的，其标准化架构和执行模式与推荐模型存在显著差异。</p>
+</div>
+<div class="ltx_para" id="S2.SS1.p3">
+<p class="ltx_p">在推荐领域，先前的工作主要针对嵌入压缩或内存效率探索了低精度技术 <cite class="ltx_cite ltx_citemacro_citep">(Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib13" title="Training with low-precision embedding tables">2018</a>)</cite>。虽然这些研究证明了将低精度表示应用于特定组件的可行性，但它们通常没有研究低精度部署下的分布特性或端到端推理行为。因此，低精度量化在现代推荐模型中的系统级有效性仍未得到充分探索。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S2.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.2 </span>推荐模型与生成式推荐</h3>
+<div class="ltx_para" id="S2.SS2.p1">
+<p class="ltx_p">推荐模型传统上是在监督学习范式下开发的，目标包括点击率或转化率。经典工业架构通常采用多阶段流水线，其中召回、过滤和排序被实现为独立的组件。这些系统通常依赖大型嵌入表来表示稀疏类别特征，随后使用多层感知机或特征交互模块进行预测 <cite class="ltx_cite ltx_citemacro_citep">(Naumov<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib9" title="Deep learning recommendation model for personalization and recommendation systems">2019</a>; Lee and Lee, <a class="ltx_ref" href="#bib.bib11" title="Scalable deep learning-based recommendation systems">2019</a>; Batmaz<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib12" title="A review on deep learning for recommender systems: challenges and remedies">2019</a>; Ivchenko<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib10" title="Torchrec: a pytorch domain library for recommendation systems">2022</a>)</cite>。虽然这在实践中有效，但多阶段设计本质上受到上游阶段的容量和召回限制的制约，并且整体推理流水线往往表现出异构且松散耦合的计算模式。</p>
+</div>
+<div class="ltx_para" id="S2.SS2.p2">
+<p class="ltx_p">最近，生成式推荐作为一种替代范式出现，它将推荐表述为条件序列生成 <cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib17" title="Generative recommendation: towards next-generation recommender paradigm">2023</a>)</cite>。通过将召回和排序集成到统一的生成过程中，该方法消除了严格的阶段边界，并能够在单一建模框架内进行端到端优化。OneRec 代表了对该范式的系统性探索 <cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="OneRec technical report">2025b</a>)</cite>，而 OneRec-V2 等后续扩展通过训练和结构改进进一步扩展了架构 <cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib2" title="Onerec-v2 technical report">2025c</a>; Liu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib3" title="Onerec-think: in-text reasoning for generative recommendation">2025</a>; Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib4" title="OpenOneRec technical report">2025a</a>)</cite>。与传统多阶段流水线相比，生成式推荐模型更依赖密集计算路径和统一执行模式，这可以在训练和推理期间带来更高的硬件利用率。</p>
+</div>
+<div class="ltx_para" id="S2.SS2.p3">
+<p class="ltx_p">与此同时，越来越多的研究工作考察了大语言模型与推荐任务之间的交互，包括对基于 LLM 的推荐能力的实证研究以及对新兴设计趋势的综述 <cite class="ltx_cite ltx_citemacro_citep">(Liu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib24" title="Is chatgpt a good recommender? a preliminary study">2023</a>; Wu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib25" title="A survey on large language models for recommendation">2024</a>)</cite>。这些发展进一步凸显了生成式建模与现代推荐工作负载之间的融合。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3 </span>预备知识</h2>
+<section class="ltx_subsection" id="S3.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.1 </span>量化背景</h3>
+<div class="ltx_para" id="S3.SS1.p1">
+<p class="ltx_p">量化是一种使用较低数值精度表示模型参数和中间激活的技术，目的是在推理期间降低计算成本、内存占用和数据移动。给定一个浮点张量 <math alttext="\mathbf{x}" class="ltx_Math" display="inline" id="S3.SS1.p1.m1"><semantics><mi>𝐱</mi><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math>，量化通常涉及将其值重新缩放以匹配目标格式的可表示范围，然后进行舍入。一个通用的量化表示 <math alttext="\hat{\mathbf{x}}" class="ltx_Math" display="inline" id="S3.SS1.p1.m2"><semantics><mover accent="true"><mi>𝐱</mi><mo>^</mo></mover><annotation encoding="application/x-tex">\hat{\mathbf{x}}</annotation></semantics></math> 可以表示为</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.Ex1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\hat{\mathbf{x}}=Q(\mathbf{x};s)=\mathrm{round}\left(\frac{\mathbf{x}}{s}%
+\right)," class="ltx_Math" display="block" id="S3.Ex1.m1"><semantics><mrow><mrow><mover accent="true"><mi>𝐱</mi><mo>^</mo></mover><mo>=</mo><mrow><mi>Q</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>𝐱</mi><mo>;</mo><mi>s</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mi>round</mi><mo>⁢</mo><mrow><mo>(</mo><mfrac><mi>𝐱</mi><mi>s</mi></mfrac><mo>)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\hat{\mathbf{x}}=Q(\mathbf{x};s)=\mathrm{round}\left(\frac{\mathbf{x}}{s}%
+\right),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="s" class="ltx_Math" display="inline" id="S3.SS1.p1.m3"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math> 表示一个缩放因子，它控制 <math alttext="\mathbf{x}" class="ltx_Math" display="inline" id="S3.SS1.p1.m4"><semantics><mi>𝐱</mi><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math> 的动态范围如何映射到目标精度。在计算过程中，量化值通常以更高精度累加，或与适当的缩放组合以控制数值误差。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p2">
+<p class="ltx_p">低精度量化可以应用于模型权重和激活两者。关键的设计选择包括缩放的粒度（例如，逐张量、逐通道或分块）以及缩放因子是在静态确定还是在运行时动态确定。在 LLM 中，低精度格式通常与更高精度的累加结合用于矩阵乘法等密集线性操作，因为大部分计算成本集中于此。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p3">
+<p class="ltx_p">量化的有效性关键取决于被量化张量的数值特性。特别是，权重和激活的幅度和方差决定了低精度表示是引入可容忍的扰动还是导致有害的数值失真。因此，理解模型的分布特性是评估低精度推理可行性的必要前提。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.2 </span>模型权重与激活的分布特性</h3>
+<figure class="ltx_figure" id="S3.F1">
+<div class="ltx_flex_figure">
+<div class="ltx_flex_cell ltx_flex_size_2">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="S3.F1.sf1"><a href="assets/450b748295c43069.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F1.sf1.g1" loading="lazy" src="assets/450b748295c43069.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(a)</span> </span><span class="ltx_text" style="font-size:90%;">权重分布统计（对数刻度）。</span></figcaption>
+</figure>
+</div>
+<div class="ltx_flex_cell ltx_flex_size_2">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="S3.F1.sf2"><a href="assets/ce270ca648eb60bd.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F1.sf2.g1" loading="lazy" src="assets/ce270ca648eb60bd.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(b)</span> </span><span class="ltx_text" style="font-size:90%;">激活分布统计（对数刻度）。</span></figcaption>
+</figure>
+</div>
+</div>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 1</span>: </span><span class="ltx_text" style="font-size:90%;">
+不同模型家族之间的分布统计比较，包括一个经典推荐模型、OneRec-V2 和 Qwen3-8B。
+所有数值以所有张量上的平均方差、平均绝对最大值（AbsMax）和平均 99 百分位绝对值（AbsP99）报告，并以对数刻度绘制。
+与 OneRec-V2 和 Qwen3-8B 相比，经典推荐模型表现出显著更大的动态范围和方差，而 OneRec-V2 的分布特征更接近 Qwen3-8B。
+</span></figcaption>
+</figure>
+<div class="ltx_para" id="S3.SS2.p1">
+<p class="ltx_p">为了理解低精度推理在不同模型家族中的可行性，我们分析了模型权重和激活的经验分布。我们比较了三个代表性模型：（1）一个用于细粒度排序的推荐模型（快照日期 2026-02-04），（2）OneRec-V2（快照日期 2026-02-27），以及（3）作为代表性 LLM 的 Qwen3-8B。对于每个模型，我们收集包括方差、绝对最大值（AbsMax）和 99 百分位绝对值（AbsP99）在内的统计量，并报告它们在所有张量上的均值。这些指标同时刻画了整体分布和极值行为，而这二者是量化的关键因素。
+图 <a class="ltx_ref" href="#S3.F1" title="Figure 1 ‣ 3.2 Distribution Characteristics of Model Weights and Activations ‣ 3 Preliminary ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">1</span></a> 以对数刻度总结了这些统计量。</p>
+</div>
+<div class="ltx_para ltx_noindent" id="S3.SS2.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">传统推荐模型。</span>
+传统推荐模型在权重和激活上都表现出极大的数值尺度。权重的平均方差处于 <math alttext="10^{7}" class="ltx_Math" display="inline" id="S3.SS2.p2.m1"><semantics><msup><mn>10</mn><mn>7</mn></msup><annotation encoding="application/x-tex">10^{7}</annotation></semantics></math> 量级，平均 AbsMax 超过 <math alttext="10^{3}" class="ltx_Math" display="inline" id="S3.SS2.p2.m2"><semantics><msup><mn>10</mn><mn>3</mn></msup><annotation encoding="application/x-tex">10^{3}</annotation></semantics></math>。激活统计呈现类似的模式，平均方差同样处于 <math alttext="10^{6}" class="ltx_Math" display="inline" id="S3.SS2.p2.m3"><semantics><msup><mn>10</mn><mn>6</mn></msup><annotation encoding="application/x-tex">10^{6}</annotation></semantics></math> 量级，且极值幅度很大。这些结果表明模型分布高度分散且动态范围很宽。</p>
+</div>
+<div class="ltx_para ltx_noindent" id="S3.SS2.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">大语言模型。</span>
+相比之下，Qwen3-8B 表现出小得多的权重统计量。
+权重的平均方差约为 <math alttext="0.1" class="ltx_Math" display="inline" id="S3.SS2.p3.m1"><semantics><mn>0.1</mn><annotation encoding="application/x-tex">0.1</annotation></semantics></math>，极值约为 <math alttext="2.0" class="ltx_Math" display="inline" id="S3.SS2.p3.m2"><semantics><mn>2.0</mn><annotation encoding="application/x-tex">2.0</annotation></semantics></math>。
+尽管激活的最大值和方差偶尔可能达到更高的值，但其整体尺度仍明显低于传统推荐模型中观察到的水平。</p>
+</div>
+<div class="ltx_para ltx_noindent" id="S3.SS2.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">OneRec-V2。</span>
+从图中我们可以得出结论，OneRec-V2 的分布统计量与大语言模型的统计量更为接近，而与传统推荐模型的统计量差异更大。平均权重方差低于 <math alttext="0.1" class="ltx_Math" display="inline" id="S3.SS2.p4.m1"><semantics><mn>0.1</mn><annotation encoding="application/x-tex">0.1</annotation></semantics></math>。激活统计量也比经典推荐模型中观察到的要小几个数量级，动态范围和离散程度大幅降低。</p>
+</div>
+<div class="ltx_para" id="S3.SS2.p5">
+<p class="ltx_p">这些经验观察表明，权重和激活的数值行为在不同模型家族之间存在根本性差异。具有极宽动态范围和高度分散分布的模型对粗粒度缩放提出更大挑战，而统计量更受控的模型本质上更兼容低精度表示。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4 </span>方法</h2>
+<div class="ltx_para" id="S4.p1">
+<p class="ltx_p">基于上一节给出的分布分析，我们为 OneRec-V2 设计了一种实用的低精度推理方案。我们的目标不仅是将低精度计算引入模型，还要确保这种数值变化在真实服务负载下能够转化为有意义的端到端系统改进。
+为此，我们采用一种由两个互补组件构成的联合优化策略。首先，我们针对 OneRec-V2 的数值与计算特点，设计了一套后训练量化方案。其次，我们将量化模型集成到优化的推理基础设施中，以提高硬件利用率和执行效率。这两个组件的结合使低精度计算能够带来稳定且可度量的系统级收益。</p>
+</div>
+<section class="ltx_subsection" id="S4.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1 </span>量化策略</h3>
+<figure class="ltx_figure" id="S4.F2"><a href="assets/5f839d0f396e2852.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F2.g1" loading="lazy" src="assets/5f839d0f396e2852.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 2</span>: </span><span class="ltx_text" style="font-size:90%;">
+FP16 与 FP8 线性计算的比较。在 FP8 路径中，输入首先被重新缩放并量化为低精度，随后进行低精度矩阵乘法并以 FP32 累加，最后转换回更高精度以供后续层使用。FP16 路径则直接以更高精度执行矩阵乘法。
+</span></figcaption>
+</figure>
+<div class="ltx_para" id="S4.SS1.p1">
+<p class="ltx_p">我们采用后训练量化（PTQ）方法，在不修改模型架构或训练过程的情况下，将低精度计算引入 OneRec-V2 的推理阶段。量化仅应用于计算最密集的算子，即 Linear 层（包括 Attention 中的 qkvo 投影层以及 Dense FFN 中的线性变换）和 Sparse MoE 中的分组 GEMM 运算。其他对数值敏感或计算占比不高的组件保持原始精度，以控制潜在的数值风险。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p2">
+<p class="ltx_p">图 <a class="ltx_ref" href="#S4.F2" title="Figure 2 ‣ 4.1 Quantization Strategy ‣ 4 Method ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">2</span></a> 展示了 Linear 层的 FP16 矩阵乘法与 FP8 矩阵乘法的比较。在 Linear 层中，权重按通道量化，缩放因子由 FP16 参数离线计算；激活则按 token 使用运行时计算的缩放因子进行动态量化。
+矩阵乘法使用 FP8 TensorCore 乘法并以 FP32 累加，结果在进入后续层之前被转换回 FP16。
+对于 MoE 中的分组 GEMM，我们采用分块量化，对激活沿最后一维使用 <math alttext="1\times 128" class="ltx_Math" display="inline" id="S4.SS1.p2.m1"><semantics><mrow><mn>1</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">1\times 128</annotation></semantics></math> 粒度，对权重使用 <math alttext="128\times 128" class="ltx_Math" display="inline" id="S4.SS1.p2.m2"><semantics><mrow><mn>128</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">128\times 128</annotation></semantics></math> 粒度。
+这种块对齐设计减少了单个缩放因子所覆盖的动态范围，同时保留了原始路由和并行执行结构，使低精度计算能够在无精度损失的情况下集成。
+所有模型权重都经过预量化，并以（FP8 权重，FP32 缩放因子）对的形式存储在 GPU 内存中。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p3">
+<p class="ltx_p">总体而言，该量化策略优先覆盖计算密集型算子，并通过结构对齐的缩放和更高精度累加来控制数值误差，为后续系统级推理优化提供了稳定的数值基础。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2 </span>基础设施优化</h3>
+<div class="ltx_para" id="S4.SS2.p1">
+<p class="ltx_p">除量化之外，我们还优化了推理基础设施（RecoGEM），以确保降低精度的计算能够转化为可度量的端到端性能收益。
+我们不依赖多阶段转换流水线（例如 PyTorch <math alttext="\rightarrow" class="ltx_Math" display="inline" id="S4.SS2.p1.m1"><semantics><mo stretchy="false">→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> ONNX <math alttext="\rightarrow" class="ltx_Math" display="inline" id="S4.SS2.p1.m2"><semantics><mo stretchy="false">→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> TensorRT），而是使用统一的算子库直接构建 TensorRT 执行图，从而能够更紧密地控制算子核选择、算子融合和内存布局。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p2">
+<p class="ltx_p">在此执行框架之上，我们实现了若干算子级优化：</p>
+<ul class="ltx_itemize" id="S4.I1">
+<li class="ltx_item" id="S4.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">量化算子。</span>
+我们为激活缩放实现了一个高效的逐行量化算子，以及一个融合了量化与 GEMM 执行的融合低精度矩阵乘法算子核，从而减少中间内存流量并提高计算效率。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">TopK 优化。</span>
+我们用基于基数排序的算子核（RadixTopK）替换默认的 TopK 实现，并应用算子核融合与零拷贝技术，以减少内存移动并在大批量负载下提高吞吐量。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I1.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">Attention 优化。</span>
+我们针对 OneRec-V2 典型的大批量、短上下文场景重新设计了 attention 算子核，引入批级并行和软件流水线，以提高调度效率和硬件利用率。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i4" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I1.i4.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">MoE 优化。</span>
+对于 Sparse MoE，我们使用支持 Hopper TMA 的算子核和算子融合来优化分组 GEMM 执行路径，提高 TensorCore 利用率并提升有效模型 FLOPs 利用率（MFU）。</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="S4.SS2.p3">
+<p class="ltx_p">这些基础设施级优化共同提高了推理过程中的算术强度和硬件利用率。
+当与前面描述的量化策略结合时，优化后的推理栈在生产服务配置下能够显著降低延迟并提升吞吐量。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5 </span>实验</h2>
+<div class="ltx_para" id="S5.p1">
+<p class="ltx_p">在本节中，我们评估所提出的 OneRec-V2 低精度推理方法的有效性。
+我们首先报告离线服务性能，包括端到端延迟和吞吐量，并分析基础设施升级、量化和算子级优化各自的贡献。
+然后我们展示在线 A/B 测试结果，以验证所提出的部署在实现显著效率收益的同时不会降低推荐质量。</p>
+</div>
+<section class="ltx_subsection" id="S5.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.1 </span>设置</h3>
+<div class="ltx_para ltx_noindent" id="S5.SS1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">模型。</span>
+我们评估了一个生产规模的 OneRec-V2 模型，采用 fat-MoE 架构，包含约 4B 骨干参数，其中每个 token 激活 0.5B 参数。该模型遵循生成式推荐范式，并部署在单列短视频推荐场景中。</p>
+</div>
+<div class="ltx_para ltx_noindent" id="S5.SS1.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">配置。</span>
+所有实验均在线服务配置下以批大小 32 进行。基线系统以 FP16 执行推理。所提出的系统对 Attention、Dense FFN 和 MoE 专家模块中计算占主导的 Linear 层应用后训练量化，而其他组件保持 FP16。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S5.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.2 </span>系统性能评估</h3>
+<div class="ltx_para" id="S5.SS2.p1">
+<p class="ltx_p">我们首先从端到端延迟和吞吐量方面评估所提出部署的系统级效率。</p>
+</div>
+<div class="ltx_para" id="S5.SS2.p2">
+<p class="ltx_p">基线 FP16 系统的平均推理延迟为 139 ms，吞吐量为 205。
+在迁移到优化后的推理基础设施并启用低精度计算后，延迟降至 70 ms，对应降低 49%。
+吞吐量从 205 提升至 394，相比基线提升 92%。</p>
+</div>
+<figure class="ltx_figure" id="S5.F3"><a href="assets/5fee68030ac0cea6.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S5.F3.g1" loading="lazy" src="assets/5fee68030ac0cea6.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 3</span>: </span><span class="ltx_text" style="font-size:90%;">
+吞吐量增益分解。
+从基线吞吐量 205 出发，迁移到优化后的推理架构带来 27% 的提升，在 Linear 和 MoE 算子上启用 FP8 量化额外带来 42%，算子级优化再带来 23%。
+这些累加改进使最终吞吐量达到 394，对应相比基线的端到端提升 92%。
+</span></figcaption>
+</figure>
+<div class="ltx_para" id="S5.SS2.p3">
+<p class="ltx_p">为了理解这些收益的来源，我们进一步将吞吐量提升分解为三个部分，如图 <a class="ltx_ref" href="#S5.F3" title="Figure 3 ‣ 5.2 System Performance Evaluation ‣ 5 Experiments ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">3</span></a> 所示。
+基础设施升级相对基线贡献 27% 的提升，在 Linear 和 MoE 算子上启用低精度计算额外贡献 42%，算子级优化再贡献 23%。
+这些累加改进共同构成了观察到的 92% 端到端吞吐量增益。</p>
+</div>
+<div class="ltx_para" id="S5.SS2.p4">
+<p class="ltx_p">总体而言，结果表明基础设施升级、低精度量化和算子级优化各自都带来了可度量的性能收益。
+虽然量化贡献了吞吐量提升的很大一部分，但完整的 92% 提升是通过它们组合且互补的效果实现的。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S5.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.3 </span>在线 A/B 评估</h3>
+<figure class="ltx_table" id="S5.T1">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>: </span><span class="ltx_text" style="font-size:90%;">
+FP8 推理相比 FP16 基线的在线 A/B 结果。
+</span></figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text ltx_font_bold">Metric</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold">Kuaishou</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold">Kuaishou Lite</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">App Stay Time</th>
+<td class="ltx_td ltx_align_center ltx_border_t">+0.047%</td>
+<td class="ltx_td ltx_align_center ltx_border_t">-0.018%</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">Watch Time</th>
+<td class="ltx_td ltx_align_center">+0.044%</td>
+<td class="ltx_td ltx_align_center">-0.157%</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">Video View</th>
+<td class="ltx_td ltx_align_center">+0.073%</td>
+<td class="ltx_td ltx_align_center">-0.041%</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">Like</th>
+<td class="ltx_td ltx_align_center">+0.085%</td>
+<td class="ltx_td ltx_align_center">-0.102%</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">Follow</th>
+<td class="ltx_td ltx_align_center">+0.020%</td>
+<td class="ltx_td ltx_align_center">-0.450%</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">Comment</th>
+<td class="ltx_td ltx_align_center">+0.805%</td>
+<td class="ltx_td ltx_align_center">+0.261%</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">Collect</th>
+<td class="ltx_td ltx_align_center">+0.430%</td>
+<td class="ltx_td ltx_align_center">-0.353%</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">Forward</th>
+<td class="ltx_td ltx_align_center ltx_border_bb">+0.313%</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">+1.047%</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div class="ltx_para" id="S5.SS3.p1">
+<p class="ltx_p">为了评估低精度推理对推荐质量的影响，我们在生产环境中进行了一周的在线 A/B 测试。
+表 <a class="ltx_ref" href="#S5.T1" title="Table 1 ‣ 5.3 Online A/B Evaluation ‣ 5 Experiments ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">1</span></a> 显示，在快手和快手极速版中，核心指标在优化后的推理配置下保持稳定。
+在关键指标上未观察到一致的性能下降。
+总体而言，结果证实低精度推理可以在不损害真实场景推荐效果的情况下部署。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S5.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.4 </span>分析与讨论</h3>
+<div class="ltx_para" id="S5.SS4.p1">
+<p class="ltx_p">实验结果支持两个主要观察。
+第一，对于计算主要由稠密线性运算和 MoE 专家主导的生成式推荐模型，低精度推理可以带来显著的系统级加速。接近 2<math alttext="\times" class="ltx_Math" display="inline" id="S5.SS4.p1.m1"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math> 的吞吐量提升证明了降低精度的计算在大规模推荐服务中的实用价值。
+第二，尽管对关键计算路径应用了更低精度，在线指标仍保持稳定。结合预备部分中的分布分析，这表明 OneRec-V2 的权重和激活统计量足够受控，能够容忍量化噪声。</p>
+</div>
+<div class="ltx_para" id="S5.SS4.p2">
+<p class="ltx_p">总体而言，结果表明在真实生产约束下，低精度推理对大规模生成式推荐模型既可行又有益。
+
+</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S6">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">6 </span>结论</h2>
+<div class="ltx_para" id="S6.p1">
+<p class="ltx_p">在本工作中，我们在生成式推荐的背景下研究低精度推理，并在生产规模的OneRec-V2模型上验证了其实际可行性。
+我们表明，推荐模型中量化的可行性不仅取决于数值格式，还取决于模型架构、训练范式和推理执行特征。
+与传统推荐模型相比，OneRec-V2展现出更可控的权重与激活统计特性以及更计算密集的执行模式，因而更适合低精度计算。</p>
+</div>
+<div class="ltx_para" id="S6.p2">
+<p class="ltx_p">基于这些特性，我们将后训练量化与优化的推理基础设施及算子级改进相结合。
+我们的实验表明，每个组件都对系统效率有正向贡献，而它们的组合带来了端到端延迟的大幅降低和吞吐量的提升，同时在实际应用中保持了在线推荐质量。</p>
+</div>
+<div class="ltx_para" id="S6.p3">
+<p class="ltx_p">这些结果表明，随着推荐模型向稠密、生成式架构演进，低精度计算可以成为提升服务效率的一种实用且可扩展的工具。
+更广泛地说，当架构层面和系统层面的考量被共同解决时，为大型语言模型开发的优化技术可以有效地适配到现代推荐模型中。</p>
+</div>
+</section>
+<section class="ltx_section" id="Sx1">
+<h2 class="ltx_title ltx_title_section">局限性</h2>
+<div class="ltx_para ltx_noindent" id="Sx1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">未探索更低精度。</span>本工作聚焦于FP8推理，将其作为效率与部署稳定性之间的实用折中，而未研究更激进的低精度设置，如INT8、FP6、FP4或混合低比特方案。因此，当前研究并未揭示生成式推荐模型完整的精度-效率前沿，且尚不清楚能否在无明显质量下降的情况下实现进一步压缩。</p>
+</div>
+<div class="ltx_para ltx_noindent" id="Sx1.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">基础设施要求高。</span>所提出的解决方案依赖大量基础设施支持和系统级定制，包括硬件能力、基于TensorRT的部署、算子级适配，以及针对Linear和MoE等关键模块的定制优化。这些要求可能限制该方法的可复现性和可移植性，尤其是在缺乏先进推理栈或充足工程资源的生产环境中。</p>
+</div>
+<div class="ltx_para ltx_noindent" id="Sx1.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">生成式推荐模型覆盖有限。</span>我们的结论来自在OneRec-V2上的实验，并未研究更广泛的生成式推荐架构集合。因此，所观察到的量化特性和部署收益在多大程度上能泛化到不同的模型设计、训练范式和推荐场景，仍不清楚。未来工作需要在更多生成式推荐模型上进行更广泛的验证。</p>
+</div>
+</section>
+<section class="ltx_section" id="Sx2">
+<h2 class="ltx_title ltx_title_section">致谢</h2>
+<div class="ltx_para" id="Sx2.p1">
+<p class="ltx_p">我们感谢Haiping Xu、Xu He、Chenhui Wang和Jin Ouyang在训练基础设施方面的贡献。</p>
+</div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">参考文献</h2>
+<ul class="ltx_biblist" id="bib.L1">
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib12">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Batmaz, A. Yurekli, A. Bilge, and C. Kaleli (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">A review on deep learning for recommender systems: challenges and remedies</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Artificial Intelligence Review</span> <span class="ltx_text ltx_bib_volume">52</span> (<span class="ltx_text ltx_bib_number">1</span>), <span class="ltx_text ltx_bib_pages"> pp. 1–37</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib7">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">T. Dettmers, M. Lewis, Y. Belkada, and L. Zettlemoyer (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Gpt3. int8 (): 8-bit matrix multiplication for transformers at scale</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in neural information processing systems</span> <span class="ltx_text ltx_bib_volume">35</span>, <span class="ltx_text ltx_bib_pages"> pp. 30318–30332</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1 Low-Precision Quantization ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib23">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">E. Frantar, S. Ashkboos, T. Hoefler, and D. Alistarh (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Gptq: accurate post-training quantization for generative pre-trained transformers</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2210.17323</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p2" title="2.1 Low-Precision Quantization ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib10">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">D. Ivchenko, D. Van Der Staay, C. Taylor, X. Liu, W. Feng, R. Kindi, A. Sudarshan, and S. Sefati (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Torchrec: a pytorch domain library for recommendation systems</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 16th ACM Conference on Recommender Systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 482–483</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib18">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">B. Jacob, S. Kligys, B. Chen, M. Zhu, M. Tang, A. Howard, H. Adam, and D. Kalenichenko (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Quantization and training of neural networks for efficient integer-arithmetic-only inference</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE conference on computer vision and pattern recognition</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 2704–2713</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1 Low-Precision Quantization ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib11">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Lee and J. Lee (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scalable deep learning-based recommendation systems</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">ICT express</span> <span class="ltx_text ltx_bib_volume">5</span> (<span class="ltx_text ltx_bib_number">2</span>), <span class="ltx_text ltx_bib_pages"> pp. 84–88</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib22">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Lin, J. Tang, H. Tang, S. Yang, W. Chen, W. Wang, G. Xiao, X. Dang, C. Gan, and S. Han (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Awq: activation-aware weight quantization for on-device llm compression and acceleration</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Proceedings of machine learning and systems</span> <span class="ltx_text ltx_bib_volume">6</span>, <span class="ltx_text ltx_bib_pages"> pp. 87–100</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p2" title="2.1 Low-Precision Quantization ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib24">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Liu, C. Liu, P. Zhou, R. Lv, K. Zhou, and Y. Zhang (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Is chatgpt a good recommender? a preliminary study</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2304.10149</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p3" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib3">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Liu, S. Wang, X. Wang, R. Zhang, J. Deng, H. Bao, J. Zhang, W. Li, P. Zheng, X. Wu, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onerec-think: in-text reasoning for generative recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2510.11639</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p2" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib8">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">P. Micikevicius, S. Narang, J. Alben, G. Diamos, E. Elsen, D. Garcia, B. Ginsburg, M. Houston, O. Kuchaiev, G. Venkatesh, <span class="ltx_text ltx_bib_etal">et al.</span> (2017)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Mixed precision training</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:1710.03740</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib5">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">P. Micikevicius, D. Stosic, N. Burgess, M. Cornea, P. Dubey, R. Grisenthwaite, S. Ha, A. Heinecke, P. Judd, J. Kamalu, <span class="ltx_text ltx_bib_etal">et al.</span> (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Fp8 formats for deep learning</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2209.05433</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p2" title="2.1 Low-Precision Quantization ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib9">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">M. Naumov, D. Mudigere, H. M. Shi, J. Huang, N. Sundaraman, J. Park, X. Wang, U. Gupta, C. Wu, A. G. Azzolini, <span class="ltx_text ltx_bib_etal">et al.</span> (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep learning recommendation model for personalization and recommendation systems</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:1906.00091</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib17">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">W. Wang, X. Lin, F. Feng, X. He, and T. Chua (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Generative recommendation: towards next-generation recommender paradigm</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2304.03516</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p2" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib19">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Wu, P. Judd, X. Zhang, M. Isaev, and P. Micikevicius (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Integer quantization for deep learning inference: principles and empirical evaluation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2004.09602</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1 Low-Precision Quantization ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib25">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">L. Wu, Z. Zheng, Z. Qiu, H. Wang, H. Gu, T. Shen, C. Qin, C. Zhu, H. Zhu, Q. Liu, <span class="ltx_text ltx_bib_etal">et al.</span> (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">A survey on large language models for recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">World Wide Web</span> <span class="ltx_text ltx_bib_volume">27</span> (<span class="ltx_text ltx_bib_number">5</span>), <span class="ltx_text ltx_bib_pages"> pp. 60</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p3" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib6">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Xiao, J. Lin, M. Seznec, H. Wu, J. Demouth, and S. Han (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Smoothquant: accurate and efficient post-training quantization for large language models</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">International conference on machine learning</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 38087–38099</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1 Low-Precision Quantization ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib13">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Zhang, J. Yang, and H. Yuen (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Training with low-precision embedding tables</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Systems for Machine Learning Workshop at NeurIPS</span>,
+</span>
+<span class="ltx_bibblock">Vol. <span class="ltx_text ltx_bib_volume">2018</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p3" title="2.1 Low-Precision Quantization ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib20">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Zhang, Y. Zhou, and R. Saab (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Post-training quantization for neural networks with provable guarantees</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">SIAM journal on mathematics of data science</span> <span class="ltx_text ltx_bib_volume">5</span> (<span class="ltx_text ltx_bib_number">2</span>), <span class="ltx_text ltx_bib_pages"> pp. 373–399</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1 Low-Precision Quantization ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib4">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhou, H. Bao, J. Huang, J. Deng, J. Zhang, J. She, K. Cai, L. Ren, L. Ren, Q. Luo, <span class="ltx_text ltx_bib_etal">et al.</span> (2025a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">OpenOneRec technical report</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2512.24762</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p2" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib1">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhou, J. Deng, J. Zhang, K. Cai, L. Ren, Q. Luo, Q. Wang, Q. Hu, R. Huang, S. Wang, <span class="ltx_text ltx_bib_etal">et al.</span> (2025b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">OneRec technical report</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2506.13695</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p2" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib2">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhou, H. Hu, H. Cheng, H. Wang, J. Deng, J. Zhang, K. Cai, L. Ren, L. Ren, L. Yu, <span class="ltx_text ltx_bib_etal">et al.</span> (2025c)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onerec-v2 technical report</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2508.20900</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p2" title="2.2 Recommendation Models and Generative Recommendation ‣ 2 Related Work ‣ Quantized Inference for OneRec-V2"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+</ul>
+</section>
+<section class="ltx_appendix" id="A1">
+<h2 class="ltx_title ltx_title_appendix">
+<span class="ltx_tag ltx_tag_appendix">Appendix A </span>示例附录</h2>
+<div class="ltx_para" id="A1.p1">
+<p class="ltx_p">这是一个附录。</p>
+</div>
+</section>
+</article></article></div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{"format": "arxiv_tex", "toc": [{"id": "tex-section-1", "title": "摘要", "level": 1}, {"id": "S1", "title": "1 引言", "level": 1}, {"id": "S2", "title": "2 相关工作", "level": 1}, {"id": "S2.SS1", "title": "2.1 低精度量化", "level": 2}, {"id": "S2.SS2", "title": "2.2 推荐模型与生成式推荐", "level": 2}, {"id": "S3", "title": "3 预备知识", "level": 1}, {"id": "S3.SS1", "title": "3.1 量化背景", "level": 2}, {"id": "S3.SS2", "title": "3.2 模型权重与激活的分布特性", "level": 2}, {"id": "S4", "title": "4 方法", "level": 1}, {"id": "S4.SS1", "title": "4.1 量化策略", "level": 2}, {"id": "S4.SS2", "title": "4.2 基础设施优化", "level": 2}, {"id": "S5", "title": "5 实验", "level": 1}, {"id": "S5.SS1", "title": "5.1 设置", "level": 2}, {"id": "S5.SS2", "title": "5.2 系统性能评估", "level": 2}, {"id": "S5.SS3", "title": "5.3 在线 A/B 评估", "level": 2}, {"id": "S5.SS4", "title": "5.4 分析与讨论", "level": 2}, {"id": "S6", "title": "6 结论", "level": 1}, {"id": "Sx1", "title": "局限性", "level": 1}, {"id": "Sx2", "title": "致谢", "level": 1}, {"id": "bib", "title": "参考文献", "level": 1}, {"id": "A1", "title": "Appendix A 示例附录", "level": 1}], "stats": {"format": "arxiv_tex", "converter": "LaTeXML", "text_chars": 13719, "sections": 21, "figures": 3, "tables": 1, "table_cells": 27, "mathml": 16, "graphics": 4, "references": 21, "warnings": ["Warning:missing_file:inconsolata Can't find binding for package inconsolata at acl_latex.tex; line 33 col 0", "Warning:missing_file:inconsolata Can't find package inconsolata at String; line 0 col 0"], "language": "zh-CN"}, "extra_head": "\u003cstyle>\n.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}\n.tex-paper .ltx_title_document{display:none}\n.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}\n.tex-paper .ltx_creator{display:inline-block;margin-right:1em}\n.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}\n.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}\n.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}\n.tex-paper .ltx_para{margin:0}\n.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}\n.tex-paper .ltx_title_paragraph{font-size:17px}\n.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}\n.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}\n.tex-paper .ltx_font_sansserif{font-family:sans-serif}\n.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}\n.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}\n.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}\n.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}\n.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}\n.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}\n.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}\n.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}\n.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}\n.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}\n.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}\n.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}\n.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}\n.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}\n.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}\n.tex-paper math{font-size:1em;line-height:normal;font-family:math}\n.tex-paper math[display=\"block\"]{margin:.2em 0;white-space:nowrap}\n.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}\n.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}\n.tex-paper .ltx_bibblock{display:block}\n.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}\n.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}\n.tex-paper .ltx_toc{display:none}\n.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}\n.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}\n.tex-paper .ltx_tag{margin-right:.35em}\n.tex-paper [id]{scroll-margin-top:24px}\n\u003c/style>"}</script>
+<script>
+const tocPanel=document.querySelector('.paper-toc');
+if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
+tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

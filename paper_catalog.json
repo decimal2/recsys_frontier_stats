@@ -14,9 +14,9 @@
         "序列推荐",
         "特征交互"
       ],
-      "tex_project": "/tmp/recsys-tex-html-bdqa9f70/OneTrans/translated",
-      "tex_entry": "main.tex",
-      "latexml_root": "/tmp/recsys-tex-html-bdqa9f70/tools/latexml-root"
+      "arxiv_url": "https://arxiv.org/abs/2510.26104v3",
+      "html_snapshot": "docs/papers/2510.26104/index.html",
+      "collection": "LLM4Rec"
     },
     {
       "short_name": "HSTU",
@@ -32,9 +32,9 @@
         "序列推荐",
         "规模扩展"
       ],
-      "tex_project": "/tmp/recsys-tex-html-bdqa9f70/HSTU/translated",
-      "tex_entry": "main.tex",
-      "latexml_root": "/tmp/recsys-tex-html-bdqa9f70/tools/latexml-root"
+      "arxiv_url": "https://arxiv.org/abs/2402.17152v3",
+      "html_snapshot": "docs/papers/2402.17152/index.html",
+      "collection": "LLM4Rec"
     },
     {
       "short_name": "OneReason",
@@ -50,9 +50,688 @@
         "推理",
         "强化学习"
       ],
-      "tex_project": "/tmp/recsys-tex-html-bdqa9f70/OneReason/translated",
-      "tex_entry": "main.tex",
-      "latexml_root": "/tmp/recsys-tex-html-bdqa9f70/tools/latexml-root"
+      "arxiv_url": "https://arxiv.org/abs/2606.06260v1",
+      "html_snapshot": "docs/papers/2606.06260/index.html",
+      "collection": "LLM4Rec"
+    },
+    {
+      "short_name": "OneRec",
+      "arxiv_id": "2502.18965",
+      "version": "v1",
+      "title_zh": "OneRec：通过生成式推荐与迭代偏好对齐统一召回和排序",
+      "title_en": "OneRec: Unifying Retrieve and Rank with Generative Recommender and Iterative Preference Alignment",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式推荐",
+        "偏好对齐",
+        "统一建模"
+      ],
+      "html_snapshot": "docs/papers/2502.18965/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2502.18965v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2502.18965v1"
+    },
+    {
+      "short_name": "Quantized Inference for OneRec-V2",
+      "arxiv_id": "2603.11486",
+      "version": "v1",
+      "title_zh": "OneRec-V2 的量化推理",
+      "title_en": "Quantized Inference for OneRec-V2",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "量化推理",
+        "生成式推荐",
+        "模型部署"
+      ],
+      "html_snapshot": "docs/papers/2603.11486/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2603.11486v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2603.11486v1"
+    },
+    {
+      "short_name": "UniPinRec",
+      "arxiv_id": "2606.00422",
+      "version": "v1",
+      "title_zh": "UniPinRec：在 Pinterest 规模下统一生成式检索与排序",
+      "title_en": "UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale",
+      "companies": [
+        "Pinterest"
+      ],
+      "topics": [
+        "生成式推荐",
+        "统一建模",
+        "工业部署"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2606.00422/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2606.00422v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2606.00422v1"
+    },
+    {
+      "short_name": "GEAR",
+      "arxiv_id": "2609.39327",
+      "version": "v1",
+      "title_zh": "GEAR：抖音生成式端到端广告检索",
+      "title_en": "GEAR: Generative End-to-end Ad Retrieval at Douyin",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "生成式检索",
+        "广告推荐",
+        "语义编码"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2609.39327/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2609.39327v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2609.39327v1"
+    },
+    {
+      "short_name": "UniSGR",
+      "arxiv_id": "2607.04068",
+      "version": "v1",
+      "title_zh": "UniSGR：统一语义 ID 生成与排序的框架",
+      "title_en": "UniSGR: Unified Framework for Semantic ID Generation and Ranking",
+      "companies": [
+        "Alibaba"
+      ],
+      "topics": [
+        "生成式推荐",
+        "语义编码",
+        "多目标排序"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2607.04068/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2607.04068v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2607.04068v1"
+    },
+    {
+      "short_name": "UniR2",
+      "arxiv_id": "2607.24439",
+      "version": "v1",
+      "title_zh": "UniR2：在单一仅解码器序列中统一生成式召回与多目标排序",
+      "title_en": "Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式召回",
+        "多目标排序",
+        "统一建模"
+      ],
+      "html_snapshot": "docs/papers/2607.24439/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2607.24439v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2607.24439v1"
+    },
+    {
+      "short_name": "HyFormer",
+      "arxiv_id": "2601.12681",
+      "version": "v2",
+      "title_zh": "HyFormer：重新审视 CTR 预测中序列建模与特征交互的作用",
+      "title_en": "HyFormer: Revisiting the Roles of Sequence Modeling and Feature Interaction in CTR Prediction",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "序列建模",
+        "特征交互",
+        "点击率预测"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2601.12681/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2601.12681v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2601.12681v2"
+    },
+    {
+      "short_name": "TIGER",
+      "arxiv_id": "2305.05065",
+      "version": "v3",
+      "title_zh": "TIGER：使用生成式检索的推荐系统",
+      "title_en": "Recommender Systems with Generative Retrieval",
+      "companies": [
+        "Google"
+      ],
+      "topics": [
+        "生成式检索",
+        "语义 ID",
+        "推荐系统"
+      ],
+      "html_snapshot": "docs/papers/2305.05065/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2305.05065v3",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2305.05065v3"
+    },
+    {
+      "short_name": "HLLM",
+      "arxiv_id": "2409.12740",
+      "version": "v1",
+      "title_zh": "HLLM：利用分层大语言模型进行物品与用户建模，增强序列推荐",
+      "title_en": "HLLM: Enhancing Sequential Recommendations via Hierarchical Large Language Models for Item and User Modeling",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "序列推荐",
+        "大语言模型",
+        "分层建模"
+      ],
+      "html_snapshot": "docs/papers/2409.12740/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2409.12740v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2409.12740v1"
+    },
+    {
+      "short_name": "OneRec-Think",
+      "arxiv_id": "2510.11639",
+      "version": "v2",
+      "title_zh": "OneRec-Think：面向生成式推荐的文本内推理",
+      "title_en": "OneRec-Think: In-Text Reasoning for Generative Recommendation",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式推荐",
+        "推理",
+        "强化学习"
+      ],
+      "html_snapshot": "docs/papers/2510.11639/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2510.11639v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2510.11639v2"
+    },
+    {
+      "short_name": "OneRec Technical Report",
+      "arxiv_id": "2506.13695",
+      "version": "v4",
+      "title_zh": "OneRec 技术报告",
+      "title_en": "OneRec Technical Report",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式推荐",
+        "强化学习",
+        "规模扩展"
+      ],
+      "html_snapshot": "docs/papers/2506.13695/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2506.13695v4",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2506.13695v4"
+    },
+    {
+      "short_name": "OneRec-V2",
+      "arxiv_id": "2508.20900",
+      "version": "v4",
+      "title_zh": "OneRec-V2 技术报告",
+      "title_en": "OneRec-V2 Technical Report",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式推荐",
+        "强化学习",
+        "多目标对齐"
+      ],
+      "html_snapshot": "docs/papers/2508.20900/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2508.20900v4",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2508.20900v4"
+    },
+    {
+      "short_name": "Multi-Decoder OneRec",
+      "arxiv_id": "2607.26500",
+      "version": "v1",
+      "title_zh": "Multi-Decoder OneRec：面向多目标工业推荐的可控生成式检索",
+      "title_en": "Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式检索",
+        "多目标推荐",
+        "多解码器"
+      ],
+      "html_snapshot": "docs/papers/2607.26500/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2607.26500v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2607.26500v1"
+    },
+    {
+      "short_name": "Trinity",
+      "arxiv_id": "2402.02842",
+      "version": "v1",
+      "title_zh": "Trinity：统一多兴趣、长尾兴趣与长期兴趣",
+      "title_en": "Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "多兴趣",
+        "长尾推荐",
+        "长期兴趣"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2402.02842/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2402.02842v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2402.02842v1"
+    },
+    {
+      "short_name": "LONGER",
+      "arxiv_id": "2505.04421",
+      "version": "v2",
+      "title_zh": "LONGER：扩展工业推荐中的长序列建模",
+      "title_en": "LONGER: Scaling Up Long Sequence Modeling in Industrial Recommenders",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "长序列",
+        "规模扩展",
+        "工业推荐"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2505.04421/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2505.04421v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2505.04421v2"
+    },
+    {
+      "short_name": "RankMixer",
+      "arxiv_id": "2507.15551",
+      "version": "v3",
+      "title_zh": "RankMixer：扩展工业推荐中的排序模型",
+      "title_en": "RankMixer: Scaling Up Ranking Models in Industrial Recommenders",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "排序模型",
+        "规模扩展",
+        "特征交互"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2507.15551/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2507.15551v3",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2507.15551v3"
+    },
+    {
+      "short_name": "TokenMixer-Large",
+      "arxiv_id": "2602.06563",
+      "version": "v2",
+      "title_zh": "TokenMixer-Large：扩展工业推荐中的大型排序模型",
+      "title_en": "TokenMixer-Large: Scaling Up Large Ranking Models in Industrial Recommenders",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "排序模型",
+        "混合专家",
+        "规模扩展"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2602.06563/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2602.06563v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2602.06563v2"
+    },
+    {
+      "short_name": "KuaFu",
+      "arxiv_id": "2609.31045",
+      "version": "v1",
+      "title_zh": "KuaFu：在十亿级规模下将用户长行为序列压缩为理解",
+      "title_en": "KuaFu: Compressing Long User Behavior into Understanding at Billion Scale",
+      "companies": [
+        "Tencent"
+      ],
+      "topics": [
+        "长序列",
+        "用户理解",
+        "压缩"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2609.31045/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2609.31045v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2609.31045v1"
+    },
+    {
+      "short_name": "HELIX",
+      "arxiv_id": "2609.37183",
+      "version": "v2",
+      "title_zh": "HELIX：纯化与统一——重新思考大规模推荐中的特征交互与序列建模",
+      "title_en": "HELIX: Purified and Unified — Rethinking Feature Interaction and Sequence Modeling for Large-Scale Recommendation",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "统一建模",
+        "特征交互",
+        "序列推荐"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2609.37183/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2609.37183v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2609.37183v2"
+    },
+    {
+      "short_name": "PPO",
+      "title_zh": "近端策略优化算法",
+      "title_en": "Proximal Policy Optimization Algorithms",
+      "arxiv_id": "1707.06347",
+      "version": "v2",
+      "companies": [
+        "OpenAI"
+      ],
+      "topics": [
+        "强化学习",
+        "策略优化",
+        "PPO"
+      ],
+      "source_format": "pdf_layout",
+      "source_url": "https://arxiv.org/pdf/1707.06347v2",
+      "html_snapshot": "docs/papers/1707.06347/index.html",
+      "arxiv_url": "https://arxiv.org/abs/1707.06347v2"
+    },
+    {
+      "short_name": "OPD / GKD",
+      "title_zh": "语言模型的同策略蒸馏：从自身生成的错误中学习",
+      "title_en": "On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes",
+      "arxiv_id": "2306.13649",
+      "version": "v3",
+      "companies": [
+        "Google"
+      ],
+      "topics": [
+        "知识蒸馏",
+        "同策略学习",
+        "语言模型"
+      ],
+      "html_snapshot": "docs/papers/2306.13649/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2306.13649v3",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2306.13649v3"
+    },
+    {
+      "short_name": "GRPO / DeepSeekMath",
+      "title_zh": "DeepSeekMath：突破开放语言模型的数学推理极限",
+      "title_en": "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models",
+      "arxiv_id": "2402.03300",
+      "version": "v3",
+      "companies": [
+        "DeepSeek"
+      ],
+      "topics": [
+        "强化学习",
+        "数学推理",
+        "GRPO"
+      ],
+      "html_snapshot": "docs/papers/2402.03300/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2402.03300v3",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2402.03300v3"
+    },
+    {
+      "short_name": "DAPO",
+      "title_zh": "DAPO：大规模开源大语言模型强化学习系统",
+      "title_en": "DAPO: An Open-Source LLM Reinforcement Learning System at Scale",
+      "arxiv_id": "2503.14476",
+      "version": "v2",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "强化学习",
+        "推理",
+        "训练系统"
+      ],
+      "html_snapshot": "docs/papers/2503.14476/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2503.14476v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2503.14476v2"
+    },
+    {
+      "short_name": "GSPO",
+      "title_zh": "组序列策略优化",
+      "title_en": "Group Sequence Policy Optimization",
+      "arxiv_id": "2507.18071",
+      "version": "v2",
+      "companies": [
+        "Alibaba"
+      ],
+      "topics": [
+        "强化学习",
+        "策略优化",
+        "MoE"
+      ],
+      "html_snapshot": "docs/papers/2507.18071/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2507.18071v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2507.18071v2"
+    },
+    {
+      "short_name": "OPSD",
+      "title_zh": "自蒸馏推理器：大语言模型的同策略自蒸馏",
+      "title_en": "Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models",
+      "arxiv_id": "2601.18734",
+      "version": "v3",
+      "companies": [
+        "Meta"
+      ],
+      "topics": [
+        "自蒸馏",
+        "推理",
+        "同策略学习"
+      ],
+      "html_snapshot": "docs/papers/2601.18734/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2601.18734v3",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2601.18734v3"
+    },
+    {
+      "short_name": "Score Centering",
+      "title_zh": "得分中心化稳定离策略强化学习",
+      "title_en": "Score Centering Stabilizes Off-policy Reinforcement Learning",
+      "arxiv_id": "2609.20807",
+      "version": "v1",
+      "companies": [
+        "Together AI"
+      ],
+      "topics": [
+        "强化学习",
+        "离策略学习",
+        "训练稳定性"
+      ],
+      "html_snapshot": "docs/papers/2609.20807/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2609.20807v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2609.20807v1"
+    },
+    {
+      "short_name": "OneTrans-V2",
+      "arxiv_id": "2609.28589",
+      "version": "v1",
+      "title_zh": "OneTrans-V2：以一个 Transformer 统一工业推荐中的召回、粗排与精排",
+      "title_en": "OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "统一建模",
+        "生成式召回",
+        "工业推荐"
+      ],
+      "html_snapshot": "docs/papers/2609.28589/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2609.28589v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2609.28589v1"
+    },
+    {
+      "short_name": "X-Rec",
+      "arxiv_id": "2609.29180",
+      "version": "v1",
+      "title_zh": "X-Rec 技术报告",
+      "title_en": "X-Rec Technical Report",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "生成式推荐",
+        "多模态",
+        "预训练"
+      ],
+      "html_snapshot": "docs/papers/2609.29180/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2609.29180v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2609.29180v1"
+    },
+    {
+      "short_name": "NoteLLM",
+      "arxiv_id": "2403.01744",
+      "version": "v2",
+      "title_zh": "NoteLLM：面向笔记推荐的可检索大语言模型",
+      "title_en": "NoteLLM: A Retrievable Large Language Model for Note Recommendation",
+      "companies": [
+        "Xiaohongshu"
+      ],
+      "topics": [
+        "大语言模型",
+        "笔记推荐",
+        "对比学习"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2403.01744/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2403.01744v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2403.01744v2"
+    },
+    {
+      "short_name": "LETTER",
+      "arxiv_id": "2405.07314",
+      "version": "v2",
+      "title_zh": "LETTER：面向生成式推荐的可学习物品词元化",
+      "title_en": "Learnable Item Tokenization for Generative Recommendation",
+      "companies": [],
+      "topics": [
+        "生成式推荐",
+        "物品词元化",
+        "语义编码"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2405.07314/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2405.07314v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2405.07314v2"
+    },
+    {
+      "short_name": "OneSearch",
+      "arxiv_id": "2509.03236",
+      "version": "v5",
+      "title_zh": "OneSearch：电商搜索统一端到端生成式框架的初步探索",
+      "title_en": "OneSearch: A Preliminary Exploration of the Unified End-to-End Generative Framework for E-commerce Search",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式检索",
+        "电商搜索",
+        "偏好优化"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2509.03236/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2509.03236v5",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2509.03236v5"
+    },
+    {
+      "short_name": "RecGPT-V3",
+      "arxiv_id": "2607.15591",
+      "version": "v2",
+      "title_zh": "RecGPT-V3 技术报告",
+      "title_en": "RecGPT-V3 Technical Report",
+      "companies": [
+        "Alibaba"
+      ],
+      "topics": [
+        "生成式推荐",
+        "用户记忆",
+        "潜在推理"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2607.15591/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2607.15591v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2607.15591v2"
+    },
+    {
+      "short_name": "SequenceO1",
+      "arxiv_id": "2609.08443",
+      "version": "v1",
+      "title_zh": "SequenceO1：通过低秩缓存实现推荐中的端到端超长（100K）序列建模",
+      "title_en": "SequenceO1: End-to-End Ultra-Long (100K) Sequence Modeling in Recommendation with Low-Rank Caching",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "超长序列",
+        "缓存",
+        "低秩压缩"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2609.08443/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2609.08443v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2609.08443v1"
+    },
+    {
+      "short_name": "Don't Rewrite the SID Map",
+      "arxiv_id": "2610.26105",
+      "version": "v1",
+      "title_zh": "不要重写 SID 映射：动态电商搜索中生成式检索的拓扑保持",
+      "title_en": "Don't Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search",
+      "companies": [
+        "Alibaba"
+      ],
+      "topics": [
+        "生成式检索",
+        "语义编码",
+        "增量更新"
+      ],
+      "collection": "LLM4Rec",
+      "html_snapshot": "docs/papers/2610.26105/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2610.26105v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2610.26105v1"
+    },
+    {
+      "short_name": "OpenOneRec",
+      "arxiv_id": "2512.24762",
+      "version": "v2",
+      "title_zh": "OpenOneRec 技术报告",
+      "title_en": "OpenOneRec Technical Report",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式推荐",
+        "开源模型",
+        "指令遵循"
+      ],
+      "html_snapshot": "docs/papers/2512.24762/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2512.24762v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2512.24762v2"
     }
   ]
 }

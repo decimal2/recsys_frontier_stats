@@ -1,0 +1,2107 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>UniPinRec：在 Pinterest 规模下统一生成式检索与排序</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style><style>
+.paper-reader main,.paper-reader>header{max-width:1180px}
+.paper-original-title{font-size:16px;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.paper-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.paper-actions a{padding:8px 14px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:14px}
+.paper-actions a:first-child{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paper-reading-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:36px;align-items:start;margin-top:30px}
+.paper-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;border-right:1px solid var(--line);padding-right:14px;font-size:13px}
+.paper-toc summary{font-size:14px;font-weight:600;cursor:pointer;padding:4px 0 10px}
+.paper-toc ol{list-style:none;padding:0;margin:0}
+.paper-toc li{margin:0;padding:4px 0;line-height:1.5}
+.paper-toc a{color:var(--muted);display:block;padding:2px 4px;border-radius:4px}
+.paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
+.paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
+.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
+.paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
+.paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
+.paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
+.paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
+.paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
+.paper-fulltext figure a{display:block}
+.paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
+.paper-fulltext .paper-equation{padding:8px 0}
+.paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
+.paper-fulltext .paper-inline-math{display:inline-block;vertical-align:middle;max-height:2.3em;width:auto;background:white;max-width:100%}
+.paper-fulltext .paper-reference{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.paper-fulltext .paper-source-page{display:block;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin:32px 0 18px;padding-top:8px;text-align:right}
+.paper-fulltext table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:14px}
+.paper-fulltext td,.paper-fulltext th{padding:6px 10px;border:1px solid var(--line)}
+.paper-bottom{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+.paper-library{display:grid;gap:0;margin:24px 0}
+.paper-entry{padding:26px 0;border-top:1px solid var(--line)}
+.paper-entry h2{display:block;font-size:21px;margin:6px 0}
+.paper-entry .original{display:block;margin-bottom:12px}
+.paper-entry .paper-actions{margin-bottom:0}
+.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+@media(max-width:800px){
+ .paper-reading-layout{display:block;margin-top:20px}
+ .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
+ .paper-toc[open] ol{max-height:55vh;overflow:auto}
+ .paper-fulltext{font-size:16px;line-height:1.9}
+ .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
+ .paper-reader h1{font-size:26px}
+}
+@media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
+</style><style>
+.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}
+.tex-paper .ltx_title_document{display:none}
+.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}
+.tex-paper .ltx_creator{display:inline-block;margin-right:1em}
+.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
+.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_para{margin:0}
+.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
+.tex-paper .ltx_title_paragraph{font-size:17px}
+.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}
+.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}
+.tex-paper .ltx_font_sansserif{font-family:sans-serif}
+.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}
+.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}
+.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}
+.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}
+.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}
+.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}
+.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}
+.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}
+.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}
+.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}
+.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}
+.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}
+.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}
+.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}
+.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+.tex-paper math{font-size:1em;line-height:normal;font-family:math}
+.tex-paper math[display="block"]{margin:.2em 0;white-space:nowrap}
+.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}
+.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}
+.tex-paper .ltx_bibblock{display:block}
+.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}
+.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}
+.tex-paper .ltx_toc{display:none}
+.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}
+.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
+.tex-paper .ltx_tag{margin-right:.35em}
+.tex-paper [id]{scroll-margin-top:24px}
+</style></head><body class="paper-reader">
+<header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
+<main><div class="eyebrow">PAPER LIBRARY / UniPinRec</div><h1>UniPinRec：在 Pinterest 规模下统一生成式检索与排序</h1><p class="paper-original-title">UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale</p>
+<p class="muted">Pinterest · arXiv 2606.00422 · 译文对应 v1</p>
+<div class="paper-actions"><a href="https://arxiv.org/abs/2606.00422v1" target="_blank" rel="noopener">英文 arXiv ↗</a>
+<a href="../index.html">全部论文</a></div>
+<p class="muted">中文全文 · 章节、公式和参考文献支持直接跳转</p>
+<div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
+<ol><li class="toc-level-1"><a href="#tex-section-1">摘要</a></li><li class="toc-level-1"><a href="#S1">1. 引言</a></li><li class="toc-level-1"><a href="#S2">2. 相关工作</a></li><li class="toc-level-1"><a href="#S3">3. 方法</a></li><li class="toc-level-3"><a href="#S3.SS0.SSS1">3.0.1. 背景：</a></li><li class="toc-level-2"><a href="#S3.SS1">3.1. 为排序重构 PinRec</a></li><li class="toc-level-3"><a href="#S3.SS1.SSS1">3.1.1. 掩码行为建模</a></li><li class="toc-level-2"><a href="#S3.SS2">3.2. 数据基础设施</a></li><li class="toc-level-3"><a href="#S3.SS2.SSS1">3.2.1. 以信息流视图为中心的数据集构建</a></li><li class="toc-level-3"><a href="#S3.SS2.SSS2">3.2.2. Ray 训练器内连接</a></li><li class="toc-level-2"><a href="#S3.SS3">3.3. 服务基础设施</a></li><li class="toc-level-3"><a href="#S3.SS3.SSS1">3.3.1. 背景：</a></li><li class="toc-level-3"><a href="#S3.SS3.SSS2">3.3.2. 整体服务设计</a></li><li class="toc-level-3"><a href="#S3.SS3.SSS3">3.3.3. 跨阶段的 KV 缓存共享</a></li><li class="toc-level-3"><a href="#S3.SS3.SSS4">3.3.4. FP8 量化</a></li><li class="toc-level-1"><a href="#S4">4. 结果</a></li><li class="toc-level-2"><a href="#S4.SS1">4.1. 训练一个统一的检索与排序模型（RQ1）</a></li><li class="toc-level-2"><a href="#S4.SS2">4.2. 协同服务检索与排序模型（RQ2）</a></li><li class="toc-level-2"><a href="#S4.SS3">4.3. 消融实验</a></li><li class="toc-level-3"><a href="#S4.SS3.SSS1">4.3.1. MAM 中掩码比例的影响</a></li><li class="toc-level-3"><a href="#S4.SS3.SSS2">4.3.2. 模型缩放的影响</a></li><li class="toc-level-1"><a href="#S5">5. 线上 A/B 实验（RQ3）</a></li><li class="toc-level-2"><a href="#S5.SS1">5.1. 实验设置</a></li><li class="toc-level-2"><a href="#S5.SS2">5.2. Board More Ideas</a></li><li class="toc-level-2"><a href="#S5.SS3">5.3. 通知</a></li><li class="toc-level-1"><a href="#S6">6. 结论</a></li><li class="toc-level-1"><a href="#bib">参考文献</a></li></ol></details><article class="paper-fulltext" aria-label="论文全文"><article class="ltx_document ltx_authors_1line ltx_leqno tex-paper">
+<h1 class="ltx_title ltx_title_document">UniPinRec：在 Pinterest 规模上统一生成式检索与排序</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Hanyu Li
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:hanyuharryli@pinterest.com">hanyuharryli@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Yi-Ping Hsu
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:yhsu@pinterest.com">yhsu@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Aditya Mantha
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:amantha@pinterest.com">amantha@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Prabhat Agarwal
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:pagarwal@pinterest.com">pagarwal@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Laksh Bhasin
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:lbhasin@pinterest.com">lbhasin@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jialu Wang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:jialuwang@pinterest.com">jialuwang@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Hongtao Lin
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:hongtaolin@pinterest.com">hongtaolin@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Bella Huang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:shuang@pinterest.com">shuang@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Yaxin Li
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:yaxinli@pinterest.com">yaxinli@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Xinyi Li
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:xinyi@pinterest.com">xinyi@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Chuxi Wang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:chuxiwang@pinterest.com">chuxiwang@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Kousik Rajesh
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:krajesh@pinterest.com">krajesh@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Hooshmand S. Razaghi
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:hshokrirazaghi@pinterest.com">hshokrirazaghi@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Shunyao Li
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:sli@pinterest.com">sli@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Zongyue Qin
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:zqin@pinterest.com">zqin@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jaewon Yang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:jaewonyang@pinterest.com">jaewonyang@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">James Li
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:jamesli@pinterest.com">jamesli@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Dhruvil Deven Badani
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:dbadani@pinterest.com">dbadani@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jiajing Xu
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:jiajing@pinterest.com">jiajing@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+<span class="ltx_author_before"> and </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Charles Rosenberg
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:crosenberg@pinterest.com">crosenberg@pinterest.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Pinterest</span><span class="ltx_text ltx_affiliation_city">Palo Alto, CA</span><span class="ltx_text ltx_affiliation_country">USA</span>
+</span></span></span>
+</div>
+<div class="ltx_dates">(2026)</div>
+<div class="ltx_abstract" id="tex-section-1">
+<h6 class="ltx_title ltx_title_abstract">摘要</h6>
+<p class="ltx_p">现代推荐系统主要将检索和排序训练为相互独立的模型，尽管二者都日益依赖编码相同用户行为数据的大型 transformer，导致参数、计算和线上服务成本重复。
+先前的工作统一了模型架构，但未统一整个流程：输入格式、训练流程和服务栈在各阶段之间仍然割裂。</p>
+<p class="ltx_p">我们提出 <span class="ltx_text ltx_font_bold">UniPinRec</span>，在 Pinterest 实现了检索与排序的全栈统一：一种输入格式、一个模型、一个训练阶段，并部署在现有的服务基础设施内。
+一个共享 transformer 将用户行为序列编码为与候选无关的表示，再通过任务特定头分支到检索（ANN 点积）和排序（交叉注意力）。
+三项思想使之可行：(1) 掩码行为建模（Masked Action Modeling，MAM）消除了交织（interleaving），从而在无需将上下文长度翻倍的情况下实现权重共享；(2) 混合训练样本将行为序列与 feedview 曝光列表配对，以联合满足两个目标；(3) 跨阶段 KV 缓存共享复用检索阶段对用户历史的计算用于排序，相比服务两个独立模型降低了总 FLOPs。</p>
+<p class="ltx_p">UniPinRec 部署于 Pinterest 核心场景，带来约 +1% 的线上互动提升，同时将端到端服务延迟降低 11.1%，并将 QPS 提升 63.6%。
+据我们所知，这是首次实现检索与排序的全栈统一，涵盖输入、模型、训练和服务，并部署于生产推荐系统。</p>
+</div>
+<div class="ltx_keywords">生成式推荐，统一的检索与排序，键值缓存复用
+</div>
+<span class="ltx_note ltx_note_frontmatter ltx_role_copyright"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">copyright: </span>none</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_journalyear"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">journalyear: </span>2026</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_ccs"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">ccs: </span>信息系统 推荐系统</span></span></span>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1. </span>引言</h2>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p">现代工业推荐系统 <cite class="ltx_cite ltx_citemacro_citep">(Chen et al., <a class="ltx_ref" href="#bib.bib8" title="">2025b</a>; Agarwal et al., <a class="ltx_ref" href="#bib.bib2" title="">2025</a>; Xia et al., <a class="ltx_ref" href="#bib.bib24" title="">2023</a>)</cite> 被构建为多级漏斗：候选生成从数百万物品的语料库中检索出数千个物品，排序用更丰富的特征对这些候选打分，混排（blending）组装最终页面。
+每个阶段都以各自的架构、目标和训练数据孤立训练。
+这种分离带来一项根本代价：检索和排序都从相同的用户行为数据中学习表示，却无法共享参数或在阶段之间迁移已学到的信号。</p>
+</div>
+<figure class="ltx_figure" id="S1.F1"><a href="assets/91eacc5380ca19f8.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S1.F1.g1" loading="lazy" src="assets/91eacc5380ca19f8.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1. </span>先前方法统一了架构，但输入格式、训练和服务仍然割裂。我们的方法统一了全部四个维度。</figcaption>
+</figure>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p">以 transformer 为基础的序列模型在每个阶段都成为主导骨干 <cite class="ltx_cite ltx_citemacro_citep">(Zhai et al., <a class="ltx_ref" href="#bib.bib33" title="">2024</a>; Ye et al., <a class="ltx_ref" href="#bib.bib30" title="">2025a</a>; Chen et al., <a class="ltx_ref" href="#bib.bib9" title="">2026</a>; Sun et al., <a class="ltx_ref" href="#bib.bib21" title="">2026b</a>; Dai et al., <a class="ltx_ref" href="#bib.bib10" title="">2025</a>)</cite>，这使得这种冗余更加突出。
+当两个阶段都由编码相同用户行为历史的大型 transformer 驱动时，重复就成为低效的主要来源：在参数、训练计算和服务成本上皆是如此。
+这创造了一个具体的机会：将两个阶段统一为单一模型，对用户只编码一次，从共同表示服务两个阶段，并实现信号共享——排序监督为检索提供信息，而检索更广泛的语料曝光对排序起正则化作用 <cite class="ltx_cite ltx_citemacro_citep">(Dai et al., <a class="ltx_ref" href="#bib.bib10" title="">2025</a>; Sun et al., <a class="ltx_ref" href="#bib.bib21" title="">2026b</a>)</cite>。</p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p">我们将这一目标称为 <em class="ltx_emph ltx_font_italic">全栈统一</em>（图 <a class="ltx_ref" href="#S1.F1" title="Figure 1 ‣ 1. Introduction ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">1</span></a>）：不仅共享模型架构，而且共享整个流程，包括输入格式、训练和服务基础设施。
+在本文中，我们实现了全栈统一，并将其部署于 Pinterest 生产环境。</p>
+</div>
+<section class="ltx_paragraph" id="S1.SS0.SSS0.Px1">
+<h5 class="ltx_title ltx_title_paragraph">为何全栈统一很困难。</h5>
+<div class="ltx_para" id="S1.SS0.SSS0.Px1.p1">
+<p class="ltx_p">有三项挑战阻碍了先前工作实现这一点。
+<span class="ltx_text ltx_font_italic">(1) 使用方式分歧：</span> 尽管骨干架构已经趋同，但计算模式仍然不同：检索必须在毫秒级延迟下对数百万候选打分（例如通过 ANN 点积打分 <cite class="ltx_cite ltx_citemacro_citep">(Agarwal et al., <a class="ltx_ref" href="#bib.bib2" title="">2025</a>)</cite>），而排序只对数百个候选打分，且能承担更丰富的逐候选计算（例如交叉注意力 <cite class="ltx_cite ltx_citemacro_citep">(Chen et al., <a class="ltx_ref" href="#bib.bib8" title="">2025b</a>; Zhai et al., <a class="ltx_ref" href="#bib.bib33" title="">2024</a>)</cite>）。
+<span class="ltx_text ltx_font_italic">(2) 训练复杂性：</span> 检索和排序使用不同的目标（在全语料上的采样 softmax 对比在小曝光集上的二分类），但先前关于下一行为预测的工作 <cite class="ltx_cite ltx_citemacro_citep">(Chen et al., <a class="ltx_ref" href="#bib.bib8" title="">2025b</a>; Xia et al., <a class="ltx_ref" href="#bib.bib25" title="">2025</a>)</cite> 已经表明这些任务可能是互补的。尽管如此，现有的统一模型仍需借助多阶段流程（预训练、微调、RL 对齐）来协调二者，这增加了复杂性，而复杂性本身又阻碍了全栈统一。
+<span class="ltx_text ltx_font_italic">(3) 服务和运维挑战：</span> 统一模型必须以低于分别部署的成本提供服务，才能证明这一变更是合理的；另一个理想特性是与现有候选生成器（例如关键词、热门趋势）的可组合性，并保留决定统一程度的灵活性，以及独立地对每个阶段进行 A/B 测试和回滚的能力。
+这些挑战在很大程度上尚未被探索；很少有系统在生产环境中部署统一的检索-排序模型 <cite class="ltx_cite ltx_citemacro_citep">(Deng et al., <a class="ltx_ref" href="#bib.bib11" title="">2025</a>; Sun et al., <a class="ltx_ref" href="#bib.bib21" title="">2026b</a>)</cite>。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S1.SS0.SSS0.Px2">
+<h5 class="ltx_title ltx_title_paragraph">现有方法为何不足。</h5>
+<div class="ltx_para" id="S1.SS0.SSS0.Px2.p1">
+<p class="ltx_p">现有方法分为两大方向（图 <a class="ltx_ref" href="#S1.F1" title="Figure 1 ‣ 1. Introduction ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">1</span></a>）。
+第一个方向提出跨阶段的 <em class="ltx_emph ltx_font_italic">统一架构</em>。
+HSTU <cite class="ltx_cite ltx_citemacro_citep">(Zhai et al., <a class="ltx_ref" href="#bib.bib33" title="">2024</a>)</cite> 采用共享 transformer 范式，但检索（非交织）和排序（交织）需要不同的输入格式，因此两个阶段独立训练，无法共享计算。
+OnePiece <cite class="ltx_cite ltx_citemacro_citep">(Dai et al., <a class="ltx_ref" href="#bib.bib10" title="">2025</a>)</cite> 增加了统一的多任务训练，但仅被部署为检索模型或排序模型，从未用单一统一模型同时服务两个阶段。
+简言之，这些方法共享了架构，但距离全栈统一仍相去甚远。</p>
+</div>
+<div class="ltx_para" id="S1.SS0.SSS0.Px2.p2">
+<p class="ltx_p">第二个方向提出 <em class="ltx_emph ltx_font_italic">端到端生成式方法</em>，完全绕过漏斗。
+OneRec <cite class="ltx_cite ltx_citemacro_citep">(Deng et al., <a class="ltx_ref" href="#bib.bib11" title="">2025</a>)</cite> 和 OneRanker <cite class="ltx_cite ltx_citemacro_citep">(Sun et al., <a class="ltx_ref" href="#bib.bib21" title="">2026b</a>)</cite> 通过自回归解码语义 ID 生成候选，以构造方式实现统一。
+然而，完全取代生产漏斗会使其更难与现有候选来源组合，并丧失逐阶段的运维控制。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S1.SS0.SSS0.Px3">
+<h5 class="ltx_title ltx_title_paragraph">我们的方法。</h5>
+<div class="ltx_para" id="S1.SS0.SSS0.Px3.p1">
+<p class="ltx_p">我们的设计原则是组合现有且经过验证的组件（ANN 索引、交叉注意力排序、KV 缓存），而非引入新机制，使统一模型成为现有生产基础设施中的即插即用替代方案。
+统一并不仅仅是优雅性目标：独立的排序器会重复检索已经执行的昂贵用户历史编码。通过共享这一计算，UniPinRec 以边际成本增加排序能力，使得在仅检索的同等延迟预算内进行排序变得可行。</p>
+</div>
+<div class="ltx_para" id="S1.SS0.SSS0.Px3.p2">
+<p class="ltx_p">UniPinRec 通过三项设计选择实现这一点。第一，掩码行为建模为用于检索的同一非交织用户序列添加排序监督。第二，混合训练样本和联合损失在单一阶段训练检索和排序。第三，跨阶段 KV 缓存共享让排序复用检索的用户历史计算，在避免重复 transformer 计算的同时保持模块化服务。</p>
+</div>
+<div class="ltx_para" id="S1.SS0.SSS0.Px3.p3">
+<p class="ltx_p">这些选择共同实现了全栈统一：两个阶段使用相同的输入格式，单阶段联合训练，并部署在现有服务基础设施内。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S1.SS0.SSS0.Px4">
+<h5 class="ltx_title ltx_title_paragraph">结果。</h5>
+<div class="ltx_para" id="S1.SS0.SSS0.Px4.p1">
+<p class="ltx_p">统一模型在保持检索召回率的同时增加了排序能力并降低了服务成本，这种组合在没有模型/系统协同设计的情况下无法实现。
+离线评测中，UniPinRec 相比生产排序器将排序 Hit@3 提升 <math alttext="+14.8\%" class="ltx_Math" display="inline" id="S1.SS0.SSS0.Px4.p1.m1"><semantics><mrow><mo>+</mo><mrow><mn>14.8</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+14.8\%</annotation></semantics></math>，同时达到与生产检索相当的召回率。</p>
+</div>
+<div class="ltx_para" id="S1.SS0.SSS0.Px4.p2">
+<p class="ltx_p">由于 UniPinRec 通过共享骨干耦合检索和排序，最自然的增量上线方案从 L0 一侧开始：我们将检索与 L1 轻量级排序作为单一服务（L0+L1）上线，随后再扩展到 L2 精排。这样保持下游排序器/混排不受影响，并让我们在早期获得清晰的 A/B 归因。</p>
+</div>
+<div class="ltx_para" id="S1.SS0.SSS0.Px4.p3">
+<p class="ltx_p">尽管离线排序提升会被下游排序器/混排削弱，它仍然带来了一致的互动增长：Board More Ideas 收藏上 <math alttext="+0.95\%" class="ltx_Math" display="inline" id="S1.SS0.SSS0.Px4.p3.m1"><semantics><mrow><mo>+</mo><mrow><mn>0.95</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+0.95\%</annotation></semantics></math>，Notifications 推送打开上 <math alttext="+0.91\%" class="ltx_Math" display="inline" id="S1.SS0.SSS0.Px4.p3.m2"><semantics><mrow><mo>+</mo><mrow><mn>0.91</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+0.91\%</annotation></semantics></math>。
+在服务方面，跨阶段 KV 缓存复用等优化带来了 <math alttext="&gt;3\times" class="ltx_math_unparsed" display="inline" id="S1.SS0.SSS0.Px4.p3.m3"><semantics><mrow><mo>&gt;</mo><mn>3</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">&gt;3\times</annotation></semantics></math> 的排序前向传播总加速（表 <a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.2. Co-serve a Retrieval and Ranking Model (RQ2) ‣ 4. Results ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">2</span></a>），在生产环境中相比朴素的分别部署实现了 -11.1% 的端到端延迟降低和 +63.6% 的 QPS 提升（表 <a class="ltx_ref" href="#S4.T3" title="Table 3 ‣ 4.2. Co-serve a Retrieval and Ranking Model (RQ2) ‣ 4. Results ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3</span></a>）。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2. </span>相关工作</h2>
+<section class="ltx_paragraph" id="S2.SS0.SSS0.Px1">
+<h5 class="ltx_title ltx_title_paragraph">基于 transformer 的推荐架构。</h5>
+<div class="ltx_para" id="S2.SS0.SSS0.Px1.p1">
+<p class="ltx_p">HSTU <cite class="ltx_cite ltx_citemacro_citep">(Zhai et al., <a class="ltx_ref" href="#bib.bib33" title="">2024</a>)</cite> 确立了以 transformer 为主导骨干的生成式推荐新范式，后续工作扩展了容量 <cite class="ltx_cite ltx_citemacro_citep">(Ye et al., <a class="ltx_ref" href="#bib.bib30" title="">2025a</a>, <a class="ltx_ref" href="#bib.bib31" title="">b</a>; Chen et al., <a class="ltx_ref" href="#bib.bib9" title="">2026</a>; Yan et al., <a class="ltx_ref" href="#bib.bib26" title="">2026</a>; Pardoe et al., <a class="ltx_ref" href="#bib.bib19" title="">2026</a>)</cite>、改进了多任务优化 <cite class="ltx_cite ltx_citemacro_citep">(Yang et al., <a class="ltx_ref" href="#bib.bib29" title="">2025</a>; Zhang et al., <a class="ltx_ref" href="#bib.bib36" title="">2026</a>; Yuan et al., <a class="ltx_ref" href="#bib.bib32" title="">2024</a>; Cao et al., <a class="ltx_ref" href="#bib.bib6" title="">2025</a>)</cite>，或进一步将该思想生产化 <cite class="ltx_cite ltx_citemacro_citep">(Han et al., <a class="ltx_ref" href="#bib.bib14" title="">2025</a>; Hertel et al., <a class="ltx_ref" href="#bib.bib16" title="">2025</a>)</cite>。
+OnePiece <cite class="ltx_cite ltx_citemacro_citep">(Dai et al., <a class="ltx_ref" href="#bib.bib10" title="">2025</a>)</cite> 在共享骨干上应用统一多任务训练，用于 Shopee 的级联排序。
+RelayGR <cite class="ltx_cite ltx_citemacro_citep">(Wang et al., <a class="ltx_ref" href="#bib.bib23" title="">2026</a>)</cite> 实现了跨流水线阶段的 KV 缓存复用，但假设模型是独立训练的。
+这些方法各自实现了部分统一，无论是在架构（HSTU、OnePiece）、训练（OnePiece）还是服务（RelayGR）方面，但都没有端到端地统一输入、模型、训练和服务。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S2.SS0.SSS0.Px2">
+<h5 class="ltx_title ltx_title_paragraph">端到端生成式方法。</h5>
+<div class="ltx_para" id="S2.SS0.SSS0.Px2.p1">
+<p class="ltx_p">OneRec <cite class="ltx_cite ltx_citemacro_citep">(Deng et al., <a class="ltx_ref" href="#bib.bib11" title="">2025</a>)</cite>、OneRanker <cite class="ltx_cite ltx_citemacro_citep">(Sun et al., <a class="ltx_ref" href="#bib.bib21" title="">2026b</a>)</cite> 和 GPR <cite class="ltx_cite ltx_citemacro_citep">(Zhang et al., <a class="ltx_ref" href="#bib.bib34" title="">2025a</a>)</cite> 用通过自回归解码生成候选的生成式模型取代级联流水线。
+这一范式已被扩展到统一搜索与推荐 <cite class="ltx_cite ltx_citemacro_citep">(Gao et al., <a class="ltx_ref" href="#bib.bib13" title="">2025</a>; Chen et al., <a class="ltx_ref" href="#bib.bib7" title="">2025a</a>; Yan et al., <a class="ltx_ref" href="#bib.bib27" title="">2025</a>)</cite>，并在多家公司部署 <cite class="ltx_cite ltx_citemacro_citep">(Han et al., <a class="ltx_ref" href="#bib.bib14" title="">2025</a>; Sun et al., <a class="ltx_ref" href="#bib.bib22" title="">2026a</a>; Zou et al., <a class="ltx_ref" href="#bib.bib37" title="">2026</a>; Su et al., <a class="ltx_ref" href="#bib.bib20" title="">2026</a>)</cite>。
+除基础设施方面的顾虑外，近期工作 <cite class="ltx_cite ltx_citemacro_citep">(Yang et al., <a class="ltx_ref" href="#bib.bib28" title="">2024</a>; Ding et al., <a class="ltx_ref" href="#bib.bib12" title="">2026</a>)</cite> 表明，由于有损压缩、生成目标的低效以及冷启动失败，使用语义 ID 的生成式检索相对于稠密检索并非明显胜出；此外，词元关系被记忆在参数中，而不是委托给外部可扩展索引，而在后者中嵌入邻近性得以自然保持。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3. </span>方法</h2>
+<section class="ltx_subsubsection" id="S3.SS0.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.0.1. </span>背景：</h4>
+<figure class="ltx_figure" id="S3.F2"><a href="assets/3990832a8e80efdb.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F2.g1" loading="lazy" src="assets/3990832a8e80efdb.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2. </span>UniPinRec 的端到端流程：单一共享骨干在检索和排序目标上联合训练，然后作为两个 Triton 进程共同服务，跨阶段共享用户历史 KV 缓存。</figcaption>
+</figure>
+<div class="ltx_para" id="S3.SS0.SSS1.p1">
+<p class="ltx_p">UniPinRec 建立在 PinRec <cite class="ltx_cite ltx_citemacro_citep">(Agarwal et al., <a class="ltx_ref" href="#bib.bib2" title="">2025</a>)</cite> 之上，后者是一个生成式检索模型。每个物品由预训练的物品嵌入 Omnisage<cite class="ltx_cite ltx_citemacro_citep">(Badrinath et al., <a class="ltx_ref" href="#bib.bib4" title="">2025</a>)</cite> 以及基于 CLIP 的多模态嵌入<cite class="ltx_cite ltx_citemacro_citep">(Beal et al., <a class="ltx_ref" href="#bib.bib5" title="">2026</a>)</cite> 表示，搜索查询使用预训练的搜索嵌入<cite class="ltx_cite ltx_citemacro_citep">(Agarwal et al., <a class="ltx_ref" href="#bib.bib3" title="">2024</a>)</cite>。这些特征通过 MLP 投影为 <math alttext="L_{2}" class="ltx_Math" display="inline" id="S3.SS0.SSS1.p1.m1"><semantics><msub><mi>L</mi><mn>2</mn></msub><annotation encoding="application/x-tex">L_{2}</annotation></semantics></math> 归一化的嵌入。给定用户正向互动物品的历史 <math alttext="H(u,t_{\max})" class="ltx_Math" display="inline" id="S3.SS0.SSS1.p1.m2"><semantics><mrow><mi>H</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><msub><mi>t</mi><mi>max</mi></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">H(u,t_{\max})</annotation></semantics></math>，PinRec 将嵌入序列输入仅解码器的因果 transformer，并使用在批内负样本和随机负样本上的采样 softmax 损失进行训练：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(1)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="L_{s}(\hat{i}_{u,t},i_{u,t+1})=-\log\frac{\exp\bigl{(}s(\hat{i}_{u,t},i_{u,t+1%
+})\bigr{)}}{\exp\bigl{(}s(\hat{i}_{u,t},i_{u,t+1})\bigr{)}+\sum_{i_{n}\in N}%
+\exp\bigl{(}s(\hat{i}_{u,t},i_{n})\bigr{)}}," class="ltx_Math" display="block" id="S3.E1.m1"><semantics><mrow><mrow><mrow><msub><mi>L</mi><mi>s</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mover accent="true"><mi>i</mi><mo>^</mo></mover><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>i</mi><mrow><mi>u</mi><mo>,</mo><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></mrow></msub><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mo rspace="0.167em">−</mo><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><mfrac><mrow><mi>exp</mi><mo>⁡</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><mi>s</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mover accent="true"><mi>i</mi><mo>^</mo></mover><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>i</mi><mrow><mi>u</mi><mo>,</mo><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></mrow></msub><mo stretchy="false">)</mo></mrow></mrow><mo maxsize="120%" minsize="120%">)</mo></mrow></mrow><mrow><mrow><mi>exp</mi><mo>⁡</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><mi>s</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mover accent="true"><mi>i</mi><mo>^</mo></mover><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>i</mi><mrow><mi>u</mi><mo>,</mo><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></mrow></msub><mo stretchy="false">)</mo></mrow></mrow><mo maxsize="120%" minsize="120%">)</mo></mrow></mrow><mo rspace="0.055em">+</mo><mrow><msub><mo>∑</mo><mrow><msub><mi>i</mi><mi>n</mi></msub><mo>∈</mo><mi>N</mi></mrow></msub><mrow><mi>exp</mi><mo>⁡</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><mi>s</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mover accent="true"><mi>i</mi><mo>^</mo></mover><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>i</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo maxsize="120%" minsize="120%">)</mo></mrow></mrow></mrow></mrow></mfrac></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">L_{s}(\hat{i}_{u,t},i_{u,t+1})=-\log\frac{\exp\bigl{(}s(\hat{i}_{u,t},i_{u,t+1%
+})\bigr{)}}{\exp\bigl{(}s(\hat{i}_{u,t},i_{u,t+1})\bigr{)}+\sum_{i_{n}\in N}%
+\exp\bigl{(}s(\hat{i}_{u,t},i_{n})\bigr{)}},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="s(\hat{i}_{u,t},i_{c})=\lambda\cdot\hat{i}_{u,t}^{\top}i_{c}-\log Q(i_{c})" class="ltx_Math" display="inline" id="S3.SS0.SSS1.p1.m3"><semantics><mrow><mrow><mi>s</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mover accent="true"><mi>i</mi><mo>^</mo></mover><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>i</mi><mi>c</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mrow><mrow><mi>λ</mi><mo lspace="0.222em" rspace="0.222em">⋅</mo><msubsup><mover accent="true"><mi>i</mi><mo>^</mo></mover><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow><mo>⊤</mo></msubsup></mrow><mo>⁢</mo><msub><mi>i</mi><mi>c</mi></msub></mrow><mo>−</mo><mrow><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><mi>Q</mi></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>i</mi><mi>c</mi></msub><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">s(\hat{i}_{u,t},i_{c})=\lambda\cdot\hat{i}_{u,t}^{\top}i_{c}-\log Q(i_{c})</annotation></semantics></math> 是频率校正后的相似度，<math alttext="Q(i_{c})" class="ltx_Math" display="inline" id="S3.SS0.SSS1.p1.m4"><semantics><mrow><mi>Q</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>i</mi><mi>c</mi></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">Q(i_{c})</annotation></semantics></math> 是候选 <math alttext="i_{c}" class="ltx_Math" display="inline" id="S3.SS0.SSS1.p1.m5"><semantics><msub><mi>i</mi><mi>c</mi></msub><annotation encoding="application/x-tex">i_{c}</annotation></semantics></math> 的估计采样概率（通过 count-min sketch 计算），<math alttext="N" class="ltx_Math" display="inline" id="S3.SS0.SSS1.p1.m6"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math> 是负样本集合。模型通过最小化在历史所有位置上平均的 <math alttext="L_{s}" class="ltx_Math" display="inline" id="S3.SS0.SSS1.p1.m7"><semantics><msub><mi>L</mi><mi>s</mi></msub><annotation encoding="application/x-tex">L_{s}</annotation></semantics></math> 进行优化。</p>
+</div>
+<section class="ltx_paragraph" id="S3.SS0.SSS1.Px1">
+<h5 class="ltx_title ltx_title_paragraph">本节结构。</h5>
+<div class="ltx_para" id="S3.SS0.SSS1.Px1.p1">
+<p class="ltx_p">本节其余部分依次处理引言中的各项挑战：第 <a class="ltx_ref" href="#S3.SS1" title="3.1. Reformulating PinRec for ranking ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3.1</span></a> 节通过掩码行为建模和联合损失解决架构与训练分歧；第 <a class="ltx_ref" href="#S3.SS2" title="3.2. Data infrastructure ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3.2</span></a> 节描述使大规模联合训练可行的数据基础设施；第 <a class="ltx_ref" href="#S3.SS3" title="3.3. Serving infrastructure ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3.3</span></a> 节通过跨请求 KV 缓存共享解决服务与运维挑战。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S3.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.1. </span>为排序重构 PinRec</h3>
+<div class="ltx_para" id="S3.SS1.p1">
+<p class="ltx_p">将 PinRec 扩展到排序需要三项改动：</p>
+<ol class="ltx_enumerate" id="S3.I1">
+<li class="ltx_item" id="S3.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(1)</span>
+<div class="ltx_para" id="S3.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">目标：</span> 模型不再最大化全语料上的下一物品似然，而是要在较小的曝光集上预测逐候选的行为概率。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(2)</span>
+<div class="ltx_para" id="S3.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">监督标签：</span>监督信号从物品嵌入上的 softmax 转变为每种行为类型的二值标签 <math alttext="c\in\{1,\dots,C\}" class="ltx_Math" display="inline" id="S3.I1.i2.p1.m1"><semantics><mrow><mi>c</mi><mo>∈</mo><mrow><mo stretchy="false">{</mo><mn>1</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mi>C</mi><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">c\in\{1,\dots,C\}</annotation></semantics></math>（点击、保存、隐藏等），并使用逐头二元交叉熵进行训练。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(3)</span>
+<div class="ltx_para" id="S3.I1.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">数据：</span>训练样本必须包含曝光负例（展示但未被互动的物品），而不仅仅是正向互动（详见第 <a class="ltx_ref" href="#S3.SS2" title="3.2. Data infrastructure ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3.2</span></a> 节）。</p>
+</div>
+</li>
+</ol>
+</div>
+<section class="ltx_subsubsection" id="S3.SS1.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.1.1. </span>掩码行为建模</h4>
+<div class="ltx_para" id="S3.SS1.SSS1.p1">
+<p class="ltx_p">核心问题是如何将行为预测形式化为一个序列学习问题，从而使排序目标能够共享检索主干。
+HSTU <cite class="ltx_cite ltx_citemacro_citep">(Zhai et al., <a class="ltx_ref" href="#bib.bib33" title="">2024</a>)</cite> 方法在物品之间交错插入行为词元以确保行为预测是候选感知的，但这会使上下文长度翻倍，并破坏与检索的输入格式兼容性。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.SSS1.p2">
+<p class="ltx_p">我们提出 <em class="ltx_emph ltx_font_italic">掩码行为建模</em>（MAM）：行为沿特征维度与每个物品嵌入拼接，并在训练过程中随机掩码，从而在保持因果性（模型在预测某一行为之前无法看到该行为）的同时不膨胀序列长度。
+类似的掩码-预测思想出现在 <cite class="ltx_cite ltx_citemacro_citep">(Huang et al., <a class="ltx_ref" href="#bib.bib17" title="">2025</a>)</cite> 中，用于信息流曝光。据我们所知，我们是首个将行为监督直接应用于用于检索的用户序列主干的工作。这在同一次前向传播中实现排序，同时通过更密集的逐位置梯度提升检索质量。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.SSS1.p3">
+<ol class="ltx_enumerate" id="S3.I2">
+<li class="ltx_item" id="S3.I2.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(1)</span>
+<div class="ltx_para" id="S3.I2.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">输入表示。</span>
+我们没有在每个物品之后交错插入专门的行为词元，而是通过线性层将行为多热向量 <math alttext="a_{i}" class="ltx_Math" display="inline" id="S3.I2.i1.p1.m1"><semantics><msub><mi>a</mi><mi>i</mi></msub><annotation encoding="application/x-tex">a_{i}</annotation></semantics></math> 编码为稠密嵌入，并在输入投影器之前沿特征轴将其与物品表示拼接。
+投影器将拼接后的表示映射到 transformer 隐藏维度。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I2.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(2)</span>
+<div class="ltx_para" id="S3.I2.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">掩码策略。</span>
+对于用户观测历史（过去）中的位置，每个行为以概率 <math alttext="p_{\text{mask}}" class="ltx_Math" display="inline" id="S3.I2.i2.p1.m1"><semantics><msub><mi>p</mi><mtext>mask</mtext></msub><annotation encoding="application/x-tex">p_{\text{mask}}</annotation></semantics></math> 独立地被掩码。
+对于候选（未来）位置，行为始终被掩码（<math alttext="m_{j}=0" class="ltx_Math" display="inline" id="S3.I2.i2.p1.m2"><semantics><mrow><msub><mi>m</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">m_{j}=0</annotation></semantics></math>，对所有 <math alttext="j" class="ltx_Math" display="inline" id="S3.I2.i2.p1.m3"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math> 均成立），因为在推理时，候选上的行为是未知的。</p>
+</div>
+<div class="ltx_para" id="S3.I2.i2.p2">
+<p class="ltx_p">当某个位置被掩码时，其行为类型输入被替换为专门的 <span class="ltx_text ltx_font_typewriter">[MASK]</span> 类别（在行为词表中追加的一个额外独热维度），从而模型可以区分“行为未知”与“未采取行为”。</p>
+</div>
+<div class="ltx_para" id="S3.I2.i2.p3">
+<p class="ltx_p">这保证了无信息泄露。输入掩码（<math alttext="m_{i}{=}0" class="ltx_Math" display="inline" id="S3.I2.i2.p3.m1"><semantics><mrow><msub><mi>m</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">m_{i}{=}0</annotation></semantics></math>）将 <math alttext="a_{i}" class="ltx_Math" display="inline" id="S3.I2.i2.p3.m2"><semantics><msub><mi>a</mi><mi>i</mi></msub><annotation encoding="application/x-tex">a_{i}</annotation></semantics></math> 替换为 <span class="ltx_text ltx_font_typewriter">[MASK]</span> 词元，且因果注意力将位置 <math alttext="i" class="ltx_Math" display="inline" id="S3.I2.i2.p3.m3"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> 限制为 <math alttext="\{0,\ldots,i\}" class="ltx_Math" display="inline" id="S3.I2.i2.p3.m4"><semantics><mrow><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mi>i</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{0,\ldots,i\}</annotation></semantics></math>，因此隐藏状态满足：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E2">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(2)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="z_{i}=f_{\theta}\!\bigl{(}\,\tilde{\Phi}_{i},\;\{\tilde{\Phi}_{t}\}_{t&lt;i}\bigr%
+{)},\quad\tilde{\Phi}_{i}\perp\!\!\!\perp a_{i}\;\text{ when }m_{i}=0," class="ltx_math_unparsed" display="block" id="S3.E2.m1"><semantics><mrow><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo maxsize="120%" minsize="120%">(</mo><msub><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mi>i</mi></msub><mo rspace="0.447em">,</mo><msub><mrow><mo stretchy="false">{</mo><msub><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mi>t</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>t</mi><mo>&lt;</mo><mi>i</mi></mrow></msub><mo maxsize="120%" minsize="120%">)</mo></mrow><mo rspace="1.167em">,</mo><msub><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mi>i</mi></msub><mpadded width="0.250em"><mo>⟂</mo></mpadded><mo>⟂</mo><msub><mi>a</mi><mi>i</mi></msub><mtext> when </mtext><msub><mi>m</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">z_{i}=f_{\theta}\!\bigl{(}\,\tilde{\Phi}_{i},\;\{\tilde{\Phi}_{t}\}_{t&lt;i}\bigr%
+{)},\quad\tilde{\Phi}_{i}\perp\!\!\!\perp a_{i}\;\text{ when }m_{i}=0,</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">确保 <math alttext="h_{\psi_{c}}(z_{i})" class="ltx_Math" display="inline" id="S3.I2.i2.p3.m5"><semantics><mrow><msub><mi>h</mi><msub><mi>ψ</mi><mi>c</mi></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>z</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">h_{\psi_{c}}(z_{i})</annotation></semantics></math> 仅依赖于 <math alttext="\Phi_{i}" class="ltx_Math" display="inline" id="S3.I2.i2.p3.m6"><semantics><msub><mi mathvariant="normal">Φ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\Phi_{i}</annotation></semantics></math> 和 <math alttext="\{(\Phi_{t},m_{t}\odot a_{t})\}_{t&lt;i}" class="ltx_Math" display="inline" id="S3.I2.i2.p3.m7"><semantics><msub><mrow><mo stretchy="false">{</mo><mrow><mo stretchy="false">(</mo><msub><mi mathvariant="normal">Φ</mi><mi>t</mi></msub><mo>,</mo><mrow><msub><mi>m</mi><mi>t</mi></msub><mo lspace="0.222em" rspace="0.222em">⊙</mo><msub><mi>a</mi><mi>t</mi></msub></mrow><mo stretchy="false">)</mo></mrow><mo stretchy="false">}</mo></mrow><mrow><mi>t</mi><mo>&lt;</mo><mi>i</mi></mrow></msub><annotation encoding="application/x-tex">\{(\Phi_{t},m_{t}\odot a_{t})\}_{t&lt;i}</annotation></semantics></math>。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I2.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(3)</span>
+<div class="ltx_para" id="S3.I2.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">注意力模式。</span>
+Transformer 处理拼接序列 <math alttext="[\tilde{\Phi}_{1},\ldots,\tilde{\Phi}_{n},||\tilde{\Phi}^{\prime}_{1},\ldots,%
+\tilde{\Phi}^{\prime}_{k}]" class="ltx_math_unparsed" display="inline" id="S3.I2.i3.p1.m1"><semantics><mrow><mo stretchy="false">[</mo><msub><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mi>n</mi></msub><mo>,</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><msubsup><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mn>1</mn><mo>′</mo></msubsup><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msubsup><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mi>k</mi><mo>′</mo></msubsup><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[\tilde{\Phi}_{1},\ldots,\tilde{\Phi}_{n},||\tilde{\Phi}^{\prime}_{1},\ldots,%
+\tilde{\Phi}^{\prime}_{k}]</annotation></semantics></math> 时采用修改后的因果掩码（图 <a class="ltx_ref" href="#S3.F2" title="Figure 2 ‣ 3.0.1. Background: ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">2</span></a>，右上），遵循 <cite class="ltx_cite ltx_citemacro_citep">(Zhai et al., <a class="ltx_ref" href="#bib.bib33" title="">2024</a>)</cite> 中的 M-FALCON 模式：过去位置保留标准因果注意力；每个候选位置 <math alttext="n+j" class="ltx_Math" display="inline" id="S3.I2.i3.p1.m2"><semantics><mrow><mi>n</mi><mo>+</mo><mi>j</mi></mrow><annotation encoding="application/x-tex">n+j</annotation></semantics></math> 关注所有过去位置 <math alttext="1,\ldots,n" class="ltx_Math" display="inline" id="S3.I2.i3.p1.m3"><semantics><mrow><mn>1</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">1,\ldots,n</annotation></semantics></math>，但不能关注其他候选。
+所有候选位置共享固定的位置 ID、信息流视图类型和时间戳，以确保无偏评分。
+由于候选之间不能相互关注，掩码将注意力成本从 <math alttext="\mathcal{O}((n{+}k)^{2})" class="ltx_Math" display="inline" id="S3.I2.i3.p1.m4"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msup><mrow><mo stretchy="false">(</mo><mrow><mi>n</mi><mo>+</mo><mi>k</mi></mrow><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}((n{+}k)^{2})</annotation></semantics></math> 降低到 <math alttext="\mathcal{O}(n^{2}+nk)" class="ltx_Math" display="inline" id="S3.I2.i3.p1.m5"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo><mrow><mi>n</mi><mo>⁢</mo><mi>k</mi></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(n^{2}+nk)</annotation></semantics></math>；我们通过 <em class="ltx_emph ltx_font_italic">flex attention</em> <cite class="ltx_cite ltx_citemacro_citep">(He et al., <a class="ltx_ref" href="#bib.bib15" title="">2024</a>)</cite> 实现这种稀疏性，它将块稀疏模式编译为融合的 CUDA 内核。
+该模式还支持跨阶段的 KV 缓存共享（第 <a class="ltx_ref" href="#S3.SS3.SSS3" title="3.3.3. KV-cache sharing across stages ‣ 3.3. Serving infrastructure ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3.3.3</span></a> 节）：检索缓存 <math alttext="\mathcal{O}(n^{2})" class="ltx_Math" display="inline" id="S3.I2.i3.p1.m6"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(n^{2})</annotation></semantics></math> 的历史计算，排序以 <math alttext="\mathcal{O}(nk)" class="ltx_Math" display="inline" id="S3.I2.i3.p1.m7"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>n</mi><mo>⁢</mo><mi>k</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(nk)</annotation></semantics></math> 的边际成本复用它。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I2.i4" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(4)</span>
+<div class="ltx_para" id="S3.I2.i4.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">训练目标。</span>
+序列的过去部分 <math alttext="\tilde{\Phi}_{1},\ldots,\tilde{\Phi}_{n}" class="ltx_Math" display="inline" id="S3.I2.i4.p1.m1"><semantics><mrow><msub><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">\tilde{\Phi}_{1},\ldots,\tilde{\Phi}_{n}</annotation></semantics></math> 保持与检索模型输入相同的长度和位置结构，并且实际上用于检索：在这些位置上应用相同的下一物品预测目标。<math alttext="k" class="ltx_Math" display="inline" id="S3.I2.i4.p1.m2"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> 个候选物品 <math alttext="\tilde{\Phi}^{\prime}_{1},\ldots,\tilde{\Phi}^{\prime}_{k}" class="ltx_Math" display="inline" id="S3.I2.i4.p1.m3"><semantics><mrow><msubsup><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mn>1</mn><mo>′</mo></msubsup><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msubsup><mover accent="true"><mi mathvariant="normal">Φ</mi><mo>~</mo></mover><mi>k</mi><mo>′</mo></msubsup></mrow><annotation encoding="application/x-tex">\tilde{\Phi}^{\prime}_{1},\ldots,\tilde{\Phi}^{\prime}_{k}</annotation></semantics></math> 被附加在过去部分之后，完整序列在单次前向传播中处理。这使得与检索模型完全共享参数。模型使用两个联合优化的损失进行训练：</p>
+<ol class="ltx_enumerate" id="S3.I2.i4.I1">
+<li class="ltx_item" id="S3.I2.i4.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(a)</span>
+<div class="ltx_para" id="S3.I2.i4.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">下一物品预测损失</span>（检索目标）：与第 <a class="ltx_ref" href="#S3.SS0.SSS1" title="3.0.1. Background: ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3.0.1</span></a> 节中的采样 softmax 损失相同，应用于每个未掩码的过去位置：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E3">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(3)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\text{item}}=\frac{1}{|H|}\sum_{t\in H}L_{s}\!\bigl{(}\hat{i}_{u,%
+t},\;i_{u,t+1}\bigr{)}." class="ltx_Math" display="block" id="S3.E3.m1"><semantics><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>item</mtext></msub><mo>=</mo><mrow><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><mi>H</mi><mo stretchy="false">|</mo></mrow></mfrac><mo>⁢</mo><mrow><munder><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>∈</mo><mi>H</mi></mrow></munder><mrow><msub><mi>L</mi><mi>s</mi></msub><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><msub><mover accent="true"><mi>i</mi><mo>^</mo></mover><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo rspace="0.447em">,</mo><msub><mi>i</mi><mrow><mi>u</mi><mo>,</mo><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></mrow></msub><mo maxsize="120%" minsize="120%">)</mo></mrow></mrow></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\text{item}}=\frac{1}{|H|}\sum_{t\in H}L_{s}\!\bigl{(}\hat{i}_{u,%
+t},\;i_{u,t+1}\bigr{)}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+</li>
+<li class="ltx_item" id="S3.I2.i4.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(b)</span>
+<div class="ltx_para" id="S3.I2.i4.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">行为预测损失</span>（排序目标）：在每个行为被掩码的位置，模型必须独立预测每种行为类型。对于每种行为类型 <math alttext="c\in\{1,\dots,C\}" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m1"><semantics><mrow><mi>c</mi><mo>∈</mo><mrow><mo stretchy="false">{</mo><mn>1</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mi>C</mi><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">c\in\{1,\dots,C\}</annotation></semantics></math>，专门的 MLP 头 <math alttext="h_{\psi_{c}}" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m2"><semantics><msub><mi>h</mi><msub><mi>ψ</mi><mi>c</mi></msub></msub><annotation encoding="application/x-tex">h_{\psi_{c}}</annotation></semantics></math> 产生一个标量 logit，逐头权重 <math alttext="w_{c}" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m3"><semantics><msub><mi>w</mi><mi>c</mi></msub><annotation encoding="application/x-tex">w_{c}</annotation></semantics></math> 控制其贡献。分别对过去（已掩码）位置和未来（始终掩码）位置应用独立的项：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E4">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(4)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\begin{split}\mathcal{L}_{\text{action}}=\sum_{c=1}^{C}w_{c}\Bigl{[}\;&amp;\frac{1%
+}{|\mathcal{M}_{\text{past}}|}\!\sum_{i\in\mathcal{M}_{\text{past}}}\ell_{%
+\text{BCE}}\!\bigl{(}h_{\psi_{c}}(z_{i}),\,a_{i}^{(c)}\bigr{)}\\
+&amp;+\frac{1}{k}\sum_{j=1}^{k}\ell_{\text{BCE}}\!\bigl{(}h_{\psi_{c}}(z^{\prime}_%
+{j}),\,a^{\prime(c)}_{j}\bigr{)}\Bigr{]},\end{split}" class="ltx_Math" display="block" id="S3.E4.m1"><semantics><mtable columnspacing="0pt" displaystyle="true" rowspacing="0pt"><mtr><mtd class="ltx_align_right" columnalign="right"><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>action</mtext></msub><mo rspace="0.111em">=</mo><munderover><mo movablelimits="false">∑</mo><mrow><mi>c</mi><mo>=</mo><mn>1</mn></mrow><mi>C</mi></munderover><msub><mi>w</mi><mi>c</mi></msub><mo maxsize="160%" minsize="160%">[</mo></mrow></mtd><mtd class="ltx_align_left" columnalign="left"><mrow><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi class="ltx_font_mathcaligraphic">ℳ</mi><mtext>past</mtext></msub><mo stretchy="false">|</mo></mrow></mfrac><mo>⁢</mo><mrow><munder><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi class="ltx_font_mathcaligraphic">ℳ</mi><mtext>past</mtext></msub></mrow></munder><mrow><msub><mi mathvariant="normal">ℓ</mi><mtext>BCE</mtext></msub><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><msub><mi>h</mi><msub><mi>ψ</mi><mi>c</mi></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>z</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.337em">,</mo><msubsup><mi>a</mi><mi>i</mi><mrow><mo stretchy="false">(</mo><mi>c</mi><mo stretchy="false">)</mo></mrow></msubsup><mo maxsize="120%" minsize="120%">)</mo></mrow></mrow></mrow></mrow></mtd></mtr><mtr><mtd></mtd><mtd class="ltx_align_left" columnalign="left"><mrow><mo>+</mo><mfrac><mn>1</mn><mi>k</mi></mfrac><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><msub><mi mathvariant="normal">ℓ</mi><mtext>BCE</mtext></msub><mrow><mo maxsize="120%" minsize="120%">(</mo><msub><mi>h</mi><msub><mi>ψ</mi><mi>c</mi></msub></msub><mrow><mo stretchy="false">(</mo><msubsup><mi>z</mi><mi>j</mi><mo>′</mo></msubsup><mo stretchy="false">)</mo></mrow><mo rspace="0.337em">,</mo><msubsup><mi>a</mi><mi>j</mi><mrow><mo mathsize="142%">′</mo><mo lspace="0em">⁣</mo><mrow><mo stretchy="false">(</mo><mi>c</mi><mo stretchy="false">)</mo></mrow></mrow></msubsup><mo maxsize="120%" minsize="120%">)</mo></mrow><mo maxsize="160%" minsize="160%">]</mo><mo>,</mo></mrow></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{split}\mathcal{L}_{\text{action}}=\sum_{c=1}^{C}w_{c}\Bigl{[}\;&amp;\frac{1%
+}{|\mathcal{M}_{\text{past}}|}\!\sum_{i\in\mathcal{M}_{\text{past}}}\ell_{%
+\text{BCE}}\!\bigl{(}h_{\psi_{c}}(z_{i}),\,a_{i}^{(c)}\bigr{)}\\
+&amp;+\frac{1}{k}\sum_{j=1}^{k}\ell_{\text{BCE}}\!\bigl{(}h_{\psi_{c}}(z^{\prime}_%
+{j}),\,a^{\prime(c)}_{j}\bigr{)}\Bigr{]},\end{split}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中，<math alttext="C" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m4"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math> 是行为类型的数量，<math alttext="z_{i}" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m5"><semantics><msub><mi>z</mi><mi>i</mi></msub><annotation encoding="application/x-tex">z_{i}</annotation></semantics></math> 是 Transformer 在位置 <math alttext="i" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m6"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> 的隐藏状态，<math alttext="h_{\psi_{c}}" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m7"><semantics><msub><mi>h</mi><msub><mi>ψ</mi><mi>c</mi></msub></msub><annotation encoding="application/x-tex">h_{\psi_{c}}</annotation></semantics></math> 是行为类型 <math alttext="c" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m8"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math> 的 MLP 头，<math alttext="a_{i}^{(c)}" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m9"><semantics><msubsup><mi>a</mi><mi>i</mi><mrow><mo stretchy="false">(</mo><mi>c</mi><mo stretchy="false">)</mo></mrow></msubsup><annotation encoding="application/x-tex">a_{i}^{(c)}</annotation></semantics></math> 是行为 <math alttext="c" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m10"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math> 在位置 <math alttext="i" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m11"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> 的二值标签，<math alttext="\mathcal{M}_{\text{past}}=\{i:m_{i}=0\}" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m12"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℳ</mi><mtext>past</mtext></msub><mo>=</mo><mrow><mo stretchy="false">{</mo><mi>i</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><msub><mi>m</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{M}_{\text{past}}=\{i:m_{i}=0\}</annotation></semantics></math> 是被掩码的过去位置集合，<math alttext="w_{c}" class="ltx_Math" display="inline" id="S3.I2.i4.I1.i2.p1.m13"><semantics><msub><mi>w</mi><mi>c</mi></msub><annotation encoding="application/x-tex">w_{c}</annotation></semantics></math> 是经超参数调优的标量权重，用于平衡各类行为（如保存、点击、隐藏）的贡献，以及它们相对于下一物品预测损失的贡献。</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="ltx_para" id="S3.I2.i4.p2">
+<p class="ltx_p">总损失为：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E5">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(5)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}=\mathcal{L}_{\text{item}}+\mathcal{L}_{\text{action}}." class="ltx_Math" display="block" id="S3.E5.m1"><semantics><mrow><mrow><mi class="ltx_font_mathcaligraphic">ℒ</mi><mo>=</mo><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>item</mtext></msub><mo>+</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>action</mtext></msub></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}=\mathcal{L}_{\text{item}}+\mathcal{L}_{\text{action}}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+<figure class="ltx_figure" id="S3.F3"><a href="assets/a94195808da7e886.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F3.g1" loading="lazy" src="assets/a94195808da7e886.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3. </span>UniPinRec 的协同服务拓扑。检索和排序是独立的 Triton 集成节点；二者之间是对 CPU 托管的 Faiss 索引进行 ANN 查找。ANN 同时返回候选 Pin ID 及其重建的物品嵌入，使排序阶段免于单独获取嵌入。共享的 KV 池由排序复用。</figcaption>
+</figure>
+</li>
+<li class="ltx_item" id="S3.I2.i5" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(5)</span>
+<div class="ltx_para" id="S3.I2.i5.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">相对于交错插入的关键优势。</span></p>
+<ol class="ltx_enumerate" id="S3.I2.i5.I1">
+<li class="ltx_item" id="S3.I2.i5.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(a)</span>
+<div class="ltx_para" id="S3.I2.i5.I1.i1.p1">
+<p class="ltx_p">无上下文长度膨胀：序列长度与检索模型保持相同。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I2.i5.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(b)</span>
+<div class="ltx_para" id="S3.I2.i5.I1.i2.p1">
+<p class="ltx_p">完全权重共享：排序模型可以直接从检索检查点初始化。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I2.i5.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(c)</span>
+<div class="ltx_para" id="S3.I2.i5.I1.i3.p1">
+<p class="ltx_p">去噪正则化：随机掩码鼓励模型在行为不可用时依赖物品内容，从而提升推理时的泛化能力。</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S3.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.2. </span>数据基础设施</h3>
+<div class="ltx_para" id="S3.SS2.p1">
+<p class="ltx_p">联合训练引入了单任务模型所不具备的数据需求：每个训练样本必须同时包含用户的互动历史（用于检索目标）和带有负例结果的完整曝光列表（用于行为预测目标）。
+现有的检索数据集和排序数据集都不能同时满足这两个约束。
+大规模构建这种统一格式
+是全栈统一的前提条件。
+下面我们描述如何构建和提供这些样本。</p>
+</div>
+<section class="ltx_subsubsection" id="S3.SS2.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.2.1. </span>以信息流视图为中心的数据集构建</h4>
+<div class="ltx_para" id="S3.SS2.SSS1.p1">
+<p class="ltx_p">一个关键的数据设计选择使我们的工作区别于以往的序列推荐模型。
+检索模型通常在仅含行为的序列（按时间顺序的互动）上训练 <cite class="ltx_cite ltx_citemacro_citep">(Zhai et al., <a class="ltx_ref" href="#bib.bib33" title="">2024</a>; Agarwal et al., <a class="ltx_ref" href="#bib.bib2" title="">2025</a>; Deng et al., <a class="ltx_ref" href="#bib.bib11" title="">2025</a>)</cite>，而排序模型在曝光日志（展示给用户的完整列表，包含已互动和无行为两种结果）上训练 <cite class="ltx_cite ltx_citemacro_citep">(Hertel et al., <a class="ltx_ref" href="#bib.bib16" title="">2025</a>; Dai et al., <a class="ltx_ref" href="#bib.bib10" title="">2025</a>)</cite>。
+以往关于统一模型的工作未讨论如何构建同时满足两个目标的训练数据；联合训练需要二者兼有：检索目标需要正向行为历史来预测下一物品，而排序目标需要完整曝光列表来学习。</p>
+</div>
+<div class="ltx_para" id="S3.SS2.SSS1.p2">
+<p class="ltx_p">我们通过为每个训练样本构建一个 <em class="ltx_emph ltx_font_italic">过去</em>行为序列并配以一个 <em class="ltx_emph ltx_font_italic">未来</em>信息流视图（来自后续请求的完整曝光列表，带互动标签）来弥合这一差距。
+具体而言，序列中的每个位置是一个（Pin、界面、行为、时间戳）元组，其中行为涵盖模型所预测的互动词表（仅曝光、点击、保存、分享、隐藏等）。</p>
+</div>
+<div class="ltx_para" id="S3.SS2.SSS1.p3">
+<p class="ltx_p">由于互动事件相对于曝光天然稀疏，训练流水线对未互动的信息流视图进行子采样（保留 <math alttext="10\%" class="ltx_Math" display="inline" id="S3.SS2.SSS1.p3.m1"><semantics><mrow><mn>10</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">10\%</annotation></semantics></math>）以放大稀有互动类别。评估流水线不进行降采样，并使用随机重放数据集，从而保持自然的无偏分布。这也有利于检索，因为它反映了真实流量分布。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S3.SS2.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.2.2. </span>Ray 训练器内连接</h4>
+<div class="ltx_para" id="S3.SS2.SSS2.p1">
+<p class="ltx_p">我们通过执行 <em class="ltx_emph ltx_font_italic">训练器内分桶连接</em>，利用 Ray <cite class="ltx_cite ltx_citemacro_citep">(Moritz et al., <a class="ltx_ref" href="#bib.bib18" title="">2018</a>)</cite> 分布式数据加载层，消除了离线连接引入的用户行为历史扇出。用户行为序列和信息流视图记录分别保存在独立的 Iceberg 表中，各自按用户 ID 哈希分桶，并在训练时于内存中连接。
+这完全避免了数据重复，并使上下文长度、采样比例和过滤成为训练时可调整的参数，而非在数据生成时就需确定的参数。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S3.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.3. </span>服务基础设施</h3>
+<div class="ltx_para" id="S3.SS3.p1">
+<p class="ltx_p">图 <a class="ltx_ref" href="#S3.F3" title="Figure 3 ‣ item 4 ‣ 3.1.1. Masked Action Modeling ‣ 3.1. Reformulating PinRec for ranking ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3</span></a> 展示了本节所述的端到端协同服务拓扑。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.p2">
+<p class="ltx_p">统一模型只有在能够替代两个独立模型而不使服务成本翻倍时，才能带来效率收益。
+我们的模型设计/训练协议的两个特性使这一点变得可行。
+首先，非交错架构和统一协同训练（第 <a class="ltx_ref" href="#S3.SS1.SSS1" title="3.1.1. Masked Action Modeling ‣ 3.1. Reformulating PinRec for ranking ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3.1.1</span></a> 节）保证了相同的模型权重，并产生与候选无关的用户表示，这些表示可以缓存一次并在各阶段复用。
+其次，检索阶段和排序阶段共享相同的物品嵌入空间，因此无需维护单独的候选表示。</p>
+</div>
+<section class="ltx_subsubsection" id="S3.SS3.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.3.1. </span>背景：</h4>
+<div class="ltx_para" id="S3.SS3.SSS1.p1">
+<p class="ltx_p">我们基于生产环境的 PinRec <cite class="ltx_cite ltx_citemacro_citep">(Agarwal et al., <a class="ltx_ref" href="#bib.bib2" title="">2025</a>)</cite> 服务栈构建，该服务栈使用 Triton 集成来组装用户历史、运行自回归检索，并通过 CPU 托管的 Faiss 索引执行 ANN 查找。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S3.SS3.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.3.2. </span>整体服务设计</h4>
+<div class="ltx_para" id="S3.SS3.SSS2.p1">
+<p class="ltx_p">UniPinRec 保留了该服务栈的大部分，并在 Faiss 下游附加了一个新的排序节点。
+排序节点消费 ANN 的候选集以及一个 KV 缓存槽标识符（详见下文第 <a class="ltx_ref" href="#S3.SS3.SSS3" title="3.3.3. KV-cache sharing across stages ‣ 3.3. Serving infrastructure ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3.3.3</span></a> 节）。
+它不重新处理完整用户历史，而是运行增量前向传播：仅处理候选词元，回看 KV 缓存历史以产生逐候选的行为概率。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.SSS2.p2">
+<p class="ltx_p">ANN 索引已存储每个 Pin 的嵌入向量（嵌入器 MLP 在索引构建时计算的输出）。
+我们使用 <span class="ltx_text ltx_font_typewriter">Faiss.search_and_reconstruct</span>，它在一次调用中同时返回候选 Pin ID 及其存储的嵌入。
+这些预嵌入向量直接作为排序阶段的候选词元。
+这消除了候选侧额外的嵌入器前向传播和特征获取，并保证检索阶段和排序阶段针对相同的表示进行评分。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S3.SS3.SSS3">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.3.3. </span>跨阶段的 KV 缓存共享</h4>
+<div class="ltx_para" id="S3.SS3.SSS3.p1">
+<p class="ltx_p">我们 Transformer 中的主要开销是编码用户行为历史（<math alttext="n" class="ltx_Math" display="inline" id="S3.SS3.SSS3.p1.m1"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> 个词元，<math alttext="\mathcal{O}(n^{2})" class="ltx_Math" display="inline" id="S3.SS3.SSS3.p1.m2"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(n^{2})</annotation></semantics></math> 自注意力）；利用这段历史对 <math alttext="k" class="ltx_Math" display="inline" id="S3.SS3.SSS3.p1.m3"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> 个候选评分只需要 <math alttext="\mathcal{O}(nk)" class="ltx_Math" display="inline" id="S3.SS3.SSS3.p1.m4"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>n</mi><mo>⁢</mo><mi>k</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(nk)</annotation></semantics></math>。
+我们在排序时完全避免了 <math alttext="\mathcal{O}(n^{2})" class="ltx_Math" display="inline" id="S3.SS3.SSS3.p1.m5"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(n^{2})</annotation></semantics></math> 的成本，具体做法是将 PinRec 的逐请求 KV 缓存（第 <a class="ltx_ref" href="#S3.SS3.SSS1" title="3.3.1. Background: ‣ 3.3. Serving infrastructure ‣ 3. Methodology ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3.3.1</span></a> 节）扩展为跨阶段、跨进程共享：排序直接关注缓存的历史 KV，无需重新编码。
+我们进一步遵循 M-FALCON <cite class="ltx_cite ltx_citemacro_citep">(Hertel et al., <a class="ltx_ref" href="#bib.bib16" title="">2025</a>)</cite> 的单位矩阵掩码设计，阻止候选之间相互关注，使每个候选的评分独立于批次组成。
+最终的排序成本为 <math alttext="\mathcal{O}(nk)" class="ltx_Math" display="inline" id="S3.SS3.SSS3.p1.m6"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>n</mi><mo>⁢</mo><mi>k</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(nk)</annotation></semantics></math>。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.SSS3.p2">
+<p class="ltx_p">检索和排序作为具有独立 CUDA 上下文的不同操作系统进程运行，这在基于微服务的服务栈中很常见。
+跨进程对 KV 张量进行朴素序列化会引入主导延迟的 GPU-主机-GPU 往返。
+我们改为预分配一个 GPU 内存池，两个进程都将其映射到各自的地址空间，因此排序进程读取检索进程写入的 KV 状态，而无需 CPU 到 GPU 的数据传输。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.SSS3.p3">
+<p class="ltx_p">因此，每个检索副本在启动时分配一个预设定大小的 GPU 池，形状为 <math alttext="[L,S,H,n,D]" class="ltx_Math" display="inline" id="S3.SS3.SSS3.p3.m1"><semantics><mrow><mo stretchy="false">[</mo><mi>L</mi><mo>,</mo><mi>S</mi><mo>,</mo><mi>H</mi><mo>,</mo><mi>n</mi><mo>,</mo><mi>D</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[L,S,H,n,D]</annotation></semantics></math>（层、槽、KV 头、过去序列长度、头维度），将其存储的 CUDA IPC 句柄导出到每个实例的文件中，排序进程打开这些句柄并将同一物理 GPU 分配映射到自己的地址空间。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.SSS3.p4">
+<p class="ltx_p">槽以轮询方式复用，
+每个排序消费者在前向传播期间将每个请求的过去 KV 从其映射池中的槽复制到自己的解码缓存中。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S3.SS3.SSS4">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.3.4. </span>FP8 量化</h4>
+<div class="ltx_para" id="S3.SS3.SSS4.p1">
+<p class="ltx_p">为了进一步提高服务效率，我们使用混合精度 FP8 训练和推理。我们使用来自 Transformer Engine 库的融合模块，将层归一化、线性投影和激活组合为单一内核，避免中间的全精度物化。训练使用混合 FP8 格式，前向传播期间使用 E4M3，反向计算使用 E5M2，从而使前向激活和反向梯度在精度和动态范围之间保持适当平衡。量化导致离线指标下降 0.5%，我们将其视为换取效率提升的合理权衡。</p>
+</div>
+</section>
+</section>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4. </span>结果</h2>
+<div class="ltx_para" id="S4.p1">
+<p class="ltx_p">我们围绕三个研究问题组织结果：</p>
+<ul class="ltx_itemize" id="S4.I1">
+<li class="ltx_item" id="S4.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">RQ1</span>：我们能否训练一个既能完成检索任务又能完成排序任务的统一模型？</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">RQ2</span>：我们能否将检索模型和排序模型协同服务，以实现最小的计算冗余？</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I1.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">RQ3</span>：我们能否使这个统一模型成为对现有生产级推荐系统的一种易于实现的扩展？</p>
+</div>
+</li>
+</ul>
+</div>
+<section class="ltx_subsection" id="S4.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1. </span>训练一个统一的检索与排序模型（RQ1）</h3>
+<div class="ltx_para" id="S4.SS1.p1">
+<p class="ltx_p">我们展示生成式推荐范式可以扩展到排序模型。这需要（1）跨阶段的架构兼容性以支持参数共享，以及（2）以检索和排序双重目标进行联合训练，以允许任务之间的信号共享。</p>
+</div>
+<section class="ltx_paragraph" id="S4.SS1.SSS0.Px1">
+<h5 class="ltx_title ltx_title_paragraph">基线与训练策略。</h5>
+<div class="ltx_para" id="S4.SS1.SSS0.Px1.p1">
+<p class="ltx_p">我们将 UniPinRec 与多个基线和训练方法进行比较：</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS0.Px1.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">TransAct V2 + DCNv2</span> <cite class="ltx_cite ltx_citemacro_citep">(Xia et al., <a class="ltx_ref" href="#bib.bib25" title="">2025</a>)</cite>：同期训练的生产排序模型，是一个基于 transformer 的模型，具有长用户序列和其他特征交叉模块。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS0.Px1.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">HSTU</span> <cite class="ltx_cite ltx_citemacro_citep">(Zhai et al., <a class="ltx_ref" href="#bib.bib33" title="">2024</a>)</cite>：最先进的统一检索与排序模型，采用动作与物品交错排列 <cite class="ltx_cite ltx_citemacro_citep">(Zhang et al., <a class="ltx_ref" href="#bib.bib35" title="">2025b</a>)</cite>。我们在检索和排序两个任务上评估 HSTU，采用统一交错范式并匹配有效序列长度。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS0.Px1.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">PinRec</span> <cite class="ltx_cite ltx_citemacro_citep">(Agarwal et al., <a class="ltx_ref" href="#bib.bib2" title="">2025</a>)</cite>：生产检索模型，是一个 12 层 transformer，采用下一物品预测（采样 softmax）训练。仅用于检索；不具备排序能力。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS0.Px1.p5">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">PinRec 微调</span>：一种顺序训练方法，我们取上述快照（PinRec），然后通过添加动作预测目标对其进行微调以用于排序。关键在于，在微调期间物品嵌入器必须保持冻结，以维持与预训练检索模型 Faiss 索引的兼容性以便部署。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS0.Px1.p6">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">UniPinRec w/o item loss</span>：一个仅用于排序的变体，仅使用动作预测损失训练，采用与统一模型相同的 MAM 架构。该消融通过移除检索目标来隔离联合训练的效果。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS0.Px1.p7">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">UniPinRec（本文方法）</span>：采用掩码动作建模的统一模型，对检索和排序使用相同的非交错序列格式。以下一物品预测（检索）和动作预测（排序）双重损失联合训练。物品嵌入器可训练，并从两个目标中受益。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S4.SS1.SSS0.Px2">
+<h5 class="ltx_title ltx_title_paragraph">结果。</h5>
+<div class="ltx_para" id="S4.SS1.SSS0.Px2.p1">
+<p class="ltx_p">表 <a class="ltx_ref" href="#S4.T1" title="Table 1 ‣ Results. ‣ 4.1. Train a Unified Retrieval and Ranking (RQ1) ‣ 4. Results ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">1</span></a> 显示，与专用基线相比，UniPinRec 在检索（Recall@10，即在未来 feedview 中发生交互的目标，由任意自回归生成的查询嵌入正确检索进 top 10）和排序（“save” Hit@3，按 save 头分数排序）两方面均取得了具有竞争力的性能。我们使用“Board More Ideas” feed 数据进行训练和评估。更多线上结果将在第 <a class="ltx_ref" href="#S5.SS2" title="5.2. Board More Ideas ‣ 5. Online A/B Experiments (RQ3) ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">5.2</span></a> 节讨论</p>
+</div>
+<figure class="ltx_table" id="S4.T1">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 1. </span>统一联合训练 vs. 解耦的预训练 / 微调。两种方法均使用相同的 12 层 MAM 主干。两列对应不同的评估数据集。Hit@3 衡量排序性能，Recall@10 衡量检索性能。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示。</figcaption>
+<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_column ltx_th_row ltx_border_tt">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:164.8pt;"><span class="ltx_text ltx_font_bold">Strategy</span></span>
+</span>
+</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">
+<span class="ltx_text ltx_font_bold">Hit@3</span> <math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T1.m1"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</th>
+<th class="ltx_td ltx_nopad_r ltx_align_center ltx_th ltx_th_column ltx_border_tt">
+<span class="ltx_text ltx_font_bold">Recall@10</span> <math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T1.m2"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:164.8pt;">TransActV2 + DCNv2</span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center ltx_border_t">0.088008</td>
+<td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_t">N/A</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:164.8pt;">HSTU</span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center">0.097326</td>
+<td class="ltx_td ltx_nopad_r ltx_align_center">0.76161</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:164.8pt;">PinRec</span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center">N/A</td>
+<td class="ltx_td ltx_nopad_r ltx_align_center">0.77486</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:164.8pt;">PinRec finetuned</span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center">0.095869</td>
+<td class="ltx_td ltx_nopad_r ltx_align_center">N/A</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:164.8pt;">UniPinRec w/o item loss</span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center">0.097345</td>
+<td class="ltx_td ltx_nopad_r ltx_align_center">N/A</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row ltx_border_bb">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:164.8pt;">UniPinRec (ours)</span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.10096</span></td>
+<td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.77659</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div class="ltx_para" id="S4.SS1.SSS0.Px2.p2">
+<p class="ltx_p">在检索方面，UniPinRec 与 PinRec 的 Recall@10 相当，仅有 <span class="ltx_text ltx_font_bold">+0.2%</span> 的微小提升，表明以排序目标进行联合训练不会降低检索质量。这对部署至关重要：该统一模型可作为生产检索系统的直接替代品。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS0.Px2.p3">
+<p class="ltx_p">在排序方面，UniPinRec 超越了 TransActV2+DCNv2——即包含专用特征交叉模块的同期生产排序模型——提升幅度为 <span class="ltx_text ltx_font_bold">14.7%</span>，尽管它在单一模型中同时处理检索和排序。在相同的上下文长度预算下，UniPinRec 也优于 HSTU。重要的是，UniPinRec 优于仅排序变体（UniPinRec w/o item loss），表明联合检索目标进一步提升了排序质量。PinRec 微调方法尽管从强大的检索模型出发，却不如联合训练。冻结嵌入器的约束阻止模型为排序任务调整物品表示，而联合训练允许嵌入器同时从两个任务中学习。这一差距表明，仅靠架构兼容性是不够的，必须进行联合优化才能充分利用统一训练。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S4.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2. </span>协同服务检索与排序模型（RQ2）</h3>
+<div class="ltx_para" id="S4.SS2.p1">
+<p class="ltx_p">统一主干只有在其不作为两个独立的模型提供服务时，才能声称具有效率优势。
+排序前向传播中的主要计算开销是对用户历史的自注意力；当检索和排序分别服务时，每个请求需为此付出两次代价。
+我们的统一设计在检索期间对历史进行一次编码，并复用生成的键和值作为后续排序阶段的 KV 缓存，将排序转变为 <em class="ltx_emph ltx_font_italic">解码</em> 步骤，即从候选向冻结的历史进行注意力计算，而非完整的 <em class="ltx_emph ltx_font_italic">预填充</em>。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p2">
+<p class="ltx_p">我们在表 <a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.2. Co-serve a Retrieval and Ranking Model (RQ2) ‣ 4. Results ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">2</span></a> 中测量了这种复用的影响，在 NVIDIA L40S（<math alttext="B{=}8" class="ltx_Math" display="inline" id="S4.SS2.p2.m1"><semantics><mrow><mi>B</mi><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">B{=}8</annotation></semantics></math>、<math alttext="n{=}992" class="ltx_Math" display="inline" id="S4.SS2.p2.m2"><semantics><mrow><mi>n</mi><mo>=</mo><mn>992</mn></mrow><annotation encoding="application/x-tex">n{=}992</annotation></semantics></math>、<math alttext="k{=}656" class="ltx_Math" display="inline" id="S4.SS2.p2.m3"><semantics><mrow><mi>k</mi><mo>=</mo><mn>656</mn></mrow><annotation encoding="application/x-tex">k{=}656</annotation></semantics></math>、<math alttext="L{=}12" class="ltx_Math" display="inline" id="S4.SS2.p2.m4"><semantics><mrow><mi>L</mi><mo>=</mo><mn>12</mn></mrow><annotation encoding="application/x-tex">L{=}12</annotation></semantics></math>）上进行，除路径外还变化了三个正交的调节手段：激活数据类型（bf16 vs. 使用 Transformer Engine 融合矩阵乘法的 fp8）、注意力实现（SDPA vs. 自动调优的 flex attention），以及运行时（eager Python 调度、<span class="ltx_text ltx_font_typewriter">torch.compile</span> 或 CUDA graph 捕获）：</p>
+<ul class="ltx_itemize" id="S4.I2">
+<li class="ltx_item" id="S4.I2.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I2.i1.p1">
+<p class="ltx_p">KV 缓存复用（预填充<math alttext="\to" class="ltx_Math" display="inline" id="S4.I2.i1.p1.m1"><semantics><mo stretchy="false">→</mo><annotation encoding="application/x-tex">\to</annotation></semantics></math>解码）大约带来 <math alttext="\sim" class="ltx_Math" display="inline" id="S4.I2.i1.p1.m2"><semantics><mo>∼</mo><annotation encoding="application/x-tex">\sim</annotation></semantics></math><math alttext="2.4\times" class="ltx_math_unparsed" display="inline" id="S4.I2.i1.p1.m3"><semantics><mrow><mn>2.4</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">2.4\times</annotation></semantics></math>。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I2.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I2.i2.p1">
+<p class="ltx_p">使用 Transformer Engine 矩阵乘法及 CUDA 图捕获的 fp8 带来 <math alttext="\sim" class="ltx_Math" display="inline" id="S4.I2.i2.p1.m1"><semantics><mo>∼</mo><annotation encoding="application/x-tex">\sim</annotation></semantics></math><math alttext="1.25\times" class="ltx_math_unparsed" display="inline" id="S4.I2.i2.p1.m2"><semantics><mrow><mn>1.25</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">1.25\times</annotation></semantics></math> 的提升，比较基线为 bf16+compile。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I2.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I2.i3.p1">
+<p class="ltx_p">Flex attention 在任何数据类型之上均稳定贡献 <math alttext="\sim" class="ltx_Math" display="inline" id="S4.I2.i3.p1.m1"><semantics><mo>∼</mo><annotation encoding="application/x-tex">\sim</annotation></semantics></math><math alttext="1.3\times" class="ltx_math_unparsed" display="inline" id="S4.I2.i3.p1.m2"><semantics><mrow><mn>1.3</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">1.3\times</annotation></semantics></math>。</p>
+</div>
+</li>
+</ul>
+<p class="ltx_p">这三种优化手段基本相互正交，因此叠加后获得最大的端到端 <math alttext="\mathbf{3.92\times}" class="ltx_math_unparsed" display="inline" id="S4.SS2.p2.m5"><semantics><mrow><mn class="ltx_mathvariant_bold" mathvariant="bold">3.92</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">\mathbf{3.92\times}</annotation></semantics></math>，见表 <a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.2. Co-serve a Retrieval and Ranking Model (RQ2) ‣ 4. Results ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">2</span></a> 的右下角单元格。</p>
+</div>
+<figure class="ltx_table" id="S4.T2">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 2. </span>单次排序前向传播的评估时前向延迟
+加速比相对于 bf16 / SDPA / compile 预填充行。“运行时”控制前向调度方式：eager、torch.compile 或 cuda graph 捕获。我们对 fp8 解码使用 graph，因为 torch.compile 融合会回退 Transformer Engine 内核。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示，*用于线上实验</figcaption>
+<table class="ltx_tabular ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Dtype</span></td>
+<td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Attn</span></td>
+<td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Runtime</span></td>
+<td class="ltx_td ltx_align_right ltx_border_tt">
+<span class="ltx_text ltx_font_bold">Lat. (ms)</span> <math alttext="\downarrow" class="ltx_Math" display="inline" id="S4.T2.m1"><semantics><mo stretchy="false">↓</mo><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math>
+</td>
+<td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_tt">
+<span class="ltx_text ltx_font_bold">Speedup</span> <math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T2.m2"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t" colspan="5"><em class="ltx_emph ltx_font_italic">Prefill (history recomputed)</em></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">bf16</td>
+<td class="ltx_td ltx_align_left">SDPA</td>
+<td class="ltx_td ltx_align_left">compile</td>
+<td class="ltx_td ltx_align_right">25.72</td>
+<td class="ltx_td ltx_nopad_r ltx_align_right"><math alttext="1.00\times" class="ltx_math_unparsed" display="inline" id="S4.T2.m3"><semantics><mrow><mn>1.00</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">1.00\times</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">bf16</td>
+<td class="ltx_td ltx_align_left">flex</td>
+<td class="ltx_td ltx_align_left">compile</td>
+<td class="ltx_td ltx_align_right">19.70</td>
+<td class="ltx_td ltx_nopad_r ltx_align_right"><math alttext="1.31\times" class="ltx_math_unparsed" display="inline" id="S4.T2.m4"><semantics><mrow><mn>1.31</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">1.31\times</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">fp8</td>
+<td class="ltx_td ltx_align_left">SDPA</td>
+<td class="ltx_td ltx_align_left">eager</td>
+<td class="ltx_td ltx_align_right">18.92</td>
+<td class="ltx_td ltx_nopad_r ltx_align_right"><math alttext="1.36\times" class="ltx_math_unparsed" display="inline" id="S4.T2.m5"><semantics><mrow><mn>1.36</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">1.36\times</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">fp8</td>
+<td class="ltx_td ltx_align_left">SDPA</td>
+<td class="ltx_td ltx_align_left">compile</td>
+<td class="ltx_td ltx_align_right">18.91</td>
+<td class="ltx_td ltx_nopad_r ltx_align_right"><math alttext="1.36\times" class="ltx_math_unparsed" display="inline" id="S4.T2.m6"><semantics><mrow><mn>1.36</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">1.36\times</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t" colspan="5"><em class="ltx_emph ltx_font_italic">Decode (KV-cache reuse, GPU memcpy overhead included)</em></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">bf16</td>
+<td class="ltx_td ltx_align_left">SDPA</td>
+<td class="ltx_td ltx_align_left">compile</td>
+<td class="ltx_td ltx_align_right">10.42</td>
+<td class="ltx_td ltx_nopad_r ltx_align_right"><math alttext="2.47\times" class="ltx_math_unparsed" display="inline" id="S4.T2.m7"><semantics><mrow><mn>2.47</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">2.47\times</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">bf16</td>
+<td class="ltx_td ltx_align_left">flex</td>
+<td class="ltx_td ltx_align_left">compile*</td>
+<td class="ltx_td ltx_align_right">
+<span class="ltx_text ltx_phantom"><span style="visibility:hidden">0</span></span>8.57</td>
+<td class="ltx_td ltx_nopad_r ltx_align_right"><math alttext="3.00\times" class="ltx_math_unparsed" display="inline" id="S4.T2.m8"><semantics><mrow><mn>3.00</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">3.00\times</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">fp8</td>
+<td class="ltx_td ltx_align_left">SDPA</td>
+<td class="ltx_td ltx_align_left">graph</td>
+<td class="ltx_td ltx_align_right">
+<span class="ltx_text ltx_phantom"><span style="visibility:hidden">0</span></span>8.77</td>
+<td class="ltx_td ltx_nopad_r ltx_align_right"><math alttext="2.93\times" class="ltx_math_unparsed" display="inline" id="S4.T2.m9"><semantics><mrow><mn>2.93</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">2.93\times</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb">fp8</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">flex</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">graph</td>
+<td class="ltx_td ltx_align_right ltx_border_bb">
+<span class="ltx_text ltx_phantom ltx_font_bold"><span style="visibility:hidden">0</span></span><span class="ltx_text ltx_font_bold">6.56</span>
+</td>
+<td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_bb"><math alttext="\mathbf{3.92\times}" class="ltx_math_unparsed" display="inline" id="S4.T2.m10"><semantics><mrow><mn class="ltx_mathvariant_bold" mathvariant="bold">3.92</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">\mathbf{3.92\times}</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure class="ltx_table" id="S4.T3">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 3. </span>在受控 GPU 活动/预算下的线上服务收益。基线对检索和排序均使用（bf16、SDPA、torch.compile），所有数字均为相对该联合基线的百分比变化。*用于第 <a class="ltx_ref" href="#S5" title="5. Online A/B Experiments (RQ3) ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">5</span></a> 节的线上实验</figcaption>
+<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text ltx_font_bold">Variant</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">
+<span class="ltx_text ltx_font_bold">E2E latency</span> <math alttext="\downarrow" class="ltx_Math" display="inline" id="S4.T3.m1"><semantics><mo stretchy="false">↓</mo><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math>
+</th>
+<th class="ltx_td ltx_nopad_r ltx_align_center ltx_th ltx_th_column ltx_border_tt">
+<span class="ltx_text ltx_font_bold">QPS lift</span> <math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T3.m2"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</th>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_t">baseline</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">—</th>
+<th class="ltx_td ltx_nopad_r ltx_align_center ltx_th ltx_th_column ltx_border_t">—</th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">+ bf16 decode flex compile*</th>
+<td class="ltx_td ltx_align_center"><math alttext="-11.1\%" class="ltx_Math" display="inline" id="S4.T3.m3"><semantics><mrow><mo>−</mo><mrow><mn>11.1</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">-11.1\%</annotation></semantics></math></td>
+<td class="ltx_td ltx_nopad_r ltx_align_center"><math alttext="+63.6\%" class="ltx_Math" display="inline" id="S4.T3.m4"><semantics><mrow><mo>+</mo><mrow><mn>63.6</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+63.6\%</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">+ fp8 decode flex graph</th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><math alttext="+6.7\%" class="ltx_Math" display="inline" id="S4.T3.m5"><semantics><mrow><mo>+</mo><mrow><mn>6.7</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+6.7\%</annotation></semantics></math></td>
+<td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb"><math alttext="+109.1\%" class="ltx_Math" display="inline" id="S4.T3.m6"><semantics><mrow><mo>+</mo><mrow><mn>109.1</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+109.1\%</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div class="ltx_para" id="S4.SS2.p3">
+<p class="ltx_p">我们进一步在线上条件下对 bf16 和 fp8 的最佳组合进行基准测试（表 <a class="ltx_ref" href="#S4.T3" title="Table 3 ‣ 4.2. Co-serve a Retrieval and Ranking Model (RQ2) ‣ 4. Results ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">3</span></a>）。
+我们观察到的 fp8 内核的一个主要权衡是，需要等待并累积请求以形成更大的批大小，以满足 Transformer Engine 的形状约束，即展平后的首维 <math alttext="[B*S,D]" class="ltx_Math" display="inline" id="S4.SS2.p3.m1"><semantics><mrow><mo stretchy="false">[</mo><mrow><mi>B</mi><mo lspace="0.222em" rspace="0.222em">∗</mo><mi>S</mi></mrow><mo>,</mo><mi>D</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[B*S,D]</annotation></semantics></math> 必须是 8 的倍数；这主要约束了检索前向传播中 <math alttext="S=1" class="ltx_Math" display="inline" id="S4.SS2.p3.m2"><semantics><mrow><mi>S</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">S=1</annotation></semantics></math> 的自回归步骤。结果导致 QPS 增加，但延迟更大。对于所报告的线上实验，我们使用了 bf16，但计划在后续步骤中继续采用 fp8。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.3. </span>消融实验</h3>
+<section class="ltx_subsubsection" id="S4.SS3.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.3.1. </span>MAM 中掩码比例的影响</h4>
+<div class="ltx_para" id="S4.SS3.SSS1.p1">
+<p class="ltx_p">掩码动作建模（MAM）的一个核心设计选择是掩码概率 <math alttext="p_{\text{mask}}" class="ltx_Math" display="inline" id="S4.SS3.SSS1.p1.m1"><semantics><msub><mi>p</mi><mtext>mask</mtext></msub><annotation encoding="application/x-tex">p_{\text{mask}}</annotation></semantics></math>，它控制在训练期间用户序列中的历史动作被随机掩码的频率。我们通过在相同数据和超参数下训练 <math alttext="p_{\text{mask}}\in\{0.0,0.1,0.2,0.3\}" class="ltx_Math" display="inline" id="S4.SS3.SSS1.p1.m2"><semantics><mrow><msub><mi>p</mi><mtext>mask</mtext></msub><mo>∈</mo><mrow><mo stretchy="false">{</mo><mn>0.0</mn><mo>,</mo><mn>0.1</mn><mo>,</mo><mn>0.2</mn><mo>,</mo><mn>0.3</mn><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">p_{\text{mask}}\in\{0.0,0.1,0.2,0.3\}</annotation></semantics></math> 的变体来消融这一选择，保持所有其他架构决策不变。</p>
+</div>
+<section class="ltx_paragraph" id="S4.SS3.SSS1.Px1">
+<h5 class="ltx_title ltx_title_paragraph">结果。</h5>
+<div class="ltx_para" id="S4.SS3.SSS1.Px1.p1">
+<p class="ltx_p">表 <a class="ltx_ref" href="#S4.T4" title="Table 4 ‣ Results. ‣ 4.3.1. Effect of Masking Ratio in MAM ‣ 4.3. Ablations ‣ 4. Results ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">4</span></a> 显示，<em class="ltx_emph ltx_font_italic">任何</em>掩码均优于不掩码（<math alttext="p_{\text{mask}}=0" class="ltx_Math" display="inline" id="S4.SS3.SSS1.Px1.p1.m1"><semantics><mrow><msub><mi>p</mi><mtext>mask</mtext></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">p_{\text{mask}}=0</annotation></semantics></math>）。零掩码基线取得最低的 Hit@3，证实额外的动作预测信号和正则化均有助于提升排序质量。
+其中 <math alttext="p_{\text{mask}}=0.2" class="ltx_Math" display="inline" id="S4.SS3.SSS1.Px1.p1.m2"><semantics><mrow><msub><mi>p</mi><mtext>mask</mtext></msub><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">p_{\text{mask}}=0.2</annotation></semantics></math> 取得最佳整体性能。更高的掩码（<math alttext="p_{\text{mask}}=0.3" class="ltx_Math" display="inline" id="S4.SS3.SSS1.Px1.p1.m3"><semantics><mrow><msub><mi>p</mi><mtext>mask</mtext></msub><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">p_{\text{mask}}=0.3</annotation></semantics></math>）显示出收益递减，可能是因为过于激进的掩码从用户历史中移除了过多信号。</p>
+</div>
+<figure class="ltx_table" id="S4.T4">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 4. </span>MAM 中动作掩码比例 <math alttext="p_{\text{mask}}" class="ltx_Math" display="inline" id="S4.T4.m2"><semantics><msub><mi>p</mi><mtext>mask</mtext></msub><annotation encoding="application/x-tex">p_{\text{mask}}</annotation></semantics></math> 的影响。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示。</figcaption>
+<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><math alttext="p_{\text{mask}}" class="ltx_Math" display="inline" id="S4.T4.m3"><semantics><msub><mi>p</mi><mtext class="ltx_mathvariant_bold">mask</mtext></msub><annotation encoding="application/x-tex">p_{\text{mask}}</annotation></semantics></math></th>
+<th class="ltx_td ltx_nopad_r ltx_align_center ltx_th ltx_th_column ltx_border_tt">
+<span class="ltx_text ltx_font_bold">Hit@3</span> <math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m4"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">0.0 (no masking)</th>
+<td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_t">0.09923</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">0.1</th>
+<td class="ltx_td ltx_nopad_r ltx_align_center">0.10078</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">0.2</th>
+<td class="ltx_td ltx_nopad_r ltx_align_center"><span class="ltx_text ltx_font_bold">0.10096</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">0.3</th>
+<td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb">0.10075</td>
+</tr>
+</tbody>
+</table>
+</figure>
+</section>
+</section>
+<section class="ltx_subsubsection" id="S4.SS3.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.3.2. </span>模型缩放的影响</h4>
+<figure class="ltx_figure" id="S4.F4"><svg class="ltx_picture ltx_centering" height="156.95" id="S4.F4.pic1" overflow="visible" version="1.1" width="596.33"><g fill="#000000" stroke="#000000" stroke-width="0.4pt" transform="translate(0,156.95) matrix(1 0 0 -1 0 0) translate(58.32,0) translate(0,39.48) matrix(1.0 0.0 0.0 1.0 -58.32 -39.48)"><g class="ltx_nestedsvg" transform="matrix(1 0 0 1 0 0) translate(58.32,0) translate(0,39.48)"><g color="#BFBFBF" fill="#BFBFBF" stroke="#BFBFBF" stroke-dasharray="3.0pt,3.0pt" stroke-dashoffset="0.0pt" stroke-width="0.4pt"><path d="M 0 12.09 L 537.73 12.09 M 0 36.28 L 537.73 36.28 M 0 60.47 L 537.73 60.47 M 0 84.66 L 537.73 84.66 M 0 108.84 L 537.73 108.84" style="fill:none"></path></g><g color="#808080" fill="#808080" stroke="#808080" stroke-width="0.2pt"><path d="M 0 0 L 0 5.91 M 34.69 0 L 34.69 5.91 M 69.39 0 L 69.39 5.91 M 104.08 0 L 104.08 5.91 M 138.77 0 L 138.77 5.91 M 173.46 0 L 173.46 5.91 M 208.16 0 L 208.16 5.91 M 242.85 0 L 242.85 5.91 M 277.54 0 L 277.54 5.91 M 312.23 0 L 312.23 5.91 M 346.93 0 L 346.93 5.91 M 381.62 0 L 381.62 5.91 M 416.31 0 L 416.31 5.91 M 451 0 L 451 5.91 M 485.7 0 L 485.7 5.91 M 520.39 0 L 520.39 5.91 M 0 114.89 L 0 108.99 M 34.69 114.89 L 34.69 108.99 M 69.39 114.89 L 69.39 108.99 M 104.08 114.89 L 104.08 108.99 M 138.77 114.89 L 138.77 108.99 M 173.46 114.89 L 173.46 108.99 M 208.16 114.89 L 208.16 108.99 M 242.85 114.89 L 242.85 108.99 M 277.54 114.89 L 277.54 108.99 M 312.23 114.89 L 312.23 108.99 M 346.93 114.89 L 346.93 108.99 M 381.62 114.89 L 381.62 108.99 M 416.31 114.89 L 416.31 108.99 M 451 114.89 L 451 108.99 M 485.7 114.89 L 485.7 108.99 M 520.39 114.89 L 520.39 108.99" style="fill:none"></path></g><g color="#808080" fill="#808080" stroke="#808080" stroke-width="0.2pt"><path d="M 0 12.09 L 5.91 12.09 M 0 36.28 L 5.91 36.28 M 0 60.47 L 5.91 60.47 M 0 84.66 L 5.91 84.66 M 0 108.84 L 5.91 108.84 M 537.73 12.09 L 531.83 12.09 M 537.73 36.28 L 531.83 36.28 M 537.73 60.47 L 531.83 60.47 M 537.73 84.66 L 531.83 84.66 M 537.73 108.84 L 531.83 108.84" style="fill:none"></path></g><g fill="#000000" stroke="#000000" stroke-width="0.4pt"><path d="M 0 0 L 0 114.89 L 537.73 114.89 L 537.73 0 L 0 0 Z" style="fill:none"></path><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 -3.11 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="6.23"><math alttext="0" class="ltx_Math" display="inline" id="S4.F4.pic1.m1"><mn mathsize="90%">0</mn></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 31.58 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="6.23"><math alttext="1" class="ltx_Math" display="inline" id="S4.F4.pic1.m2"><semantics><mn mathsize="90%">1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 66.27 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="6.23"><math alttext="2" class="ltx_Math" display="inline" id="S4.F4.pic1.m3"><semantics><mn mathsize="90%">2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 100.96 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="6.23"><math alttext="3" class="ltx_Math" display="inline" id="S4.F4.pic1.m4"><semantics><mn mathsize="90%">3</mn><annotation encoding="application/x-tex">3</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 135.66 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="6.23"><math alttext="4" class="ltx_Math" display="inline" id="S4.F4.pic1.m5"><semantics><mn mathsize="90%">4</mn><annotation encoding="application/x-tex">4</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 170.35 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="6.23"><math alttext="5" class="ltx_Math" display="inline" id="S4.F4.pic1.m6"><semantics><mn mathsize="90%">5</mn><annotation encoding="application/x-tex">5</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 205.04 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="6.23"><math alttext="6" class="ltx_Math" display="inline" id="S4.F4.pic1.m7"><semantics><mn mathsize="90%">6</mn><annotation encoding="application/x-tex">6</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 239.73 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="6.23"><math alttext="7" class="ltx_Math" display="inline" id="S4.F4.pic1.m8"><semantics><mn mathsize="90%">7</mn><annotation encoding="application/x-tex">7</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 274.43 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="6.23"><math alttext="8" class="ltx_Math" display="inline" id="S4.F4.pic1.m9"><semantics><mn mathsize="90%">8</mn><annotation encoding="application/x-tex">8</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 309.12 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="6.23"><math alttext="9" class="ltx_Math" display="inline" id="S4.F4.pic1.m10"><semantics><mn mathsize="90%">9</mn><annotation encoding="application/x-tex">9</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 340.7 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="12.45"><math alttext="10" class="ltx_Math" display="inline" id="S4.F4.pic1.m11"><semantics><mn mathsize="90%">10</mn><annotation encoding="application/x-tex">10</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 375.39 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="12.45"><math alttext="11" class="ltx_Math" display="inline" id="S4.F4.pic1.m12"><semantics><mn mathsize="90%">11</mn><annotation encoding="application/x-tex">11</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 410.08 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="12.45"><math alttext="12" class="ltx_Math" display="inline" id="S4.F4.pic1.m13"><semantics><mn mathsize="90%">12</mn><annotation encoding="application/x-tex">12</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 444.78 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="12.45"><math alttext="13" class="ltx_Math" display="inline" id="S4.F4.pic1.m14"><semantics><mn mathsize="90%">13</mn><annotation encoding="application/x-tex">13</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 479.47 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="12.45"><math alttext="14" class="ltx_Math" display="inline" id="S4.F4.pic1.m15"><semantics><mn mathsize="90%">14</mn><annotation encoding="application/x-tex">14</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 514.16 -12.91)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="12.45"><math alttext="15" class="ltx_Math" display="inline" id="S4.F4.pic1.m16"><semantics><mn mathsize="90%">15</mn><annotation encoding="application/x-tex">15</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 -35.56 8.08)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="30.67"><math alttext="0.096" class="ltx_Math" display="inline" id="S4.F4.pic1.m17"><semantics><mn mathsize="90%">0.096</mn><annotation encoding="application/x-tex">0.096</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 -35.56 32.27)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="30.67"><math alttext="0.098" class="ltx_Math" display="inline" id="S4.F4.pic1.m18"><semantics><mn mathsize="90%">0.098</mn><annotation encoding="application/x-tex">0.098</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 -23.11 56.46)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="18.22"><math alttext="0.1" class="ltx_Math" display="inline" id="S4.F4.pic1.m19"><semantics><mn mathsize="90%">0.1</mn><annotation encoding="application/x-tex">0.1</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 -35.56 80.64)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="30.67"><math alttext="0.102" class="ltx_Math" display="inline" id="S4.F4.pic1.m20"><semantics><mn mathsize="90%">0.102</mn><annotation encoding="application/x-tex">0.102</annotation></semantics></math></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 -35.56 104.83)"><foreignobject height="8.03" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="30.67"><math alttext="0.104" class="ltx_Math" display="inline" id="S4.F4.pic1.m21"><semantics><mn mathsize="90%">0.104</mn><annotation encoding="application/x-tex">0.104</annotation></semantics></math></foreignobject></g><clippath id="pgfcp1"><path d="M 0 0 L 537.73 0 L 537.73 114.89 L 0 114.89 Z"></path></clippath><g clip-path="url(#pgfcp1)"><g color="#4C72B0" fill="#4C72B0" stroke="#4C72B0" stroke-width="0.8pt"><path d="M 34.69 10.16 L 69.39 42.93 L 138.77 62.77 L 208.16 72.08 L 416.31 78.25" style="fill:none"></path></g><g></g><g color="#DD8452" fill="#DD8452" stroke="#DD8452" stroke-width="0.8pt"><path d="M 45.1 17.78 L 93.67 39.79 L 208.16 72.08 L 492.63 103.16" style="fill:none"></path></g><g></g></g><g color="#4C72B0" fill="#4C72B0" stroke="#4C72B0" stroke-width="0.8pt"><path d="M 31.93 7.39 h 5.53 v 5.53 h -5.53 Z"></path><path d="M 66.62 40.17 h 5.53 v 5.53 h -5.53 Z"></path><path d="M 136 60 h 5.53 v 5.53 h -5.53 Z"></path><path d="M 205.39 69.31 h 5.53 v 5.53 h -5.53 Z"></path><path d="M 413.54 75.48 h 5.53 v 5.53 h -5.53 Z"></path></g><g color="#DD8452" fill="#DD8452" stroke="#DD8452" stroke-width="0.8pt"><path d="M 47.87 17.78 C 47.87 19.31 46.63 20.55 45.1 20.55 C 43.57 20.55 42.33 19.31 42.33 17.78 C 42.33 16.25 43.57 15.01 45.1 15.01 C 46.63 15.01 47.87 16.25 47.87 17.78 Z M 45.1 17.78"></path><path d="M 96.44 39.79 C 96.44 41.32 95.2 42.56 93.67 42.56 C 92.14 42.56 90.9 41.32 90.9 39.79 C 90.9 38.26 92.14 37.02 93.67 37.02 C 95.2 37.02 96.44 38.26 96.44 39.79 Z M 93.67 39.79"></path><path d="M 210.92 72.08 C 210.92 73.61 209.68 74.85 208.16 74.85 C 206.63 74.85 205.39 73.61 205.39 72.08 C 205.39 70.55 206.63 69.31 208.16 69.31 C 209.68 69.31 210.92 70.55 210.92 72.08 Z M 208.16 72.08"></path><path d="M 495.4 103.16 C 495.4 104.69 494.16 105.93 492.63 105.93 C 491.11 105.93 489.87 104.69 489.87 103.16 C 489.87 101.63 491.11 100.39 492.63 100.39 C 494.16 100.39 495.4 101.63 495.4 103.16 Z M 492.63 103.16"></path></g><g fill="#000000" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 160.83 -31.75)"><foreignobject height="12.45" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="216.07"><span class="ltx_text" style="font-size:90%;">Relative FLOPs (<math alttext="1{\times}" class="ltx_math_unparsed" display="inline" id="S4.F4.pic1.m22"><semantics><mrow><mn>1</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">1{\times}</annotation></semantics></math> = smallest model)</span></foreignobject></g><g fill="#000000" stroke="#000000" transform="matrix(0.0 1.0 -1.0 0.0 -45.06 40.67)"><foreignobject height="8.65" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="33.55"><span class="ltx_text" style="font-size:90%;">Hit@3</span></foreignobject></g><g fill="#FFFFFF" stroke="#000000"><path d="M 278.15 3.72 h 243.18 v 39.44 h -243.18 Z"></path></g><g fill="#FFFFFF" stroke="#000000" transform="matrix(1.0 0.0 0.0 1.0 282.3 6.49)"><g class="ltx_tikzmatrix" transform="matrix(1 0 0 -1 0 25.425)"><g class="ltx_tikzmatrix_row" transform="matrix(1 0 0 1 0 8.48)"><g class="ltx_tikzmatrix_col ltx_nopad_l ltx_nopad_r" color="#4C72B0" fill="#4C72B0" stroke="#4C72B0" stroke-width="0.8pt" transform="matrix(1 0 0 -1 0 0) translate(0.55,0)"><path d="M 0 0 L 11.81 0 L 23.62 0" style="fill:none"></path><path d="M 9.04 -2.77 h 5.53 v 5.53 h -5.53 Z"></path></g><g class="ltx_tikzmatrix_col ltx_nopad_l ltx_nopad_r" fill="#000000" stroke="#000000" transform="matrix(1 0 0 -1 41.25 0) translate(88.56,0) matrix(1.0 0.0 0.0 1.0 -85.79 -3.63)"><foreignobject height="12.45" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="171.58"><span class="ltx_text" style="font-size:90%;">Depth (L=2,4,8,12,24; S=1024)</span></foreignobject></g></g><g class="ltx_tikzmatrix_row" transform="matrix(1 0 0 1 0 25.43)"><g class="ltx_tikzmatrix_col ltx_nopad_l ltx_nopad_r" color="#DD8452" fill="#DD8452" stroke="#DD8452" stroke-width="0.8pt" transform="matrix(1 0 0 -1 0 0) translate(0.55,0)"><path d="M 0 0 L 11.81 0 L 23.62 0" style="fill:none"></path><path d="M 14.58 0 C 14.58 1.53 13.34 2.77 11.81 2.77 C 10.28 2.77 9.04 1.53 9.04 0 C 9.04 -1.53 10.28 -2.77 11.81 -2.77 C 13.34 -2.77 14.58 -1.53 14.58 0 Z M 11.81 0"></path></g><g class="ltx_tikzmatrix_col ltx_nopad_l ltx_nopad_r" fill="#000000" stroke="#000000" transform="matrix(1 0 0 -1 24.73 0) translate(105.07,0) matrix(1.0 0.0 0.0 1.0 -102.31 -3.63)"><foreignobject height="12.45" overflow="visible" transform="matrix(1 0 0 -1 0 16.6)" width="204.62"><span class="ltx_text" style="font-size:90%;">Seq length (S=256,512,1K,2K; L=12)</span></foreignobject></g></g></g></g></g></g></g></svg>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4. </span>深度和序列长度缩放的 Hit@3 与相对 FLOPs 关系。FLOPs 归一化到最小模型（<math alttext="L{=}2" class="ltx_Math" display="inline" id="S4.F4.m4"><semantics><mrow><mi>L</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">L{=}2</annotation></semantics></math>、<math alttext="S{=}1024" class="ltx_Math" display="inline" id="S4.F4.m5"><semantics><mrow><mi>S</mi><mo>=</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">S{=}1024</annotation></semantics></math>）。两个系列均使用 MAM 与 <math alttext="p_{\text{mask}}=0.2" class="ltx_Math" display="inline" id="S4.F4.m6"><semantics><mrow><msub><mi>p</mi><mtext>mask</mtext></msub><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">p_{\text{mask}}=0.2</annotation></semantics></math>。</figcaption>
+</figure>
+<div class="ltx_para" id="S4.SS3.SSS2.p1">
+<p class="ltx_p">我们研究模型容量如何通过两个维度影响排序性能：transformer 深度和序列长度。
+理解这些权衡对部署至关重要，因为两个维度都会影响模型质量、训练成本和服务延迟。</p>
+</div>
+<section class="ltx_paragraph" id="S4.SS3.SSS2.Px1">
+<h5 class="ltx_title ltx_title_paragraph">结果。</h5>
+<div class="ltx_para" id="S4.SS3.SSS2.Px1.p1">
+<p class="ltx_p">我们训练了不同深度（2、4、8、12、24 层）且序列长度固定为 1024 个词元的模型，以及不同序列长度（256、512、1024、2048 个词元）且固定 12 层模型的变体。两个维度均使用带 <math alttext="p_{\text{mask}}=0.2" class="ltx_Math" display="inline" id="S4.SS3.SSS2.Px1.p1.m1"><semantics><mrow><msub><mi>p</mi><mtext>mask</mtext></msub><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">p_{\text{mask}}=0.2</annotation></semantics></math> 的 MAM。图 <a class="ltx_ref" href="#S4.F4" title="Figure 4 ‣ 4.3.2. Effect of Model Scaling ‣ 4.3. Ablations ‣ 4. Results ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">4</span></a> 显示，性能在两个缩放轴上均持续提升，表明统一模型在容量上尚未饱和。然而，成本影响差异显著：深度随计算线性缩放，而序列长度对注意力产生二次成本。这使得序列长度成为延迟敏感型应用中更严重的瓶颈，尽管两个维度都显示出持续的质量提升。
+更长序列带来的显著收益表明，序列压缩技术是一条有前景的方向，能够在降低成本的条件下获得更长上下文的质量收益。</p>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5. </span>线上 A/B 实验（RQ3）</h2>
+<div class="ltx_para" id="S5.p1">
+<p class="ltx_p">我们通过受控的 A/B 实验在生产环境中评估 UniPinRec，将统一模型与 PinRec <cite class="ltx_cite ltx_citemacro_citep">(Agarwal et al., <a class="ltx_ref" href="#bib.bib2" title="">2025</a>)</cite>（生产检索基线）进行比较。这验证了全栈统一能否在真实流量中带来参与度提升，同时保持实际的服务效率，并回答了第三个 RQ：我们能否对现有生产推荐系统实现这种高度模块化的扩展。</p>
+</div>
+<section class="ltx_subsection" id="S5.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.1. </span>实验设置</h3>
+<section class="ltx_paragraph" id="S5.SS1.SSS0.Px1">
+<h5 class="ltx_title ltx_title_paragraph">部署配置。</h5>
+<div class="ltx_para" id="S5.SS1.SSS0.Px1.p1">
+<p class="ltx_p">我们比较候选生成器的两种设置，两者均向下游阶段返回 K(&lt;3000) 个候选：</p>
+</div>
+<div class="ltx_para" id="S5.SS1.SSS0.Px1.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">基线（PinRec）：</span>生产检索模型通过 ANN 搜索生成 K 个候选，直接传递到下游排序阶段。</p>
+</div>
+<div class="ltx_para" id="S5.SS1.SSS0.Px1.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">UniPinRec：</span>统一模型首先通过 ANN 搜索超额获取候选（L0），然后立即使用排序头（L1）结合动作预测对其进行排序，并将 top K 排序候选（基于头部效用函数）返回给下游阶段。</p>
+</div>
+<div class="ltx_para" id="S5.SS1.SSS0.Px1.p4">
+<p class="ltx_p">值得注意的是，在线上实验中，我们用统一的 L0 + L1 打分服务器替换检索阶段，并仍然将精炼后的候选发送到基于 TransAct V2 <cite class="ltx_cite ltx_citemacro_citep">(Xia et al., <a class="ltx_ref" href="#bib.bib25" title="">2025</a>)</cite> 的下游生产排序器，以严格验证指标提升。这也意味着离线提升会被衰减和稀释。</p>
+</div>
+<div class="ltx_para" id="S5.SS1.SSS0.Px1.p5">
+<p class="ltx_p">我们在两个生产场景上运行 A/B 实验：Board More Ideas（L0 超额获取比例约 2 倍）和 Notification（L0 超额获取比例约 3 倍）。两个场景每天服务数百万用户。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S5.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.2. </span>Board More Ideas</h3>
+<div class="ltx_para" id="S5.SS2.p1">
+<p class="ltx_p">Board More Ideas（BMI）推荐锚定在用户图板上的 Pin。
+为实现这一点，我们将 UniPinRec 扩展为支持“图板”作为除 Pin 和搜索查询之外的新序列模态。</p>
+</div>
+<section class="ltx_paragraph" id="S5.SS2.SSS0.Px1">
+<h5 class="ltx_title ltx_title_paragraph">结果。</h5>
+<div class="ltx_para" id="S5.SS2.SSS0.Px1.p1">
+<p class="ltx_p">表 <a class="ltx_ref" href="#S5.T5" title="Table 5 ‣ Results. ‣ 5.2. Board More Ideas ‣ 5. Online A/B Experiments (RQ3) ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">5</span></a> 显示，UniPinRec 相比 PinRec 基线提供了强劲的参与度提升，场景 save 提升为 <span class="ltx_text ltx_font_bold">+0.95%</span>，表明统一的检索与排序方法相比仅检索显著改善了候选质量，同时也带来了 <span class="ltx_text ltx_font_bold">+0.08%</span> 的全站提升，证实更好的 BMI 推荐对整体平台参与度产生了积极影响。</p>
+</div>
+<figure class="ltx_table" id="S5.T5">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 5. </span>Board More Ideas 上的线上 A/B 结果。提升显示 UniPinRec L0+L1 对比 PinRec 基线。</figcaption>
+<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_column ltx_th_row ltx_border_tt">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:260.2pt;"><span class="ltx_text ltx_font_bold">Metric</span></span>
+</span>
+</th>
+<th class="ltx_td ltx_nopad_r ltx_align_right ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold">UniPinRec</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:260.2pt;">BMI surface saves</span>
+</span>
+</th>
+<td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_t"><span class="ltx_text ltx_font_bold">+0.95%</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row ltx_border_bb">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:260.2pt;">Site-wide saves</span>
+</span>
+</th>
+<td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_bb"><span class="ltx_text ltx_font_bold">+0.08%</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+</section>
+</section>
+<section class="ltx_subsection" id="S5.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.3. </span>通知</h3>
+<div class="ltx_para" id="S5.SS3.p1">
+<p class="ltx_p">Pinterest 使用电子邮件和推送通知向用户传递相关内容。这些通知是用户召回和长期留存的重要手段。</p>
+</div>
+<section class="ltx_paragraph" id="S5.SS3.SSS0.Px1">
+<h5 class="ltx_title ltx_title_paragraph">结果。</h5>
+<div class="ltx_para" id="S5.SS3.SSS0.Px1.p1">
+<p class="ltx_p">表 <a class="ltx_ref" href="#S5.T6" title="Table 6 ‣ Results. ‣ 5.3. Notifications ‣ 5. Online A/B Experiments (RQ3) ‣ UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale"><span class="ltx_text ltx_ref_tag">6</span></a> 显示，用 UniPinRec 排序器替换仅检索的 PinRec 基线，在各项通知参与度指标上均带来一致收益，其中通知场景 save 的提升最大。休眠用户推送打开提升为 <span class="ltx_text ltx_font_bold">+1.72%</span>，约为全用户提升的两倍，表明更个性化的通知推荐在召回流失用户方面尤其有效，并显著将 WAU 提升了 <span class="ltx_text ltx_font_bold">0.09%</span>。</p>
+</div>
+<figure class="ltx_table" id="S5.T6">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 6. </span>通知上的线上 A/B 结果。提升显示 UniPinRec 对比 PinRec 基线，以去重用户为基准测量。</figcaption>
+<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_column ltx_th_row ltx_border_tt">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:260.2pt;"><span class="ltx_text ltx_font_bold">Metric</span></span>
+</span>
+</th>
+<th class="ltx_td ltx_nopad_r ltx_align_right ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold">UniPinRec</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:260.2pt;">Push opens</span>
+</span>
+</th>
+<td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_t"><span class="ltx_text ltx_font_bold">+0.91%</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:260.2pt;">Push opens (dormant users)</span>
+</span>
+</th>
+<td class="ltx_td ltx_nopad_r ltx_align_right"><span class="ltx_text ltx_font_bold">+1.72%</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:260.2pt;">Notification surface saves</span>
+</span>
+</th>
+<td class="ltx_td ltx_nopad_r ltx_align_right"><span class="ltx_text ltx_font_bold">+3.84%</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:260.2pt;">Email clicks</span>
+</span>
+</th>
+<td class="ltx_td ltx_nopad_r ltx_align_right"><span class="ltx_text ltx_font_bold">+0.30%</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row ltx_border_bb">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:260.2pt;">Weekly active users</span>
+</span>
+</th>
+<td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_bb"><span class="ltx_text ltx_font_bold">+0.09%</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+</section>
+</section>
+</section>
+<section class="ltx_section" id="S6">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">6. </span>结论</h2>
+<div class="ltx_para" id="S6.p1">
+<p class="ltx_p">我们提出了 UniPinRec，这是首个在生产推荐系统中部署的检索与排序全栈统一方案。
+在实证上，该统一模型检索召回率与生产基线相当，排序质量超过专用排序器，并在提升 QPS 的同时降低端到端延迟，能够呈现此前漏斗流程所遗漏的候选，并在线上转化为净互动量的提升。</p>
+</div>
+<div class="ltx_para" id="S6.p2">
+<p class="ltx_p">UniPinRec 目前将检索与上层漏斗排序统一起来，而这一环节的主干冗余最为严重。
+它尚未取代 L2 排序器，因为后者在分数校准、训练数据记录和运维工具方面还有额外的基础设施依赖，超出了本工作的直接范围。我们采取逐步上线的策略，并计划将统一工作扩展到 L2 阶段，并横向扩展到更多场景（搜索、广告）作为下一步。</p>
+</div>
+<div class="ltx_para" id="S6.p3">
+<p class="ltx_p">在架构上，UniPinRec 类似于检索增强生成：主干网络形成一个查询，ANN 索引充当非参数化记忆，而排序器通过同一缓存上下文生成动作概率。
+这种相似性提示可以从 RAG 文献中借鉴，例如迭代检索和可学习的检索深度控制，作为未来的研究方向。</p>
+</div>
+<div class="ltx_para" id="S6.p4">
+<p class="ltx_p">此前的统一模型已经证明检索与排序可以共享一种架构。
+UniPinRec 表明，更困难的问题——统一输入格式、训练和服务基础设施——在当今生产环境中同样可以解决。</p>
+</div>
+<div class="ltx_acknowledgements">
+<h6 class="ltx_title ltx_title_acknowledgements">致谢。</h6>
+我们感谢 Kyle Soares、Pihui Wei、Anirudhan Badrinath、Edoardo Botta、Devin Kreuzer、Josie Zeng、Chi Zhang、Chen Yang、Po-Wei Wang、David Woo、Lei Wang、Lin Zhu、Kritarth Anand、Bowen Deng、Matt Chun、Zisis Petrou、Dimitra Tsiaousi、Dylan Wang 等合作者在整个工作开发过程中给予的有益支持、宝贵反馈和富有洞见的讨论。
+
+</div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">参考文献</h2>
+<ul class="ltx_biblist">
+<li class="ltx_bibitem" id="bib.bib2">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Agarwal et al. (2025)</span>
+<span class="ltx_bibblock">
+Prabhat Agarwal, Anirudhan
+Badrinath, Laksh Bhasin, Jaewon Yang,
+Edoardo Botta, Jiajing Xu, and
+Charles Rosenberg. 2025.
+
+</span>
+<span class="ltx_bibblock">PinRec: Outcome-Conditioned, Multi-Token
+Generative Retrieval for Industry-Scale Recommendation Systems.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2504.10507</em>
+(2025).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib3">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Agarwal et al. (2024)</span>
+<span class="ltx_bibblock">
+Prabhat Agarwal,
+Minhazul Islam SK, Nikil Pancha,
+Kurchi Subhra Hazra, Jiajing Xu, and
+Chuck Rosenberg. 2024.
+
+</span>
+<span class="ltx_bibblock">OmniSearchSage: Multi-Task Multi-Entity Embeddings
+for Pinterest Search. In <em class="ltx_emph ltx_font_italic">Companion Proceedings of
+the ACM Web Conference 2024</em> <em class="ltx_emph ltx_font_italic">(WWW ’24)</em>.
+ACM, 121–130.
+
+</span>
+<span class="ltx_bibblock"><a class="ltx_ref ltx_href" href="https://doi.org/10.1145/3589335.3648309" title="">doi:<span class="ltx_ref ltx_nolink">10.1145/3589335.3648309</span></a>
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib4">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Badrinath et al. (2025)</span>
+<span class="ltx_bibblock">
+Anirudhan Badrinath, Alex
+Yang, Kousik Rajesh, Prabhat Agarwal,
+Jaewon Yang, Haoyu Chen,
+Jiajing Xu, and Charles Rosenberg.
+2025.
+
+</span>
+<span class="ltx_bibblock">OmniSage: Large Scale, Multi-Entity Heterogeneous
+Graph Representation Learning. In <em class="ltx_emph ltx_font_italic">Proceedings of
+the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2</em>
+(Toronto ON, Canada) <em class="ltx_emph ltx_font_italic">(KDD ’25)</em>.
+Association for Computing Machinery,
+New York, NY, USA, 4261–4272.
+
+</span>
+<span class="ltx_bibblock">
+<a class="ltx_ref ltx_href" href="https://doi.org/10.1145/3711896.3737253" title="">doi:<span class="ltx_ref ltx_nolink">10.1145/3711896.3737253</span></a>
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib5">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Beal et al. (2026)</span>
+<span class="ltx_bibblock">
+Josh Beal, Eric Kim,
+Jinfeng Rao, Rex Wu,
+Dmitry Kislyuk, and Charles Rosenberg.
+2026.
+
+</span>
+<span class="ltx_bibblock">PinCLIP: Large-scale Foundational Multimodal
+Representation at Pinterest.
+
+</span>
+<span class="ltx_bibblock">arXiv:2603.03544 [cs.CV]
+
+<a class="ltx_ref ltx_url ltx_font_typewriter" href="https://arxiv.org/abs/2603.03544" title="">https://arxiv.org/abs/2603.03544</a>
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib6">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Cao et al. (2025)</span>
+<span class="ltx_bibblock">
+Yang Cao, Changhao Zhang,
+Xiaoshuang Chen, Kaiqiao Zhan, and
+Ben Wang. 2025.
+
+</span>
+<span class="ltx_bibblock">xMTF: A Formula-Free Model for
+Reinforcement-Learning-Based Multi-Task Fusion in Recommender Systems. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the ACM Web Conference 2025 (WWW)</em>.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib7">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Chen et al. (2025a)</span>
+<span class="ltx_bibblock">
+Jiahui Chen, Xiaoze
+Jiang, Zhibo Wang, Quanzhi Zhu,
+Junyao Zhao, Feng Hu,
+Kang Pan, Ao Xie, Maohua
+Pei, Zhiheng Qin, Hongjing Zhang,
+Zhixin Zhai, Xiaobo Guo,
+Runbin Zhou, Kefeng Wang,
+Mingyang Geng, Cheng Chen,
+Jingshan Lv, Yupeng Huang,
+Xiao Liang, and Han Li.
+2025a.
+
+</span>
+<span class="ltx_bibblock">UniSearch: Rethinking Search System with a Unified
+Generative Architecture.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2509.06887</em>
+(2025).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib8">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Chen et al. (2025b)</span>
+<span class="ltx_bibblock">
+Xiangyi Chen, Kousik
+Rajesh, Matthew Lawhon, Zelun Wang,
+Hanyu Li, Haomiao Li,
+Saurabh Vishwas Joshi, Pong Eksombatchai,
+Jaewon Yang, Yi-Ping Hsu,
+Jiajing Xu, and Charles Rosenberg.
+2025b.
+
+</span>
+<span class="ltx_bibblock">PinFM: Foundation Model for User Activity
+Sequences at a Billion-scale Visual Discovery Platform. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the 19th ACM Conference on
+Recommender Systems (RecSys)</em>. 381–390.
+
+</span>
+<span class="ltx_bibblock"><a class="ltx_ref ltx_href" href="https://doi.org/10.1145/3705328.3748050" title="">doi:<span class="ltx_ref ltx_nolink">10.1145/3705328.3748050</span></a>
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib9">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Chen et al. (2026)</span>
+<span class="ltx_bibblock">
+Zhimin Chen, Chenyu Zhao,
+Ka Chun Mo, Yunjiang Jiang,
+Jane H. Lee, Khushhall Chandra Mahajan,
+Ning Jiang, Kai Ren,
+Jinhui Li, and Wen-Yun Yang.
+2026.
+
+</span>
+<span class="ltx_bibblock">Massive Memorization with Hundreds of Trillions of
+Parameters for Sequential Transducer Generative Recommenders. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the International Conference on
+Learning Representations (ICLR)</em>.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib10">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Dai et al. (2025)</span>
+<span class="ltx_bibblock">
+Sunhao Dai, Jiakai Tang,
+Jiahua Wu, Kun Wang,
+Yuxuan Zhu, Bingjun Chen,
+Bangyang Hong, Yu Zhao,
+Cong Fu, Kangle Wu, Yabo
+Ni, Anxiang Zeng, Wenjie Wang,
+Xu Chen, Jun Xu, and
+See-Kiong Ng. 2025.
+
+</span>
+<span class="ltx_bibblock">OnePiece: Bringing Context Engineering and
+Reasoning to Industrial Cascade Ranking System.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2509.18091</em>
+(2025).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib11">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Deng et al. (2025)</span>
+<span class="ltx_bibblock">
+Jiaxin Deng, Shiyao Wang,
+Kuo Cai, Lejian Ren,
+Qigen Hu, Weifeng Ding,
+Qiang Luo, and Guorui Zhou.
+2025.
+
+</span>
+<span class="ltx_bibblock">OneRec: Unifying Retrieve and Rank with Generative
+Recommender and Iterative Preference Alignment.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2502.18965</em>
+(2025).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib12">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Ding et al. (2026)</span>
+<span class="ltx_bibblock">
+Yijie Ding, Zitian Guo,
+Jiacheng Li, Letian Peng,
+Shuai Shao, Wei Shao,
+Xiaoqiang Luo, Luke Simon,
+Jingbo Shang, Julian McAuley, and
+Yupeng Hou. 2026.
+
+</span>
+<span class="ltx_bibblock">How Well Does Generative Recommendation Generalize?
+
+</span>
+<span class="ltx_bibblock">arXiv:2603.19809 [cs.IR]
+
+<a class="ltx_ref ltx_url ltx_font_typewriter" href="https://arxiv.org/abs/2603.19809" title="">https://arxiv.org/abs/2603.19809</a>
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib13">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Gao et al. (2025)</span>
+<span class="ltx_bibblock">
+Vianne R. Gao, Chen Xue,
+Marc Versage, Xie Zhou,
+Zhongruo Wang, Chao Li,
+Yeon Seonwoo, Nan Chen,
+Zhen Ge, Gourab Kundu,
+Weiqi Zhang, Tian Wang,
+Qingjun Cui, and Trishul Chilimbi.
+2025.
+
+</span>
+<span class="ltx_bibblock">SynerGen: Contextualized Generative Recommender for
+Unified Search and Recommendation.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2509.21777</em>
+(2025).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib14">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Han et al. (2025)</span>
+<span class="ltx_bibblock">
+Ruidong Han, Bin Yin,
+Shangyu Chen, He Jiang,
+Fei Jiang, Xiang Li, Chi
+Ma, Mincong Huang, Xiaoguang Li,
+Chunzhen Jing, Yueming Han,
+Menglei Zhou, Lei Yu,
+Chuan Liu, and Wei Lin.
+2025.
+
+</span>
+<span class="ltx_bibblock">MTGR: Industrial-Scale Generative Recommendation
+Framework in Meituan. In <em class="ltx_emph ltx_font_italic">Proceedings of the 34th
+ACM International Conference on Information and Knowledge Management
+(CIKM)</em>. 5731–5738.
+
+</span>
+<span class="ltx_bibblock"><a class="ltx_ref ltx_href" href="https://doi.org/10.1145/3746252.3761565" title="">doi:<span class="ltx_ref ltx_nolink">10.1145/3746252.3761565</span></a>
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib15">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">He et al. (2024)</span>
+<span class="ltx_bibblock">
+Horace He et al.
+2024.
+
+</span>
+<span class="ltx_bibblock">Flex Attention: A Programming Model for Generating
+Optimized Attention Kernels.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2412.05496</em>
+(2024).
+
+</span>
+<span class="ltx_bibblock">
+<a class="ltx_ref ltx_url ltx_font_typewriter" href="https://arxiv.org/abs/2412.05496" title="">https://arxiv.org/abs/2412.05496</a>
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib16">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Hertel et al. (2025)</span>
+<span class="ltx_bibblock">
+Lars Hertel, Neil
+Daftary, Fedor Borisyuk, Aman Gupta,
+and Rahul Mazumder. 2025.
+
+</span>
+<span class="ltx_bibblock">Efficient User History Modeling with Amortized
+Inference for Deep Learning Recommendation Models. In
+<em class="ltx_emph ltx_font_italic">Companion Proceedings of the ACM Web Conference
+2025 (WWW)</em>.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib17">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Huang et al. (2025)</span>
+<span class="ltx_bibblock">
+Yanhua Huang, Yuqi Chen,
+Xiong Cao, Rui Yang,
+Mingliang Qi, Yinghao Zhu,
+Qingchang Han, Yaowei Liu,
+Zhaoyu Liu, Xuefeng Yao,
+Yuting Jia, Leilei Ma,
+Yinqi Zhang, Taoyu Zhu,
+Liujie Zhang, Lei Chen,
+Weihang Chen, Min Zhu,
+Ruiwen Xu, and Lei Zhang.
+2025.
+
+</span>
+<span class="ltx_bibblock">Towards Large-scale Generative Ranking.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">CoRR</em> abs/2505.04180
+(2025).
+
+</span>
+<span class="ltx_bibblock"><a class="ltx_ref ltx_href" href="https://doi.org/10.48550/ARXIV.2505.04180" title="">doi:<span class="ltx_ref ltx_nolink">10.48550/ARXIV.2505.04180</span></a>
+arXiv:2505.04180
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib18">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Moritz et al. (2018)</span>
+<span class="ltx_bibblock">
+Philipp Moritz, Robert
+Nishihara, Stephanie Wang, Alexey
+Tumanov, Richard Liaw, Eric Liang,
+Melih Elibol, Zongheng Yang,
+William Paul, Michael I. Jordan, and
+Ion Stoica. 2018.
+
+</span>
+<span class="ltx_bibblock">Ray: A Distributed Framework for Emerging AI
+Applications. In <em class="ltx_emph ltx_font_italic">13th USENIX Symposium on
+Operating Systems Design and Implementation (OSDI 18)</em>.
+561–577.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib19">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Pardoe et al. (2026)</span>
+<span class="ltx_bibblock">
+David Pardoe, Neil
+Daftary, Miro Furtado, Aditya Aiyer,
+Yu Wang, Liuqing Li, Tao
+Song, Lars Hertel, Young Jin Yun,
+Senthil Radhakrishnan, Zhiwei Wang,
+Tommy Li, Khai Tran,
+Ananth Nagarajan, Ali Naqvi,
+Yue Zhang, Renpeng Fang,
+Avi Romascanu, Arjun Kulothungun,
+Deepak Kumar, Praneeth Boda,
+Fedor Borisyuk, and Ruoyan Wang.
+2026.
+
+</span>
+<span class="ltx_bibblock">CADET: Context-Conditioned Ads CTR Prediction
+With a Decoder-Only Transformer.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2602.11410</em>
+(2026).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib20">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Su et al. (2026)</span>
+<span class="ltx_bibblock">
+Zhengyang Su, Isay
+Katsman, Yueqi Wang, Ruining He,
+Lukasz Heldt, Raghunandan Keshavan,
+Shao-Chuan Wang, Xinyang Yi,
+Mingyan Gao, Onkar Dalal,
+Lichan Hong, Ed Chi, and
+Ningren Han. 2026.
+
+</span>
+<span class="ltx_bibblock">STATIC: Vectorizing the Trie: Efficient
+Constrained Decoding for LLM-based Generative Retrieval on Accelerators.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2602.22647</em>
+(2026).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib21">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Sun et al. (2026b)</span>
+<span class="ltx_bibblock">
+Dekai Sun, Yiming Liu,
+Jiafan Zhou, Xun Liu,
+Chenchen Yu, Yi Li, Jun
+Zhang, Huan Yu, and Jie Jiang.
+2026b.
+
+</span>
+<span class="ltx_bibblock">OneRanker: Unified Generation and Ranking with One
+Model in Industrial Advertising Recommendation.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2603.02999</em>
+(2026).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib22">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Sun et al. (2026a)</span>
+<span class="ltx_bibblock">
+Yijia Sun, Shanshan
+Huang, Zhiyuan Guan, Qiang Luo,
+Ruiming Tang, Kun Gai, and
+Guorui Zhou. 2026a.
+
+</span>
+<span class="ltx_bibblock">GRank: Towards Target-Aware and Streamlined
+Industrial Retrieval with a Generate-Rank Framework. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the ACM Web Conference 2026 (WWW)</em>.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib23">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Wang et al. (2026)</span>
+<span class="ltx_bibblock">
+Jiarui Wang, Huichao
+Chai, Yuanhang Zhang, Zongjin Zhou,
+Wei Guo, Xingkun Yang,
+Qiang Tang, Bo Pan,
+Jiawei Zhu, Ke Cheng,
+Yuting Yan, Shulan Wang,
+Yingjie Zhu, Zhengfan Yuan,
+Jiaqi Huang, Yuhan Zhang,
+Xiaosong Sun, Zhinan Zhang,
+Hong Zhu, Yongsheng Zhang,
+Tiantian Dong, Zhong Xiao,
+Deliang Liu, Chengzhou Lu,
+Yuan Sun, Zhiyuan Chen,
+Xinming Han, Zaizhu Liu,
+Yaoyuan Wang, Ziyang Zhang,
+Yong Liu, Jinxin Xu,
+Yajing Sun, Zhoujun Yu,
+Wenting Zhou, Qidong Zhang,
+Zhengyong Zhang, Zhonghai Gu,
+Yibo Jin, Yongxiang Feng, and
+Pengfei Zuo. 2026.
+
+</span>
+<span class="ltx_bibblock">RelayGR: Scaling Long-Sequence Generative
+Recommendation via Cross-Stage Relay-Race Inference.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2601.01712</em>
+(2026).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib24">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Xia et al. (2023)</span>
+<span class="ltx_bibblock">
+Xue Xia, Pong
+Eksombatchai, Nikil Pancha, Dhruvil Deven
+Badani, Po-Wei Wang, Neng Gu,
+Saurabh Vishwas Joshi, Nazanin Farahpour,
+Zhiyuan Zhang, and Andrew Zhai.
+2023.
+
+</span>
+<span class="ltx_bibblock">TransAct: Transformer-based Realtime User Action
+Model for Recommendation at Pinterest. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the 29th ACM SIGKDD Conference
+on Knowledge Discovery and Data Mining, KDD 2023, Long Beach, CA, USA,
+August 6-10, 2023</em>, Ambuj K. Singh,
+Yizhou Sun, Leman Akoglu,
+Dimitrios Gunopulos, Xifeng Yan,
+Ravi Kumar, Fatma Ozcan, and
+Jieping Ye (Eds.). ACM,
+5249–5259.
+
+</span>
+<span class="ltx_bibblock"><a class="ltx_ref ltx_href" href="https://doi.org/10.1145/3580305.3599918" title="">doi:<span class="ltx_ref ltx_nolink">10.1145/3580305.3599918</span></a>
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib25">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Xia et al. (2025)</span>
+<span class="ltx_bibblock">
+Xue Xia, Saurabh Joshi,
+Kousik Rajesh, Kangnan Li,
+Yangyi Lu, Nikil Pancha,
+Dhruvil Badani, Jiajing Xu, and
+Pong Eksombatchai. 2025.
+
+</span>
+<span class="ltx_bibblock">TransAct V2: Lifelong User Action Sequence Modeling
+on Pinterest Recommendation. In <em class="ltx_emph ltx_font_italic">Proceedings of the
+34th ACM International Conference on Information and Knowledge Management</em>
+(Seoul, Republic of Korea) <em class="ltx_emph ltx_font_italic">(CIKM ’25)</em>.
+Association for Computing Machinery,
+New York, NY, USA, 6881–6882.
+
+</span>
+<span class="ltx_bibblock">
+<a class="ltx_ref ltx_href" href="https://doi.org/10.1145/3746252.3761433" title="">doi:<span class="ltx_ref ltx_nolink">10.1145/3746252.3761433</span></a>
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib26">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Yan et al. (2026)</span>
+<span class="ltx_bibblock">
+Bencheng Yan, Shilei Liu,
+Zhiyuan Zeng, Zihao Wang,
+Yizhen Zhang, Yujin Yuan,
+Langming Liu, Jiaqi Liu,
+Di Wang, Wenbo Su,
+Pengjie Wang, Jian Xu, and
+Bo Zheng. 2026.
+
+</span>
+<span class="ltx_bibblock">Unlocking Scaling Law in Industrial Recommendation
+Systems with a Three-step Paradigm based Large User Model. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the 19th ACM International
+Conference on Web Search and Data Mining (WSDM)</em>.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib27">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Yan et al. (2025)</span>
+<span class="ltx_bibblock">
+Huimin Yan, Longfei Xu,
+Junjie Sun, Ni Ou, Wei
+Luo, Xing Tan, Ran Cheng,
+Kaikui Liu, and Xiangxiang Chu.
+2025.
+
+</span>
+<span class="ltx_bibblock">IntSR: An Integrated Generative Framework for
+Search and Recommendation.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2509.21179</em>
+(2025).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib28">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Yang et al. (2024)</span>
+<span class="ltx_bibblock">
+Liu Yang, Fabian
+Paischer, Kaveh Hassani, Jiacheng Li,
+Shuai Shao, Zhang Gabriel Li,
+Yun He, Xue Feng, Nima
+Noorshams, Sem Park, Bo Long,
+Robert D. Nowak, Xiaoli Gao, and
+Hamid Eghbalzadeh. 2024.
+
+</span>
+<span class="ltx_bibblock">Unifying Generative and Dense Retrieval for
+Sequential Recommendation.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2411.18814</em>
+(2024).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib29">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Yang et al. (2025)</span>
+<span class="ltx_bibblock">
+Xiao Yang, Peifeng Yin,
+Abe Engle, Jinfeng Zhuang, and
+Ling Leng. 2025.
+
+</span>
+<span class="ltx_bibblock">MTMD: A Multi-Task Multi-Domain Framework for
+Unified Ad Lightweight Ranking at Pinterest. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the AdKDD Workshop at the 31st ACM
+SIGKDD Conference on Knowledge Discovery and Data Mining</em>.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib30">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Ye et al. (2025a)</span>
+<span class="ltx_bibblock">
+Yufei Ye, Wei Guo,
+Jin Yao Chin, Hao Wang,
+Hong Zhu, Xi Lin, Yuyang
+Ye, Yong Liu, Ruiming Tang,
+Defu Lian, and Enhong Chen.
+2025a.
+
+</span>
+<span class="ltx_bibblock">FuXi-<math alttext="\alpha" class="ltx_Math" display="inline" id="bib.bib30.m1"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>: Scaling Recommendation Model with
+Feature Interaction Enhanced Transformer. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the ACM Web Conference 2025 (WWW)</em>.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib31">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Ye et al. (2025b)</span>
+<span class="ltx_bibblock">
+Yufei Ye, Wei Guo,
+Hao Wang, Hong Zhu,
+Yuyang Ye, Yong Liu,
+Huifeng Guo, Ruiming Tang,
+Defu Lian, and Enhong Chen.
+2025b.
+
+</span>
+<span class="ltx_bibblock">FuXi-<math alttext="\beta" class="ltx_Math" display="inline" id="bib.bib31.m1"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>: Towards a Lightweight and Fast
+Large-Scale Generative Recommendation Model.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2508.10615</em>
+(2025).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib32">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Yuan et al. (2024)</span>
+<span class="ltx_bibblock">
+Jun Yuan, Guohao Cai,
+and Zhenhua Dong. 2024.
+
+</span>
+<span class="ltx_bibblock">A Parameter Update Balancing Algorithm for
+Multi-task Ranking Models in Recommendation Systems. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the 2024 IEEE International
+Conference on Data Mining (ICDM)</em>.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib33">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Zhai et al. (2024)</span>
+<span class="ltx_bibblock">
+Jiaqi Zhai, Lucy Liao,
+Xing Liu, Yueming Wang,
+Rui Li, Xuan Cao, Leon
+Gao, Zhaojie Gong, Fangda Gu,
+Michael He, Yinghai Lu, and
+Yu Shi. 2024.
+
+</span>
+<span class="ltx_bibblock">Actions Speak Louder than Words: Trillion-Parameter
+Sequential Transducers for Generative Recommendations. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the 41st International Conference on
+Machine Learning (ICML)</em>.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib34">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Zhang et al. (2025a)</span>
+<span class="ltx_bibblock">
+Jun Zhang, Yi Li,
+Yue Liu, Changping Wang,
+Yuan Wang, Yuling Xiong,
+Xun Liu, Haiyang Wu,
+Qian Li, Enming Zhang,
+Jiawei Sun, Xin Xu,
+Zishuai Zhang, Ruoran Liu,
+Suyuan Huang, Zhaoxin Zhang,
+Zhengkai Guo, Shuojin Yang,
+Meng-Hao Guo, Huan Yu,
+Jie Jiang, and Shi-Min Hu.
+2025a.
+
+</span>
+<span class="ltx_bibblock">GPR: Towards a Generative Pre-trained One-Model
+Paradigm for Large-Scale Advertising Recommendation.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2511.10138</em>
+(2025).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib35">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Zhang et al. (2025b)</span>
+<span class="ltx_bibblock">
+Luankang Zhang, Kenan
+Song, Yi Quan Lee, Wei Guo,
+Hao Wang, Yawen Li,
+Huifeng Guo, Yong Liu,
+Defu Lian, and Enhong Chen.
+2025b.
+
+</span>
+<span class="ltx_bibblock">Killing Two Birds with One Stone: Unifying
+Retrieval and Ranking with a Single Generative Recommendation Model. In
+<em class="ltx_emph ltx_font_italic">Proceedings of the 48th International ACM SIGIR
+Conference on Research and Development in Information Retrieval</em> (Padua,
+Italy) <em class="ltx_emph ltx_font_italic">(SIGIR ’25)</em>. Association
+for Computing Machinery, New York, NY, USA,
+2224–2234.
+
+</span>
+<span class="ltx_bibblock">
+<a class="ltx_ref ltx_href" href="https://doi.org/10.1145/3726302.3730017" title="">doi:<span class="ltx_ref ltx_nolink">10.1145/3726302.3730017</span></a>
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib36">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Zhang et al. (2026)</span>
+<span class="ltx_bibblock">
+Yukun Zhang, Si Dong,
+Xu Wang, Bo Chen,
+Qinglin Jia, Shengzhe Wang,
+Jinlong Jiao, Runhan Li,
+Jiaqing Liu, Chaoyi Ma,
+Ruiming Tang, Guorui Zhou,
+Han Li, and Kun Gai.
+2026.
+
+</span>
+<span class="ltx_bibblock">SMES: Towards Scalable Multi-Task Recommendation
+via Expert Sparsity.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2602.09386</em>
+(2026).
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib37">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Zou et al. (2026)</span>
+<span class="ltx_bibblock">
+Yanyan Zou, Junbo Qi,
+Lunsong Huang, Yu Li,
+Kewei Xu, Jiabao Gao,
+Binglei Zhao, Xuanhua Yang,
+Sulong Xu, and Shengjie Li.
+2026.
+
+</span>
+<span class="ltx_bibblock">GenRec: A Preference-Oriented Generative Framework
+for Large-Scale Recommendation. In <em class="ltx_emph ltx_font_italic">Proceedings of
+the 49th International ACM SIGIR Conference on Research and Development in
+Information Retrieval (SIGIR)</em>.
+
+</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+</ul>
+</section>
+</article></article></div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{"format": "arxiv_tex", "toc": [{"id": "tex-section-1", "title": "摘要", "level": 1}, {"id": "S1", "title": "1. 引言", "level": 1}, {"id": "S2", "title": "2. 相关工作", "level": 1}, {"id": "S3", "title": "3. 方法", "level": 1}, {"id": "S3.SS0.SSS1", "title": "3.0.1. 背景：", "level": 3}, {"id": "S3.SS1", "title": "3.1. 为排序重构 PinRec", "level": 2}, {"id": "S3.SS1.SSS1", "title": "3.1.1. 掩码行为建模", "level": 3}, {"id": "S3.SS2", "title": "3.2. 数据基础设施", "level": 2}, {"id": "S3.SS2.SSS1", "title": "3.2.1. 以信息流视图为中心的数据集构建", "level": 3}, {"id": "S3.SS2.SSS2", "title": "3.2.2. Ray 训练器内连接", "level": 3}, {"id": "S3.SS3", "title": "3.3. 服务基础设施", "level": 2}, {"id": "S3.SS3.SSS1", "title": "3.3.1. 背景：", "level": 3}, {"id": "S3.SS3.SSS2", "title": "3.3.2. 整体服务设计", "level": 3}, {"id": "S3.SS3.SSS3", "title": "3.3.3. 跨阶段的 KV 缓存共享", "level": 3}, {"id": "S3.SS3.SSS4", "title": "3.3.4. FP8 量化", "level": 3}, {"id": "S4", "title": "4. 结果", "level": 1}, {"id": "S4.SS1", "title": "4.1. 训练一个统一的检索与排序模型（RQ1）", "level": 2}, {"id": "S4.SS2", "title": "4.2. 协同服务检索与排序模型（RQ2）", "level": 2}, {"id": "S4.SS3", "title": "4.3. 消融实验", "level": 2}, {"id": "S4.SS3.SSS1", "title": "4.3.1. MAM 中掩码比例的影响", "level": 3}, {"id": "S4.SS3.SSS2", "title": "4.3.2. 模型缩放的影响", "level": 3}, {"id": "S5", "title": "5. 线上 A/B 实验（RQ3）", "level": 1}, {"id": "S5.SS1", "title": "5.1. 实验设置", "level": 2}, {"id": "S5.SS2", "title": "5.2. Board More Ideas", "level": 2}, {"id": "S5.SS3", "title": "5.3. 通知", "level": 2}, {"id": "S6", "title": "6. 结论", "level": 1}, {"id": "bib", "title": "参考文献", "level": 1}], "stats": {"format": "arxiv_tex", "converter": "LaTeXML", "text_chars": 33432, "sections": 27, "figures": 4, "tables": 6, "table_cells": 108, "mathml": 127, "graphics": 3, "references": 36, "warnings": ["Warning:missing_file:needspace Can't find binding for package needspace at main_arxiv.tex; line 51 col 12", "Warning:not_parsed:RELOP.NUMBER>MULOP MathParser failed to match rule 'Anything' at intro.tex; line 58 col 68", "Warning:not_parsed:PUNCT.ATOM.POSTSUBSCRIPT>RELOP MathParser failed to match rule 'Anything' at method.tex; line 64 col 0", "Warning:not_parsed:>OPEN MathParser failed to match rule 'Anything' at method.tex; line 73 col 58", "Warning:not_parsed:POSTSUPERSCRIPT.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Anything' at method.tex; line 89 col 20", "Warning:not_parsed:POSTSUPERSCRIPT.POSTSUBSCRIPT.CLOSE>CLOSE MathParser failed to match rule 'Anything' at method.tex; line 93 col 14", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 64 col 62", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 65 col 85", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 66 col 57", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 68 col 96", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 78 col 33", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 79 col 33", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 80 col 31", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 81 col 33", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 84 col 33", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 85 col 44", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 86 col 43", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 87 col 52", "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 178 col 0"], "language": "zh-CN"}, "extra_head": "\u003cstyle>\n.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}\n.tex-paper .ltx_title_document{display:none}\n.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}\n.tex-paper .ltx_creator{display:inline-block;margin-right:1em}\n.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}\n.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}\n.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}\n.tex-paper .ltx_para{margin:0}\n.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}\n.tex-paper .ltx_title_paragraph{font-size:17px}\n.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}\n.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}\n.tex-paper .ltx_font_sansserif{font-family:sans-serif}\n.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}\n.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}\n.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}\n.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}\n.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}\n.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}\n.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}\n.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}\n.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}\n.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}\n.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}\n.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}\n.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}\n.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}\n.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}\n.tex-paper math{font-size:1em;line-height:normal;font-family:math}\n.tex-paper math[display=\"block\"]{margin:.2em 0;white-space:nowrap}\n.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}\n.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}\n.tex-paper .ltx_bibblock{display:block}\n.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}\n.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}\n.tex-paper .ltx_toc{display:none}\n.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}\n.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}\n.tex-paper .ltx_tag{margin-right:.35em}\n.tex-paper [id]{scroll-margin-top:24px}\n\u003c/style>"}</script>
+<script>
+const tocPanel=document.querySelector('.paper-toc');
+if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
+tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

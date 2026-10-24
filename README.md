@@ -95,18 +95,17 @@ python -m http.server 8080 --bind 127.0.0.1 -d reports/site
 
 ## 论文阅读专栏
 
-首批收录 **OneTrans、HSTU、OneReason**，目录记录在 `paper_catalog.json`。
-三篇使用对应版本的 arXiv TeX 源码翻译并构建 HTML，保留正文、附录、公式、图表和参考文献。
-`papers` 负责转换已翻译的本地工程，不会自动下载或翻译其他论文。
+当前共 **38 篇**：`LLM4Rec/source` 的 31 篇与 `RL_Training/source` 的 7 篇，清单记录在 `paper_catalog.json`。
+已发布的中文全文保存在 `docs/papers/<arxiv_id>/`，只包含 HTML 和必要图表，不保留下载用 PDF。
 
 ```bash
-# 构建三篇全文、论文列表和网站首页
+# 从已发布 HTML 快照重建全文、论文列表和首页
 python pipeline.py papers
 
 # 只重建指定论文（简称或 arXiv ID，--paper 可以重复）
 python pipeline.py papers --paper OneTrans --paper HSTU
 
-# 强制重新转换，不使用缓存
+# 忽略本地正文缓存，重新读取 HTML 快照
 python pipeline.py papers --force
 
 # 在浏览器中查看
@@ -114,28 +113,24 @@ python -m http.server 8080 --bind 127.0.0.1 -d reports/site
 # http://127.0.0.1:8080/papers/
 ```
 
-论文正文以可选择、搜索和重排的 HTML 展示，保留章节、参考文献与附录。
-TeX 公式转换为浏览器原生 MathML，并保留对应的 TeX 标注；表格为可选择文字的 HTML 表格，
-图形使用源文件中的图片或矢量图。公式、图表和逐条参考文献均保留交叉引用。
-数学表达式、表格数据、图内文字、作者名与文献题名保留原文；标题、正文和图表说明译为中文。
-论文专栏只发布 HTML 和必要的图形资源，不复制 PDF、不提供 PDF 下载入口。
-重新构建时会删除旧版页面目录中的 `paper.zh.pdf` / `paper_zh.pdf` 副本。
+新增全文采用固定版本 arXiv TeX 源码，在 `/tmp` 独立任务目录中下载、解压并转换为结构化 HTML，
+再翻译标题、正文、章节标题和图表说明。数学、表格数据、代码、原图、作者与参考文献保持原样。
+逐段对照英文审阅，并核对公式、引用、图片和 HTML 结构后，发布到 GitHub Pages；上线验证后删除本次临时源码与构建缓存。
+PPO 的 arXiv 源码只有 PDF 外壳，没有正文 TeX，因此单独从英文 PDF 转换和翻译，公式与图表保留原版裁图。
 
-`papers` 不调用模型、检索或日报数据库，不需要 API 密钥。转换缓存按整个 TeX 工程内容和转换器代码更新，
-重复执行会复用正文与图表，同时刷新页面样式、列表和导航。
+TeX 公式使用浏览器原生 MathML，表格为 HTML 表格，图形使用源码中的图片或矢量图；体积过大的密集矢量图以 216 dpi 无损 PNG/WebP 发布；WebP 编码前后逐像素核对。
+全文保留正文、附录和逐条参考文献；章节、公式、图表与文献的交叉引用可直接跳转。
+原图中的英文文字及参考文献题名保留原文。
+
+`papers` 是离线重建命令，不调用模型、检索或日报数据库，不需要 API 密钥。
+`html_snapshot` 路径相对目录清单文件，快照内保存正文和重建所需的元数据；
+清理 `/tmp` 与 `reports/paper_cache/` 后仍可重建，无需重新下载源码或重新翻译。
 构建论文会保留已有日报；之后生成日报也会保留论文专栏。
 
-构建 TeX 需要 LaTeXML。可以使用系统安装的 `latexmlc` / `latexmlpost`，或通过 `LATEXML_ROOT`
-指定已解包且包含 `usr/bin/latexmlc` 的安装目录。目录中的 `latexml_root` 字段可为单篇指定安装位置。
-当前三篇的原始源码、中文工程和转换工具保留在 `/tmp/recsys-tex-html-bdqa9f70/`，
-分别位于 `<论文简称>/source/`、`<论文简称>/translated/` 和 `tools/latexml-root/`。
-迁移机器或清理 `/tmp` 前，应保存需要继续编辑的中文工程，并更新 `paper_catalog.json` 中的路径；
-已发布的 `docs/` 是独立静态网页，浏览时不依赖这些临时文件或 LaTeXML。
-
-新增 TeX 条目需填写 `tex_project`（中文工程路径）与 `tex_entry`（如 `main.tex`），以及标题、简称、
-arXiv ID/版本、公司和主题。配置了 TeX 但工程缺失时会明确报错。
-没有 TeX 配置的旧条目仍可使用 `zh_pdf`，其路径相对 `--source-dir`（默认 `../LLM4Rec/source/`）；
-缺少中文 PDF 时跳过。这种模式的公式与复杂图表采用 PDF 局部截图，新增论文需单独检查。
+手动转换中文 TeX 工程仍可使用 `tex_project` + `tex_entry` 配置，需要系统的 `latexmlc` / `latexmlpost`，
+或通过 `LATEXML_ROOT` / 单篇 `latexml_root` 指定解包工具目录。配置的 TeX 缺失时会明确报错。
+旧条目的 `zh_pdf` 模式也保留兼容能力，路径相对 `--source-dir`（默认 `../LLM4Rec/source/`）。
+这些输入模式同样只输出 HTML 和图形，并清除页面目录中旧 `paper.zh.pdf` / `paper_zh.pdf` 副本。
 
 ## GitHub Pages 在线阅读
 

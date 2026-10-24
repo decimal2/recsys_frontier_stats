@@ -1,0 +1,1770 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>UniSGR：统一语义 ID 生成与排序的框架</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style><style>
+.paper-reader main,.paper-reader>header{max-width:1180px}
+.paper-original-title{font-size:16px;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.paper-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.paper-actions a{padding:8px 14px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:14px}
+.paper-actions a:first-child{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paper-reading-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:36px;align-items:start;margin-top:30px}
+.paper-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;border-right:1px solid var(--line);padding-right:14px;font-size:13px}
+.paper-toc summary{font-size:14px;font-weight:600;cursor:pointer;padding:4px 0 10px}
+.paper-toc ol{list-style:none;padding:0;margin:0}
+.paper-toc li{margin:0;padding:4px 0;line-height:1.5}
+.paper-toc a{color:var(--muted);display:block;padding:2px 4px;border-radius:4px}
+.paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
+.paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
+.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
+.paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
+.paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
+.paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
+.paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
+.paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
+.paper-fulltext figure a{display:block}
+.paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
+.paper-fulltext .paper-equation{padding:8px 0}
+.paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
+.paper-fulltext .paper-inline-math{display:inline-block;vertical-align:middle;max-height:2.3em;width:auto;background:white;max-width:100%}
+.paper-fulltext .paper-reference{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.paper-fulltext .paper-source-page{display:block;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin:32px 0 18px;padding-top:8px;text-align:right}
+.paper-fulltext table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:14px}
+.paper-fulltext td,.paper-fulltext th{padding:6px 10px;border:1px solid var(--line)}
+.paper-bottom{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+.paper-library{display:grid;gap:0;margin:24px 0}
+.paper-entry{padding:26px 0;border-top:1px solid var(--line)}
+.paper-entry h2{display:block;font-size:21px;margin:6px 0}
+.paper-entry .original{display:block;margin-bottom:12px}
+.paper-entry .paper-actions{margin-bottom:0}
+.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+@media(max-width:800px){
+ .paper-reading-layout{display:block;margin-top:20px}
+ .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
+ .paper-toc[open] ol{max-height:55vh;overflow:auto}
+ .paper-fulltext{font-size:16px;line-height:1.9}
+ .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
+ .paper-reader h1{font-size:26px}
+}
+@media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
+</style><style>
+.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}
+.tex-paper .ltx_title_document{display:none}
+.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}
+.tex-paper .ltx_creator{display:inline-block;margin-right:1em}
+.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
+.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_para{margin:0}
+.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
+.tex-paper .ltx_title_paragraph{font-size:17px}
+.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}
+.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}
+.tex-paper .ltx_font_sansserif{font-family:sans-serif}
+.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}
+.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}
+.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}
+.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}
+.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}
+.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}
+.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}
+.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}
+.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}
+.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}
+.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}
+.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}
+.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}
+.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}
+.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+.tex-paper math{font-size:1em;line-height:normal;font-family:math}
+.tex-paper math[display="block"]{margin:.2em 0;white-space:nowrap}
+.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}
+.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}
+.tex-paper .ltx_bibblock{display:block}
+.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}
+.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}
+.tex-paper .ltx_toc{display:none}
+.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}
+.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
+.tex-paper .ltx_tag{margin-right:.35em}
+.tex-paper [id]{scroll-margin-top:24px}
+</style></head><body class="paper-reader">
+<header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
+<main><div class="eyebrow">PAPER LIBRARY / UniSGR</div><h1>UniSGR：统一语义 ID 生成与排序的框架</h1><p class="paper-original-title">UniSGR: Unified Framework for Semantic ID Generation and Ranking</p>
+<p class="muted">Alibaba · arXiv 2607.04068 · 译文对应 v1</p>
+<div class="paper-actions"><a href="https://arxiv.org/abs/2607.04068v1" target="_blank" rel="noopener">英文 arXiv ↗</a>
+<a href="../index.html">全部论文</a></div>
+<p class="muted">中文全文 · 章节、公式和参考文献支持直接跳转</p>
+<div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
+<ol><li class="toc-level-1"><a href="#tex-section-1">摘要</a></li><li class="toc-level-1"><a href="#S1">1. 引言</a></li><li class="toc-level-1"><a href="#S2">2. 相关工作</a></li><li class="toc-level-2"><a href="#S2.SS1">2.1. 深度学习推荐模型</a></li><li class="toc-level-2"><a href="#S2.SS2">2.2. 生成式推荐模型</a></li><li class="toc-level-1"><a href="#S3">3. 方法</a></li><li class="toc-level-2"><a href="#S3.SS1">3.1. 数据组织</a></li><li class="toc-level-2"><a href="#S3.SS2">3.2. 问题形式化</a></li><li class="toc-level-2"><a href="#S3.SS3">3.3. 分词器</a></li><li class="toc-level-2"><a href="#S3.SS4">3.4. UniSGR框架</a></li><li class="toc-level-2"><a href="#S3.SS5">3.5. 两阶段训练范式</a></li><li class="toc-level-3"><a href="#S3.SS5.SSS1">3.5.1. 多场景预训练阶段</a></li><li class="toc-level-3"><a href="#S3.SS5.SSS2">3.5.2. 价值感知的并行多词元预测</a></li><li class="toc-level-3"><a href="#S3.SS5.SSS3">3.5.3. 统一多目标排序模块</a></li><li class="toc-level-3"><a href="#S3.SS5.SSS4">3.5.4. 用于生成-排序对齐的任务感知词元</a></li><li class="toc-level-3"><a href="#S3.SS5.SSS5">3.5.5. 生成与排序的联合训练</a></li><li class="toc-level-3"><a href="#S3.SS5.SSS6">3.5.6. 用于任务词元引导的漏斗感知对比学习</a></li><li class="toc-level-2"><a href="#S3.SS6">3.6. STARK：带重组 KV 缓存的语义树注意力</a></li><li class="toc-level-1"><a href="#S4">4. 实验</a></li><li class="toc-level-2"><a href="#S4.SS1">4.1. 实验设置</a></li><li class="toc-level-3"><a href="#S4.SS1.SSS1">4.1.1. 数据集</a></li><li class="toc-level-3"><a href="#S4.SS1.SSS2">4.1.2. 基线模型</a></li><li class="toc-level-3"><a href="#S4.SS1.SSS3">4.1.3. 评估指标</a></li><li class="toc-level-3"><a href="#S4.SS1.SSS4">4.1.4. 实现细节</a></li><li class="toc-level-2"><a href="#S4.SS2">4.2. 离线性能</a></li><li class="toc-level-2"><a href="#S4.SS3">4.3. 消融实验</a></li><li class="toc-level-3"><a href="#S4.SS3.SSS1">4.3.1. 码本规模的影响</a></li><li class="toc-level-3"><a href="#S4.SS3.SSS2">4.3.2. 模型变体消融</a></li><li class="toc-level-3"><a href="#S4.SS3.SSS3">4.3.3. 缩放</a></li><li class="toc-level-3"><a href="#S4.SS3.SSS4">4.3.4. 两阶段训练</a></li><li class="toc-level-2"><a href="#S4.SS4">4.4. 在线 A/B 测试</a></li><li class="toc-level-1"><a href="#S5">5. 结论</a></li><li class="toc-level-1"><a href="#bib">参考文献</a></li></ol></details><article class="paper-fulltext" aria-label="论文全文"><article class="ltx_document ltx_authors_1line ltx_leqno tex-paper">
+<h1 class="ltx_title ltx_title_document">UniSGR：语义ID生成与排序的统一框架</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jiawei Sun
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:xiangxing.sjw@alibaba-inc.com">xiangxing.sjw@alibaba-inc.com</a>
+</span>
+<span class="ltx_contact ltx_role_orcid"><a class="ltx_ref" href="https://orcid.org/0009-0001-6018-234X" title="ORCID identifier">0009-0001-6018-234X</a></span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Alibaba International Digital Commerce Group</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jun Yang
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:yj494343@alibaba-inc.com">yj494343@alibaba-inc.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Alibaba International Digital Commerce Group</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Ziyue Guo
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:guoziyue.gzy@alibaba-inc.com">guoziyue.gzy@alibaba-inc.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Alibaba International Digital Commerce Group</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Dongyue Xu
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:xudongyue.xdy@alibaba-inc.com">xudongyue.xdy@alibaba-inc.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Alibaba International Digital Commerce Group</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jianan Yan
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:jianan.yjn@alibaba-inc.com">jianan.yjn@alibaba-inc.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Alibaba International Digital Commerce Group</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span></span></span>
+<span class="ltx_author_before">, </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Lifang Deng
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:wanmei.dlf@alibaba-inc.com">wanmei.dlf@alibaba-inc.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Alibaba International Digital Commerce Group</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span></span></span>
+<span class="ltx_author_before"> and </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Xiaoyi Zeng
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:yuanhan@taobao.com">yuanhan@taobao.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">Alibaba International Digital Commerce Group</span><span class="ltx_text ltx_affiliation_city">Hangzhou</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span></span></span>
+</div>
+<div class="ltx_dates">(2018)</div>
+<div class="ltx_abstract" id="tex-section-1">
+<h6 class="ltx_title ltx_title_abstract">摘要</h6>
+<p class="ltx_p">推荐系统在现代电商平台中发挥着关键作用。尽管生成式检索已成为一种有望缓解多阶段级联架构局限性的范式，现有方法在细粒度多目标排序方面仍存在困难。为弥合这一差距，我们提出UniSGR，一个<span class="ltx_text ltx_font_bold">统一</span>的<span class="ltx_text ltx_font_bold">语义</span>ID<span class="ltx_text ltx_font_bold">生成</span>与<span class="ltx_text ltx_font_bold">排序</span>框架。UniSGR采用两阶段训练范式：多场景预训练阶段从混合业务场景数据中学习，随后是场景特定对齐阶段，该阶段联合优化价值感知并行多词元预测（VA-PMTP）和统一多目标排序模块。为使生成更好地与下游排序对齐，我们引入由漏斗感知对比学习引导的任务感知词元（TAT）。此外，我们提出基于重组KV缓存的语义树注意力（STARK），这是一种消除传统束搜索中关键效率瓶颈的推理策略。在大规模电商平台上的大量离线实验表明了UniSGR的有效性和可扩展性。</p>
+</div>
+<div class="ltx_keywords">生成式推荐，语义词元化，自回归生成，缩放定律
+</div>
+<span class="ltx_note ltx_note_frontmatter ltx_role_copyright"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">copyright: </span>acmlicensed</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_journalyear"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">journalyear: </span>2018</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_doi"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">doi: </span>XXXXXXX.XXXXXXX</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_conference"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">conference: </span>请确保输入来自您权利确认邮件中的正确会议名称；6月 03–05，2018；Woodstock, NY</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_isbn"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">isbn: </span>978-1-4503-XXXX-X/2018/06</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_ccs"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">ccs: </span>信息系统 推荐系统</span></span></span>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1. </span>引言</h2>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p">推荐系统（RSs）对现代电商平台不可或缺<cite class="ltx_cite ltx_citemacro_citep">(Alamdari<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib17" title="A systematic study on the recommender systems in the e-commerce">2020</a>)</cite>。工业级系统通常组织为级联流水线，其中候选检索之后依次是粗排、精排和重排阶段<cite class="ltx_cite ltx_citemacro_citep">(Isinkaye<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib14" title="Recommendation systems: principles, methods and evaluation">2015</a>; Ko<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib16" title="A survey of recommendation systems: recommendation models, techniques, and application fields">2022</a>)</cite>。在DLRM时代<cite class="ltx_cite ltx_citemacro_citep">(Mudigere<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib18" title="Software-hardware co-design for fast and scalable training of deep learning recommendation models">2022</a>; Covington<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib19" title="Deep neural networks for youtube recommendations">2016</a>; Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="Deep interest network for click-through rate prediction">2018</a>)</cite>，检索通常通过高效的双塔匹配模型实现：用户和物品特征被独立编码，物品嵌入在离线建立索引，大规模最大内积搜索在严格延迟约束下检索候选。</p>
+</div>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p">尽管有效，这种级联架构为每个模块优化的是局部子任务，而非端到端推荐目标。下游排序器只能对上游检索保留的候选重新排序，因此早期被过滤掉的相关物品无法在后续被恢复。这种分阶段分解限制了真正端到端推荐的可能性。</p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p">生成式检索近来已成为一种有前景的替代方案<cite class="ltx_cite ltx_citemacro_citep">(Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib36" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>; Zhai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib34" title="Actions speak louder than words: trillion-parameter sequential transducers for generative recommendations">2024</a>)</cite>。通过将推荐表述为自回归生成，这些方法直接生成物品标识符（通常表示为离散语义ID），从而为候选生成提供了更统一的视角。</p>
+</div>
+<div class="ltx_para" id="S1.p4">
+<p class="ltx_p">然而，现有生成式检索方法的排序能力仍然有限。它们能够选择语义相关的候选，但往往缺乏工业排序所需的细粒度区分能力。一种直接的解决方案是在生成式检索之后添加一个判别式排序器，但这重新引入了目标不匹配：生成器被优化以产生合理的候选，而排序器则在截断的候选集上优化最终效用。</p>
+</div>
+<div class="ltx_para" id="S1.p5">
+<p class="ltx_p">训练范式是另一个关键因素。大型平台包含多个业务场景，其意图、行为和目标具有异质性。仅在目标场景上训练会限制所学知识的可迁移性，而简单地将所有数据汇集在一起又可能削弱场景特定的适应性。因此，我们采用多场景预训练后接场景特定对齐，这一范式类似于基础模型中的广泛预训练与下游适应<cite class="ltx_cite ltx_citemacro_citep">(Brown<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib42" title="Language models are few-shot learners">2020</a>; Devlin<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib43" title="Bert: pre-training of deep bidirectional transformers for language understanding">2019</a>)</cite>。</p>
+</div>
+<div class="ltx_para" id="S1.p6">
+<p class="ltx_p">受此视角启发，我们提出UniSGR，一个<span class="ltx_text ltx_font_bold">统一</span>的<span class="ltx_text ltx_font_bold">语义</span>ID<span class="ltx_text ltx_font_bold">生成</span>与<span class="ltx_text ltx_font_bold">排序</span>框架。UniSGR在单一学习框架中耦合生成式检索和判别式排序，将面向排序的监督纳入语义ID生成，使生成的候选更好地与下游业务目标对齐。</p>
+</div>
+<div class="ltx_para" id="S1.p7">
+<p class="ltx_p">该框架进一步支持多目标优化，使点击、加购和购买信号能够被纳入同一个训练过程。因此，语义ID生成和排序都朝着共享的推荐目标进行优化。</p>
+</div>
+<div class="ltx_para" id="S1.p8">
+<p class="ltx_p">我们的主要贡献可总结如下：</p>
+<ol class="ltx_enumerate" id="S1.I1">
+<li class="ltx_item" id="S1.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(1)</span>
+<div class="ltx_para" id="S1.I1.i1.p1">
+<p class="ltx_p">我们提出UniSGR，一个无缝集成语义ID生成和多目标排序的统一框架，缓解了传统级联架构固有的差距。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(2)</span>
+<div class="ltx_para" id="S1.I1.i2.p1">
+<p class="ltx_p">我们设计了一种两阶段训练范式，将多场景预训练与场景特定对齐相结合，其中价值感知并行多词元预测（VA-PMTP）和任务感知词元（TAT）有助于使生成与业务目标对齐。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(3)</span>
+<div class="ltx_para" id="S1.I1.i3.p1">
+<p class="ltx_p">我们引入STARK，一种为语义ID量身定制的高效树注意力推理策略，在工业规模场景中实现了<math alttext="200\%" class="ltx_Math" display="inline" id="S1.I1.i3.p1.m1"><semantics><mrow><mn>200</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">200\%</annotation></semantics></math>的吞吐量提升。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i4" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(4)</span>
+<div class="ltx_para" id="S1.I1.i4.p1">
+<p class="ltx_p">在真实电商平台上进行的大量离线评估和在线A/B测试验证了UniSGR的有效性和可扩展性。</p>
+</div>
+</li>
+</ol>
+</div>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2. </span>相关工作</h2>
+<section class="ltx_subsection" id="S2.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.1. </span>深度学习推荐模型</h3>
+<div class="ltx_para" id="S2.SS1.p1">
+<p class="ltx_p">传统DLRM依赖以ID为中心的稀疏特征和连续稠密特征，随后进行显式或学习的特征交互。Wide &amp; Deep<cite class="ltx_cite ltx_citemacro_citep">(Cheng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib27" title="Wide &amp; deep learning for recommender systems">2016</a>)</cite>结合了记忆与泛化，而DeepFM<cite class="ltx_cite ltx_citemacro_citep">(Guo<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib25" title="DeepFM: a factorization-machine based neural network for ctr prediction">2017</a>)</cite>通过共享嵌入联合建模低阶和高阶特征交互。基于注意力的模型如AutoInt<cite class="ltx_cite ltx_citemacro_citep">(Song<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib28" title="Autoint: automatic feature interaction learning via self-attentive neural networks">2019</a>)</cite>和DIN<cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="Deep interest network for click-through rate prediction">2018</a>)</cite>进一步从历史行为中捕获多样化的用户兴趣。DLRM<cite class="ltx_cite ltx_citemacro_citep">(Naumov<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib29" title="Deep learning recommendation model for personalization and recommendation systems">2019</a>)</cite>解决了稠密计算与稀疏嵌入查找之间的系统级约束，而LONGER<cite class="ltx_cite ltx_citemacro_citep">(Chai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib30" title="Longer: scaling up long sequence modeling in industrial recommenders">2025</a>)</cite>通过解耦检索和内容表示空间改进了长序列建模。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S2.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.2. </span>生成式推荐模型</h3>
+<div class="ltx_para" id="S2.SS2.p1">
+<p class="ltx_p">近期工作利用语义表示和生成模型来解决标准基于ID推荐的局限。TIGER<cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib31" title="Recommender systems with generative retrieval">2023</a>)</cite>通过RQ-VAE<cite class="ltx_cite ltx_citemacro_citep">(Lee<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib32" title="Autoregressive image generation using residual quantization">2022</a>)</cite>引入语义元组ID。同时，HLLM<cite class="ltx_cite ltx_citemacro_citep">(Chen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib33" title="Hllm: enhancing sequential recommendations via hierarchical large language models for item and user modeling">2024</a>)</cite>将物品级语义建模与用户序列建模相结合。为处理高基数设置，HSTU<cite class="ltx_cite ltx_citemacro_citep">(Zhai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib34" title="Actions speak louder than words: trillion-parameter sequential transducers for generative recommendations">2024</a>)</cite>使用线性门控聚合提高效率。此外，MTGR<cite class="ltx_cite ltx_citemacro_citep">(Han<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib35" title="Mtgr: industrial-scale generative recommendation framework in meituan">2025</a>)</cite>研究了工业生成式推荐中的缩放行为。OneRec<cite class="ltx_cite ltx_citemacro_citep">(Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib36" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>)</cite>和OneRec-Think<cite class="ltx_cite ltx_citemacro_citep">(Liu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib37" title="Onerec-think: in-text reasoning for generative recommendation">2025</a>)</cite>也探索了端到端生成范式，将偏好优化与推理增强生成相结合。</p>
+</div>
+<div class="ltx_para" id="S2.SS2.p2">
+<p class="ltx_p">统一检索与排序也受到越来越多的关注。OneRanker<cite class="ltx_cite ltx_citemacro_citep">(Sun<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib46" title="OneRanker: unified generation and ranking with one model in industrial advertising recommendation">2026</a>)</cite>、GRank<cite class="ltx_cite ltx_citemacro_citep">(Sun<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib47" title="GRank: towards target-aware and streamlined industrial retrieval with a generate-rank framework">2025</a>)</cite>和GPR<cite class="ltx_cite ltx_citemacro_citep">(Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib48" title="GPR: towards a generative pre-trained one-model paradigm for large-scale advertising recommendation">2026</a>)</cite>通过在工业推荐设置中耦合生成、排序或预训练来减少目标不匹配。在此方向上，UniSGR聚焦于基于语义ID的生成式推荐，并直接在生成式解码器之上引入多目标排序模块，使候选生成与最终业务价值对齐。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3. </span>方法</h2>
+<section class="ltx_subsection" id="S3.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.1. </span>数据组织</h3>
+<div class="ltx_para" id="S3.SS1.p1">
+<p class="ltx_p">训练数据按照两阶段学习范式进行组织。在多场景预训练中，我们混合来自多个业务场景的用户行为日志，并从按时间排序的交互序列构建下一物品生成样本。每个样本由用户画像特征、场景/上下文特征、先前交互过的物品以及下一交互物品的语义ID序列组成。此阶段旨在使模型接触跨多个场景的多样化用户兴趣和物品语义。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p2">
+<p class="ltx_p">在场景特定对齐中，样本来自目标场景并包含更丰富的行为标签。对于用户会话，我们收集与不同行为类型（如点击、加购和购买）相关联的候选目标物品。这些行为特定目标以两种方式使用：VA-PMTP将它们视为具有不同业务价值权重的生成目标，而排序模块使用共享的生成表示来预测其对应的行为标签。这种安排使生成和排序能够在同一语义ID表示空间上联合优化。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p3">
+<p class="ltx_p">在服务阶段，输入遵循与训练相同的特征组织方式。编码器接收用户画像、行为序列和上下文特征，而解码器为候选物品生成语义ID。随后排序模块对生成的候选进行打分，而不依赖单独的基于物品ID的排序模型。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.2. </span>问题形式化</h3>
+<div class="ltx_para" id="S3.SS2.p1">
+<p class="ltx_p">我们将序列推荐形式化为统一的生成式检索与多目标排序。令<math alttext="\mathcal{U}" class="ltx_Math" display="inline" id="S3.SS2.p1.m1"><semantics><mi class="ltx_font_mathcaligraphic">𝒰</mi><annotation encoding="application/x-tex">\mathcal{U}</annotation></semantics></math>和<math alttext="\mathcal{I}" class="ltx_Math" display="inline" id="S3.SS2.p1.m2"><semantics><mi class="ltx_font_mathcaligraphic">ℐ</mi><annotation encoding="application/x-tex">\mathcal{I}</annotation></semantics></math>分别表示用户集和物品集。对于每个用户<math alttext="u" class="ltx_Math" display="inline" id="S3.SS2.p1.m3"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>，系统观测到用户画像特征<math alttext="\mathbf{x}_{u}" class="ltx_Math" display="inline" id="S3.SS2.p1.m4"><semantics><msub><mi>𝐱</mi><mi>u</mi></msub><annotation encoding="application/x-tex">\mathbf{x}_{u}</annotation></semantics></math>和按时间排序的交互序列<math alttext="\mathcal{S}_{u}=[v_{1},v_{2},\ldots,v_{L}]" class="ltx_Math" display="inline" id="S3.SS2.p1.m5"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒮</mi><mi>u</mi></msub><mo>=</mo><mrow><mo stretchy="false">[</mo><msub><mi>v</mi><mn>1</mn></msub><mo>,</mo><msub><mi>v</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>v</mi><mi>L</mi></msub><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{S}_{u}=[v_{1},v_{2},\ldots,v_{L}]</annotation></semantics></math>，其中<math alttext="v_{t}\in\mathcal{I}" class="ltx_Math" display="inline" id="S3.SS2.p1.m6"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>∈</mo><mi class="ltx_font_mathcaligraphic">ℐ</mi></mrow><annotation encoding="application/x-tex">v_{t}\in\mathcal{I}</annotation></semantics></math>。每个物品<math alttext="v" class="ltx_Math" display="inline" id="S3.SS2.p1.m7"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>被映射为离散语义ID序列<math alttext="\mathbf{s}_{v}=(c_{v,1},c_{v,2},\dots,c_{v,d})" class="ltx_Math" display="inline" id="S3.SS2.p1.m8"><semantics><mrow><msub><mi>𝐬</mi><mi>v</mi></msub><mo>=</mo><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mrow><mi>v</mi><mo>,</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>c</mi><mrow><mi>v</mi><mo>,</mo><mn>2</mn></mrow></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>c</mi><mrow><mi>v</mi><mo>,</mo><mi>d</mi></mrow></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{s}_{v}=(c_{v,1},c_{v,2},\dots,c_{v,d})</annotation></semantics></math>，其中<math alttext="d" class="ltx_Math" display="inline" id="S3.SS2.p1.m9"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>是语义层数。</p>
+</div>
+<div class="ltx_para" id="S3.SS2.p2">
+<p class="ltx_p">我们的框架通过与两阶段学习范式对齐来解决这一问题：</p>
+</div>
+<div class="ltx_para" id="S3.SS2.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">1. 多场景预训练：</span>模型从混合业务场景数据中学习可泛化的用户兴趣，并作为纯生成式检索器：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(1)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="P_{\theta}(v_{L+1}\mid\mathbf{x}_{u},\mathcal{S}_{u})=\prod_{j=1}^{d}P_{\theta%
+}(c_{v_{L+1},j}\mid\mathbf{x}_{u},\mathcal{S}_{u},c_{v_{L+1},&lt;j})." class="ltx_Math" display="block" id="S3.E1.m1"><semantics><mrow><mrow><mrow><msub><mi>P</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>v</mi><mrow><mi>L</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>∣</mo><mrow><msub><mi>𝐱</mi><mi>u</mi></msub><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒮</mi><mi>u</mi></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false">∏</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover><mrow><msub><mi>P</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>c</mi><mrow><msub><mi>v</mi><mrow><mi>L</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mi>j</mi></mrow></msub><mo>∣</mo><mrow><msub><mi>𝐱</mi><mi>u</mi></msub><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒮</mi><mi>u</mi></msub><mo>,</mo><msub><mi>c</mi><mrow><msub><mi>v</mi><mrow><mi>L</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>j</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">P_{\theta}(v_{L+1}\mid\mathbf{x}_{u},\mathcal{S}_{u})=\prod_{j=1}^{d}P_{\theta%
+}(c_{v_{L+1},j}\mid\mathbf{x}_{u},\mathcal{S}_{u},c_{v_{L+1},&lt;j}).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="ltx_para" id="S3.SS2.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">2. 场景特定对齐：</span>通过联合优化价值感知的下一词元预测和多目标排序，将预训练模型适配到目标场景。给定语义ID和生成隐状态，模型使用BCE损失预测点击、加购和购买标签：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E2">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(2)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\hat{y}_{v}^{(task)}=P_{\phi}(y^{(task)}=1\mid\mathbf{x}_{u},\mathcal{S}_{u},%
+\mathbf{s}_{v}),\quad task\in\{\text{click},\text{atc},\text{pay}\}." class="ltx_Math" display="block" id="S3.E2.m1"><semantics><mrow><mrow><mrow><msubsup><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>v</mi><mrow><mo stretchy="false">(</mo><mrow><mi>t</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>s</mi><mo>⁢</mo><mi>k</mi></mrow><mo stretchy="false">)</mo></mrow></msubsup><mo>=</mo><mrow><msub><mi>P</mi><mi>ϕ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msup><mi>y</mi><mrow><mo stretchy="false">(</mo><mrow><mi>t</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>s</mi><mo>⁢</mo><mi>k</mi></mrow><mo stretchy="false">)</mo></mrow></msup><mo>=</mo><mrow><mn>1</mn><mo>∣</mo><mrow><msub><mi>𝐱</mi><mi>u</mi></msub><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒮</mi><mi>u</mi></msub><mo>,</mo><msub><mi>𝐬</mi><mi>v</mi></msub></mrow></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow><mo rspace="1.167em">,</mo><mrow><mrow><mi>t</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>s</mi><mo>⁢</mo><mi>k</mi></mrow><mo>∈</mo><mrow><mo stretchy="false">{</mo><mtext>click</mtext><mo>,</mo><mtext>atc</mtext><mo>,</mo><mtext>pay</mtext><mo stretchy="false">}</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\hat{y}_{v}^{(task)}=P_{\phi}(y^{(task)}=1\mid\mathbf{x}_{u},\mathcal{S}_{u},%
+\mathbf{s}_{v}),\quad task\in\{\text{click},\text{atc},\text{pay}\}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="ltx_para" id="S3.SS2.p5">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">推理服务：</span>对齐后的模型通过束搜索解码候选，并复用生成的语义ID和隐状态来计算多目标分数。随后，服务系统可以返回重排后的Top-<math alttext="K" class="ltx_Math" display="inline" id="S3.SS2.p5.m1"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>推荐，而无需调用单独的排序模型。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.3. </span>分词器</h3>
+<div class="ltx_para" id="S3.SS3.p1">
+<p class="ltx_p">我们首先通过使用行为交互对微调Qwen3-VL来获得多模态协同物品嵌入，然后使用RQ-VAE和Sinkhorn-Knopp分配将其离散化为一个平衡的3层语义码本。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">协同感知表示。</span>对于物品<math alttext="i" class="ltx_Math" display="inline" id="S3.SS3.p2.m1"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>，我们将文本元数据<math alttext="T_{i}" class="ltx_Math" display="inline" id="S3.SS3.p2.m2"><semantics><msub><mi>T</mi><mi>i</mi></msub><annotation encoding="application/x-tex">T_{i}</annotation></semantics></math>和视觉特征<math alttext="V_{i}" class="ltx_Math" display="inline" id="S3.SS3.p2.m3"><semantics><msub><mi>V</mi><mi>i</mi></msub><annotation encoding="application/x-tex">V_{i}</annotation></semantics></math>输入Qwen3-VL，记为<math alttext="f_{\theta}" class="ltx_Math" display="inline" id="S3.SS3.p2.m4"><semantics><msub><mi>f</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">f_{\theta}</annotation></semantics></math>，以获得多模态嵌入：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E3">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(3)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="e_{i}=f_{\theta}(T_{i},V_{i})" class="ltx_Math" display="block" id="S3.E3.m1"><semantics><mrow><msub><mi>e</mi><mi>i</mi></msub><mo>=</mo><mrow><msub><mi>f</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>T</mi><mi>i</mi></msub><mo>,</mo><msub><mi>V</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">e_{i}=f_{\theta}(T_{i},V_{i})</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">我们使用交互过的目标物品<math alttext="i^{+}" class="ltx_Math" display="inline" id="S3.SS3.p2.m5"><semantics><msup><mi>i</mi><mo>+</mo></msup><annotation encoding="application/x-tex">i^{+}</annotation></semantics></math>作为正样本，曝光但未点击的物品<math alttext="\mathcal{H}_{i}" class="ltx_Math" display="inline" id="S3.SS3.p2.m6"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℋ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\mathcal{H}_{i}</annotation></semantics></math>作为难负样本，批次内物品<math alttext="\mathcal{B}_{i}" class="ltx_Math" display="inline" id="S3.SS3.p2.m7"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℬ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\mathcal{B}_{i}</annotation></semantics></math>作为易负样本。网络使用以下InfoNCE损失进行优化：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E4">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(4)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{CL}=-\log\frac{\exp(\operatorname{sim}(e_{i},e_{i^{+}})/\tau)}{%
+\sum_{j\in\mathcal{C}_{i}}\exp(\operatorname{sim}(e_{i},e_{j})/\tau)}," class="ltx_Math" display="block" id="S3.E4.m1"><semantics><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mrow><mi>C</mi><mo>⁢</mo><mi>L</mi></mrow></msub><mo>=</mo><mrow><mo rspace="0.167em">−</mo><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><mfrac><mrow><mi>exp</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mrow><mrow><mi>sim</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><msub><mi>e</mi><mi>i</mi></msub><mo>,</mo><msub><mi>e</mi><msup><mi>i</mi><mo>+</mo></msup></msub><mo stretchy="false">)</mo></mrow></mrow><mo>/</mo><mi>τ</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><msub><mi class="ltx_font_mathcaligraphic">𝒞</mi><mi>i</mi></msub></mrow></msub><mrow><mi>exp</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mrow><mrow><mi>sim</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><msub><mi>e</mi><mi>i</mi></msub><mo>,</mo><msub><mi>e</mi><mi>j</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo>/</mo><mi>τ</mi></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mfrac></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}_{CL}=-\log\frac{\exp(\operatorname{sim}(e_{i},e_{i^{+}})/\tau)}{%
+\sum_{j\in\mathcal{C}_{i}}\exp(\operatorname{sim}(e_{i},e_{j})/\tau)},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="\mathcal{C}_{i}=\{i^{+}\}\cup\mathcal{H}_{i}\cup\mathcal{B}_{i}" class="ltx_Math" display="inline" id="S3.SS3.p2.m8"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒞</mi><mi>i</mi></msub><mo>=</mo><mrow><mrow><mo stretchy="false">{</mo><msup><mi>i</mi><mo>+</mo></msup><mo stretchy="false">}</mo></mrow><mo>∪</mo><msub><mi class="ltx_font_mathcaligraphic">ℋ</mi><mi>i</mi></msub><mo>∪</mo><msub><mi class="ltx_font_mathcaligraphic">ℬ</mi><mi>i</mi></msub></mrow></mrow><annotation encoding="application/x-tex">\mathcal{C}_{i}=\{i^{+}\}\cup\mathcal{H}_{i}\cup\mathcal{B}_{i}</annotation></semantics></math>，<math alttext="\operatorname{sim}(x,y)" class="ltx_Math" display="inline" id="S3.SS3.p2.m9"><semantics><mrow><mi>sim</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\operatorname{sim}(x,y)</annotation></semantics></math>表示余弦相似度，<math alttext="\tau" class="ltx_Math" display="inline" id="S3.SS3.p2.m10"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>是温度超参数。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">量化。</span>我们应用带有Sinkhorn-Knopp平衡分配的残差量化VAE（RQ-VAE）<cite class="ltx_cite ltx_citemacro_citep">(Zeghidour<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib15" title="Soundstream: an end-to-end neural audio codec">2021</a>)</cite>，生成3层语义层次结构，码本大小为<math alttext="K=8192" class="ltx_Math" display="inline" id="S3.SS3.p3.m1"><semantics><mrow><mi>K</mi><mo>=</mo><mn>8192</mn></mrow><annotation encoding="application/x-tex">K=8192</annotation></semantics></math>。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.4. </span>UniSGR框架</h3>
+<figure class="ltx_figure" id="S3.F1"><a href="assets/0096807eb3036853.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F1.g1" loading="lazy" src="assets/0096807eb3036853.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1. </span>UniSGR的整体架构。它具有用于多模态用户行为序列的轻量级特征编码器，以及一个使用任务感知词元统一生成式检索和多目标排序的稀疏MoE解码器。</figcaption>
+</figure>
+<div class="ltx_para" id="S3.SS4.p1">
+<p class="ltx_p">图<a class="ltx_ref" href="#S3.F1" title="Figure 1 ‣ 3.4. UniSGR Framework ‣ 3. Methodology ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">1</span></a>展示了UniSGR，一个基于Transformer的非对称编码器-解码器框架，包含轻量级特征编码器和深层稀疏专家混合（MoE）解码器。</p>
+</div>
+<div class="ltx_para" id="S3.SS4.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">特征编码器（MemoryNet）</span>。编码器处理用户画像、先前交互过的物品和上下文标签。MemoryNet不使用自注意力，而是通过MLP映射用户画像，并将其作为前缀词元前置到行为序列中。每个历史物品由其语义ID嵌入以及行为和位置信息表示，因此编码器能够区分物品身份和交互类型。随后，位置编码、dropout和线性投影产生静态记忆表示<math alttext="\mathbf{M}" class="ltx_Math" display="inline" id="S3.SS4.p2.m1"><semantics><mi>𝐌</mi><annotation encoding="application/x-tex">\mathbf{M}</annotation></semantics></math>，其复杂度为线性的<math alttext="\mathcal{O}(L)" class="ltx_Math" display="inline" id="S3.SS4.p2.m2"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>L</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(L)</annotation></semantics></math>。这一设计有意保持轻量：它保留了解码器所需的信息，同时避免了对长用户历史的二次自注意力计算。</p>
+</div>
+<div class="ltx_para" id="S3.SS4.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">稀疏MoE解码器</span>。解码器自回归生成语义ID词元，以可学习的BOS词元初始化，并通过交叉注意力以<math alttext="\mathbf{M}" class="ltx_Math" display="inline" id="S3.SS4.p3.m1"><semantics><mi>𝐌</mi><annotation encoding="application/x-tex">\mathbf{M}</annotation></semantics></math>为条件。学习得到的词元类型嵌入（TTE）被加到语义ID嵌入上以编码其层次结构。这一点至关重要，因为不同语义ID层级解码不同的语义：上层捕获粗粒度语义聚类，而下层提供更细粒度的区分和物品唯一性。因此，解码器联合学习序列级生成和层级感知的语义细化。</p>
+</div>
+<div class="ltx_para" id="S3.SS4.p4">
+<p class="ltx_p">为高效且可扩展的解码，我们采用分组查询注意力（GQA）<cite class="ltx_cite ltx_citemacro_citep">(Ainslie<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib39" title="Gqa: training generalized multi-query transformer models from multi-head checkpoints">2023</a>)</cite>以降低KV缓存成本，并用共享SwiGLU-MoE层<cite class="ltx_cite ltx_citemacro_citep">(Dai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib41" title="Deepseekmoe: towards ultimate expert specialization in mixture-of-experts language models">2024</a>)</cite>替换标准FFN。共享专家捕获常见推荐模式，而路由专家专门处理不同的语义子空间和用户兴趣模式：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.Ex1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="y=\mathrm{Expert}_{\mathrm{shared}}(x)+\sum_{i\in\mathrm{TopK}}g_{i}(x)\,%
+\mathrm{Expert}_{i}(x)." class="ltx_Math" display="block" id="S3.Ex1.m1"><semantics><mrow><mrow><mi>y</mi><mo>=</mo><mrow><mrow><msub><mi>Expert</mi><mi>shared</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.055em">+</mo><mrow><munder><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>TopK</mi></mrow></munder><mrow><msub><mi>g</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><mo lspace="0.170em">⁢</mo><msub><mi>Expert</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">y=\mathrm{Expert}_{\mathrm{shared}}(x)+\sum_{i\in\mathrm{TopK}}g_{i}(x)\,%
+\mathrm{Expert}_{i}(x).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">我们进一步采用RMSNorm<cite class="ltx_cite ltx_citemacro_citep">(Zhang and Sennrich, <a class="ltx_ref" href="#bib.bib49" title="Root Mean Square Layer Normalization">2019</a>)</cite>和QK-Norm<cite class="ltx_cite ltx_citemacro_citep">(Henry<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib50" title="Query-key normalization for transformers">2020</a>)</cite>以实现稳定训练。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS5">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.5. </span>两阶段训练范式</h3>
+<div class="ltx_para" id="S3.SS5.p1">
+<p class="ltx_p">UniSGR 采用两阶段训练范式：</p>
+<ol class="ltx_enumerate" id="S3.I1">
+<li class="ltx_item" id="S3.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(1)</span>
+<div class="ltx_para" id="S3.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">多场景预训练阶段：</span> 通过对来自多个业务场景的混合数据执行下一词元预测，捕获通用用户兴趣与物品语义。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(2)</span>
+<div class="ltx_para" id="S3.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">场景特定对齐阶段：</span> 引入 VA-PMTP 与统一的多目标排序模块，使生成与目标场景的业务目标对齐。</p>
+</div>
+</li>
+</ol>
+</div>
+<section class="ltx_subsubsection" id="S3.SS5.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.5.1. </span>多场景预训练阶段</h4>
+<div class="ltx_para" id="S3.SS5.SSS1.p1">
+<p class="ltx_p">与仅在单一场景的稀疏交互上训练不同，多场景预训练使 UniSGR 接触到跨业务场景聚合的多样化行为信号。预训练采用 NTP 损失：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E5">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(5)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\text{NTP}}=-\sum_{j=1}^{d}\log P_{\theta}(c_{v_{L+1},j}\mid%
+\mathbf{x}_{u},\mathcal{S}_{u},c_{v_{L+1},&lt;j})" class="ltx_Math" display="block" id="S3.E5.m1"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>NTP</mtext></msub><mo>=</mo><mrow><mo>−</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover><mrow><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><msub><mi>P</mi><mi>θ</mi></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>c</mi><mrow><msub><mi>v</mi><mrow><mi>L</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mi>j</mi></mrow></msub><mo>∣</mo><mrow><msub><mi>𝐱</mi><mi>u</mi></msub><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒮</mi><mi>u</mi></msub><mo>,</mo><msub><mi>c</mi><mrow><msub><mi>v</mi><mrow><mi>L</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>j</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\text{NTP}}=-\sum_{j=1}^{d}\log P_{\theta}(c_{v_{L+1},j}\mid%
+\mathbf{x}_{u},\mathcal{S}_{u},c_{v_{L+1},&lt;j})</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">由此得到的骨干网络为后续的场景特定对齐提供了稳健的基础。</p>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS1.p2">
+<p class="ltx_p">该阶段以广泛的跨场景兴趣初始化语义 ID 生成器，这对稀疏的目标场景尤为有益，否则这些场景会面临覆盖不足与过拟合问题。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S3.SS5.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.5.2. </span>价值感知的并行多词元预测</h4>
+<div class="ltx_para" id="S3.SS5.SSS2.p1">
+<p class="ltx_p">为捕获目标场景中的多个并发兴趣，我们引入并行 MTP（PMTP），它针对同一会话中的多个自回归语义 ID 目标使用定制的并行掩码：</p>
+<ul class="ltx_itemize" id="S3.I2">
+<li class="ltx_item" id="S3.I2.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I2.i1.p1">
+<p class="ltx_p">同一物品内部：在所有层级的语义 ID 之间施加因果掩码。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I2.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I2.i2.p1">
+<p class="ltx_p">不同物品之间：强制相互不可见。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I2.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I2.i3.p1">
+<p class="ltx_p">共享 BOS 词元：所有语义 ID 均可访问 BOS 词元，通过单一 BOS 统一多个兴趣的表示。</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS2.p2">
+<p class="ltx_p">我们进一步引入行为上的业务价值权重（例如，购买 &gt; 加入购物车 &gt; 点击 &gt; 曝光），得到 VA-PMTP 损失：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E6">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(6)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\text{VA-PMTP}}=-\sum_{\tau}w_{\tau}\sum_{i=1}^{\mathcal{S}_{\tau%
+}}\sum_{j=1}^{d}\log P_{\theta}(c_{v_{L+i},j}\mid\mathbf{x}_{u},\mathcal{S}_{u%
+},c_{v_{L+i},&lt;j})" class="ltx_Math" display="block" id="S3.E6.m1"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>VA-PMTP</mtext></msub><mo>=</mo><mrow><mo>−</mo><mrow><munder><mo movablelimits="false">∑</mo><mi>τ</mi></munder><mrow><msub><mi>w</mi><mi>τ</mi></msub><mo>⁢</mo><mrow><munderover><mo movablelimits="false" rspace="0em">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi class="ltx_font_mathcaligraphic">𝒮</mi><mi>τ</mi></msub></munderover><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover><mrow><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><msub><mi>P</mi><mi>θ</mi></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>c</mi><mrow><msub><mi>v</mi><mrow><mi>L</mi><mo>+</mo><mi>i</mi></mrow></msub><mo>,</mo><mi>j</mi></mrow></msub><mo>∣</mo><mrow><msub><mi>𝐱</mi><mi>u</mi></msub><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒮</mi><mi>u</mi></msub><mo>,</mo><msub><mi>c</mi><mrow><msub><mi>v</mi><mrow><mi>L</mi><mo>+</mo><mi>i</mi></mrow></msub><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>j</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\text{VA-PMTP}}=-\sum_{\tau}w_{\tau}\sum_{i=1}^{\mathcal{S}_{\tau%
+}}\sum_{j=1}^{d}\log P_{\theta}(c_{v_{L+i},j}\mid\mathbf{x}_{u},\mathcal{S}_{u%
+},c_{v_{L+i},&lt;j})</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="w_{\tau}" class="ltx_Math" display="inline" id="S3.SS5.SSS2.p2.m1"><semantics><msub><mi>w</mi><mi>τ</mi></msub><annotation encoding="application/x-tex">w_{\tau}</annotation></semantics></math> 为业务价值权重，<math alttext="\mathcal{S}_{\tau}" class="ltx_Math" display="inline" id="S3.SS5.SSS2.p2.m2"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒮</mi><mi>τ</mi></msub><annotation encoding="application/x-tex">\mathcal{S}_{\tau}</annotation></semantics></math> 为会话内目标 <math alttext="\tau" class="ltx_Math" display="inline" id="S3.SS5.SSS2.p2.m3"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math> 对应的物品集合。</p>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS2.p3">
+<p class="ltx_p">与标准 NTP 相比，VA-PMTP 既通过并行的行为特定目标提升了目标多样性，又使生成偏向更高价值的行为，从而产生对下游排序更有用的候选集。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S3.SS5.SSS3">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.5.3. </span>统一多目标排序模块</h4>
+<div class="ltx_para" id="S3.SS5.SSS3.p1">
+<p class="ltx_p">场景特定对齐在生成式解码器上附加了一个基于语义 ID 的多目标排序模块。该模块并未引入独立的基于物品 ID 的排序器，而是复用生成过程中产生的语义 ID 表示与解码器状态。</p>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS3.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">输入共享</span>：</p>
+<ul class="ltx_itemize" id="S3.I3">
+<li class="ltx_item" id="S3.I3.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I3.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">语义 ID 表示共享</span>：生成与排序共享语义 ID 表示；拼接后的多层级语义 ID 作为排序模块的候选输入。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I3.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I3.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">编码器表示共享</span>：生成与排序共享用户行为序列的编码器表示。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I3.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I3.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">解码器表示共享（DRS）</span>：随着解码器进行自回归解码，各层级的语义 ID 表示逐步捕获目标物品与用户表示之间的高阶交互。这些解码器状态被排序模块复用。</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS3.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">模型架构</span>：</p>
+<ul class="ltx_itemize" id="S3.I4">
+<li class="ltx_item" id="S3.I4.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I4.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">目标注意力</span>：使用候选语义 ID 对行为序列编码器表示施加交叉注意力，从而实现细粒度的用户兴趣建模。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I4.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I4.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">基于 PLE 的多目标排序</span>：用户信息、语义 ID 表示、目标注意力输出以及解码器表示被用作渐进式分层提取（PLE）模块的底层输入，以进行多目标排序。</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS3.p4">
+<p class="ltx_p">这种共享设计使排序损失能够将价值导向的梯度传播到用于生成的表示上。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S3.SS5.SSS4">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.5.4. </span>用于生成-排序对齐的任务感知词元</h4>
+<div class="ltx_para" id="S3.SS5.SSS4.p1">
+<p class="ltx_p">纯生成目标并未显式编码该表示应服务于哪个业务目标，而点击、加入购物车与购买预测需要相关但不同的偏好信号。</p>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS4.p2">
+<p class="ltx_p">因此，我们提出任务感知词元（TAT），它将可学习的任务词元前置到解码器输入中。这使后续的语义 ID 表示能够以目标特定信号为条件。</p>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS4.p3">
+<p class="ltx_p">我们引入三个可学习的嵌入向量 <math alttext="\mathbf{e}_{\text{click}}" class="ltx_Math" display="inline" id="S3.SS5.SSS4.p3.m1"><semantics><msub><mi>𝐞</mi><mtext>click</mtext></msub><annotation encoding="application/x-tex">\mathbf{e}_{\text{click}}</annotation></semantics></math>、<math alttext="\mathbf{e}_{\text{atc}}" class="ltx_Math" display="inline" id="S3.SS5.SSS4.p3.m2"><semantics><msub><mi>𝐞</mi><mtext>atc</mtext></msub><annotation encoding="application/x-tex">\mathbf{e}_{\text{atc}}</annotation></semantics></math> 和 <math alttext="\mathbf{e}_{\text{pay}}" class="ltx_Math" display="inline" id="S3.SS5.SSS4.p3.m3"><semantics><msub><mi>𝐞</mi><mtext>pay</mtext></msub><annotation encoding="application/x-tex">\mathbf{e}_{\text{pay}}</annotation></semantics></math>，分别对应点击、加入购物车和购买目标。它们被前置在序列起始词元 <math alttext="\langle\text{bos}\rangle" class="ltx_Math" display="inline" id="S3.SS5.SSS4.p3.m4"><semantics><mrow><mo stretchy="false">⟨</mo><mtext>bos</mtext><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">\langle\text{bos}\rangle</annotation></semantics></math> 之前，形成增强后的解码器输入：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E7">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(7)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathbf{X}_{\text{dec}}=[\underbrace{\mathbf{e}_{\text{click}},\ \mathbf{e}_{%
+\text{atc}},\ \mathbf{e}_{\text{pay}}}_{\text{task tokens}},\ \underbrace{%
+\langle\text{bos}\rangle,\ s_{1},\ s_{2},\ldots}_{\text{sequence tokens}}]" class="ltx_Math" display="block" id="S3.E7.m1"><semantics><mrow><msub><mi>𝐗</mi><mtext>dec</mtext></msub><mo>=</mo><mrow><mo stretchy="false">[</mo><munder><munder accentunder="true"><mrow><msub><mi>𝐞</mi><mtext>click</mtext></msub><mo rspace="0.667em">,</mo><msub><mi>𝐞</mi><mtext>atc</mtext></msub><mo rspace="0.667em">,</mo><msub><mi>𝐞</mi><mtext>pay</mtext></msub></mrow><mo>⏟</mo></munder><mtext>task tokens</mtext></munder><mo rspace="0.667em">,</mo><munder><munder accentunder="true"><mrow><mrow><mo stretchy="false">⟨</mo><mtext>bos</mtext><mo stretchy="false">⟩</mo></mrow><mo rspace="0.667em">,</mo><msub><mi>s</mi><mn>1</mn></msub><mo rspace="0.667em">,</mo><msub><mi>s</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi></mrow><mo>⏟</mo></munder><mtext>sequence tokens</mtext></munder><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{X}_{\text{dec}}=[\underbrace{\mathbf{e}_{\text{click}},\ \mathbf{e}_{%
+\text{atc}},\ \mathbf{e}_{\text{pay}}}_{\text{task tokens}},\ \underbrace{%
+\langle\text{bos}\rangle,\ s_{1},\ s_{2},\ldots}_{\text{sequence tokens}}]</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS4.p4">
+<p class="ltx_p">该序列在统一的因果掩码下处理：任务词元遵循点击 <math alttext="\rightarrow" class="ltx_Math" display="inline" id="S3.SS5.SSS4.p4.m1"><semantics><mo stretchy="false">→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 加入购物车 <math alttext="\rightarrow" class="ltx_Math" display="inline" id="S3.SS5.SSS4.p4.m2"><semantics><mo stretchy="false">→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 购买的漏斗顺序，且所有语义 ID 词元均可关注前面的任务词元。因此，目标特定信息从第一个解码步骤起即被注入。</p>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS4.p5">
+<p class="ltx_p">由于任务词元占据固定的前缀位置，TAT 在推理时不会引入额外的自回归步骤。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S3.SS5.SSS5">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.5.5. </span>生成与排序的联合训练</h4>
+<div class="ltx_para" id="S3.SS5.SSS5.p1">
+<p class="ltx_p">主训练目标由两个部分组成——生成任务与排序任务——它们共同驱动端到端优化。</p>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS5.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">生成任务</span>。令 <math alttext="\mathbf{e}_{\text{task}}=(\mathbf{e}_{\text{click}},\mathbf{e}_{\text{atc}},%
+\mathbf{e}_{\text{pay}})" class="ltx_Math" display="inline" id="S3.SS5.SSS5.p2.m1"><semantics><mrow><msub><mi>𝐞</mi><mtext>task</mtext></msub><mo>=</mo><mrow><mo stretchy="false">(</mo><msub><mi>𝐞</mi><mtext>click</mtext></msub><mo>,</mo><msub><mi>𝐞</mi><mtext>atc</mtext></msub><mo>,</mo><msub><mi>𝐞</mi><mtext>pay</mtext></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{e}_{\text{task}}=(\mathbf{e}_{\text{click}},\mathbf{e}_{\text{atc}},%
+\mathbf{e}_{\text{pay}})</annotation></semantics></math> 表示任务词元表示。解码器在序列词元位置上执行 VA-PMTP，使用交叉熵损失：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E8">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(8)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\text{gen}}=-\sum_{\tau}w_{\tau}\sum_{i=1}^{\mathcal{S}_{\tau}}%
+\sum_{j=1}^{d}\log P_{\theta}\!\left(c_{v_{L+i},j}\mid\mathbf{x}_{u},\mathcal{%
+S}_{u},c_{v_{L+i},&lt;j},\mathbf{e}_{\text{task}}\right)" class="ltx_Math" display="block" id="S3.E8.m1"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>gen</mtext></msub><mo>=</mo><mrow><mo>−</mo><mrow><munder><mo movablelimits="false">∑</mo><mi>τ</mi></munder><mrow><msub><mi>w</mi><mi>τ</mi></msub><mo>⁢</mo><mrow><munderover><mo movablelimits="false" rspace="0em">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi class="ltx_font_mathcaligraphic">𝒮</mi><mi>τ</mi></msub></munderover><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover><mrow><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><msub><mi>P</mi><mi>θ</mi></msub></mrow><mo>⁢</mo><mrow><mo>(</mo><mrow><msub><mi>c</mi><mrow><msub><mi>v</mi><mrow><mi>L</mi><mo>+</mo><mi>i</mi></mrow></msub><mo>,</mo><mi>j</mi></mrow></msub><mo>∣</mo><mrow><msub><mi>𝐱</mi><mi>u</mi></msub><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒮</mi><mi>u</mi></msub><mo>,</mo><msub><mi>c</mi><mrow><msub><mi>v</mi><mrow><mi>L</mi><mo>+</mo><mi>i</mi></mrow></msub><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>j</mi></mrow></mrow></msub><mo>,</mo><msub><mi>𝐞</mi><mtext>task</mtext></msub></mrow></mrow><mo>)</mo></mrow></mrow></mrow></mrow></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\text{gen}}=-\sum_{\tau}w_{\tau}\sum_{i=1}^{\mathcal{S}_{\tau}}%
+\sum_{j=1}^{d}\log P_{\theta}\!\left(c_{v_{L+i},j}\mid\mathbf{x}_{u},\mathcal{%
+S}_{u},c_{v_{L+i},&lt;j},\mathbf{e}_{\text{task}}\right)</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">与不含任务词元的基线相比，该条件概率包含 <math alttext="\mathbf{e}_{\text{task}}" class="ltx_Math" display="inline" id="S3.SS5.SSS5.p2.m2"><semantics><msub><mi>𝐞</mi><mtext>task</mtext></msub><annotation encoding="application/x-tex">\mathbf{e}_{\text{task}}</annotation></semantics></math>，因此生成受到目标特定偏好的调制。</p>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS5.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">排序任务</span>。<math alttext="\langle\text{bos}\rangle,s_{1},s_{2},\ldots" class="ltx_Math" display="inline" id="S3.SS5.SSS5.p3.m1"><semantics><mrow><mrow><mo stretchy="false">⟨</mo><mtext>bos</mtext><mo stretchy="false">⟩</mo></mrow><mo>,</mo><msub><mi>s</mi><mn>1</mn></msub><mo>,</mo><msub><mi>s</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi></mrow><annotation encoding="application/x-tex">\langle\text{bos}\rangle,s_{1},s_{2},\ldots</annotation></semantics></math> 处的解码器输出作为任务感知特征，用于点击、加入购物车和购买预测。
+排序损失为各目标损失的加权和：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E9">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(9)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\text{rank}}=\sum_{\tau}\lambda_{\tau}\cdot\mathcal{L}_{\tau}(%
+\hat{y}_{\tau},y_{\tau})" class="ltx_Math" display="block" id="S3.E9.m1"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>rank</mtext></msub><mo rspace="0.111em">=</mo><mrow><munder><mo movablelimits="false">∑</mo><mi>τ</mi></munder><mrow><mrow><msub><mi>λ</mi><mi>τ</mi></msub><mo lspace="0.222em" rspace="0.222em">⋅</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>τ</mi></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>τ</mi></msub><mo>,</mo><msub><mi>y</mi><mi>τ</mi></msub><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\text{rank}}=\sum_{\tau}\lambda_{\tau}\cdot\mathcal{L}_{\tau}(%
+\hat{y}_{\tau},y_{\tau})</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="\mathcal{L}_{\tau}" class="ltx_Math" display="inline" id="S3.SS5.SSS5.p3.m2"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>τ</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\tau}</annotation></semantics></math> 表示对应目标的二元交叉熵（BCE）损失。</p>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS5.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">联合优化</span>。最终训练目标为：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E10">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(10)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}=\mathcal{L}_{\text{gen}}+\alpha\cdot\mathcal{L}_{\text{rank}}" class="ltx_Math" display="block" id="S3.E10.m1"><semantics><mrow><mi class="ltx_font_mathcaligraphic">ℒ</mi><mo>=</mo><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>gen</mtext></msub><mo>+</mo><mrow><mi>α</mi><mo lspace="0.222em" rspace="0.222em">⋅</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>rank</mtext></msub></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{L}=\mathcal{L}_{\text{gen}}+\alpha\cdot\mathcal{L}_{\text{rank}}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="\alpha" class="ltx_Math" display="inline" id="S3.SS5.SSS5.p4.m1"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math> 为平衡超参数。排序损失的梯度通过共享解码器参数反向传播，进一步强化序列词元位置上输出表示的多目标感知能力。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S3.SS5.SSS6">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.5.6. </span>用于任务词元引导的漏斗感知对比学习</h4>
+<div class="ltx_para" id="S3.SS5.SSS6.p1">
+<p class="ltx_p">任务词元主要通过注意力影响下游序列表示。因此，它们容易受到弱监督和语义漂移的影响。</p>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS6.p2">
+<p class="ltx_p">我们引入漏斗感知对比学习（FACL）作为辅助信号。对于任务词元输出 <math alttext="\mathbf{h}_{\tau}" class="ltx_Math" display="inline" id="S3.SS5.SSS6.p2.m1"><semantics><msub><mi>𝐡</mi><mi>τ</mi></msub><annotation encoding="application/x-tex">\mathbf{h}_{\tau}</annotation></semantics></math>、<math alttext="\tau\in\{\text{click},\text{atc},\text{pay}\}" class="ltx_Math" display="inline" id="S3.SS5.SSS6.p2.m2"><semantics><mrow><mi>τ</mi><mo>∈</mo><mrow><mo stretchy="false">{</mo><mtext>click</mtext><mo>,</mo><mtext>atc</mtext><mo>,</mo><mtext>pay</mtext><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">\tau\in\{\text{click},\text{atc},\text{pay}\}</annotation></semantics></math>，我们针对物品 ID 嵌入 <math alttext="\mathbf{v}_{i}" class="ltx_Math" display="inline" id="S3.SS5.SSS6.p2.m3"><semantics><msub><mi>𝐯</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\mathbf{v}_{i}</annotation></semantics></math> 执行对比学习：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E11">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(11)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\tau}^{\text{aux}}=-\log\frac{\exp(\text{sim}(\mathbf{h}_{\tau},%
+\ \mathbf{v}^{+})/t)}{\exp(\text{sim}(\mathbf{h}_{\tau},\ \mathbf{v}^{+})/t)+%
+\sum_{j=1}^{K}\exp(\text{sim}(\mathbf{h}_{\tau},\ \mathbf{v}_{j}^{-})/t)}" class="ltx_Math" display="block" id="S3.E11.m1"><semantics><mrow><msubsup><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>τ</mi><mtext>aux</mtext></msubsup><mo>=</mo><mrow><mo rspace="0.167em">−</mo><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><mfrac><mrow><mi>exp</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mrow><mrow><mtext>sim</mtext><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>𝐡</mi><mi>τ</mi></msub><mo rspace="0.667em">,</mo><msup><mi>𝐯</mi><mo>+</mo></msup><mo stretchy="false">)</mo></mrow></mrow><mo>/</mo><mi>t</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><mrow><mi>exp</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mrow><mrow><mtext>sim</mtext><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>𝐡</mi><mi>τ</mi></msub><mo rspace="0.667em">,</mo><msup><mi>𝐯</mi><mo>+</mo></msup><mo stretchy="false">)</mo></mrow></mrow><mo>/</mo><mi>t</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.055em">+</mo><mrow><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></msubsup><mrow><mi>exp</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mrow><mrow><mtext>sim</mtext><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>𝐡</mi><mi>τ</mi></msub><mo rspace="0.667em">,</mo><msubsup><mi>𝐯</mi><mi>j</mi><mo>−</mo></msubsup><mo stretchy="false">)</mo></mrow></mrow><mo>/</mo><mi>t</mi></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow></mfrac></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\tau}^{\text{aux}}=-\log\frac{\exp(\text{sim}(\mathbf{h}_{\tau},%
+\ \mathbf{v}^{+})/t)}{\exp(\text{sim}(\mathbf{h}_{\tau},\ \mathbf{v}^{+})/t)+%
+\sum_{j=1}^{K}\exp(\text{sim}(\mathbf{h}_{\tau},\ \mathbf{v}_{j}^{-})/t)}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="\text{sim}(\cdot,\cdot)" class="ltx_Math" display="inline" id="S3.SS5.SSS6.p2.m4"><semantics><mrow><mtext>sim</mtext><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo rspace="0em">,</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\text{sim}(\cdot,\cdot)</annotation></semantics></math> 表示余弦相似度，<math alttext="t" class="ltx_Math" display="inline" id="S3.SS5.SSS6.p2.m5"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> 为温度。正样本遵循各任务词元关联的行为，而负样本沿转化漏斗逐渐变得更具挑战性：点击任务的负样本为随机物品，加入购物车任务的负样本为已点击但未加入购物车的物品，购买任务的负样本为已点击但未购买的物品。</p>
+<ul class="ltx_itemize" id="S3.I5">
+<li class="ltx_item" id="S3.I5.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I5.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">点击词元</span>：正样本为已点击物品，负样本从物品池中采样。该词元捕获粗粒度兴趣。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I5.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I5.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">加入购物车词元</span>：正样本为加入购物车的物品，负样本为已点击但未加入的物品。这促使该词元将更强的购买意图与点击级兴趣区分开来。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I5.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S3.I5.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">购买词元</span>：正样本为已购买物品，负样本为已点击但未购买的物品。这引导该词元朝向最终转化目标。</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS6.p3">
+<p class="ltx_p">辅助对比损失为：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E12">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(12)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\text{aux}}=\beta\cdot(\mathcal{L}_{\text{click}}^{\text{aux}}+%
+\mathcal{L}_{\text{atc}}^{\text{aux}}+\mathcal{L}_{\text{pay}}^{\text{aux}})" class="ltx_Math" display="block" id="S3.E12.m1"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>aux</mtext></msub><mo>=</mo><mrow><mi>β</mi><mo lspace="0.222em" rspace="0.222em">⋅</mo><mrow><mo stretchy="false">(</mo><mrow><msubsup><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>click</mtext><mtext>aux</mtext></msubsup><mo>+</mo><msubsup><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>atc</mtext><mtext>aux</mtext></msubsup><mo>+</mo><msubsup><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>pay</mtext><mtext>aux</mtext></msubsup></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\text{aux}}=\beta\cdot(\mathcal{L}_{\text{click}}^{\text{aux}}+%
+\mathcal{L}_{\text{atc}}^{\text{aux}}+\mathcal{L}_{\text{pay}}^{\text{aux}})</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="ltx_para" id="S3.SS5.SSS6.p4">
+<p class="ltx_p">完整训练目标为：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E13">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(13)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}=\underbrace{\mathcal{L}_{\text{gen}}+\alpha\cdot\mathcal{L}_{\text%
+{rank}}}_{\text{main tasks}}+\underbrace{\mathcal{L}_{\text{aux}}}_{\text{%
+auxiliary task}}" class="ltx_Math" display="block" id="S3.E13.m1"><semantics><mrow><mi class="ltx_font_mathcaligraphic">ℒ</mi><mo>=</mo><mrow><munder><munder accentunder="true"><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>gen</mtext></msub><mo>+</mo><mrow><mi>α</mi><mo lspace="0.222em" rspace="0.222em">⋅</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>rank</mtext></msub></mrow></mrow><mo>⏟</mo></munder><mtext>main tasks</mtext></munder><mo>+</mo><munder><munder accentunder="true"><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>aux</mtext></msub><mo>⏟</mo></munder><mtext>auxiliary task</mtext></munder></mrow></mrow><annotation encoding="application/x-tex">\mathcal{L}=\underbrace{\mathcal{L}_{\text{gen}}+\alpha\cdot\mathcal{L}_{\text%
+{rank}}}_{\text{main tasks}}+\underbrace{\mathcal{L}_{\text{aux}}}_{\text{%
+auxiliary task}}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">FACL 为任务词元提供面向目标的监督，有助于防止语义漂移。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S3.SS6">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.6. </span>STARK：带重组 KV 缓存的语义树注意力</h3>
+<div class="ltx_para" id="S3.SS6.p1">
+<p class="ltx_p">基于语义 ID 的生成式检索方法通常采用束搜索进行自回归解码，沿批量维度扩展前 <math alttext="K" class="ltx_Math" display="inline" id="S3.SS6.p1.m1"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 个候选序列。然而，这种传统实现会带来严重的效率瓶颈。</p>
+</div>
+<div class="ltx_para" id="S3.SS6.p2">
+<p class="ltx_p">具体而言，KV 缓存在批量维度上的重复复制与重排会带来显著的内存带宽开销，而独立处理这些批量候选会导致对共享前缀的冗余注意力计算。这些低效问题还因语义 ID 长度极短而进一步加剧，导致针对长序列优化的主流注意力内核因过度填充而出现严重的利用率不足。</p>
+</div>
+<div class="ltx_para" id="S3.SS6.p3">
+<p class="ltx_p">为解决这些问题，我们从推测解码中的树注意力获得启发，提出 STARK（带重组 KV 缓存的语义树注意力），一种为语义 ID 解码量身定制的高效推理方案。</p>
+</div>
+<figure class="ltx_figure" id="S3.F2"><a href="assets/8dab535f96b564e9.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F2.g1" loading="lazy" src="assets/8dab535f96b564e9.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2. </span>STARK 推理机制。它使用序列维度的树注意力掩码来消除冗余的前缀计算与数据复制。</figcaption>
+</figure>
+<div class="ltx_para" id="S3.SS6.p4">
+<p class="ltx_p">STARK 的核心思想是以序列维度扩展替代批量维度扩展。在每个解码步骤，我们不再将前 <math alttext="K" class="ltx_Math" display="inline" id="S3.SS6.p4.m1"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 个候选复制为 <math alttext="K" class="ltx_Math" display="inline" id="S3.SS6.p4.m2"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 个独立的批量样本，而是沿序列维度拼接候选词元，并使用预定义的树注意力掩码控制可见性。每个词元只能关注解码树中的祖先节点及其自身。这既保留了标准束搜索的解码结果，又提升了效率。</p>
+</div>
+<div class="ltx_para" id="S3.SS6.p5">
+<p class="ltx_p">形式上，令 <math alttext="P^{(l)}=\{p_{1}^{(l)},p_{2}^{(l)},\ldots,p_{k}^{(l)}\}" class="ltx_Math" display="inline" id="S3.SS6.p5.m1"><semantics><mrow><msup><mi>P</mi><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msup><mo>=</mo><mrow><mo stretchy="false">{</mo><msubsup><mi>p</mi><mn>1</mn><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>,</mo><msubsup><mi>p</mi><mn>2</mn><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msubsup><mi>p</mi><mi>k</mi><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msubsup><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">P^{(l)}=\{p_{1}^{(l)},p_{2}^{(l)},\ldots,p_{k}^{(l)}\}</annotation></semantics></math> 表示第 <math alttext="l" class="ltx_Math" display="inline" id="S3.SS6.p5.m2"><semantics><mi>l</mi><annotation encoding="application/x-tex">l</annotation></semantics></math> 个语义层级上的候选路径。STARK 构造树掩码 <math alttext="\mathbf{M}^{(l)}" class="ltx_Math" display="inline" id="S3.SS6.p5.m3"><semantics><msup><mi>𝐌</mi><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msup><annotation encoding="application/x-tex">\mathbf{M}^{(l)}</annotation></semantics></math>：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E14">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(14)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathbf{M}^{(l)}_{i,j}=\begin{cases}1,&amp;\text{if }j\in\mathrm{Anc}(p_{i}^{(l)})%
+\text{ or }j=i,\\
+0,&amp;\text{otherwise},\end{cases}" class="ltx_Math" display="block" id="S3.E14.m1"><semantics><mrow><msubsup><mi>𝐌</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>=</mo><mrow><mo>{</mo><mtable columnspacing="5pt" displaystyle="true" rowspacing="0pt"><mtr><mtd class="ltx_align_left" columnalign="left"><mrow><mn>1</mn><mo>,</mo></mrow></mtd><mtd class="ltx_align_left" columnalign="left"><mrow><mrow><mrow><mtext>if </mtext><mo>⁢</mo><mi>j</mi></mrow><mo>∈</mo><mrow><mi>Anc</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msubsup><mi>p</mi><mi>i</mi><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msubsup><mo stretchy="false">)</mo></mrow><mo>⁢</mo><mtext> or </mtext><mo>⁢</mo><mi>j</mi></mrow><mo>=</mo><mi>i</mi></mrow><mo>,</mo></mrow></mtd></mtr><mtr><mtd class="ltx_align_left" columnalign="left"><mrow><mn>0</mn><mo>,</mo></mrow></mtd><mtd class="ltx_align_left" columnalign="left"><mrow><mtext>otherwise</mtext><mo>,</mo></mrow></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\mathbf{M}^{(l)}_{i,j}=\begin{cases}1,&amp;\text{if }j\in\mathrm{Anc}(p_{i}^{(l)})%
+\text{ or }j=i,\\
+0,&amp;\text{otherwise},\end{cases}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+<figure class="ltx_table" id="S3.T1">
+<figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 1. </span>STARK 的端到端延迟与吞吐量对比。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Method</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Batchsize</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">QPS</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">AVG Lat(ms)</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">P99 Lat(ms)</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t"><span class="ltx_text" style="font-size:90%;">w/o STARK</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">1</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">119</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">30.9</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">33.5</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left"><span class="ltx_text" style="font-size:90%;">STARK</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">1</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">219</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">14.1</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">15.6</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text" style="font-size:90%;">STARK</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">8</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">596</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">26.1</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">26.8</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div class="ltx_para" id="S3.SS6.p6">
+<p class="ltx_p">其中 <math alttext="\mathrm{Anc}(p_{i}^{(l)})" class="ltx_Math" display="inline" id="S3.SS6.p6.m1"><semantics><mrow><mi>Anc</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msubsup><mi>p</mi><mi>i</mi><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msubsup><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathrm{Anc}(p_{i}^{(l)})</annotation></semantics></math> 表示路径 <math alttext="p_{i}^{(l)}" class="ltx_Math" display="inline" id="S3.SS6.p6.m2"><semantics><msubsup><mi>p</mi><mi>i</mi><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msubsup><annotation encoding="application/x-tex">p_{i}^{(l)}</annotation></semantics></math> 的祖先位置。该掩码保证候选分支之间保持因果隔离，同时共享前缀仅被精确计算一次。</p>
+</div>
+<div class="ltx_para" id="S3.SS6.p7">
+<p class="ltx_p">STARK 使用预计算的注意力掩码来编码束搜索树。每个候选词元只能关注其祖先前缀及其自身，从而保持不同候选路径之间的因果隔离。由于语义 ID 深度与束宽在服务时是固定的，树掩码与 KV 缓存重映射均可作为轻量级索引操作来准备，而非重复的数据复制。</p>
+</div>
+<div class="ltx_para" id="S3.SS6.p8">
+<p class="ltx_p">KV 缓存的组织遵循相同的树拓扑。当两条候选路径共享前缀时，对应的键和值仅存储一次，并由后代节点通过预计算的索引映射引用。因此，候选扩展主要是将新选出的语义词元追加到树中，而不是为每个束复制整个前缀缓存。这一特性对语义 ID 生成尤为有益，因为其解码长度短但束宽可能很大。</p>
+</div>
+<div class="ltx_para" id="S3.SS6.p9">
+<p class="ltx_p">总体而言，STARK 减少了数据复制，避免了冗余前缀计算，并提升了注意力内核利用率，同时保留了标准束搜索的结果。STARK 在工业规模场景下实现了 200% 的吞吐量提升，支撑了生成式推荐系统的大规模部署。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4. </span>实验</h2>
+<section class="ltx_subsection" id="S4.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1. </span>实验设置</h3>
+<section class="ltx_subsubsection" id="S4.SS1.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.1.1. </span>数据集</h4>
+<div class="ltx_para" id="S4.SS1.SSS1.p1">
+<p class="ltx_p">我们在来自 Lazada 首页“猜你喜欢”场景的大规模电商推荐日志上评估 UniSGR。多场景预训练使用从多个业务场景收集的混合行为数据，而场景特定对齐使用带行为标签的目标场景日志。评估考察在给定行为目标下，真实物品是否出现在生成的 Top-<math alttext="K" class="ltx_Math" display="inline" id="S4.SS1.SSS1.p1.m1"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 候选集中，以及排序模块是否提升了生成候选上的行为预测质量。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS1.p2">
+<p class="ltx_p">出于保密原因，我们省略了敏感的生产统计信息，包括用户量、物品量和确切流量规模。除非另有说明，所有对比方法均在相同的数据划分、语义 ID 分词器和服务约束下进行评估。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S4.SS1.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.1.2. </span>基线模型</h4>
+<div class="ltx_para" id="S4.SS1.SSS2.p1">
+<p class="ltx_p">我们将 UniSGR 与若干具有代表性的基于语义 ID 的生成式推荐基线进行比较，包括 TIGER <cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib31" title="Recommender systems with generative retrieval">2023</a>)</cite>、OneRec <cite class="ltx_cite ltx_citemacro_citep">(Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib36" title="Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>)</cite> 和 OneRec-V2 <cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib44" title="OneRec-v2 technical report">2025</a>)</cite>。这些方法与我们的设定密切相关，因为它们将推荐建模为语义 ID 生成。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S4.SS1.SSS3">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.1.3. </span>评估指标</h4>
+<div class="ltx_para" id="S4.SS1.SSS3.p1">
+<p class="ltx_p">对于生成式检索，我们采用 top-<math alttext="K" class="ltx_Math" display="inline" id="S4.SS1.SSS3.p1.m1"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 命中率（HR@<math alttext="K" class="ltx_Math" display="inline" id="S4.SS1.SSS3.p1.m2"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>），若目标物品出现在前 <math alttext="K" class="ltx_Math" display="inline" id="S4.SS1.SSS3.p1.m3"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 个生成候选中即计为一次命中。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS3.p2">
+<p class="ltx_p">在多场景预训练阶段，由于点击行为在该阶段提供主要监督信号，检索评估采用基于点击的 HR@<math alttext="K" class="ltx_Math" display="inline" id="S4.SS1.SSS3.p2.m1"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>。在场景特定对齐中，我们进一步报告不同目标行为下的行为特定 HR@<math alttext="K" class="ltx_Math" display="inline" id="S4.SS1.SSS3.p2.m2"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>，包括点击（Clk-HR）、加入购物车（Atc-HR）和购买（Pay-HR），以评估多个业务目标下的检索质量。对于排序模块，我们额外报告点击、加入购物车和购买预测的 AUC 与 GAUC。除非另有说明，检索实验中我们报告 HR@50、HR@100、HR@200 和 HR@500。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S4.SS1.SSS4">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.1.4. </span>实现细节</h4>
+<div class="ltx_para" id="S4.SS1.SSS4.p1">
+<p class="ltx_p">UniSGR 的嵌入维度为 <math alttext="d=128" class="ltx_Math" display="inline" id="S4.SS1.SSS4.p1.m1"><semantics><mrow><mi>d</mi><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">d=128</annotation></semantics></math>，采用分组查询注意力（GQA），每 4 个查询头共享一个键值头，并使用稀疏 MoE 架构，每个词元仅激活总参数中约 7% 的部分。所有基线与变体均使用相同的嵌入与硬件，以保证公平比较。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS4.p2">
+<p class="ltx_p">对于生成式检索推理，我们使用束搜索解码语义 ID 序列，并将码本各层在自回归各步的束宽设为 <math alttext="(512,512,1024)" class="ltx_Math" display="inline" id="S4.SS1.SSS4.p2.m1"><semantics><mrow><mo stretchy="false">(</mo><mn>512</mn><mo>,</mo><mn>512</mn><mo>,</mo><mn>1024</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(512,512,1024)</annotation></semantics></math>。最后一层采用更宽的束宽，从而在细粒度候选之间消歧时扩大假设空间。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S4.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2. </span>离线性能</h3>
+<div class="ltx_para" id="S4.SS2.p1">
+<p class="ltx_p">我们首先将 UniSGR 与最先进的基线进行比较，评估其整体检索质量。表 <a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.2. Offline Performance ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">2</span></a> 展示了在多个业务场景下评估的离线对比结果。在相同配置下，UniSGR -M 在所有评估指标上均持续超越所有基于语义 ID 的基线。</p>
+</div>
+<figure class="ltx_table" id="S4.T2">
+<figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 2. </span>检索模型的离线比较。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_column ltx_th_row ltx_border_tt">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Model</span></span>
+</span>
+</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@50</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@200</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@500</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">TIGER</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.1445</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.2026</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.2698</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.3675</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">OneRec-V2</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.1529</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2126</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2816</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.3812</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">OneRec</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.1538</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2151</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2855</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.3866</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row ltx_border_bb">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">UniSGR -M (Ours)</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1579</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2195</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2896</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.3913</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure class="ltx_table" id="S4.T3">
+<figcaption class="ltx_caption ltx_centering" style="font-size:70%;"><span class="ltx_tag ltx_tag_table">Table 3. </span>在 Lazada 首页“猜你喜欢”场景中评估的 UniSGR 训练范式在各行为上的命中率。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text" style="font-size:70%;">Model</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" colspan="3"><span class="ltx_text" style="font-size:70%;">HR@100</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" colspan="3"><span class="ltx_text" style="font-size:70%;">HR@500</span></th>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_th ltx_th_row"></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Clk</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Atc</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Pay</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Clk</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Atc</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Pay</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t"><span class="ltx_text" style="font-size:70%;">Pre-train Only</span></th>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.1886</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.2276</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.2783</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.3893</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.4288</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.4768</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:70%;">Scenario Align Only</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.2297</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.2397</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.2573</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.4334</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.4374</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.4386</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb"><span class="ltx_text" style="font-size:70%;">Two-stage Training</span></th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.2842</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.3073</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.3408</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.5166</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.5369</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.5632</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+</section>
+<section class="ltx_subsection" id="S4.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.3. </span>消融实验</h3>
+<div class="ltx_para" id="S4.SS3.p1">
+<p class="ltx_p">我们对 UniSGR 的关键组件进行了全面的消融实验。具体而言，我们考察了语义 ID 设计、模型变体、不同模型规模下的缩放行为，以及排序阶段所使用的辅助任务设置的影响。</p>
+</div>
+<section class="ltx_subsubsection" id="S4.SS3.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.3.1. </span>码本规模的影响</h4>
+<div class="ltx_para" id="S4.SS3.SSS1.p1">
+<p class="ltx_p">为了研究码本容量的影响，我们评估了对称 3 层配置（<math alttext="L_{1}=L_{2}=L_{3}=K" class="ltx_Math" display="inline" id="S4.SS3.SSS1.p1.m1"><semantics><mrow><msub><mi>L</mi><mn>1</mn></msub><mo>=</mo><msub><mi>L</mi><mn>2</mn></msub><mo>=</mo><msub><mi>L</mi><mn>3</mn></msub><mo>=</mo><mi>K</mi></mrow><annotation encoding="application/x-tex">L_{1}=L_{2}=L_{3}=K</annotation></semantics></math>），并在不同规模 <math alttext="K\in\{2048,4096,8192,10240\}" class="ltx_Math" display="inline" id="S4.SS3.SSS1.p1.m2"><semantics><mrow><mi>K</mi><mo>∈</mo><mrow><mo stretchy="false">{</mo><mn>2048</mn><mo>,</mo><mn>4096</mn><mo>,</mo><mn>8192</mn><mo>,</mo><mn>10240</mn><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">K\in\{2048,4096,8192,10240\}</annotation></semantics></math> 下进行比较，并在表 <a class="ltx_ref" href="#S4.T4" title="Table 4 ‣ 4.3.1. Impact of Codebook Size ‣ 4.3. Ablation Study ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">4</span></a> 中汇总了 Clk-HR 与碰撞率。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.SSS1.p2">
+<p class="ltx_p">将 <math alttext="K" class="ltx_Math" display="inline" id="S4.SS3.SSS1.p2.m1"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 从 2048 增大到 8192 带来了显著提升，使 Clk-HR@100 从 0.2917 提升至 0.3266。这一改进主要归因于码本层内语义碰撞率的急剧下降（从 45.00% 降至 24.03%），从而使解码过程中能更好地区分细粒度物品。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.SSS1.p3">
+<p class="ltx_p">然而，进一步将 <math alttext="K" class="ltx_Math" display="inline" id="S4.SS3.SSS1.p3.m1"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 扩大到 10240 时收益递减：Clk-HR 基本保持不变，碰撞率仅略微下降至 23.58%。这表明过大的码本会带来参数效率低下以及深层利用不足的问题。因此，我们采用 <math alttext="3L8192" class="ltx_Math" display="inline" id="S4.SS3.SSS1.p3.m2"><semantics><mrow><mn>3</mn><mo>⁢</mo><mi>L</mi><mo>⁢</mo><mn>8192</mn></mrow><annotation encoding="application/x-tex">3L8192</annotation></semantics></math> 配置，作为表征能力与检索准确率之间的最优平衡。</p>
+</div>
+<figure class="ltx_table" id="S4.T4">
+<figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 4. </span>量化模块中不同对称码本规模的性能比较。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Model</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@500</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Collision Rate</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t"><span class="ltx_text" style="font-size:90%;">3L2048</span></th>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.2917</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.4051</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">45.00%</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:90%;">3L4096</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.3126</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.4360</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">31.00%</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:90%;">3L8192</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.3266</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.4597</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">24.03%</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb"><span class="ltx_text" style="font-size:90%;">3L10240</span></th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.3264</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.4603</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">23.58%</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+</section>
+<section class="ltx_subsubsection" id="S4.SS3.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.3.2. </span>模型变体消融</h4>
+<div class="ltx_para" id="S4.SS3.SSS2.p1">
+<p class="ltx_p">为了理解 UniSGR 解码器中不同架构组件的贡献，我们通过系统地移除关键模块进行了消融实验。结果汇总于表 <a class="ltx_ref" href="#S4.T5" title="Table 5 ‣ 4.3.2. Model Variants Ablation ‣ 4.3. Ablation Study ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">5</span></a>。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.SSS2.p2">
+<p class="ltx_p">移除混合专家（MoE）路由机制（<span class="ltx_text ltx_font_italic">w/o MoE</span>）导致性能明显下降，HR@100 从 0.2195 降至 0.1725。这凸显了稀疏 MoE 在扩展模型容量以及在不产生过高计算开销的前提下捕捉多样化用户兴趣方面的关键作用。将 SwiGLU 激活替换为标准前馈网络（<span class="ltx_text ltx_font_italic">w/o SwiGLU</span>）导致所有指标出现明显下降，证实了 SwiGLU 为语义 ID 生成提供了更优越的非线性表达能力。</p>
+</div>
+<figure class="ltx_table" id="S4.T5">
+<figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 5. </span>UniSGR 检索模块的消融实验。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_column ltx_th_row ltx_border_tt">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Model</span></span>
+</span>
+</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@50</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@200</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@500</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">UniSGR -M</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1579</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2195</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2896</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.3913</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">w/o SwiGLU</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.1523</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2119</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2813</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.3802</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">w/o MoE</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.1229</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.1725</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2313</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.3183</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row ltx_border_bb">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">w/o Shared Expert</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.1571</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.2180</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.2882</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.3883</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure class="ltx_figure" id="S4.F3">
+<div class="ltx_flex_figure">
+<div class="ltx_flex_cell ltx_flex_size_2">
+<div class="ltx_block ltx_figure_panel ltx_minipage ltx_align_center ltx_align_top" style="width:208.1pt;">
+<a href="assets/06b62228c1506270.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics" id="S4.F3.g1" loading="lazy" src="assets/06b62228c1506270.svg"/></a>
+<p class="ltx_p ltx_align_center"><span class="ltx_text" style="font-size:90%;">(a) HR@100 缩放曲线</span></p>
+</div>
+</div>
+<div class="ltx_flex_cell ltx_flex_size_2">
+<div class="ltx_block ltx_figure_panel ltx_minipage ltx_align_center ltx_align_top" style="width:208.1pt;">
+<a href="assets/eaa190c0af4537d2.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics" id="S4.F3.g2" loading="lazy" src="assets/eaa190c0af4537d2.svg"/></a>
+<p class="ltx_p ltx_align_center"><span class="ltx_text" style="font-size:90%;">(b) HR@500 缩放曲线</span></p>
+</div>
+</div>
+</div>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3. </span>UniSGR 在不同模型规模下的缩放行为。</figcaption>
+</figure>
+</section>
+<section class="ltx_subsubsection" id="S4.SS3.SSS3">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.3.3. </span>缩放</h4>
+<div class="ltx_para" id="S4.SS3.SSS3.p1">
+<p class="ltx_p">我们评估了当模型规模从 0.2B 增大到 2.0B 时 UniSGR 的表现。如表 <a class="ltx_ref" href="#S4.T6" title="Table 6 ‣ 4.3.3. Scaling ‣ 4.3. Ablation Study ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">6</span></a> 所示，更大的 UniSGR 模型在所有评估指标上均持续取得更好的结果，展现出清晰且稳定的缩放行为。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.SSS3.p2">
+<p class="ltx_p">具体而言，与 UniSGR-XS（0.2B）相比，UniSGR-M（0.8B）将 HR@100 从 0.1911 提升至 0.2195（+14.86%），并将 HR@500 从 0.3489 提升至 0.3913（+12.15%）。当规模扩大到 1.2B、1.6B 和 2.0B 时，可观察到进一步的准确率提升。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.SSS3.p3">
+<p class="ltx_p">随着模型规模增大，边际收益逐渐减小，这表明 UniSGR 主要从中小规模范围内的容量增长中获益，而在更大规模下则表现出收益递减，如图 <a class="ltx_ref" href="#S4.F3" title="Figure 3 ‣ 4.3.2. Model Variants Ablation ‣ 4.3. Ablation Study ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">3</span></a> 所示。</p>
+</div>
+<figure class="ltx_table" id="S4.T6">
+<figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 6. </span>UniSGR 在不同模型规模下的性能缩放。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_column ltx_th_row ltx_border_tt">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Model</span></span>
+</span>
+</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@50</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@100</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@200</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">HR@500</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">UniSGR-XS (0.2B)</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.1364</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.1911</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.2549</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.3489</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">UniSGR-S (0.4B)</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.1471</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2058</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2732</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.3705</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">UniSGR-M (0.8B)</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.1579</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2195</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2896</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.3913</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">UniSGR-L (1.2B)</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.1631</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2266</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2987</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.4018</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">UniSGR-XL (1.6B)</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.1655</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.2298</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.3030</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.4062</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row ltx_border_bb">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:90%;">UniSGR-XXL (2.0B)</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.1664</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.2311</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.3048</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.4097</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure class="ltx_table" id="S4.T7">
+<figcaption class="ltx_caption ltx_centering" style="font-size:70%;"><span class="ltx_tag ltx_tag_table">Table 7. </span>排序模块消融中在各行为上的命中率表现。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text" style="font-size:70%;">Model</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" colspan="3"><span class="ltx_text" style="font-size:70%;">HR@100</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" colspan="3"><span class="ltx_text" style="font-size:70%;">HR@500</span></th>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_th ltx_th_row"></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Clk</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Atc</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Pay</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Clk</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Atc</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">Pay</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t"><span class="ltx_text" style="font-size:70%;">NTP</span></th>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.2752</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.2841</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.3117</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.4962</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.5010</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.5117</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:70%;">VA-PMTP</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.2777</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.3006</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.3382</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5107</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5287</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5566</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:70%;">VA-PMTP + Ranking</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.2903</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.3076</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.3621</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5203</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5380</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5716</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:70%;">VA-PMTP + Ranking + TAT</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.2924</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.3141</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.3614</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.5234</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.5389</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.5754</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb"><span class="ltx_text" style="font-size:70%;">Full UniSGR</span></th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.2932</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.3176</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.3636</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:70%;">0.5229</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:70%;">0.5379</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:70%;">0.5728</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure class="ltx_table" id="S4.T8">
+<figcaption class="ltx_caption ltx_centering" style="font-size:70%;"><span class="ltx_tag ltx_tag_table">Table 8. </span>场景特定对齐消融中的排序性能。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_column ltx_th_row ltx_border_tt">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:70%;">Model</span></span>
+</span>
+</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" colspan="2"><span class="ltx_text" style="font-size:70%;">Click</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" colspan="2"><span class="ltx_text" style="font-size:70%;">ATC</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" colspan="2"><span class="ltx_text" style="font-size:70%;">Pay</span></th>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_th ltx_th_row"></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">GAUC</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">AUC</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">GAUC</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">AUC</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">GAUC</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t"><span class="ltx_text" style="font-size:70%;">AUC</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:70%;">VA-PMTP</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.5513</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.5684</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.5245</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.5360</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.5340</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:70%;">0.5603</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:70%;">VA-PMTP + Ranking</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5624</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.6218</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5710</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.6780</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5767</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.7662</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:70%;">VA-PMTP + Ranking + TAT</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5626</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.6219</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5697</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.6855</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.5787</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:70%;">0.7656</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_justify ltx_th ltx_th_row ltx_border_bb">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p"><span class="ltx_text" style="font-size:70%;">Full UniSGR</span></span>
+</span>
+</th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.5744</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.6334</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.5901</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.6978</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.6153</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.7870</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+</section>
+<section class="ltx_subsubsection" id="S4.SS3.SSS4">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.3.4. </span>两阶段训练</h4>
+<div class="ltx_para" id="S4.SS3.SSS4.p1">
+<p class="ltx_p">为了评估两阶段训练范式，我们将完整流程分别与仅进行多场景预训练以及仅进行场景特定对齐进行比较。如表 <a class="ltx_ref" href="#S4.T3" title="Table 3 ‣ 4.2. Offline Performance ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">3</span></a> 所示，联合方法在 Clk-HR、Atc-HR 和 Pay-HR 上均持续优于这些替代方案。这证实了在广泛的预训练阶段之后执行场景特定对齐的价值。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.SSS4.p2">
+<p class="ltx_p">此外，我们以传统 NTP 作为基线，并逐步加入所提出的对齐组件。如表 <a class="ltx_ref" href="#S4.T7" title="Table 7 ‣ 4.3.3. Scaling ‣ 4.3. Ablation Study ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">7</span></a> 所示，VA-PMTP 在加入购物车和购买上的增益大于点击，表明价值感知生成对更高价值的行为尤其有帮助。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.SSS4.p3">
+<p class="ltx_p">在 VA-PMTP 的基础上，加入排序模块可同时提升检索命中率和排序指标。这些结果表明联合生成-排序训练的优势：排序模块提供了直接的业务目标监督，同时与生成器共享表征，如表 <a class="ltx_ref" href="#S4.T8" title="Table 8 ‣ 4.3.3. Scaling ‣ 4.3. Ablation Study ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">8</span></a> 所示。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.SSS4.p4">
+<p class="ltx_p">TAT 通过将目标特定的信号注入解码器，进一步提升了生成与排序之间的一致性。复用解码器状态为排序模块提供了更丰富的交互特征，从而在点击、加入购物车和购买目标上取得了最佳的 GAUC 和 AUC 结果。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.SSS4.p5">
+<p class="ltx_p">这些结果还表明，面向检索的目标与面向排序的目标是互补的，而非相互竞争的。VA-PMTP 通过使生成具有行为感知能力来改进生成的候选池，而排序模块则在多个业务目标下改进候选的排序与校准。HR 与 AUC/GAUC 上的一致增益表明，共享解码器表征不仅是增加了一个辅助头；它改变了学习到的表征空间，从而同时有利于候选生成和最终打分。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S4.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.4. </span>在线 A/B 测试</h3>
+<div class="ltx_para" id="S4.SS4.p1">
+<p class="ltx_p">为了评估 UniSGR 的在线性能，我们在 Lazada 首页“猜你喜欢”推荐场景中进行了在线 A/B 测试。基线是生产环境中的级联推荐系统。</p>
+</div>
+<div class="ltx_para" id="S4.SS4.p2">
+<p class="ltx_p">如表 <a class="ltx_ref" href="#S4.T9" title="Table 9 ‣ 4.4. Online A/B Test ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">9</span></a> 所示，与基线相比，UniSGR 将商品详情页浏览量（IPV）提升了 3.36%，交易数提升了 2.17%，商品交易总额（GMV）提升了 5.68%。这些结果表明，UniSGR 在真实工业环境中有效提升了用户参与度和转化指标。</p>
+</div>
+<figure class="ltx_table" id="S4.T9">
+<figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 9. </span>在线 A/B 测试中 UniSGR 相较基线的绝对提升。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Scenario</span></th>
+<td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">IPV</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Transaction Count</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">GMV</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb ltx_border_t"><span class="ltx_text" style="font-size:90%;">Lazada Homepage</span></th>
+<td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t"><span class="ltx_text" style="font-size:90%;">+3.36%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t"><span class="ltx_text" style="font-size:90%;">+2.17%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t"><span class="ltx_text" style="font-size:90%;">+5.68%</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+</section>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5. </span>结论</h2>
+<div class="ltx_para" id="S5.p1">
+<p class="ltx_p">在本工作中，我们提出了 UniSGR，一个集成语义 ID 生成与多目标排序的统一框架。为解决级联架构固有的局限性，我们引入了两阶段训练范式：多场景预训练，随后进行场景特定对齐。在该范式内，价值感知并行多词元预测与任务感知词元引导候选生成朝向高价值业务目标。此外，我们设计了 STARK，一种树注意力推理策略，通过消除冗余前缀计算来加速解码。在大规模电商平台上的广泛评估验证了 UniSGR 的优越性与工业可扩展性。</p>
+</div>
+<div class="ltx_pagination ltx_role_newpage"></div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">参考文献</h2>
+<ul class="ltx_biblist" id="bib.L1">
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib39">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Ainslie, J. Lee-Thorp, M. De Jong, Y. Zemlyanskiy, F. Lebrón, and S. Sanghai (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Gqa: training generalized multi-query transformer models from multi-head checkpoints</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2305.13245</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS4.p4" title="3.4. UniSGR Framework ‣ 3. Methodology ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§3.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib17">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">P. M. Alamdari, N. J. Navimipour, M. Hosseinzadeh, A. A. Safaei, and A. Darwesh (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">A systematic study on the recommender systems in the e-commerce</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Ieee Access</span> <span class="ltx_text ltx_bib_volume">8</span>, <span class="ltx_text ltx_bib_pages"> pp. 115694–115716</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib42">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">T. Brown, B. Mann, N. Ryder, M. Subbiah, J. D. Kaplan, P. Dhariwal, A. Neelakantan, P. Shyam, G. Sastry, A. Askell, <span class="ltx_text ltx_bib_etal">et al.</span> (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Language models are few-shot learners</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in neural information processing systems</span> <span class="ltx_text ltx_bib_volume">33</span>, <span class="ltx_text ltx_bib_pages"> pp. 1877–1901</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p5" title="1. Introduction ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib30">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Chai, Q. Ren, X. Xiao, H. Yang, B. Han, S. Zhang, D. Chen, H. Lu, W. Zhao, L. Yu, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Longer: scaling up long sequence modeling in industrial recommenders</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the Nineteenth ACM Conference on Recommender Systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 247–256</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Deep Learning Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib33">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Chen, L. Chi, B. Peng, and Z. Yuan (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Hllm: enhancing sequential recommendations via hierarchical large language models for item and user modeling</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2409.12740</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Generative Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib27">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Cheng, L. Koc, J. Harmsen, T. Shaked, T. Chandra, H. Aradhye, G. Anderson, G. Corrado, W. Chai, M. Ispir, <span class="ltx_text ltx_bib_etal">et al.</span> (2016)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Wide &amp; deep learning for recommender systems</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 1st workshop on deep learning for recommender systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 7–10</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Deep Learning Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib19">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">P. Covington, J. Adams, and E. Sargin (2016)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep neural networks for youtube recommendations</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 10th ACM conference on recommender systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 191–198</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib41">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">D. Dai, C. Deng, C. Zhao, R. Xu, H. Gao, D. Chen, J. Li, W. Zeng, X. Yu, Y. Wu, <span class="ltx_text ltx_bib_etal">et al.</span> (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deepseekmoe: towards ultimate expert specialization in mixture-of-experts language models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2401.06066</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS4.p4" title="3.4. UniSGR Framework ‣ 3. Methodology ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§3.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib36">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Deng, S. Wang, K. Cai, L. Ren, Q. Hu, W. Ding, Q. Luo, and G. Zhou (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onerec: unifying retrieve and rank with generative recommender and iterative preference alignment</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2502.18965</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p3" title="1. Introduction ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Generative Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.2</span></a>,
+<a class="ltx_ref" href="#S4.SS1.SSS2.p1" title="4.1.2. Baseline Models ‣ 4.1. Setup ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§4.1.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib43">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Devlin, M. Chang, K. Lee, and K. Toutanova (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Bert: pre-training of deep bidirectional transformers for language understanding</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 2019 conference of the North American chapter of the association for computational linguistics: human language technologies, volume 1 (long and short papers)</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 4171–4186</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p5" title="1. Introduction ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib25">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Guo, R. Tang, Y. Ye, Z. Li, and X. He (2017)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">DeepFM: a factorization-machine based neural network for ctr prediction</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:1703.04247</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Deep Learning Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib35">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">R. Han, B. Yin, S. Chen, H. Jiang, F. Jiang, X. Li, C. Ma, M. Huang, X. Li, C. Jing, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Mtgr: industrial-scale generative recommendation framework in meituan</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 34th ACM International Conference on Information and Knowledge Management</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 5731–5738</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Generative Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib50">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">A. Henry, P. R. Dachapally, S. S. Pawar, and Y. Chen (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Query-key normalization for transformers</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Findings of the Association for Computational Linguistics: EMNLP 2020</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 4246–4253</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS4.p4" title="3.4. UniSGR Framework ‣ 3. Methodology ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§3.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib14">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">F. O. Isinkaye, Y. O. Folajimi, and B. A. Ojokoh (2015)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Recommendation systems: principles, methods and evaluation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Egyptian informatics journal</span> <span class="ltx_text ltx_bib_volume">16</span> (<span class="ltx_text ltx_bib_number">3</span>), <span class="ltx_text ltx_bib_pages"> pp. 261–273</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib16">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Ko, S. Lee, Y. Park, and A. Choi (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">A survey of recommendation systems: recommendation models, techniques, and application fields</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Electronics</span> <span class="ltx_text ltx_bib_volume">11</span> (<span class="ltx_text ltx_bib_number">1</span>), <span class="ltx_text ltx_bib_pages"> pp. 141</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib32">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">D. Lee, C. Kim, S. Kim, M. Cho, and W. Han (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Autoregressive image generation using residual quantization</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF conference on computer vision and pattern recognition</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 11523–11532</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Generative Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib37">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Liu, S. Wang, X. Wang, R. Zhang, J. Deng, H. Bao, J. Zhang, W. Li, P. Zheng, X. Wu, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onerec-think: in-text reasoning for generative recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2510.11639</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Generative Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib18">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">D. Mudigere, Y. Hao, J. Huang, Z. Jia, A. Tulloch, S. Sridharan, X. Liu, M. Ozdal, J. Nie, J. Park, <span class="ltx_text ltx_bib_etal">et al.</span> (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Software-hardware co-design for fast and scalable training of deep learning recommendation models</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 49th Annual International Symposium on Computer Architecture</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 993–1011</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib29">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">M. Naumov, D. Mudigere, H. M. Shi, J. Huang, N. Sundaraman, J. Park, X. Wang, U. Gupta, C. Wu, A. G. Azzolini, <span class="ltx_text ltx_bib_etal">et al.</span> (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep learning recommendation model for personalization and recommendation systems</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:1906.00091</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Deep Learning Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib31">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">S. Rajput, N. Mehta, A. Singh, R. Hulikal Keshavan, T. Vu, L. Heldt, L. Hong, Y. Tay, V. Tran, J. Samost, <span class="ltx_text ltx_bib_etal">et al.</span> (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Recommender systems with generative retrieval</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in Neural Information Processing Systems</span> <span class="ltx_text ltx_bib_volume">36</span>, <span class="ltx_text ltx_bib_pages"> pp. 10299–10315</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Generative Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.2</span></a>,
+<a class="ltx_ref" href="#S4.SS1.SSS2.p1" title="4.1.2. Baseline Models ‣ 4.1. Setup ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§4.1.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib28">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">W. Song, C. Shi, Z. Xiao, Z. Duan, Y. Xu, M. Zhang, and J. Tang (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Autoint: automatic feature interaction learning via self-attentive neural networks</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 28th ACM international conference on information and knowledge management</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1161–1170</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Deep Learning Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib46">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">D. Sun, Y. Liu, J. Zhou, X. Liu, C. Yu, Y. Li, J. Zhang, H. Yu, and J. Jiang (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">OneRanker: unified generation and ranking with one model in industrial advertising recommendation</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2603.02999</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2603.02999" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p2" title="2.2. Generative Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib47">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Sun, S. Huang, Z. Guan, Q. Luo, R. Tang, K. Gai, and G. Zhou (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">GRank: towards target-aware and streamlined industrial retrieval with a generate-rank framework</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">ArXiv</span> <span class="ltx_text ltx_bib_volume">abs/2510.15299</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref ltx_bib_external" href="https://api.semanticscholar.org/CorpusID:282203416" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p2" title="2.2. Generative Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib15">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">N. Zeghidour, A. Luebs, A. Omran, J. Skoglund, and M. Tagliasacchi (2021)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Soundstream: an end-to-end neural audio codec</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">CoRR</span> <span class="ltx_text ltx_bib_volume">abs/2107.03312</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS3.p3" title="3.3. Tokenizer ‣ 3. Methodology ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§3.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib34">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Zhai, L. Liao, X. Liu, Y. Wang, R. Li, X. Cao, L. Gao, Z. Gong, F. Gu, M. He, <span class="ltx_text ltx_bib_etal">et al.</span> (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Actions speak louder than words: trillion-parameter sequential transducers for generative recommendations</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2402.17152</span></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p3" title="1. Introduction ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS2.p1" title="2.2. Generative Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib49">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">B. Zhang and R. Sennrich (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Root Mean Square Layer Normalization</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Advances in Neural Information Processing Systems 32</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_place">Vancouver, Canada</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref ltx_bib_external" href="https://openreview.net/references/pdf?id=S1qBAf6rr" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS4.p4" title="3.4. UniSGR Framework ‣ 3. Methodology ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§3.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib48">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Zhang, Y. Li, Y. Liu, C. Wang, Y. Wang, Y. Xiong, X. Liu, H. Wu, Q. Li, E. Zhang, J. Sun, X. Xu, Z. Zhang, R. Liu, S. Huang, Z. Zhang, Z. Guo, S. Yang, M. Guo, H. Yu, J. Jiang, and S. Hu (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">GPR: towards a generative pre-trained one-model paradigm for large-scale advertising recommendation</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2511.10138</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2511.10138" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.SS2.p2" title="2.2. Generative Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib44">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhou, H. Hu, H. Cheng, H. Wang, J. Deng, J. Zhang, K. Cai, L. Ren, L. Ren, L. Yu, P. Zheng, Q. Luo, Q. Wang, Q. Hu, R. Huang, R. Tang, S. Wang, S. Yang, T. Wu, W. Li, X. Luo, X. Wang, Y. Su, Y. Wu, Z. Cheng, Z. Liu, Z. Zhang, B. Zhang, B. Wang, C. Ma, C. Song, C. Wang, C. Chu, D. Wang, D. Meng, D. Zang, F. Yang, F. Zhang, F. Jiang, F. Zhang, G. Wang, G. Zhang, H. Li, H. Bao, H. Cao, J. Huang, J. Chen, J. Liu, J. Jia, K. Gai, L. Hu, L. Zeng, Q. Wang, Q. Zhou, R. Zhang, S. Wang, S. He, S. Yang, S. Mao, S. Huang, T. He, T. Gao, W. Yuan, X. Liang, X. Xu, X. Liu, Y. Wang, Y. Zhou, Y. Wang, Y. Liu, Y. Song, Y. Zhang, Y. Zhao, Z. Ling, and Z. Li (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">OneRec-v2 technical report</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2508.20900</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2508.20900" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS1.SSS2.p1" title="4.1.2. Baseline Models ‣ 4.1. Setup ‣ 4. Experiments ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§4.1.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib20">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhou, X. Zhu, C. Song, Y. Fan, H. Zhu, X. Ma, Y. Yan, J. Jin, H. Li, and K. Gai (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep interest network for click-through rate prediction</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 24th ACM SIGKDD international conference on knowledge discovery &amp; data mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1059–1068</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.SS1.p1" title="2.1. Deep Learning Recommendation Model ‣ 2. Related Work ‣ UniSGR: Unified Framework for Semantic ID Generation and Ranking"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+</ul>
+</section>
+</article></article></div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{"format": "arxiv_tex", "toc": [{"id": "tex-section-1", "title": "摘要", "level": 1}, {"id": "S1", "title": "1. 引言", "level": 1}, {"id": "S2", "title": "2. 相关工作", "level": 1}, {"id": "S2.SS1", "title": "2.1. 深度学习推荐模型", "level": 2}, {"id": "S2.SS2", "title": "2.2. 生成式推荐模型", "level": 2}, {"id": "S3", "title": "3. 方法", "level": 1}, {"id": "S3.SS1", "title": "3.1. 数据组织", "level": 2}, {"id": "S3.SS2", "title": "3.2. 问题形式化", "level": 2}, {"id": "S3.SS3", "title": "3.3. 分词器", "level": 2}, {"id": "S3.SS4", "title": "3.4. UniSGR框架", "level": 2}, {"id": "S3.SS5", "title": "3.5. 两阶段训练范式", "level": 2}, {"id": "S3.SS5.SSS1", "title": "3.5.1. 多场景预训练阶段", "level": 3}, {"id": "S3.SS5.SSS2", "title": "3.5.2. 价值感知的并行多词元预测", "level": 3}, {"id": "S3.SS5.SSS3", "title": "3.5.3. 统一多目标排序模块", "level": 3}, {"id": "S3.SS5.SSS4", "title": "3.5.4. 用于生成-排序对齐的任务感知词元", "level": 3}, {"id": "S3.SS5.SSS5", "title": "3.5.5. 生成与排序的联合训练", "level": 3}, {"id": "S3.SS5.SSS6", "title": "3.5.6. 用于任务词元引导的漏斗感知对比学习", "level": 3}, {"id": "S3.SS6", "title": "3.6. STARK：带重组 KV 缓存的语义树注意力", "level": 2}, {"id": "S4", "title": "4. 实验", "level": 1}, {"id": "S4.SS1", "title": "4.1. 实验设置", "level": 2}, {"id": "S4.SS1.SSS1", "title": "4.1.1. 数据集", "level": 3}, {"id": "S4.SS1.SSS2", "title": "4.1.2. 基线模型", "level": 3}, {"id": "S4.SS1.SSS3", "title": "4.1.3. 评估指标", "level": 3}, {"id": "S4.SS1.SSS4", "title": "4.1.4. 实现细节", "level": 3}, {"id": "S4.SS2", "title": "4.2. 离线性能", "level": 2}, {"id": "S4.SS3", "title": "4.3. 消融实验", "level": 2}, {"id": "S4.SS3.SSS1", "title": "4.3.1. 码本规模的影响", "level": 3}, {"id": "S4.SS3.SSS2", "title": "4.3.2. 模型变体消融", "level": 3}, {"id": "S4.SS3.SSS3", "title": "4.3.3. 缩放", "level": 3}, {"id": "S4.SS3.SSS4", "title": "4.3.4. 两阶段训练", "level": 3}, {"id": "S4.SS4", "title": "4.4. 在线 A/B 测试", "level": 2}, {"id": "S5", "title": "5. 结论", "level": 1}, {"id": "bib", "title": "参考文献", "level": 1}], "stats": {"format": "arxiv_tex", "converter": "LaTeXML", "text_chars": 26129, "sections": 33, "figures": 3, "tables": 9, "table_cells": 248, "mathml": 80, "graphics": 4, "references": 29, "warnings": [], "language": "zh-CN"}, "extra_head": "\u003cstyle>\n.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}\n.tex-paper .ltx_title_document{display:none}\n.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}\n.tex-paper .ltx_creator{display:inline-block;margin-right:1em}\n.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}\n.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}\n.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}\n.tex-paper .ltx_para{margin:0}\n.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}\n.tex-paper .ltx_title_paragraph{font-size:17px}\n.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}\n.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}\n.tex-paper .ltx_font_sansserif{font-family:sans-serif}\n.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}\n.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}\n.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}\n.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}\n.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}\n.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}\n.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}\n.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}\n.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}\n.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}\n.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}\n.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}\n.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}\n.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}\n.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}\n.tex-paper math{font-size:1em;line-height:normal;font-family:math}\n.tex-paper math[display=\"block\"]{margin:.2em 0;white-space:nowrap}\n.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}\n.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}\n.tex-paper .ltx_bibblock{display:block}\n.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}\n.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}\n.tex-paper .ltx_toc{display:none}\n.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}\n.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}\n.tex-paper .ltx_tag{margin-right:.35em}\n.tex-paper [id]{scroll-margin-top:24px}\n\u003c/style>"}</script>
+<script>
+const tocPanel=document.querySelector('.paper-toc');
+if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
+tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

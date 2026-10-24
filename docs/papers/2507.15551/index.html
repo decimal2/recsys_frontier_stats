@@ -1,0 +1,1546 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>RankMixer：扩展工业推荐中的排序模型</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style><style>
+.paper-reader main,.paper-reader>header{max-width:1180px}
+.paper-original-title{font-size:16px;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.paper-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.paper-actions a{padding:8px 14px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:14px}
+.paper-actions a:first-child{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paper-reading-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:36px;align-items:start;margin-top:30px}
+.paper-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;border-right:1px solid var(--line);padding-right:14px;font-size:13px}
+.paper-toc summary{font-size:14px;font-weight:600;cursor:pointer;padding:4px 0 10px}
+.paper-toc ol{list-style:none;padding:0;margin:0}
+.paper-toc li{margin:0;padding:4px 0;line-height:1.5}
+.paper-toc a{color:var(--muted);display:block;padding:2px 4px;border-radius:4px}
+.paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
+.paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
+.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
+.paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
+.paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
+.paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
+.paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
+.paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
+.paper-fulltext figure a{display:block}
+.paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
+.paper-fulltext .paper-equation{padding:8px 0}
+.paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
+.paper-fulltext .paper-inline-math{display:inline-block;vertical-align:middle;max-height:2.3em;width:auto;background:white;max-width:100%}
+.paper-fulltext .paper-reference{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.paper-fulltext .paper-source-page{display:block;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin:32px 0 18px;padding-top:8px;text-align:right}
+.paper-fulltext table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:14px}
+.paper-fulltext td,.paper-fulltext th{padding:6px 10px;border:1px solid var(--line)}
+.paper-bottom{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+.paper-library{display:grid;gap:0;margin:24px 0}
+.paper-entry{padding:26px 0;border-top:1px solid var(--line)}
+.paper-entry h2{display:block;font-size:21px;margin:6px 0}
+.paper-entry .original{display:block;margin-bottom:12px}
+.paper-entry .paper-actions{margin-bottom:0}
+.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+@media(max-width:800px){
+ .paper-reading-layout{display:block;margin-top:20px}
+ .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
+ .paper-toc[open] ol{max-height:55vh;overflow:auto}
+ .paper-fulltext{font-size:16px;line-height:1.9}
+ .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
+ .paper-reader h1{font-size:26px}
+}
+@media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
+</style><style>
+.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}
+.tex-paper .ltx_title_document{display:none}
+.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}
+.tex-paper .ltx_creator{display:inline-block;margin-right:1em}
+.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
+.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_para{margin:0}
+.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
+.tex-paper .ltx_title_paragraph{font-size:17px}
+.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}
+.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}
+.tex-paper .ltx_font_sansserif{font-family:sans-serif}
+.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}
+.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}
+.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}
+.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}
+.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}
+.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}
+.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}
+.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}
+.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}
+.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}
+.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}
+.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}
+.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}
+.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}
+.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+.tex-paper math{font-size:1em;line-height:normal;font-family:math}
+.tex-paper math[display="block"]{margin:.2em 0;white-space:nowrap}
+.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}
+.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}
+.tex-paper .ltx_bibblock{display:block}
+.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}
+.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}
+.tex-paper .ltx_toc{display:none}
+.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}
+.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
+.tex-paper .ltx_tag{margin-right:.35em}
+.tex-paper [id]{scroll-margin-top:24px}
+</style></head><body class="paper-reader">
+<header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
+<main><div class="eyebrow">PAPER LIBRARY / RankMixer</div><h1>RankMixer：扩展工业推荐中的排序模型</h1><p class="paper-original-title">RankMixer: Scaling Up Ranking Models in Industrial Recommenders</p>
+<p class="muted">ByteDance · arXiv 2507.15551 · 译文对应 v3</p>
+<div class="paper-actions"><a href="https://arxiv.org/abs/2507.15551v3" target="_blank" rel="noopener">英文 arXiv ↗</a>
+<a href="../index.html">全部论文</a></div>
+<p class="muted">中文全文 · 章节、公式和参考文献支持直接跳转</p>
+<div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
+<ol><li class="toc-level-1"><a href="#tex-section-1">摘要</a></li><li class="toc-level-1"><a href="#S1">1. 引言</a></li><li class="toc-level-1"><a href="#S2">2. 相关工作</a></li><li class="toc-level-1"><a href="#S3">3. 方法</a></li><li class="toc-level-2"><a href="#S3.SS1">3.1. 整体架构</a></li><li class="toc-level-2"><a href="#S3.SS2">3.2. 输入层与特征词元化</a></li><li class="toc-level-2"><a href="#S3.SS3">3.3. RankMixer 模块</a></li><li class="toc-level-3"><a href="#S3.SS3.SSS1">3.3.1. 多头词元混合</a></li><li class="toc-level-3"><a href="#S3.SS3.SSS2">3.3.2. 逐词元FFN</a></li><li class="toc-level-2"><a href="#S3.SS4">3.4. RankMixer中的稀疏MoE</a></li><li class="toc-level-2"><a href="#S3.SS5">3.5. 扩展方向</a></li><li class="toc-level-1"><a href="#S4">4. 实验</a></li><li class="toc-level-2"><a href="#S4.SS1">4.1. 实验设置</a></li><li class="toc-level-3"><a href="#S4.SS1.SSS1">4.1.1. 数据集与环境</a></li><li class="toc-level-3"><a href="#S4.SS1.SSS2">4.1.2. 评估指标</a></li><li class="toc-level-3"><a href="#S4.SS1.SSS3">4.1.3. 基线</a></li><li class="toc-level-2"><a href="#S4.SS2">4.2. 与SOTA方法的比较</a></li><li class="toc-level-2"><a href="#S4.SS3">4.3. 不同模型的缩放定律</a></li><li class="toc-level-2"><a href="#S4.SS4">4.4. 消融实验</a></li><li class="toc-level-2"><a href="#S4.SS5">4.5. 稀疏 MoE 的可扩展性与专家均衡</a></li><li class="toc-level-2"><a href="#S4.SS6">4.6. 在线服务成本</a></li><li class="toc-level-2"><a href="#S4.SS7">4.7. 在线性能</a></li><li class="toc-level-1"><a href="#S5">5. 结论</a></li><li class="toc-level-1"><a href="#bib">参考文献</a></li></ol></details><article class="paper-fulltext" aria-label="论文全文"><article class="ltx_document ltx_authors_1line ltx_leqno tex-paper">
+<h1 class="ltx_title ltx_title_document">RankMixer：扩展<br class="ltx_break"/>工业推荐系统中的排序模型</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jie Zhu*, Zhifang Fan*, Xiaoxie Zhu*, Yuchen Jiang*, Hangyu Wang, Xintian Han, Haoran Ding, Xinmin Wang, Wenlin Zhao, Zhen Gong, Huizhi Yang, Zheng Chai, Zhe Chen, Yuchao Zheng, 
+<br class="ltx_break"/>Qiwei Chen<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">†</span></sup>, Feng Zhang, Xun Zhou, Peng Xu, Xiao Yang, Di Wu, Zuotao Liu
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_country">ByteDance
+<br class="ltx_break"/>{zhujie.zj, zhuxiaoxie.777, jiangyuchen.jyc, wanghangyu.123, hanxintian, dinghaoran, xinmin.wang,
+zhaowenlin, gongzhen.666, yanghuizhi, chaizheng.cz, chenzhe.john, zhengyuchao.yc, feng.zhang, zhouxun, xupeng, wuqi.shaw, di.wu, michael.liu}@bytedance.com, {fanzhifangfzf, chenqiwei05}@gmail.com</span>
+</span></span></span>
+</div>
+<div class="ltx_dates">(2018)</div>
+<div class="ltx_abstract" id="tex-section-1">
+<h6 class="ltx_title ltx_title_abstract">摘要</h6>
+<p class="ltx_p">近期大语言模型（LLM）的进展激发了扩展推荐系统的兴趣，但仍存在两个实际障碍。第一，工业推荐系统上的训练和服务成本必须满足严格的延迟约束和高 QPS 需求。第二，排序模型中的大多数人工设计的特征交叉模块继承自 CPU 时代，无法利用现代 GPU，导致模型浮点运算利用率（MFU）低且可扩展性差。我们提出 RankMixer，一种面向统一且可扩展的特征交互架构的硬件感知模型设计。RankMixer 保留了 transformer 的高并行性，同时用多头词元混合模块替代二次复杂度自注意力以实现更高效率。此外，RankMixer 通过逐词元 FFN 同时保持对不同特征子空间的建模和跨特征空间交互。我们进一步将其扩展到十亿参数，并采用 Sparse-MoE 变体以获得更高 ROI。采用动态路由策略以解决专家训练不足和不平衡问题。实验表明 RankMixer 在万亿规模生产数据集上具有优越的扩展能力。通过用 RankMixer 替代先前多样化的手工设计低 MFU 模块，我们将模型 MFU 从 <span class="ltx_text ltx_font_bold">4.5%</span> 提升至 <span class="ltx_text ltx_font_bold">45%</span>，并将在线排序模型参数扩展两个数量级，同时保持大致相同的推理延迟。我们通过两个核心应用场景（推荐和广告）的在线 A/B 测试验证了 RankMixer 的通用性。最后，我们上线了 1B 稠密参数 RankMixer 进行全流量服务，且不增加服务成本，将用户活跃天数提升了 <span class="ltx_text ltx_font_bold">0.3%</span>，将应用内总使用时长提升了 <span class="ltx_text ltx_font_bold">1.08%</span>。</p>
+</div>
+<div class="ltx_keywords">缩放定律，排序模型，推荐系统
+</div>
+<div class="ltx_acknowledgements">* Equal Contributions. 
+<br class="ltx_break"/><math alttext="\dagger" class="ltx_Math" display="inline" id="m2"><semantics><mo>†</mo><annotation encoding="application/x-tex">\dagger</annotation></semantics></math> Corresponding authors.
+</div>
+<span class="ltx_note ltx_note_frontmatter ltx_role_copyright"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">copyright: </span>acmlicensed</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_journalyear"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">journalyear: </span>2018</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_doi"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">doi: </span>XXXXXXX.XXXXXXX</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_conference"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">conference: </span>请确保输入权利确认邮件中的正确
+会议名称；六月 03–05 日（2018 年）；
+Woodstock, NY</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_isbn"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">isbn: </span>978-1-4503-XXXX-X/2018/06</span></span></span><span class="ltx_note ltx_note_frontmatter ltx_role_ccs"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">ccs: </span>信息系统 推荐系统</span></span></span>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section"><span class="ltx_tag ltx_tag_section">1. </span>引言</h2>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p">推荐系统（RS）在信息分发过程中至关重要。作为一个重要的机器学习场景，RS 基于大量多字段特征数据预测用户对物品的行为，这些数据包括多样统计量等数值特征、用户和物品 ID 等类别特征、用户行为特征和内容特征 <cite class="ltx_cite ltx_citemacro_citep">(Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib50" title="Deep learning for click-through rate estimation">2021</a>; Lin<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib55" title="How can recommender systems benefit from large language models: a survey">2023</a>)</cite>。最先进的推荐方法基于深度学习推荐模型（DLRM），其以神经网络作为特征嵌入之上的稠密交互层，灵活捕获特征交互。DLRM 中的稠密交互层对 RS 性能至关重要，已有多种模型结构被提出 <cite class="ltx_cite ltx_citemacro_citep">(Covington<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib17" title="Deep neural networks for youtube recommendations">2016</a>; Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib29" title="Deep interest network for click-through rate prediction">2018</a>; Guo<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib32" title="DeepFM: a factorization-machine based neural network for ctr prediction">2017</a>; Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib16" title="Dcn v2: improved deep &amp; cross network and practical lessons for web-scale learning to rank systems">2021</a>; <a class="ltx_ref" href="#bib.bib4" title="Wukong: towards a scaling law for large-scale recommendation">Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, </a>)</cite>。</p>
+</div>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p">受惠于参数增长的大语言模型（LLM）进展的推动 <cite class="ltx_cite ltx_citemacro_citep">(Achiam<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Gpt-4 technical report">2023</a>; Kaplan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="Scaling laws for neural language models">2020</a>; Hoffmann<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib8" title="Training compute-optimal large language models">2022</a>)</cite>，将 DLRM 扩展到充分利用数据规模是一项迫切需求。
+先前研究已在 DLRM 扩展方面取得大量成果，早期研究 <cite class="ltx_cite ltx_citemacro_citep">(Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib13" title="Scaling law of large sequential recommendation models">2024</a>; Ardalani<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib19" title="Understanding scaling laws for recommendation models">2022</a>; Chitlangia<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="Scaling generative pre-training for user ad activity sequences">2023</a>)</cite> 仅加宽或堆叠特征交互层而不修改结构。以这种方式获得的收益有限，偶尔甚至为负 <cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib15" title="Deep &amp; cross network for ad click predictions">2017</a>; Lian<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib14" title="Xdeepfm: combining explicit and implicit feature interactions for recommender systems">2018</a>)</cite>。随后，DHEN <cite class="ltx_cite ltx_citemacro_citep">(Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib18" title="DHEN: a deep and hierarchical ensemble network for large-scale click-through rate prediction">2022</a>)</cite> 和 Wukong <cite class="ltx_cite ltx_citemacro_citep">(<a class="ltx_ref" href="#bib.bib4" title="Wukong: towards a scaling law for large-scale recommendation">Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, </a>)</cite> 等后续工作专注于设计创新 DNN 结构以提升扩展性能。然而，利用模型规模提升推荐性能面临独特的实际挑战。与 NLP 或视觉任务不同，工业规模推荐系统必须严格遵守紧延迟约束并支持极高 QPS（每秒查询数）。因此，核心挑战在于找到平衡模型效果与计算效率的最佳点。</p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p">从历史上看，推荐中排序模型的架构一直受 CPU 时代设计原则塑造。这些模型通常依赖组合异构多样的手工设计交叉特征模块来提取特征交互，但其中许多核心算子在现代 GPU 上是内存受限而非计算受限，导致 GPU 并行性差且 MFU（模型浮点运算利用率）极低，通常处于个位数百分比范围。此外，由于 CPU 时代模型的计算成本大致与参数数量成正比，如缩放定律所暗示的那样通过激进扩展获得潜在 ROI 在实践中难以实现。</p>
+</div>
+<div class="ltx_para" id="S1.p4">
+<p class="ltx_p">总之，DLRM 缩放定律研究必须克服以下问题：</p>
+<ul class="ltx_itemize" id="S1.I1">
+<li class="ltx_item" id="S1.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i1.p1">
+<p class="ltx_p">架构应与硬件对齐，在现代 GPU 上最大化 MFU 和计算吞吐量。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i2.p1">
+<p class="ltx_p">模型设计必须利用推荐数据的特性，例如异构特征空间以及数百个字段之间的个性化跨特征交互。</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="S1.p5">
+<p class="ltx_p">为应对这些挑战，我们提出硬件感知模型设计方法 RankMixer。RankMixer 的核心设计基于两个可扩展组件：1。<span class="ltx_text ltx_font_italic">多头词元混合</span>仅通过无参数算子实现跨词元特征交互。该策略在性能和计算效率上优于自注意力机制。2。<span class="ltx_text ltx_font_italic">逐词元前馈网络（FFN）</span>显著扩展模型容量，并通过为不同特征子空间建模分配独立参数来解决特征空间间主导问题。这些 FFN 也与推荐数据模式良好对齐，从而实现更好的扩展行为。
+为进一步提升大规模模型的 ROI，我们将逐词元 FFN 模块扩展为<span class="ltx_text ltx_font_italic">稀疏专家混合（MoE）</span>结构。通过针对不同数据为每个词元动态激活仅一部分专家，我们能够以最小的计算成本增加显著提高模型容量。
+RankMixer 采用类似 transformer 的高度并行架构，但克服了基于自注意力的特征交互的几个关键局限：训练效率低、建模跨空间 ID 相似度时的组合爆炸以及注意力权重矩阵导致的严重内存受限。同时，与 Vanilla Transformer 相比，RankMixer 在相同 Flops 下提供更大的模型容量和学习能力。</p>
+</div>
+<div class="ltx_para" id="S1.p6">
+<p class="ltx_p">在抖音推荐系统的生产部署中，我们证明将模型参数扩展超过 100× 同时保持比先前基线更短的推理延迟是可行的。这得益于 RankMixer 架构能够将参数增长与 FLOPs 解耦，并通过高 MFU 和工程优化将 FLOPs 增长与实际成本解耦。</p>
+</div>
+<div class="ltx_para" id="S1.p7">
+<p class="ltx_p">主要贡献可总结如下：</p>
+<ul class="ltx_itemize" id="S1.I2">
+<li class="ltx_item" id="S1.I2.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I2.i1.p1">
+<p class="ltx_p">我们提出一种遵循硬件感知模型设计理念的新架构 RankMixer。我们设计多头词元混合和逐词元 FFN 策略以高效捕获异构特征交互，并使用动态路由策略提升 RankMixer 中 SparseMoE 的可扩展性。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I2.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I2.i2.p1">
+<p class="ltx_p">利用高 MFU 和性能优化手段，我们在不增加推理成本的情况下将模型参数扩展 70×，包括提升 MFU 和量化。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I2.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I2.i3.p1">
+<p class="ltx_p">我们进行了大量离线和在线实验，并在万亿规模工业推荐数据集上研究模型的缩放定律。RankMixer 模型已成功部署在抖音 Feed 推荐排序中进行全流量服务，在活跃天数和 App 时长上分别实现 0.3% 和 1.08% 的提升。</p>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section"><span class="ltx_tag ltx_tag_section">2. </span>相关工作</h2>
+<div class="ltx_para" id="S2.p1">
+<p class="ltx_p">现代推荐系统基于深度推荐模型（DLRM），如何有效建模特征交互是 DLRM 的关键因素 <cite class="ltx_cite ltx_citemacro_citep">(Cheng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib30" title="Wide &amp; deep learning for recommender systems">2016</a>; Guo<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib32" title="DeepFM: a factorization-machine based neural network for ctr prediction">2017</a>; Huang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib48" title="Neural statistics for click-through rate prediction">2022</a>; Qu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib33" title="Product-based neural networks for user response prediction over multi-field categorical data">2018</a>; Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib49" title="FLIP: fine-grained alignment between id-based models and pretrained language models for ctr prediction">2024a</a>, <a class="ltx_ref" href="#bib.bib16" title="Dcn v2: improved deep &amp; cross network and practical lessons for web-scale learning to rank systems">2021</a>; Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib18" title="DHEN: a deep and hierarchical ensemble network for large-scale click-through rate prediction">2022</a>)</cite>。Wide&amp;Deep <cite class="ltx_cite ltx_citemacro_citep">(Cheng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib30" title="Wide &amp; deep learning for recommender systems">2016</a>)</cite> 是最早的努力之一，它结合逻辑回归（wide 部分）和 DNN（deep 部分）以分别捕获低阶和高阶特征交互。DeepFM <cite class="ltx_cite ltx_citemacro_citep">(Guo<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib32" title="DeepFM: a factorization-machine based neural network for ctr prediction">2017</a>)</cite> 是另一项成果，它集成了因子分解机（FM）和 DNN。此外，DeepCross <cite class="ltx_cite ltx_citemacro_citep">(Shan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib35" title="Deep crossing: web-scale modeling without manually crafted combinatorial features">2016</a>)</cite> 是残差网络 <cite class="ltx_cite ltx_citemacro_citep">(He<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib31" title="Deep residual learning for image recognition">2016</a>)</cite> 的扩展，旨在隐式学习自动特征交互。而仅依赖 DNN 学习高阶特征交互已被证明相当具有挑战性 <cite class="ltx_cite ltx_citemacro_citep">(Qu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib33" title="Product-based neural networks for user response prediction over multi-field categorical data">2018</a>; Rendle<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib34" title="Neural collaborative filtering vs. matrix factorization revisited">2020</a>)</cite>。
+显式交叉方法设计不同算子以显式捕获高阶特征交互，例如 PNN <cite class="ltx_cite ltx_citemacro_citep">(Qu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib33" title="Product-based neural networks for user response prediction over multi-field categorical data">2018</a>)</cite>、DCN <cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib15" title="Deep &amp; cross network for ad click predictions">2017</a>)</cite> 及其后继 DCNv2 <cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib16" title="Dcn v2: improved deep &amp; cross network and practical lessons for web-scale learning to rank systems">2021</a>)</cite>、xDeepFM <cite class="ltx_cite ltx_citemacro_citep">(Lian<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib14" title="Xdeepfm: combining explicit and implicit feature interactions for recommender systems">2018</a>)</cite>、FGCNN <cite class="ltx_cite ltx_citemacro_citep">(Liu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib36" title="Feature generation by convolutional neural network for click-through rate prediction">2019</a>)</cite> 和 FiGNN <cite class="ltx_cite ltx_citemacro_citep">(Li<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib37" title="Fi-gnn: modeling feature interactions via graph neural networks for ctr prediction">2019</a>)</cite>。AutoInt <cite class="ltx_cite ltx_citemacro_citep">(Song<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib38" title="Autoint: automatic feature interaction learning via self-attentive neural networks">2019</a>)</cite> 和 Hiformer <cite class="ltx_cite ltx_citemacro_citep">(Gui<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib39" title="Hiformer: heterogeneous feature interactions learning with transformers for recommender systems">2023</a>)</cite> 采用带残差连接的注意力机制学习复杂交互。DHEN <cite class="ltx_cite ltx_citemacro_citep">(Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib18" title="DHEN: a deep and hierarchical ensemble network for large-scale click-through rate prediction">2022</a>)</cite> 提出将多个交互算子组合在一起。尽管提高了准确性，这些新架构增加了模型延迟和内存消耗，且其模型规模相对较小。</p>
+</div>
+<div class="ltx_para" id="S2.p2">
+<p class="ltx_p">缩放定律已成为深度学习的基本主题，也是过去十年众多突破的关键催化剂，尤其是在自然语言处理（NLP）<cite class="ltx_cite ltx_citemacro_citep">(Kaplan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="Scaling laws for neural language models">2020</a>; Hoffmann<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib8" title="Training compute-optimal large language models">2022</a>)</cite>、计算机视觉（CV）<cite class="ltx_cite ltx_citemacro_citep">(Dosovitskiy, <a class="ltx_ref" href="#bib.bib9" title="An image is worth 16x16 words: transformers for image recognition at scale">2020</a>; Zhai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib10" title="Scaling vision transformers">2022</a>)</cite>和多模态建模 <cite class="ltx_cite ltx_citemacro_citep">(Radford<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib11" title="Learning transferable visual models from natural language supervision">2021</a>; Ramesh<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib12" title="Zero-shot text-to-image generation">2021</a>)</cite> 中，它们描述了模型性能与扩展因素（如模型规模、数据量和计算能力）之间的幂律相关性 <cite class="ltx_cite ltx_citemacro_citep">(Kaplan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="Scaling laws for neural language models">2020</a>; Achiam<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Gpt-4 technical report">2023</a>; Touvron<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib7" title="Llama 2: open foundation and fine-tuned chat models">2023</a>; Team<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Gemma: open models based on gemini research and technology">2024</a>)</cite>。
+最近，推荐系统中的缩放定律引起了研究者的广泛关注 <cite class="ltx_cite ltx_citemacro_citep">(Guo<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib40" title="Scaling new frontiers: insights into large recommendation models">2024</a>)</cite>。研究探索了预训练用户活动序列 <cite class="ltx_cite ltx_citemacro_citep">(Chitlangia<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib20" title="Scaling generative pre-training for user ad activity sequences">2023</a>)</cite>、通用用户表示 <cite class="ltx_cite ltx_citemacro_citep">(Shin<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib42" title="Scaling law for recommendation models: towards general-purpose user representations">2023</a>; Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib13" title="Scaling law of large sequential recommendation models">2024</a>)</cite> 和在线检索 <cite class="ltx_cite ltx_citemacro_citep">(Fang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib43" title="Scaling laws for dense retrieval">2024</a>; Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib44" title="Scaling laws for online advertisement retrieval">2024b</a>)</cite> 的扩展策略。Wukong <cite class="ltx_cite ltx_citemacro_citep">(<a class="ltx_ref" href="#bib.bib4" title="Wukong: towards a scaling law for large-scale recommendation">Zhang<span class="ltx_text ltx_bib_etal"> et al.</span>, </a>)</cite> 堆叠 FM 和 LCB 以学习特征交互。正交地，<cite class="ltx_cite ltx_citemacro_citet">Zhang<span class="ltx_text ltx_bib_etal"> et al.</span> (<a class="ltx_ref" href="#bib.bib13" title="Scaling law of large sequential recommendation models">2024</a>)</cite> 将序列推荐模型扩展到 0.8B 参数。HSTU <cite class="ltx_cite ltx_citemacro_citep">(<a class="ltx_ref" href="#bib.bib2" title="Actions speak louder than words: trillion-parameter sequential transducers for generative recommendations">Zhai<span class="ltx_text ltx_bib_etal"> et al.</span>, </a>)</cite> 增强了更关注序列部分的生成式推荐器（GR）的扩展效果。</p>
+</div>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section"><span class="ltx_tag ltx_tag_section">3. </span>方法</h2>
+<figure class="ltx_figure" id="S3.F1"><a href="assets/230e055a72c21473.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F1.g1" loading="lazy" src="assets/230e055a72c21473.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1. </span>RankMixer 块的架构。一个 RankMixer 块由两个模块组成：<span class="ltx_text ltx_font_bold">多头词元混合</span>和<span class="ltx_text ltx_font_bold">基于 SMoE 的逐词元 FFN</span>。词元混合模块将每个词元的嵌入划分为 <math alttext="H" class="ltx_Math" display="inline" id="S3.F1.m2"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math> 个更小的部分（头），然后跨词元重新组合这些部分以创建新的混合词元。这允许不同特征的信息相互交互。</figcaption>
+</figure>
+<section class="ltx_subsection" id="S3.SS1">
+<h3 class="ltx_title ltx_title_subsection"><span class="ltx_tag ltx_tag_subsection">3.1. </span>整体架构</h3>
+<div class="ltx_para" id="S3.SS1.p1">
+<p class="ltx_p">RankMixer 的整体架构由 T 个输入词元组成，经过 L 个连续的 RankMixer 块处理，随后是输出池化算子。每个 RankMixer 块有两个主要组件：(1) 多头词元混合层，和 (2) 逐词元前馈网络（PFFN）层，如图 <a class="ltx_ref" href="#S3.F1" title="Figure 1 ‣ 3. Methodology ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">1</span></a> 所示。
+首先，输入向量 <math alttext="\mathbf{e}_{\text{input}}" class="ltx_Math" display="inline" id="S3.SS1.p1.m1"><semantics><msub><mi>𝐞</mi><mtext>input</mtext></msub><annotation encoding="application/x-tex">\mathbf{e}_{\text{input}}</annotation></semantics></math> 被词元化为 <math alttext="T" class="ltx_Math" display="inline" id="S3.SS1.p1.m2"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math> 个特征词元 <math alttext="\mathbf{x}_{1},\mathbf{x}_{2},...,\mathbf{x}_{T}" class="ltx_Math" display="inline" id="S3.SS1.p1.m3"><semantics><mrow><msub><mi>𝐱</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐱</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝐱</mi><mi>T</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x}_{1},\mathbf{x}_{2},...,\mathbf{x}_{T}</annotation></semantics></math>，每个表示一个连贯的特征向量。
+RankMixer 块通过以下方式在 <math alttext="L" class="ltx_Math" display="inline" id="S3.SS1.p1.m4"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math> 层中迭代细化词元表示：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(1)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\begin{split}\mathbf{S}_{n-1}&amp;={\rm LN}\left({\rm TokenMixing}\left(\mathbf{X}%
+_{n-1}\right)+\mathbf{X}_{n-1}\right),\\
+\mathbf{X}_{n}&amp;={\rm LN}\left({\rm PFFN}\left(\mathbf{S}_{n-1}\right)+\mathbf{%
+S}_{n-1}\right),\end{split}" class="ltx_Math" display="block" id="S3.E1.m1"><semantics><mtable columnspacing="0pt" displaystyle="true" rowspacing="0pt"><mtr><mtd class="ltx_align_right" columnalign="right"><msub><mi>𝐒</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub></mtd><mtd class="ltx_align_left" columnalign="left"><mrow><mrow><mi></mi><mo>=</mo><mrow><mi>LN</mi><mo>⁢</mo><mrow><mo>(</mo><mrow><mrow><mi>TokenMixing</mi><mo>⁢</mo><mrow><mo>(</mo><msub><mi>𝐗</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>)</mo></mrow></mrow><mo>+</mo><msub><mi>𝐗</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow></mrow></mrow><mo>,</mo></mrow></mtd></mtr><mtr><mtd class="ltx_align_right" columnalign="right"><msub><mi>𝐗</mi><mi>n</mi></msub></mtd><mtd class="ltx_align_left" columnalign="left"><mrow><mrow><mi></mi><mo>=</mo><mrow><mi>LN</mi><mo>⁢</mo><mrow><mo>(</mo><mrow><mrow><mi>PFFN</mi><mo>⁢</mo><mrow><mo>(</mo><msub><mi>𝐒</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>)</mo></mrow></mrow><mo>+</mo><msub><mi>𝐒</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow></mrow></mrow><mo>,</mo></mrow></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{split}\mathbf{S}_{n-1}&amp;={\rm LN}\left({\rm TokenMixing}\left(\mathbf{X}%
+_{n-1}\right)+\mathbf{X}_{n-1}\right),\\
+\mathbf{X}_{n}&amp;={\rm LN}\left({\rm PFFN}\left(\mathbf{S}_{n-1}\right)+\mathbf{%
+S}_{n-1}\right),\end{split}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="{\rm LN}(\cdot)" class="ltx_Math" display="inline" id="S3.SS1.p1.m5"><semantics><mrow><mi>LN</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">{\rm LN}(\cdot)</annotation></semantics></math> 是层归一化函数，<math alttext="{\rm TokenMixing}(\cdot)" class="ltx_Math" display="inline" id="S3.SS1.p1.m6"><semantics><mrow><mi>TokenMixing</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">{\rm TokenMixing}(\cdot)</annotation></semantics></math> 和 <math alttext="{\rm PFFN}(\cdot)" class="ltx_Math" display="inline" id="S3.SS1.p1.m7"><semantics><mrow><mi>PFFN</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">{\rm PFFN}(\cdot)</annotation></semantics></math> 分别是多头词元混合模块和逐词元 FFN 模块，<math alttext="\mathbf{X}_{n}\in\mathbb{R}^{T\times D}" class="ltx_Math" display="inline" id="S3.SS1.p1.m8"><semantics><mrow><msub><mi>𝐗</mi><mi>n</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>T</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>D</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{X}_{n}\in\mathbb{R}^{T\times D}</annotation></semantics></math> 是第 <math alttext="n" class="ltx_Math" display="inline" id="S3.SS1.p1.m9"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> 个 RankMixer 块的输出，<math alttext="\mathbf{X}_{0}\in\mathbb{R}^{T\times D}" class="ltx_Math" display="inline" id="S3.SS1.p1.m10"><semantics><mrow><msub><mi>𝐗</mi><mn>0</mn></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>T</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>D</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{X}_{0}\in\mathbb{R}^{T\times D}</annotation></semantics></math> 由 <math alttext="\mathbf{x}_{1},\mathbf{x}_{2},...,\mathbf{x}_{T}" class="ltx_Math" display="inline" id="S3.SS1.p1.m11"><semantics><mrow><msub><mi>𝐱</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐱</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝐱</mi><mi>T</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x}_{1},\mathbf{x}_{2},...,\mathbf{x}_{T}</annotation></semantics></math> 堆叠而成，<math alttext="D" class="ltx_Math" display="inline" id="S3.SS1.p1.m12"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math> 是模型的隐藏维度。
+输出表示 <math alttext="\mathbf{o}_{\text{output}}" class="ltx_Math" display="inline" id="S3.SS1.p1.m13"><semantics><msub><mi>𝐨</mi><mtext>output</mtext></msub><annotation encoding="application/x-tex">\mathbf{o}_{\text{output}}</annotation></semantics></math> 来自最终层表示 <math alttext="\mathbf{X}_{L}" class="ltx_Math" display="inline" id="S3.SS1.p1.m14"><semantics><msub><mi>𝐗</mi><mi>L</mi></msub><annotation encoding="application/x-tex">\mathbf{X}_{L}</annotation></semantics></math> 的平均池化，将用于计算不同任务的预测。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS2">
+<h3 class="ltx_title ltx_title_subsection"><span class="ltx_tag ltx_tag_subsection">3.2. </span>输入层与特征词元化</h3>
+<div class="ltx_para" id="S3.SS2.p1">
+<p class="ltx_p">构建大规模推荐模型的第一步是准备包含丰富信息的输入，例如<span class="ltx_text ltx_font_bold">用户特征</span>包括用户 ID 和其他用户信息，<span class="ltx_text ltx_font_bold">候选特征</span>包括视频 ID、作者 ID 等，<span class="ltx_text ltx_font_bold">序列特征</span>通过序列模块 <cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib29" title="Deep interest network for click-through rate prediction">2018</a>; Chai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib56" title="LONGER: scaling up long sequence modeling in industrial recommenders">2025</a>)</cite> 处理以捕获时间兴趣，得到 <math alttext="\mathbf{e}_{s}" class="ltx_Math" display="inline" id="S3.SS2.p1.m1"><semantics><msub><mi>𝐞</mi><mi>s</mi></msub><annotation encoding="application/x-tex">\mathbf{e}_{s}</annotation></semantics></math> 和 <span class="ltx_text ltx_font_bold">交叉特征</span>，即用户与候选之间的交叉特征。所有特征将被转换为不同维度的嵌入。</p>
+</div>
+<div class="ltx_para" id="S3.SS2.p2">
+<p class="ltx_p">为使后续阶段能够高效并行计算，不同维度的嵌入必须转换为维度对齐的向量，称为特征词元。我们将此嵌入对齐过程称为词元化。最简单的策略是为每个特征分配一个嵌入，但考虑到通常有数百个特征，这会带来若干挑战。拥有数百个词元不可避免地会将分配给每个词元的参数和计算减少为小碎片，导致重要特征建模不足以及 GPU 核心利用率低下。相反，过少的词元（例如单个词元）会将模型结构退化为简单的深度神经网络（DNN），无法清晰地表示多样特征空间，存在主导特征掩盖其他特征的风险。</p>
+</div>
+<div class="ltx_para" id="S3.SS2.p3">
+<p class="ltx_p">为克服这些问题，我们提出一种基于语义的词元化方法，借助领域知识将特征分组为若干语义连贯的簇。这些分组后的特征被依次拼接为一个嵌入向量<math alttext="e_{\text{input}}\;=\;[\,e_{1};e_{2};\dots;e_{N}\,]" class="ltx_Math" display="inline" id="S3.SS2.p3.m1"><semantics><mrow><msub><mi>e</mi><mtext>input</mtext></msub><mo lspace="0.558em" rspace="0.558em">=</mo><mrow><mo rspace="0.170em" stretchy="false">[</mo><msub><mi>e</mi><mn>1</mn></msub><mo>;</mo><msub><mi>e</mi><mn>2</mn></msub><mo>;</mo><mi mathvariant="normal">…</mi><mo>;</mo><msub><mi>e</mi><mi>N</mi></msub><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">e_{\text{input}}\;=\;[\,e_{1};e_{2};\dots;e_{N}\,]</annotation></semantics></math>，随后被划分为数量合适、维度固定的词元。每个特征词元<math alttext="x_{i}\in\mathbb{R}^{D}" class="ltx_Math" display="inline" id="S3.SS2.p3.m2"><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mi>D</mi></msup></mrow><annotation encoding="application/x-tex">x_{i}\in\mathbb{R}^{D}</annotation></semantics></math>捕获一组表示相似语义侧面的特征嵌入。</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E2">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(2)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\newline
+\text{x}_{i}\;=\;{\rm Proj}(e_{\text{input}}\bigl{[}d\cdot(i-1):d\cdot i\bigr{%
+]}),\quad i=1,\dots,T," class="ltx_math_unparsed" display="block" id="S3.E2.m1"><semantics><mrow><msub><mtext>x</mtext><mi>i</mi></msub><mo lspace="0.558em" rspace="0.558em">=</mo><mi>Proj</mi><mrow><mo stretchy="false">(</mo><msub><mi>e</mi><mtext>input</mtext></msub><mrow><mo maxsize="120%" minsize="120%">[</mo><mi>d</mi><mo lspace="0.222em" rspace="0.222em">⋅</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo rspace="0.278em" stretchy="false">)</mo></mrow><mo rspace="0.278em">:</mo><mi>d</mi><mo lspace="0.222em" rspace="0.222em">⋅</mo><mi>i</mi><mo maxsize="120%" minsize="120%">]</mo></mrow><mo stretchy="false">)</mo></mrow><mo rspace="1.167em">,</mo><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mi>T</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\newline
+\text{x}_{i}\;=\;{\rm Proj}(e_{\text{input}}\bigl{[}d\cdot(i-1):d\cdot i\bigr{%
+]}),\quad i=1,\dots,T,</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="e_{\text{input}}" class="ltx_Math" display="inline" id="S3.SS2.p3.m3"><semantics><msub><mi>e</mi><mtext>input</mtext></msub><annotation encoding="application/x-tex">e_{\text{input}}</annotation></semantics></math>是拼接后的嵌入向量，<math alttext="d" class="ltx_Math" display="inline" id="S3.SS2.p3.m4"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>是每个词元的固定维度，<math alttext="N" class="ltx_Math" display="inline" id="S3.SS2.p3.m5"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>是特征组的数量，<math alttext="T" class="ltx_Math" display="inline" id="S3.SS2.p3.m6"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>是得到的词元数量，而<math alttext="{\rm Proj}" class="ltx_Math" display="inline" id="S3.SS2.p3.m7"><semantics><mi>Proj</mi><annotation encoding="application/x-tex">{\rm Proj}</annotation></semantics></math>函数将切分后的嵌入映射到<math alttext="D" class="ltx_Math" display="inline" id="S3.SS2.p3.m8"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>维。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.3. </span>RankMixer 模块</h3>
+<section class="ltx_subsubsection" id="S3.SS3.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.3.1. </span>多头词元混合</h4>
+<div class="ltx_para" id="S3.SS3.SSS1.p1">
+<p class="ltx_p">为促进词元之间有效的信息交换（这对特征交叉和全局信息建模很重要），我们引入多头词元混合模块。每个词元被均匀划分为<math alttext="H" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m1"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>个头，第<math alttext="h" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m2"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>个头（属于词元<math alttext="\mathbf{x}_{t}" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m3"><semantics><msub><mi>𝐱</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{x}_{t}</annotation></semantics></math>）记为<math alttext="x_{t}^{h}" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m4"><semantics><msubsup><mi>x</mi><mi>t</mi><mi>h</mi></msubsup><annotation encoding="application/x-tex">x_{t}^{h}</annotation></semantics></math>：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E3">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(3)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\Bigl{[}\,\mathbf{x}_{t}^{(1)}\;\|\;\mathbf{x}_{t}^{(2)}\;\|\;\dots\;\|\;%
+\mathbf{x}_{t}^{(H)}\Bigr{]}={\rm SplitHead}\left(\mathbf{x}_{t}\right)." class="ltx_Math" display="block" id="S3.E3.m1"><semantics><mrow><mrow><mrow><mo maxsize="160%" minsize="160%" rspace="0.170em">[</mo><mrow><mrow><msubsup><mi>𝐱</mi><mi>t</mi><mrow><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msubsup><mo>⁢</mo><mrow><mo rspace="0.280em" stretchy="false">‖</mo><msubsup><mi>𝐱</mi><mi>t</mi><mrow><mo stretchy="false">(</mo><mn>2</mn><mo stretchy="false">)</mo></mrow></msubsup><mo stretchy="false">‖</mo></mrow><mo lspace="0.280em">⁢</mo><mi mathvariant="normal">…</mi></mrow><mo lspace="0.558em" rspace="0.558em">∥</mo><msubsup><mi>𝐱</mi><mi>t</mi><mrow><mo stretchy="false">(</mo><mi>H</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><mo maxsize="160%" minsize="160%">]</mo></mrow><mo>=</mo><mrow><mi>SplitHead</mi><mo>⁢</mo><mrow><mo>(</mo><msub><mi>𝐱</mi><mi>t</mi></msub><mo>)</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\Bigl{[}\,\mathbf{x}_{t}^{(1)}\;\|\;\mathbf{x}_{t}^{(2)}\;\|\;\dots\;\|\;%
+\mathbf{x}_{t}^{(H)}\Bigr{]}={\rm SplitHead}\left(\mathbf{x}_{t}\right).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">由于推荐任务需要从不同视角进行考量，这些头可以被视为将词元<math alttext="\mathbf{x}_{t}" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m5"><semantics><msub><mi>𝐱</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{x}_{t}</annotation></semantics></math>投影到更低维的特征子空间。词元混合用于融合这些子空间向量，以实现全局特征交互。形式上，经过多头词元混合后，第<math alttext="h" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m6"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>个词元<math alttext="\mathbf{s}^{h}" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m7"><semantics><msup><mi>𝐬</mi><mi>h</mi></msup><annotation encoding="application/x-tex">\mathbf{s}^{h}</annotation></semantics></math>（对应第<math alttext="h" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m8"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>个头）构造为：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E4">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(4)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathbf{s}^{h}={\rm Concat}\left(\mathbf{x}_{1}^{h},\mathbf{x}_{2}^{h},...,%
+\mathbf{x}_{T}^{h}\right)." class="ltx_Math" display="block" id="S3.E4.m1"><semantics><mrow><mrow><msup><mi>𝐬</mi><mi>h</mi></msup><mo>=</mo><mrow><mi>Concat</mi><mo>⁢</mo><mrow><mo>(</mo><msubsup><mi>𝐱</mi><mn>1</mn><mi>h</mi></msubsup><mo>,</mo><msubsup><mi>𝐱</mi><mn>2</mn><mi>h</mi></msubsup><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msubsup><mi>𝐱</mi><mi>T</mi><mi>h</mi></msubsup><mo>)</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\mathbf{s}^{h}={\rm Concat}\left(\mathbf{x}_{1}^{h},\mathbf{x}_{2}^{h},...,%
+\mathbf{x}_{T}^{h}\right).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">多头词元混合模块的输出为<math alttext="\mathbf{S}\in\mathbb{R}^{H\times\frac{TD}{H}}" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m9"><semantics><mrow><mi>𝐒</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>H</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mfrac><mrow><mi>T</mi><mo>⁢</mo><mi>D</mi></mrow><mi>H</mi></mfrac></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{S}\in\mathbb{R}^{H\times\frac{TD}{H}}</annotation></semantics></math>，它由所有打乱顺序的词元<math alttext="\mathbf{s}_{1},\mathbf{s}_{2},...,\mathbf{s}_{H}" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m10"><semantics><mrow><msub><mi>𝐬</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐬</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝐬</mi><mi>H</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{s}_{1},\mathbf{s}_{2},...,\mathbf{s}_{H}</annotation></semantics></math>堆叠而成。在本工作中，我们设置<math alttext="H=T" class="ltx_Math" display="inline" id="S3.SS3.SSS1.p1.m11"><semantics><mrow><mi>H</mi><mo>=</mo><mi>T</mi></mrow><annotation encoding="application/x-tex">H=T</annotation></semantics></math>，以在词元混合后保持词元数量不变，从而支持残差连接。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.SSS1.p2">
+<p class="ltx_p">经过残差连接和归一化模块后，我们可以生成</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E5">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(5)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathbf{s}_{1},\mathbf{s}_{2},...,\mathbf{s}_{T}={\rm LN}\left({\rm TokenMixing%
+}\left(\mathbf{x}_{1},\mathbf{x}_{2},...,\mathbf{x}_{T}\right)+\left(\mathbf{x%
+}_{1},\mathbf{x}_{2},...,\mathbf{x}_{T}\right)\right)," class="ltx_Math" display="block" id="S3.E5.m1"><semantics><mrow><mrow><mrow><msub><mi>𝐬</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐬</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝐬</mi><mi>T</mi></msub></mrow><mo>=</mo><mrow><mi>LN</mi><mo>⁢</mo><mrow><mo>(</mo><mrow><mrow><mi>TokenMixing</mi><mo>⁢</mo><mrow><mo>(</mo><msub><mi>𝐱</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐱</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝐱</mi><mi>T</mi></msub><mo>)</mo></mrow></mrow><mo>+</mo><mrow><mo>(</mo><msub><mi>𝐱</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐱</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝐱</mi><mi>T</mi></msub><mo>)</mo></mrow></mrow><mo>)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathbf{s}_{1},\mathbf{s}_{2},...,\mathbf{s}_{T}={\rm LN}\left({\rm TokenMixing%
+}\left(\mathbf{x}_{1},\mathbf{x}_{2},...,\mathbf{x}_{T}\right)+\left(\mathbf{x%
+}_{1},\mathbf{x}_{2},...,\mathbf{x}_{T}\right)\right),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="ltx_para" id="S3.SS3.SSS1.p3">
+<p class="ltx_p">尽管自注意力已被证明在大语言模型中非常有效，但我们发现它对推荐系统并非最优。在自注意力中，注意力权重通过词元的内积计算。该方法对NLP很有效，因为其中所有词元共享统一的嵌入空间。然而在推荐任务中，特征空间本质上是异质的。在两个异质语义空间之间计算内积相似度是众所周知的困难——尤其在推荐系统中，用户侧和物品侧特征的ID空间可能包含数亿个元素。因此，将自注意力应用于如此多样的输入并不能优于无参数的多头词元混合方法，并且会消耗更多计算、内存IO操作和GPU显存。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S3.SS3.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">3.3.2. </span>逐词元FFN</h4>
+<div class="ltx_para" id="S3.SS3.SSS2.p1">
+<p class="ltx_p">以往的DLRM和DHEN模型倾向于在单个交互模块中混合来自许多不同语义空间的特征，这可能使高频字段占据主导地位，淹没低频或长尾信号，最终损害整体推荐质量。我们引入一种参数隔离的前馈网络架构，称为逐词元FFN。在传统设计中，FFN的参数在所有词元间共享，而我们的方法用专门的变换处理每个词元，从而为每个词元隔离参数。对于第<math alttext="t" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m1"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>个词元<math alttext="\mathbf{s}_{t}" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m2"><semantics><msub><mi>𝐬</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{s}_{t}</annotation></semantics></math>，逐词元FFN可以表示为</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E6">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(6)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathbf{v}_{t}=f_{\text{pffn}}^{t,2}\left({\rm Gelu}\left(f_{\text{pffn}}^{t,1%
+}\left(\mathbf{s}_{t}\right)\right)\right)," class="ltx_Math" display="block" id="S3.E6.m1"><semantics><mrow><mrow><msub><mi>𝐯</mi><mi>t</mi></msub><mo>=</mo><mrow><msubsup><mi>f</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mn>2</mn></mrow></msubsup><mo>⁢</mo><mrow><mo>(</mo><mrow><mi>Gelu</mi><mo>⁢</mo><mrow><mo>(</mo><mrow><msubsup><mi>f</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mn>1</mn></mrow></msubsup><mo>⁢</mo><mrow><mo>(</mo><msub><mi>𝐬</mi><mi>t</mi></msub><mo>)</mo></mrow></mrow><mo>)</mo></mrow></mrow><mo>)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathbf{v}_{t}=f_{\text{pffn}}^{t,2}\left({\rm Gelu}\left(f_{\text{pffn}}^{t,1%
+}\left(\mathbf{s}_{t}\right)\right)\right),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E7">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(7)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="f_{\text{pffn}}^{t,i}(\mathbf{x})=\mathbf{x}\mathbf{W}_{\text{pffn}}^{t,i}+%
+\mathbf{b}_{\text{pffn}}^{t,i}" class="ltx_Math" display="block" id="S3.E7.m1"><semantics><mrow><mrow><msubsup><mi>f</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mi>i</mi></mrow></msubsup><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>𝐱</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><msubsup><mi>𝐱𝐖</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mi>i</mi></mrow></msubsup><mo>+</mo><msubsup><mi>𝐛</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mi>i</mi></mrow></msubsup></mrow></mrow><annotation encoding="application/x-tex">f_{\text{pffn}}^{t,i}(\mathbf{x})=\mathbf{x}\mathbf{W}_{\text{pffn}}^{t,i}+%
+\mathbf{b}_{\text{pffn}}^{t,i}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">是逐词元FFN的第<math alttext="i" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m3"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>层MLP，<math alttext="\mathbf{W}_{\text{pffn}}^{t,1}\in\mathbb{R}^{D\times kD}" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m4"><semantics><mrow><msubsup><mi>𝐖</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mn>1</mn></mrow></msubsup><mo>∈</mo><msup><mi>ℝ</mi><mrow><mrow><mi>D</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>k</mi></mrow><mo>⁢</mo><mi>D</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{W}_{\text{pffn}}^{t,1}\in\mathbb{R}^{D\times kD}</annotation></semantics></math>、<math alttext="\mathbf{b}_{\text{pffn}}^{t,1}\in\mathbb{R}^{kD}" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m5"><semantics><mrow><msubsup><mi>𝐛</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mn>1</mn></mrow></msubsup><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>k</mi><mo>⁢</mo><mi>D</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{b}_{\text{pffn}}^{t,1}\in\mathbb{R}^{kD}</annotation></semantics></math>、<math alttext="\mathbf{W}_{\text{pffn}}^{t,2}\in\mathbb{R}^{kD\times D}" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m6"><semantics><mrow><msubsup><mi>𝐖</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mn>2</mn></mrow></msubsup><mo>∈</mo><msup><mi>ℝ</mi><mrow><mrow><mi>k</mi><mo>⁢</mo><mi>D</mi></mrow><mo lspace="0.222em" rspace="0.222em">×</mo><mi>D</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{W}_{\text{pffn}}^{t,2}\in\mathbb{R}^{kD\times D}</annotation></semantics></math>、<math alttext="\mathbf{b}_{\text{pffn}}^{t,2}\in\mathbb{R}^{D}" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m7"><semantics><mrow><msubsup><mi>𝐛</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mn>2</mn></mrow></msubsup><mo>∈</mo><msup><mi>ℝ</mi><mi>D</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{b}_{\text{pffn}}^{t,2}\in\mathbb{R}^{D}</annotation></semantics></math>、<math alttext="k" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m8"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>是用于调整逐词元FFN隐藏维度的超参数，<math alttext="{\rm Gelu(\cdot)}" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m9"><semantics><mrow><mi>Gelu</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">{\rm Gelu(\cdot)}</annotation></semantics></math>是Gelu激活函数，<math alttext="\mathbf{s}_{t}\in\mathbb{R}^{D}" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m10"><semantics><mrow><msub><mi>𝐬</mi><mi>t</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mi>D</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{s}_{t}\in\mathbb{R}^{D}</annotation></semantics></math>是第<math alttext="t" class="ltx_Math" display="inline" id="S3.SS3.SSS2.p1.m11"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>个词元。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.SSS2.p2">
+<p class="ltx_p">我们将逐词元FFN模块概括为</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E8">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(8)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathbf{v}_{1},\mathbf{v}_{2},...,\mathbf{v}_{T}={\rm PFFN}\left(\mathbf{s}_{1%
+},\mathbf{s}_{2},...,\mathbf{s}_{T}\right)," class="ltx_Math" display="block" id="S3.E8.m1"><semantics><mrow><mrow><mrow><msub><mi>𝐯</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐯</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝐯</mi><mi>T</mi></msub></mrow><mo>=</mo><mrow><mi>PFFN</mi><mo>⁢</mo><mrow><mo>(</mo><msub><mi>𝐬</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐬</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝐬</mi><mi>T</mi></msub><mo>)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathbf{v}_{1},\mathbf{v}_{2},...,\mathbf{v}_{T}={\rm PFFN}\left(\mathbf{s}_{1%
+},\mathbf{s}_{2},...,\mathbf{s}_{T}\right),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E9">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(9)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="{\rm PFFN}\left(\mathbf{s}_{1},\mathbf{s}_{2},...,\mathbf{s}_{T}\right)=f_{%
+\text{pffn}}^{t,2}\left({\rm Gelu}\left(f_{\text{pffn}}^{t,1}\left(\mathbf{s}_%
+{1},\mathbf{s}_{2},...,\mathbf{s}_{T}\right)\right)\right)." class="ltx_Math" display="block" id="S3.E9.m1"><semantics><mrow><mrow><mrow><mi>PFFN</mi><mo>⁢</mo><mrow><mo>(</mo><msub><mi>𝐬</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐬</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝐬</mi><mi>T</mi></msub><mo>)</mo></mrow></mrow><mo>=</mo><mrow><msubsup><mi>f</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mn>2</mn></mrow></msubsup><mo>⁢</mo><mrow><mo>(</mo><mrow><mi>Gelu</mi><mo>⁢</mo><mrow><mo>(</mo><mrow><msubsup><mi>f</mi><mtext>pffn</mtext><mrow><mi>t</mi><mo>,</mo><mn>1</mn></mrow></msubsup><mo>⁢</mo><mrow><mo>(</mo><msub><mi>𝐬</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐬</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝐬</mi><mi>T</mi></msub><mo>)</mo></mrow></mrow><mo>)</mo></mrow></mrow><mo>)</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">{\rm PFFN}\left(\mathbf{s}_{1},\mathbf{s}_{2},...,\mathbf{s}_{T}\right)=f_{%
+\text{pffn}}^{t,2}\left({\rm Gelu}\left(f_{\text{pffn}}^{t,1}\left(\mathbf{s}_%
+{1},\mathbf{s}_{2},...,\mathbf{s}_{T}\right)\right)\right).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">与参数全部共享的FFN相比，逐词元FFN在保持计算复杂度不变的同时，通过引入更多参数增强了建模能力。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.SSS2.p3">
+<p class="ltx_p">值得强调的是，逐词元FFN与MMoE专家不同之处在于，每个逐词元FFN看到的是不同的词元输入，而MMoE中的所有专家共享相同的输入。不同于许多专家处理同一输入的MMoE，也不同于不同输入共享一个FFN的Transformer，RankMixer同时切分输入和参数，这有利于在不同特征子空间中学习多样性。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S3.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.4. </span>RankMixer中的稀疏MoE</h3>
+<div class="ltx_para" id="S3.SS4.p1">
+<p class="ltx_p">为进一步提高扩展的投资回报率，我们可以将每个逐词元的稠密FFN替换为<em class="ltx_emph ltx_font_italic">稀疏混合专家</em>（MoE）模块，使模型容量增长而计算成本大致保持不变。然而，原生稀疏MoE在RankMixer中会退化，原因在于：(i) <span class="ltx_text ltx_font_bold">均匀的<math alttext="k" class="ltx_Math" display="inline" id="S3.SS4.p1.m1"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>专家路由</span>。Top-<math alttext="k" class="ltx_Math" display="inline" id="S3.SS4.p1.m2"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>选择对所有特征词元一视同仁，将预算浪费在低信息量词元上，而使高信息量词元得不到足够资源，这阻碍了模型捕捉词元之间的差异。(ii) <span class="ltx_text ltx_font_bold">专家训练不足</span>。逐词元FFN已经将参数乘以词元数量；加入非共享专家会进一步使专家数量激增，产生高度不平衡的路由和训练不充分的专家；</p>
+</div>
+<div class="ltx_para" id="S3.SS4.p2">
+<p class="ltx_p">我们结合两种互补的训练策略来解决上述问题。</p>
+</div>
+<section class="ltx_paragraph" id="S3.SS4.SSS0.Px1">
+<h5 class="ltx_title ltx_title_paragraph">ReLU 路由</h5>
+<div class="ltx_para" id="S3.SS4.SSS0.Px1.p1">
+<p class="ltx_p">为使词元拥有灵活的专家数量并保持可微性，我们将常用的<math alttext="\text{Top}k{+}{\rm softmax}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m1"><semantics><mrow><mrow><mtext>Top</mtext><mo>⁢</mo><mi>k</mi></mrow><mo>+</mo><mi>softmax</mi></mrow><annotation encoding="application/x-tex">\text{Top}k{+}{\rm softmax}</annotation></semantics></math>替换为 ReLU 门控加上自适应<math alttext="\ell_{1}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m2"><semantics><msub><mi mathvariant="normal">ℓ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\ell_{1}</annotation></semantics></math>惩罚<cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib23" title="ReMoE: fully differentiable mixture-of-experts with relu routing">2024c</a>)</cite>。给定第<math alttext="j" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m3"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>个专家<math alttext="e_{i,j}(\cdot)" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m4"><semantics><mrow><msub><mi>e</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">e_{i,j}(\cdot)</annotation></semantics></math>（对应词元<math alttext="s_{i}\!\in\!\mathbb{R}^{d_{h}}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m5"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub><mo lspace="0.108em" rspace="0.108em">∈</mo><msup><mi>ℝ</mi><msub><mi>d</mi><mi>h</mi></msub></msup></mrow><annotation encoding="application/x-tex">s_{i}\!\in\!\mathbb{R}^{d_{h}}</annotation></semantics></math>）以及路由器<math alttext="h(\cdot)" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m6"><semantics><mrow><mi>h</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">h(\cdot)</annotation></semantics></math>：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E10">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(10)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="G_{i,j}={\rm ReLU}\bigl{(}h(\mathbf{s}_{i})\bigr{)},\quad\mathbf{v}_{i}=\sum_{%
+j=1}^{N_{e}}G_{i,j}\,e_{i,j}(\mathbf{s}_{i})," class="ltx_Math" display="block" id="S3.E10.m1"><semantics><mrow><mrow><mrow><msub><mi>G</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><mrow><mi>ReLU</mi><mo>⁢</mo><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><mi>h</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>𝐬</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo maxsize="120%" minsize="120%">)</mo></mrow></mrow></mrow><mo rspace="1.167em">,</mo><mrow><msub><mi>𝐯</mi><mi>i</mi></msub><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>N</mi><mi>e</mi></msub></munderover><mrow><msub><mi>G</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>⁢</mo><msub><mi>e</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>𝐬</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">G_{i,j}={\rm ReLU}\bigl{(}h(\mathbf{s}_{i})\bigr{)},\quad\mathbf{v}_{i}=\sum_{%
+j=1}^{N_{e}}G_{i,j}\,e_{i,j}(\mathbf{s}_{i}),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="N_{e}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m7"><semantics><msub><mi>N</mi><mi>e</mi></msub><annotation encoding="application/x-tex">N_{e}</annotation></semantics></math>是每个词元的专家数量，<math alttext="N_{t}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m8"><semantics><msub><mi>N</mi><mi>t</mi></msub><annotation encoding="application/x-tex">N_{t}</annotation></semantics></math>是词元数量。ReLU路由会为高信息量词元激活更多专家，从而提高参数效率。稀疏性由<math alttext="\mathcal{L}_{\mathrm{reg}}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m9"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>reg</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{reg}}</annotation></semantics></math>引导，其系数<math alttext="\lambda" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px1.p1.m10"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>使平均激活专家比例保持在预算附近：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E11">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(11)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}=\mathcal{L}_{\text{task}}+\lambda\,\mathcal{L}_{\mathrm{reg}},%
+\quad\mathcal{L}_{\mathrm{reg}}=\sum_{i=1}^{N_{t}}\sum_{j=1}^{N_{e}}G_{i,j}." class="ltx_Math" display="block" id="S3.E11.m1"><semantics><mrow><mrow><mrow><mi class="ltx_font_mathcaligraphic">ℒ</mi><mo>=</mo><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>task</mtext></msub><mo>+</mo><mrow><mi>λ</mi><mo lspace="0.170em">⁢</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>reg</mi></msub></mrow></mrow></mrow><mo rspace="1.167em">,</mo><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>reg</mi></msub><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false" rspace="0em">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>N</mi><mi>t</mi></msub></munderover><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>N</mi><mi>e</mi></msub></munderover><msub><mi>G</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub></mrow></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}=\mathcal{L}_{\text{task}}+\lambda\,\mathcal{L}_{\mathrm{reg}},%
+\quad\mathcal{L}_{\mathrm{reg}}=\sum_{i=1}^{N_{t}}\sum_{j=1}^{N_{e}}G_{i,j}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+</div>
+</section>
+<section class="ltx_paragraph" id="S3.SS4.SSS0.Px2">
+<h5 class="ltx_title ltx_title_paragraph">稠密训练/稀疏推理（DTSI-MoE）</h5>
+<div class="ltx_para" id="S3.SS4.SSS0.Px2.p1">
+<p class="ltx_p">受<cite class="ltx_cite ltx_citemacro_citep">(Pan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib22" title="Ads recommendation in a collapsed and entangled world">2024</a>)</cite>启发，采用两个路由器<math alttext="h_{\text{train}}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px2.p1.m1"><semantics><msub><mi>h</mi><mtext>train</mtext></msub><annotation encoding="application/x-tex">h_{\text{train}}</annotation></semantics></math>和<math alttext="h_{\text{infer}}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px2.p1.m2"><semantics><msub><mi>h</mi><mtext>infer</mtext></msub><annotation encoding="application/x-tex">h_{\text{infer}}</annotation></semantics></math>，并且<math alttext="\mathcal{L}_{\mathrm{reg}}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px2.p1.m3"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>reg</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{reg}}</annotation></semantics></math>仅应用于<math alttext="h_{\text{infer}}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px2.p1.m4"><semantics><msub><mi>h</mi><mtext>infer</mtext></msub><annotation encoding="application/x-tex">h_{\text{infer}}</annotation></semantics></math>。训练期间<math alttext="h_{\text{train}}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px2.p1.m5"><semantics><msub><mi>h</mi><mtext>train</mtext></msub><annotation encoding="application/x-tex">h_{\text{train}}</annotation></semantics></math>和<math alttext="h_{\text{infer}}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px2.p1.m6"><semantics><msub><mi>h</mi><mtext>infer</mtext></msub><annotation encoding="application/x-tex">h_{\text{infer}}</annotation></semantics></math>都会被更新，而推理时仅使用<math alttext="h_{\text{infer}}" class="ltx_Math" display="inline" id="S3.SS4.SSS0.Px2.p1.m7"><semantics><msub><mi>h</mi><mtext>infer</mtext></msub><annotation encoding="application/x-tex">h_{\text{infer}}</annotation></semantics></math>。结果表明，DS-MoE使专家不会遭受训练不足的问题，同时降低了推理成本。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S3.SS5">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.5. </span>扩展方向</h3>
+<div class="ltx_para" id="S3.SS5.p1">
+<p class="ltx_p">RankMixer本质上是一种高度并行且可扩展的架构。其参数数量和计算成本可以沿四个正交轴扩展：词元数量<math alttext="T" class="ltx_Math" display="inline" id="S3.SS5.p1.m1"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>、模型宽度<math alttext="D" class="ltx_Math" display="inline" id="S3.SS5.p1.m2"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>、层数<math alttext="L" class="ltx_Math" display="inline" id="S3.SS5.p1.m3"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>和专家数量<math alttext="E" class="ltx_Math" display="inline" id="S3.SS5.p1.m4"><semantics><mi>E</mi><annotation encoding="application/x-tex">E</annotation></semantics></math>。对于全稠密激活版本，单个样本的参数和前向FLOPs可按如下方式计算</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E12">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_left">(12)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\text{\#Param}\;\approx\;2\,k\,L\,T\,D^{2},\qquad\text{FLOPs}\;\approx\;4\,k\,%
+L\,T\,D^{2}," class="ltx_Math" display="block" id="S3.E12.m1"><semantics><mrow><mrow><mrow><mtext>#Param</mtext><mo lspace="0.558em">≈</mo><mrow><mn> 2</mn><mo lspace="0.170em">⁢</mo><mi>k</mi><mo lspace="0.170em">⁢</mo><mi>L</mi><mo lspace="0.170em">⁢</mo><mi>T</mi><mo lspace="0.170em">⁢</mo><msup><mi>D</mi><mn>2</mn></msup></mrow></mrow><mo rspace="2.167em">,</mo><mrow><mtext>FLOPs</mtext><mo lspace="0.558em">≈</mo><mrow><mn> 4</mn><mo lspace="0.170em">⁢</mo><mi>k</mi><mo lspace="0.170em">⁢</mo><mi>L</mi><mo lspace="0.170em">⁢</mo><mi>T</mi><mo lspace="0.170em">⁢</mo><msup><mi>D</mi><mn>2</mn></msup></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\text{\#Param}\;\approx\;2\,k\,L\,T\,D^{2},\qquad\text{FLOPs}\;\approx\;4\,k\,%
+L\,T\,D^{2},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p"><math alttext="k" class="ltx_Math" display="inline" id="S3.SS5.p1.m5"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>是用于调整FFN隐藏维度的缩放比例。在<em class="ltx_emph ltx_font_italic">稀疏MoE</em>版本中，每个词元的<em class="ltx_emph ltx_font_italic">有效</em>参数和计算量会进一步按稀疏比例<math alttext="s=\frac{\text{\#Activated\_Param}}{\text{\#Total\_Param}}" class="ltx_Math" display="inline" id="S3.SS5.p1.m6"><semantics><mrow><mi>s</mi><mo>=</mo><mfrac><mtext>#Activated_Param</mtext><mtext>#Total_Param</mtext></mfrac></mrow><annotation encoding="application/x-tex">s=\frac{\text{\#Activated\_Param}}{\text{\#Total\_Param}}</annotation></semantics></math>缩放。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4. </span>实验</h2>
+<section class="ltx_subsection" id="S4.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1. </span>实验设置</h3>
+<section class="ltx_subsubsection" id="S4.SS1.SSS1">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.1.1. </span>数据集与环境</h4>
+<div class="ltx_para" id="S4.SS1.SSS1.p1">
+<p class="ltx_p">离线实验使用抖音推荐系统的训练数据进行。这些数据来自抖音的在线日志和用户反馈标签。训练数据集包含超过300个特征，如数值特征、ID特征、交叉特征和序列特征，涉及数十亿用户ID和数亿视频ID，这些特征均被转换为嵌入。数据每天覆盖数万亿条记录，实验在两周期间收集的数据上进行。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S4.SS1.SSS2">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.1.2. </span>评估指标</h4>
+<div class="ltx_para" id="S4.SS1.SSS2.p1">
+<p class="ltx_p">为评估模型性能，我们使用AUC（曲线下面积）和UAUC（用户级AUC）作为主要性能指标，并使用参数数量、FLOPs和MFU作为效率指标，具体如下：<span class="ltx_text ltx_font_bold">完播/跳过 AUC/UAUC：</span>完播=1/0或跳过=1/0标签表示用户在短时间内是否完整观看视频或滑动到下一个视频。我们针对该完播标签评估AUC和UAUC。AUC提升0.0001可被视为具有置信度的显著提升。<span class="ltx_text ltx_font_bold">稠密参数：</span>稠密部分的参数数量，不包括稀疏嵌入参数。训练<span class="ltx_text ltx_font_bold">Flops/Batch：</span>让一个批次512通过模型所需的浮点运算次数（FLOPs），代表训练的计算成本。<span class="ltx_text ltx_font_bold">MFU：</span>MFU（模型FLOPs利用率）是衡量模型对硬件提供的浮点运算利用程度的指标，通过将模型的实际FLOPs消耗除以硬件的理论FLOPs容量计算得到。</p>
+</div>
+</section>
+<section class="ltx_subsubsection" id="S4.SS1.SSS3">
+<h4 class="ltx_title ltx_title_subsubsection">
+<span class="ltx_tag ltx_tag_subsubsection">4.1.3. </span>基线</h4>
+<div class="ltx_para" id="S4.SS1.SSS3.p1">
+<p class="ltx_p">我们与以下被广泛认可的SOTA基线进行比较：<span class="ltx_text ltx_font_bold">DLRM-MLP</span>：作为实验基线的用于特征交叉的原生MLP，<span class="ltx_text ltx_font_bold">DCNv2<cite class="ltx_cite ltx_citemacro_citep"><span class="ltx_text ltx_font_medium">(</span>Wang<span class="ltx_text ltx_bib_etal"> et al.</span><span class="ltx_text ltx_font_medium">, </span><a class="ltx_ref" href="#bib.bib16" title="Dcn v2: improved deep &amp; cross network and practical lessons for web-scale learning to rank systems">2021</a><span class="ltx_text ltx_font_medium">)</span></cite></span>、<span class="ltx_text ltx_font_bold">RDCN<cite class="ltx_cite ltx_citemacro_citep"><span class="ltx_text ltx_font_medium">(</span>Borisyuk<span class="ltx_text ltx_bib_etal"> et al.</span><span class="ltx_text ltx_font_medium">, </span><a class="ltx_ref" href="#bib.bib24" title="LiRank: industrial large scale ranking models at linkedin">2024</a><span class="ltx_text ltx_font_medium">)</span></cite></span>特征交叉模型的SOTA。<span class="ltx_text ltx_font_bold">MoE</span>通过使用多个并行专家进行扩展。<span class="ltx_text ltx_font_bold">AutoInt<cite class="ltx_cite ltx_citemacro_citep"><span class="ltx_text ltx_font_medium">(</span>Song<span class="ltx_text ltx_bib_etal"> et al.</span><span class="ltx_text ltx_font_medium">, </span><a class="ltx_ref" href="#bib.bib38" title="Autoint: automatic feature interaction learning via self-attentive neural networks">2019</a><span class="ltx_text ltx_font_medium">)</span></cite></span>、<span class="ltx_text ltx_font_bold">Hiformer<cite class="ltx_cite ltx_citemacro_citep"><span class="ltx_text ltx_font_medium">(</span>Gui<span class="ltx_text ltx_bib_etal"> et al.</span><span class="ltx_text ltx_font_medium">, </span><a class="ltx_ref" href="#bib.bib39" title="Hiformer: heterogeneous feature interactions learning with transformers for recommender systems">2023</a><span class="ltx_text ltx_font_medium">)</span></cite></span>结合了异质自注意力层和低秩近似矩阵计算。<span class="ltx_text ltx_font_bold">DHEN<cite class="ltx_cite ltx_citemacro_citep"><span class="ltx_text ltx_font_medium">(</span>Zhang<span class="ltx_text ltx_bib_etal"> et al.</span><span class="ltx_text ltx_font_medium">, </span><a class="ltx_ref" href="#bib.bib18" title="DHEN: a deep and hierarchical ensemble network for large-scale click-through rate prediction">2022</a><span class="ltx_text ltx_font_medium">)</span></cite></span>：结合不同类型的特征交叉块并堆叠多层（DCN/自注意力/FM/LR）<span class="ltx_text ltx_font_bold">Wukong<cite class="ltx_cite ltx_citemacro_citep"><span class="ltx_text ltx_font_medium">(</span><a class="ltx_ref" href="#bib.bib4" title="Wukong: towards a scaling law for large-scale recommendation">Zhang<span class="ltx_text ltx_bib_etal"> et al.</span><span class="ltx_text ltx_font_medium">, </span></a><span class="ltx_text ltx_font_medium">)</span></cite></span>遵循DHEN架构，并采用因子分解机块（FMB）和线性压缩块（LCB），研究了特征交互的缩放定律。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.SSS3.p2">
+<p class="ltx_p">所有实验均在数百块GPU上以混合分布式训练框架进行：稀疏部分异步更新，而稠密部分同步更新。所有模型的优化器超参数保持一致。对于稠密部分，我们使用学习率为0.01的RMSProp优化器，而稀疏部分使用Adagrad优化器。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S4.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2. </span>与SOTA方法的比较</h3>
+<figure class="ltx_table" id="S4.T1">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 1. </span><math alttext="\sim" class="ltx_Math" display="inline" id="S4.T1.m2"><semantics><mo>∼</mo><annotation encoding="application/x-tex">\sim</annotation></semantics></math>100 M参数推荐模型的性能与效率比较（最佳值以<span class="ltx_text ltx_font_bold">粗体</span>表示）。</figcaption>
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:250.3pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(14.2pt,-8.2pt) scale(1.06985763314123,1.06985763314123) ;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_tt" rowspan="2" style="padding-top:0.25pt;padding-bottom:0.25pt;">Model</td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="2" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">Finish</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="2" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">Skip</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="2" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">Efficiency</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">AUC<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T1.m3"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">UAUC<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T1.m4"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">AUC<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T1.m5"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">UAUC<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T1.m6"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">Params</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">FLOPs/Batch</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">DLRM-MLP (base)</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">0.8554</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">0.8270</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">0.8124</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">0.7294</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">8.7 M</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">52 G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">DLRM-MLP-100M</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.15%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">—</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.15%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">—</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">95 M</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">185 G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-top:0.25pt;padding-bottom:0.25pt;">DCNv2</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.13%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.13%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.15%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.26%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">22 M</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">170 G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-top:0.25pt;padding-bottom:0.25pt;">RDCN</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.09%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.12%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.10%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.22%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">22.6 M</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">172 G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-top:0.25pt;padding-bottom:0.25pt;">MoE</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.09%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.12%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.08%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.21%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">47.6 M</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">158 G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-top:0.25pt;padding-bottom:0.25pt;">AutoInt</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.10%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.14%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.12%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.23%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">19.2 M</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">307 G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-top:0.25pt;padding-bottom:0.25pt;">DHEN</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.18%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.26%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.36%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.52%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">22 M</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">158 G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-top:0.25pt;padding-bottom:0.25pt;">HiFormer</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.48%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">—</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">—</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">—</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">116 M</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">326 G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-top:0.25pt;padding-bottom:0.25pt;">Wukong</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.29%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.29%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.49%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">+0.65%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">122 M</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.25pt;padding-bottom:0.25pt;">442 G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">RankMixer-100M</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">+0.64%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">+0.72%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">+0.86%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">+1.33%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">107 M</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.25pt;padding-bottom:0.25pt;">233 G</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">RankMixer-1B</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">+0.95%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">+1.22%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">+1.25%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">+1.82%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">1.1 B</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">2.1T</span></td>
+</tr>
+</table>
+</span></div>
+</figure>
+<div class="ltx_para" id="S4.SS2.p1">
+<p class="ltx_p">为探索如何扩展模型，我们比较了参数量相近（约100百万）的模型，以确定在相同计算成本下哪种模型结构表现最佳。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p2">
+<p class="ltx_p">我们的方法与基线的主要性能结果总结在表<a class="ltx_ref" href="#S4.T1" title="Table 1 ‣ 4.2. Comparison with SOTA methods ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">1</span></a>中。我们可以观察到，RankMixer在多个目标和指标上显著优于其他SOTA模型。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p3">
+<p class="ltx_p">我们进一步仔细分析每个模型。首先，仅将DLRM扩展到100百万参数只能带来有限收益，这凸显了针对推荐数据特性设计模型以获得更好扩展性能的必要性。然后我们将RankMixer模型与其他经典交叉结构设计（如DCN、RDCN、AutoInt和DHEN）进行比较，发现它们存在模型参数与计算成本之间的不平衡。即使参数量相对较小，这些模型也已表现出较大的FLOPs，表明设计上的缺陷制约了它们在表中的结果。同时，尽管RankMixer取得了最佳性能，但在扩展到100百万参数时，其FLOPs在所有模型中仍相对适中，体现了在模型容量和计算负载之间的平衡。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p4">
+<p class="ltx_p">我们还将RankMixer与几种常用的最先进扩展模型（如Hiformer和wukong）进行比较，发现在相近参数设置下，RankMixer不仅性能更好，而且计算需求更低。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.3. </span>不同模型的缩放定律</h3>
+<figure class="ltx_figure" id="S4.F2"><a href="assets/31ad91f43a5f3d05.png" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F2.g1" loading="lazy" src="assets/31ad91f43a5f3d05.png"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2. </span>不同模型的完播AUC增益与Params/Flops之间的缩放定律。x轴使用对数刻度。</figcaption>
+</figure>
+<div class="ltx_para" id="S4.SS3.p1">
+<p class="ltx_p">在图<a class="ltx_ref" href="#S4.F2" title="Figure 2 ‣ 4.3. Scaling Laws of different models ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">2</span></a>中，我们展示了从参数规模和Flops两方面观察到的缩放定律曲线。RankMixer模型在参数和FLOPs两方面均表现出最陡峭的缩放定律。RankMixer始终优于其他模型。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.p2">
+<p class="ltx_p">尽管wukong模型表现出相对陡峭的参数曲线，但其计算成本增长更为迅速；因此，在AUC vs FLOPs曲线上，它与RankMixer和hiformer之间的差距更大。此外，hiformer的性能略逊于RankMixer，反映其依赖特征级词元切分和注意力机制影响了效率。DHEN的扩展并不理想，反映其交叉结构的可扩展性有限。此外，MoE通过增加专家进行扩展的策略带来了维持专家平衡的挑战，导致扩展性能次优。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.p3">
+<p class="ltx_p">具体而言，我们可以通过增加宽度（<math alttext="D" class="ltx_Math" display="inline" id="S4.SS3.p3.m1"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>）、特征词元（<math alttext="T" class="ltx_Math" display="inline" id="S4.SS3.p3.m2"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>）和层数（<math alttext="L" class="ltx_Math" display="inline" id="S4.SS3.p3.m3"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>）来扩展 RankMixer 模型。在我们的实验中，我们观察到一个与 LLM 缩放定律一致的结论：模型质量主要与参数总量相关，而不同的扩展方向（深度 L、宽度 D、词元数 T）会产生几乎相同的性能。从计算效率的角度来看，更大的隐藏维度会产生更大的矩阵乘法形状，因此相比堆叠更多层能实现更高的 MFU。因此，100M 和 1B 的最终配置分别设为（<math alttext="D" class="ltx_Math" display="inline" id="S4.SS3.p3.m4"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>=768，<math alttext="T" class="ltx_Math" display="inline" id="S4.SS3.p3.m5"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>=16，<math alttext="L" class="ltx_Math" display="inline" id="S4.SS3.p3.m6"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>=2）和（<math alttext="D" class="ltx_Math" display="inline" id="S4.SS3.p3.m7"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>=1536，<math alttext="T" class="ltx_Math" display="inline" id="S4.SS3.p3.m8"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>=32，<math alttext="L" class="ltx_Math" display="inline" id="S4.SS3.p3.m9"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>=2）。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.4. </span>消融实验</h3>
+<figure class="ltx_table" id="S4.T2">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 2. </span>对 RankMixer-100M 各组件的消融实验</figcaption>
+<table class="ltx_tabular ltx_centering ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_tt">
+<span class="ltx_text" style="font-size:90%;">   </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">Setting</span>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">
+<math alttext="\Delta" class="ltx_Math" display="inline" id="S4.T2.m1"><semantics><mi mathsize="90%" mathvariant="normal">Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math><span class="ltx_text" style="font-size:90%;">AUC</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t"><span class="ltx_text" style="font-size:90%;">   w/o skip connections</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><math alttext="-0.07\%" class="ltx_Math" display="inline" id="S4.T2.m2"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.07</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.07\%</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left"><span class="ltx_text" style="font-size:90%;">   w/o multi-head token mixing</span></td>
+<td class="ltx_td ltx_align_center"><math alttext="-0.50\%" class="ltx_Math" display="inline" id="S4.T2.m3"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.50</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.50\%</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left"><span class="ltx_text" style="font-size:90%;">   w/o layer normalization</span></td>
+<td class="ltx_td ltx_align_center"><math alttext="-0.05\%" class="ltx_Math" display="inline" id="S4.T2.m4"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.05</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.05\%</annotation></semantics></math></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb">
+<span class="ltx_text" style="font-size:90%;">   Per-token FFN </span><math alttext="\rightarrow" class="ltx_Math" display="inline" id="S4.T2.m5"><semantics><mo mathsize="90%" stretchy="false">→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> shared FFN</span>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><math alttext="-0.31\%" class="ltx_Math" display="inline" id="S4.T2.m6"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.31</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.31\%</annotation></semantics></math></td>
+</tr>
+</table>
+</figure>
+<figure class="ltx_table" id="S4.T3">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 3. </span>Token2FFN 路由——策略比较</figcaption>
+<table class="ltx_tabular ltx_centering ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_tt">
+<span class="ltx_text" style="font-size:90%;">   </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">Routing strategy</span>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">
+<math alttext="\Delta" class="ltx_Math" display="inline" id="S4.T3.m1"><semantics><mi mathsize="90%" mathvariant="normal">Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math><span class="ltx_text" style="font-size:90%;">AUC</span>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">
+<math alttext="\Delta" class="ltx_Math" display="inline" id="S4.T3.m2"><semantics><mi mathsize="90%" mathvariant="normal">Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math><span class="ltx_text" style="font-size:90%;">Params</span>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">
+<math alttext="\Delta" class="ltx_Math" display="inline" id="S4.T3.m3"><semantics><mi mathsize="90%" mathvariant="normal">Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math><span class="ltx_text" style="font-size:90%;">FLOPs</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t"><span class="ltx_text" style="font-size:90%;">   All-Concat-MLP</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><math alttext="-0.18\%" class="ltx_Math" display="inline" id="S4.T3.m4"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.18</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.18\%</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.0%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.0%</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left"><span class="ltx_text" style="font-size:90%;">   All-Share</span></td>
+<td class="ltx_td ltx_align_center"><math alttext="-0.25\%" class="ltx_Math" display="inline" id="S4.T3.m5"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.25</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.25\%</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.0%</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">0.0%</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text" style="font-size:90%;">   Self-Attention</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><math alttext="-0.03\%" class="ltx_Math" display="inline" id="S4.T3.m6"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.03</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.03\%</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">+16%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">+71.8%</span></td>
+</tr>
+</table>
+</figure>
+<div class="ltx_para" id="S4.SS4.p1">
+<p class="ltx_p">在 RankMixer-100M 模型中，我们对残差连接、多头词元混合进行了消融研究。从表 <a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.4. Ablation Study ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">2</span></a> 中可以看出，移除这些组件会显著降低模型性能。移除多头词元混合会丢失全局信息，因为每个 FFN 只对部分特征建模而缺乏交互。移除残差连接和 LayerNorm 同样会使性能变差，降低训练稳定性，并使梯度爆炸或消失问题更容易出现。</p>
+</div>
+<div class="ltx_para" id="S4.SS4.p2">
+<p class="ltx_p">我们进一步分析了词元混合策略，即表 <a class="ltx_ref" href="#S4.T3" title="Table 3 ‣ 4.4. Ablation Study ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">3</span></a> 中从特征词元到 FFN 的路由策略。与多头词元混合（Multi-Head Token-Mixing）进行比较的路由策略包括：<span class="ltx_text ltx_font_italic">All-Concat-MLP：</span> 将所有词元拼接，通过一个大 MLP 处理后再切分为相同数量的词元。性能的下降表明学习大矩阵存在挑战，且削弱了局部信息的学习。<span class="ltx_text ltx_font_italic">All-Share：</span> 不做切分，整个输入向量被共享并馈入每个逐词元 FFN，类似于 MoE。性能显著下降，这表明与全共享输入相比，特征子空间划分和独立建模的重要性。
+<span class="ltx_text ltx_font_italic">自注意力：</span> 在词元之间应用自注意力进行路由。其性能略逊于多头词元混合，并且还承受较高的计算开销，这表明在数百个不同特征子空间之间学习相似性存在困难。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS5">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.5. </span>稀疏 MoE 的可扩展性与专家均衡</h3>
+<figure class="ltx_figure" id="S4.F3"><a href="assets/b7f8a130a9a91245.png" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F3.g1" loading="lazy" src="assets/b7f8a130a9a91245.png"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3. </span>在激活比例逐渐稀疏（专家比例为 1,1/2,1/4,1/8）时，RankMixer 各变体的 AUC 性能：稠密训练 + ReLU 路由的 SMoE 几乎保留了 1 B 稠密模型的全部精度。</figcaption>
+</figure>
+<section class="ltx_paragraph" id="S4.SS5.SSS0.Px1">
+<h5 class="ltx_title ltx_title_paragraph">可扩展性。</h5>
+<div class="ltx_para" id="S4.SS5.SSS0.Px1.p1">
+<p class="ltx_p">图 <a class="ltx_ref" href="#S4.F3" title="Figure 3 ‣ 4.5. Sparse-MoE Scalability and Expert Balance ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">3</span></a> 绘制了离线 <span class="ltx_text ltx_font_smallcaps">AUC</span> 增益随 SMoE 稀疏度的变化。将稠密训练-稀疏推理与 ReLU 路由相结合，对于在激进稀疏度下保持精度至关重要，使 RankMixer 能够将参数容量（和内存占用）扩展至超过 8 倍，而 AUC 几乎没有损失，并在推理时带来显著节省（吞吐量提升 50%）。原始 SMoE 的性能随着激活专家数量减少而单调下降，这印证了我们识别出的专家不均衡和训练不足问题。加入负载均衡损失可相对原始 SMoE 减轻性能退化，但仍不及 DTSI + ReLU 版本，因为问题主要出在专家训练而非路由器上。
+这验证了稀疏 MoE 是将 RankMixer 从当前的 1 B 参数扩展到未来 10 B 规模部署而不超出成本预算的可行路径。</p>
+</div>
+<figure class="ltx_figure" id="S4.F4"><a href="assets/519ba867f63a88e6.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F4.g1" loading="lazy" src="assets/519ba867f63a88e6.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4. </span>RankMixer 中不同词元的激活专家比例。</figcaption>
+</figure>
+<figure class="ltx_table" id="S4.T4">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 4. </span>抖音和抖音极速版信息流推荐场景的在线 AB 测试结果，所有提升均具有统计显著性。根据长期反转 A/B 测试以及对长期反转实验的持续观察，RankMixer-1B 带来的增益尚未收敛，此处呈现的结果仍在持续提升。</figcaption>
+<div class="ltx_inline-block ltx_transformed_outer" style="width:433.6pt;height:70.9pt;vertical-align:-0.7pt;"><span class="ltx_transformed_inner" style="transform:translate(-116.6pt,18.9pt) scale(0.650320302724818,0.650320302724818) ;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"></td>
+<td class="ltx_td ltx_align_center ltx_border_t" colspan="5" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Douyin app</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" colspan="4" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Douyin lite</span></td>
+<td class="ltx_td ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td" style="padding-top:0.4pt;padding-bottom:0.4pt;"></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Active Day<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m1"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Duration<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m2"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Like<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m3"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Finish<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m4"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Comment<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m5"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Active Day<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m6"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Duration<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m7"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Like<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m8"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Finish<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m9"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Comment<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T4.m10"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Overall</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.2908%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.0836%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+2.3852%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.9874%</td>
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.7886%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.1968%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.9869%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.1318%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+2.0744%</td>
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.1338%</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Low-active</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.7412%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+3.6434%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+8.1641%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+4.5393%</td>
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+2.9368%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.5389%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+2.1831%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+4.4486%</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+3.3958%</td>
+<td class="ltx_td ltx_align_left ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.9595%</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Middle-active</span></td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.7081%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.5269%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.4pt;padding-bottom:0.4pt;">+2.5823%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.4pt;padding-bottom:0.4pt;">+2.5062%</td>
+<td class="ltx_td ltx_align_left" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.2266%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.4235%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.9011%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.7491%</td>
+<td class="ltx_td ltx_align_center" style="padding-top:0.4pt;padding-bottom:0.4pt;">+2.6568%</td>
+<td class="ltx_td ltx_align_left" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.6782%</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">High-active</span></td>
+<td class="ltx_td ltx_align_center ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.1445%</td>
+<td class="ltx_td ltx_align_center ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.6259%</td>
+<td class="ltx_td ltx_align_center ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.828%</td>
+<td class="ltx_td ltx_align_center ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.4939%</td>
+<td class="ltx_td ltx_align_left ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.4151%</td>
+<td class="ltx_td ltx_align_center ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+0.0929%</td>
+<td class="ltx_td ltx_align_center ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.1356%</td>
+<td class="ltx_td ltx_align_center ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.8212%</td>
+<td class="ltx_td ltx_align_center ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.7683%</td>
+<td class="ltx_td ltx_align_left ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+2.3683%</td>
+</tr>
+</table>
+</span></div>
+</figure>
+<figure class="ltx_table" id="S4.T5">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 5. </span>RankMixer 在广告中的在线提升</figcaption>
+<table class="ltx_tabular ltx_centering ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_border_tt" style="padding-top:-0.2pt;padding-bottom:-0.2pt;"></td>
+<td class="ltx_td ltx_align_center ltx_border_tt" colspan="2" style="padding-top:-0.2pt;padding-bottom:-0.2pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Advertising</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left" style="padding-top:-0.2pt;padding-bottom:-0.2pt;"><span class="ltx_text" style="font-size:80%;">Metric</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:-0.2pt;padding-bottom:-0.2pt;">
+<math alttext="\Delta" class="ltx_Math" display="inline" id="S4.T5.m1"><semantics><mi mathsize="80%" mathvariant="normal">Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math><span class="ltx_text" style="font-size:80%;">AUC</span><math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T5.m2"><semantics><mo mathsize="80%" stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-top:-0.2pt;padding-bottom:-0.2pt;">
+<span class="ltx_text" style="font-size:80%;">ADVV</span><math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T5.m3"><semantics><mo mathsize="80%" stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" style="padding-top:-0.2pt;padding-bottom:-0.2pt;"><span class="ltx_text" style="font-size:80%;">Lift</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-top:-0.2pt;padding-bottom:-0.2pt;"><span class="ltx_text" style="font-size:80%;">+0.73%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-top:-0.2pt;padding-bottom:-0.2pt;"><span class="ltx_text" style="font-size:80%;">+3.90%</span></td>
+</tr>
+</table>
+</figure>
+<figure class="ltx_table" id="S4.T6">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 6. </span>在线模型部署与成本指标</figcaption>
+<div class="ltx_inline-block ltx_transformed_outer" style="width:208.1pt;height:85.9pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-48.6pt,20.1pt) scale(0.681696927777393,0.681696927777393) ;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_r ltx_border_t">Metric</td>
+<td class="ltx_td ltx_align_center ltx_border_r ltx_border_t">OnlineBase-16M</td>
+<td class="ltx_td ltx_align_center ltx_border_r ltx_border_t">RankMixer-1B</td>
+<td class="ltx_td ltx_align_center ltx_border_t">Change</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_r ltx_border_t">#Param</td>
+<td class="ltx_td ltx_align_center ltx_border_r ltx_border_t">15.8M</td>
+<td class="ltx_td ltx_align_center ltx_border_r ltx_border_t">1.1B</td>
+<td class="ltx_td ltx_align_center ltx_border_t">
+<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T6.m1"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math> <span class="ltx_text ltx_font_bold">70<math alttext="\times" class="ltx_Math" display="inline" id="S4.T6.m2"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_r">FLOPs</td>
+<td class="ltx_td ltx_align_center ltx_border_r">107G</td>
+<td class="ltx_td ltx_align_center ltx_border_r">2106G</td>
+<td class="ltx_td ltx_align_center">
+<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T6.m3"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math> 20.7<math alttext="\times" class="ltx_Math" display="inline" id="S4.T6.m4"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_r">Flops/Param(G/M)</td>
+<td class="ltx_td ltx_align_center ltx_border_r">6.8</td>
+<td class="ltx_td ltx_align_center ltx_border_r">1.9</td>
+<td class="ltx_td ltx_align_center">
+<math alttext="\downarrow" class="ltx_Math" display="inline" id="S4.T6.m5"><semantics><mo stretchy="false">↓</mo><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math> 3.6<math alttext="\times" class="ltx_Math" display="inline" id="S4.T6.m6"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_r">MFU</td>
+<td class="ltx_td ltx_align_center ltx_border_r">4.47%</td>
+<td class="ltx_td ltx_align_center ltx_border_r">
+<span class="ltx_text ltx_font_bold">44.57</span>%</td>
+<td class="ltx_td ltx_align_center">
+<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T6.m7"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math> 10<math alttext="\times" class="ltx_Math" display="inline" id="S4.T6.m8"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_r">Hardware FLOPs</td>
+<td class="ltx_td ltx_align_center ltx_border_r">fp32</td>
+<td class="ltx_td ltx_align_center ltx_border_r">fp16</td>
+<td class="ltx_td ltx_align_center">
+<math alttext="\uparrow" class="ltx_Math" display="inline" id="S4.T6.m9"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math> 2<math alttext="\times" class="ltx_Math" display="inline" id="S4.T6.m10"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_b ltx_border_r">Latency</td>
+<td class="ltx_td ltx_align_center ltx_border_b ltx_border_r">14.5ms</td>
+<td class="ltx_td ltx_align_center ltx_border_b ltx_border_r"><span class="ltx_text ltx_font_bold">14.3ms</span></td>
+<td class="ltx_td ltx_align_center ltx_border_b">-</td>
+</tr>
+</table>
+</span></div>
+</figure>
+</section>
+<section class="ltx_paragraph" id="S4.SS5.SSS0.Px2">
+<h5 class="ltx_title ltx_title_paragraph">专家均衡与多样性。</h5>
+<div class="ltx_para" id="S4.SS5.SSS0.Px2.p1">
+<p class="ltx_p">原始稀疏 MoE 常常存在专家不均衡问题，进而使部分专家训练不足，最终导致“死亡专家”（几乎从不被激活的专家），而只有少数固定专家不断被激活。
+图 <a class="ltx_ref" href="#S4.F4" title="Figure 4 ‣ Scalability. ‣ 4.5. Sparse-MoE Scalability and Expert Balance ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">4</span></a> 显示，将 DTSI（稠密训练、稀疏推理）与 ReLU 路由相结合可有效解决该问题：稠密训练保证大多数专家获得充足的梯度更新，防止专家饥饿。
+ReLU 路由使激活比例在不同词元之间动态变化——图中显示的激活比例根据其信息内容自适应变化，这与推荐数据多样且高度动态的分布很好地吻合。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S4.SS6">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.6. </span>在线服务成本</h3>
+<div class="ltx_para" id="S4.SS6.p1">
+<p class="ltx_p">当参数增加两个数量级时，我们如何防止推理延迟爆炸？在实际系统中，延迟与吞吐量成反比，与服务机器资源的成本成正比。
+与我们之前完全部署的 16M 参数模型（其结构集成了 DLRM 和 DCN）相比，我们的 RankMixer 模型将参数量扩展约 70<math alttext="\times" class="ltx_Math" display="inline" id="S4.SS6.p1.m1"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>，达到 1B。尽管参数显著增加，由于我们对齐硬件的模型设计和优化策略，最终推理延迟保持稳定。</p>
+</div>
+<div class="ltx_para" id="S4.SS6.p2">
+<p class="ltx_p">当大幅增加模型参数时，延迟可以分解为以下公式：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S4.Ex1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\text{Latency}=\frac{\#\text{Param}\times\text{FLOPs/Param ratio}}{\text{MFU}%
+\times\text{(Theoretical Hardware FLOPs)}}" class="ltx_Math" display="block" id="S4.Ex1.m1"><semantics><mrow><mtext>Latency</mtext><mo>=</mo><mfrac><mrow><mrow><mi mathvariant="normal">#</mi><mo>⁢</mo><mtext>Param</mtext></mrow><mo lspace="0.222em" rspace="0.222em">×</mo><mtext>FLOPs/Param ratio</mtext></mrow><mrow><mtext>MFU</mtext><mo lspace="0.222em" rspace="0.222em">×</mo><mtext>(Theoretical Hardware FLOPs)</mtext></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{Latency}=\frac{\#\text{Param}\times\text{FLOPs/Param ratio}}{\text{MFU}%
+\times\text{(Theoretical Hardware FLOPs)}}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">如表 6 所示，两个数量级的参数增长被逐步抵消：FLOPs/Param 比率下降 <span class="ltx_text ltx_font_bold">3.6<math alttext="\times" class="ltx_Math" display="inline" id="S4.SS6.p2.m1"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></span>，MFU 提升 <span class="ltx_text ltx_font_bold">10 <math alttext="\times" class="ltx_Math" display="inline" id="S4.SS6.p2.m2"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></span>，以及基于量化的 <span class="ltx_text ltx_font_bold">2 <math alttext="\times" class="ltx_Math" display="inline" id="S4.SS6.p2.m3"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></span> 硬件 FLOPs 提升。</p>
+</div>
+<div class="ltx_para" id="S4.SS6.p3">
+<ol class="ltx_enumerate" id="S4.I1">
+<li class="ltx_item" id="S4.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(1)</span>
+<div class="ltx_para" id="S4.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">FLOPs/Param 比率。</span>
+表 <a class="ltx_ref" href="#S4.T6" title="Table 6 ‣ Scalability. ‣ 4.5. Sparse-MoE Scalability and Expert Balance ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">6</span></a> 的第三行报告了<em class="ltx_emph ltx_font_italic">每参数</em>所需的浮点运算次数（FLOPs）。
+得益于模型设计，RankMixer 在参数量增加 70 倍的情况下，FLOPs 仅增加约 20 倍，FLOPs/Param 比率仅为基线的三分之一——即 <span class="ltx_text ltx_font_bold">3.6,<math alttext="\times" class="ltx_Math" display="inline" id="S4.I1.i1.p1.m1"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math> 的效率提升</span>。换言之，在相同 FLOPs 预算下，RankMixer 可以容纳比基线多三倍的参数。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(2)</span>
+<div class="ltx_para" id="S4.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">模型 FLOPs 利用率（MFU）。</span>
+同样如表 <a class="ltx_ref" href="#S4.T6" title="Table 6 ‣ Scalability. ‣ 4.5. Sparse-MoE Scalability and Expert Balance ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">6</span></a> 所示，MFU 表示机器算力的利用率。
+通过使用大 GEMM 形状、良好的并行拓扑（将逐词元并行 FFN 融合为一个内核）、降低内存带宽成本和开销，RankMixer 将 MFU 提升近 <span class="ltx_text ltx_font_bold">10 <math alttext="\times" class="ltx_Math" display="inline" id="S4.I1.i2.p1.m1"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></span>，使模型从<span class="ltx_text ltx_font_italic">内存受限</span>转变为<span class="ltx_text ltx_font_italic">计算受限</span>状态。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(3)</span>
+<div class="ltx_para" id="S4.I1.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">量化</span>
+半精度（fp16）推理将使 GPU 的理论峰值硬件 FLOPS 提升 <span class="ltx_text ltx_font_bold">2 <math alttext="\times" class="ltx_Math" display="inline" id="S4.I1.i3.p1.m1"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math></span>。如前所述，RankMixer 中的主要计算由若干大型矩阵乘法构成，非常适合半精度（fp16）推理</p>
+</div>
+</li>
+</ol>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS7">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.7. </span>在线性能 </h3>
+<div class="ltx_para" id="S4.SS7.p1">
+<p class="ltx_p">为验证 RankMixer 作为可扩展推荐模型框架的普适性，我们在个性化排序的两个核心应用场景——<em class="ltx_emph ltx_font_italic">信息流推荐</em>和<em class="ltx_emph ltx_font_italic">广告</em>——中进行了在线实验，涵盖了个性化排序的主要用例。
+对于每个场景，我们监控以下关键性能指标：</p>
+<ul class="ltx_itemize" id="S4.I2">
+<li class="ltx_item" id="S4.I2.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I2.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">信息流推荐。</span>
+<em class="ltx_emph ltx_font_italic">活跃天数</em>是实验期间每用户的平均活跃天数，作为 DAU 增长的替代指标；
+<em class="ltx_emph ltx_font_italic">时长</em>衡量在 App 上的累计停留时间；
+<em class="ltx_emph ltx_font_italic">完播/点赞/评论：</em>用户的完播、点赞和评论总数。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I2.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S4.I2.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">广告。</span>
+我们报告模型质量指标（<math alttext="\Delta\emph{AUC}" class="ltx_Math" display="inline" id="S4.I2.i2.p1.m1"><semantics><mrow><mi mathvariant="normal">Δ</mi><mo>⁢</mo><mtext class="ltx_mathvariant_italic"><em class="ltx_emph ltx_font_italic">AUC</em></mtext></mrow><annotation encoding="application/x-tex">\Delta\emph{AUC}</annotation></semantics></math>）和收入指标 <em class="ltx_emph ltx_font_italic">ADVV</em>（广告主价值）。
+</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="S4.SS7.p2">
+<p class="ltx_p">这些场景中之前的基线是 16M 参数模型，结合了 DLRM 和 DCN。我们用 RankMixer-1B 模型替换了稠密部分，AUC 提升了 0.7%。我们在信息流推荐和广告中开展了在线 A/B 测试实验。信息流推荐上 A/B 测试结果为期 8 个月的长期观察见表 <a class="ltx_ref" href="#S4.T4" title="Table 4 ‣ Scalability. ‣ 4.5. Sparse-MoE Scalability and Expert Balance ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">4</span></a> <span class="ltx_note ltx_role_footnote" id="footnote1"><sup class="ltx_note_mark">1</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">1</sup>
+<span class="ltx_tag ltx_tag_note">1</span>
+              
+              
+              
+            该结果更新于七月 24 日（2025 年），因为长期实验表明增益尚未饱和。</span></span></span>
+广告的结果见表 <a class="ltx_ref" href="#S4.T5" title="Table 5 ‣ Scalability. ‣ 4.5. Sparse-MoE Scalability and Expert Balance ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">5</span></a>。</p>
+</div>
+<div class="ltx_para" id="S4.SS7.p3">
+<p class="ltx_p">RankMixer 已在包括信息流推荐（RankMixer-1B）和广告（RankMixer-1B）在内的三个个性化排序应用中部署和评估。RankMixer 在所有关键业务指标上带来了统计显著的提升。我们还可以观察到，与其他活跃度用户群体相比，表 <a class="ltx_ref" href="#S4.T4" title="Table 4 ‣ Scalability. ‣ 4.5. Sparse-MoE Scalability and Expert Balance ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">4</span></a> 中低活跃用户的提升最大，活跃天数提升超过 1.7412%，这证明了模型强大的泛化能力。
+这些结果表明，RankMixer 作为统一骨干能够可靠地泛化到不同应用场景。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5. </span>结论</h2>
+<div class="ltx_para" id="S5.p1">
+<p class="ltx_p">在本文中，我们介绍了最新的 RankMixer 模型，它已完全部署在抖音信息流排序中。它结合了面向异构特征交互的模型设计和面向服务效率的高度可并行架构。实验已证明其优越的性能和陡峭的缩放定律。在抖音 App 上完全部署后，它在活跃天数和 App 时长上分别获得了 0.3% 和 1% 的提升。</p>
+</div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">参考文献</h2>
+<ul class="ltx_biblist" id="bib.L1">
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib5">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Achiam, S. Adler, S. Agarwal, L. Ahmad, I. Akkaya, F. L. Aleman, D. Almeida, J. Altenschmidt, S. Altman, S. Anadkat, <span class="ltx_text ltx_bib_etal">et al.</span> (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Gpt-4 technical report</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2303.08774</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib19">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">N. Ardalani, C. Wu, Z. Chen, B. Bhushanam, and A. Aziz (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Understanding scaling laws for recommendation models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2208.08489</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib24">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">F. Borisyuk, M. Zhou, Q. Song, S. Zhu, B. Tiwana, G. Parameswaran, S. Dangi, L. Hertel, Q. C. Xiao, X. Hou, Y. Ouyang, A. Gupta, S. Singh, D. Liu, H. Cheng, L. Le, J. Hung, S. S. Keerthi, R. Wang, F. Zhang, M. Kothari, C. Zhu, D. Sun, Y. Dai, X. Luan, S. Zhu, Z. Wang, N. Daftary, Q. Shen, C. Jiang, H. Wei, M. Varshney, A. Ghoting, and S. Ghosh (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">LiRank: industrial large scale ranking models at linkedin</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery
+and Data Mining, KDD 2024, Barcelona, Spain, August 25-29, 2024</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 4804–4815</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS1.SSS3.p1" title="4.1.3. Baselines ‣ 4.1. Experiment Settings ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§4.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib56">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Chai, Q. Ren, X. Xiao, H. Yang, B. Han, S. Zhang, D. Chen, H. Lu, W. Zhao, L. Yu, X. Xie, S. Ren, X. Sun, Y. Tan, P. Xu, Y. Zheng, and D. Wu (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">LONGER: scaling up long sequence modeling in industrial recommenders</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text ltx_bib_external">2505.04421</span>,
+<a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2505.04421" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS2.p1" title="3.2. Input Layer and Feature Tokenization ‣ 3. Methodology ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§3.2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib30">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Cheng, L. Koc, J. Harmsen, T. Shaked, T. Chandra, H. Aradhye, G. Anderson, G. Corrado, W. Chai, M. Ispir, <span class="ltx_text ltx_bib_etal">et al.</span> (2016)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Wide &amp; deep learning for recommender systems</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 1st workshop on deep learning for recommender systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 7–10</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib20">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">S. Chitlangia, K. R. Kesari, and R. Agarwal (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scaling generative pre-training for user ad activity sequences</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib17">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">P. Covington, J. Adams, and E. Sargin (2016)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep neural networks for youtube recommendations</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 10th ACM conference on recommender systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 191–198</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib9">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">A. Dosovitskiy (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">An image is worth 16x16 words: transformers for image recognition at scale</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2010.11929</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib43">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Fang, J. Zhan, Q. Ai, J. Mao, W. Su, J. Chen, and Y. Liu (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scaling laws for dense retrieval</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1339–1349</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib39">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Gui, R. Wang, K. Yin, L. Jin, M. Kula, T. Xu, L. Hong, and E. H. Chi (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Hiformer: heterogeneous feature interactions learning with transformers for recommender systems</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2311.05884</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.SS1.SSS3.p1" title="4.1.3. Baselines ‣ 4.1. Experiment Settings ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§4.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib32">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Guo, R. Tang, Y. Ye, Z. Li, and X. He (2017)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">DeepFM: a factorization-machine based neural network for ctr prediction</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:1703.04247</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib40">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">W. Guo, H. Wang, L. Zhang, J. Y. Chin, Z. Liu, K. Cheng, Q. Pan, Y. Q. Lee, W. Xue, T. Shen, <span class="ltx_text ltx_bib_etal">et al.</span> (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scaling new frontiers: insights into large recommendation models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2412.00714</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib31">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">K. He, X. Zhang, S. Ren, and J. Sun (2016)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep residual learning for image recognition</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE conference on computer vision and pattern recognition</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 770–778</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib8">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Hoffmann, S. Borgeaud, A. Mensch, E. Buchatskaya, T. Cai, E. Rutherford, D. d. L. Casas, L. A. Hendricks, J. Welbl, A. Clark, <span class="ltx_text ltx_bib_etal">et al.</span> (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Training compute-optimal large language models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2203.15556</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib48">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Huang, H. Wang, Y. Miao, R. Xu, L. Zhang, and W. Zhang (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Neural statistics for click-through rate prediction</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 45th International ACM SIGIR Conference on Research and Development in Information Retrieval</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1849–1853</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib1">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Kaplan, S. McCandlish, T. Henighan, T. B. Brown, B. Chess, R. Child, S. Gray, A. Radford, J. Wu, and D. Amodei (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scaling laws for neural language models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2001.08361</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib37">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Li, Z. Cui, S. Wu, X. Zhang, and L. Wang (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Fi-gnn: modeling feature interactions via graph neural networks for ctr prediction</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 28th ACM international conference on information and knowledge management</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 539–548</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib14">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Lian, X. Zhou, F. Zhang, Z. Chen, X. Xie, and G. Sun (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Xdeepfm: combining explicit and implicit feature interactions for recommender systems</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 24th ACM SIGKDD international conference on knowledge discovery &amp; data mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1754–1763</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib55">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Lin, X. Dai, Y. Xi, W. Liu, B. Chen, H. Zhang, Y. Liu, C. Wu, X. Li, C. Zhu, <span class="ltx_text ltx_bib_etal">et al.</span> (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">How can recommender systems benefit from large language models: a survey</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">ACM Transactions on Information Systems</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib36">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">B. Liu, R. Tang, Y. Chen, J. Yu, H. Guo, and Y. Zhang (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Feature generation by convolutional neural network for click-through rate prediction</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">The World Wide Web Conference</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1119–1129</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib22">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Pan, W. Xue, X. Wang, H. Yu, X. Liu, S. Quan, X. Qiu, D. Liu, L. Xiao, and J. Jiang (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Ads recommendation in a collapsed and entangled world</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 5566–5577</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS4.SSS0.Px2.p1" title="Dense-training / Sparse-inference (DTSI-MoE) ‣ 3.4. Sparse MoE in RankMixer ‣ 3. Methodology ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§3.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib33">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Qu, B. Fang, W. Zhang, R. Tang, M. Niu, H. Guo, Y. Yu, and X. He (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Product-based neural networks for user response prediction over multi-field categorical data</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">ACM Transactions on Information Systems (TOIS)</span> <span class="ltx_text ltx_bib_volume">37</span> (<span class="ltx_text ltx_bib_number">1</span>), <span class="ltx_text ltx_bib_pages"> pp. 1–35</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib11">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">A. Radford, J. W. Kim, C. Hallacy, A. Ramesh, G. Goh, S. Agarwal, G. Sastry, A. Askell, P. Mishkin, J. Clark, <span class="ltx_text ltx_bib_etal">et al.</span> (2021)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Learning transferable visual models from natural language supervision</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">International conference on machine learning</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 8748–8763</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib12">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">A. Ramesh, M. Pavlov, G. Goh, S. Gray, C. Voss, A. Radford, M. Chen, and I. Sutskever (2021)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Zero-shot text-to-image generation</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">International conference on machine learning</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 8821–8831</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib34">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">S. Rendle, W. Krichene, L. Zhang, and J. Anderson (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Neural collaborative filtering vs. matrix factorization revisited</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 14th ACM Conference on Recommender Systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 240–248</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib35">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Shan, T. R. Hoens, J. Jiao, H. Wang, D. Yu, and J. Mao (2016)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep crossing: web-scale modeling without manually crafted combinatorial features</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 22nd ACM SIGKDD international conference on knowledge discovery and data mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 255–262</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib42">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">K. Shin, H. Kwak, S. Y. Kim, M. N. Ramström, J. Jeong, J. Ha, and K. Kim (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scaling law for recommendation models: towards general-purpose user representations</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the AAAI Conference on Artificial Intelligence</span>,
+</span>
+<span class="ltx_bibblock">Vol. <span class="ltx_text ltx_bib_volume">37</span>, <span class="ltx_text ltx_bib_pages"> pp. 4596–4604</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib38">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">W. Song, C. Shi, Z. Xiao, Z. Duan, Y. Xu, M. Zhang, and J. Tang (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Autoint: automatic feature interaction learning via self-attentive neural networks</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 28th ACM international conference on information and knowledge management</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1161–1170</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.SS1.SSS3.p1" title="4.1.3. Baselines ‣ 4.1. Experiment Settings ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§4.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib6">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Team, T. Mesnard, C. Hardin, R. Dadashi, S. Bhupatiraju, S. Pathak, L. Sifre, M. Rivière, M. S. Kale, J. Love, <span class="ltx_text ltx_bib_etal">et al.</span> (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Gemma: open models based on gemini research and technology</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2403.08295</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib7">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Touvron, L. Martin, K. Stone, P. Albert, A. Almahairi, Y. Babaei, N. Bashlykov, S. Batra, P. Bhargava, S. Bhosale, <span class="ltx_text ltx_bib_etal">et al.</span> (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Llama 2: open foundation and fine-tuned chat models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2307.09288</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib49">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Wang, J. Lin, X. Li, B. Chen, C. Zhu, R. Tang, W. Zhang, and Y. Yu (2024a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">FLIP: fine-grained alignment between id-based models and pretrained language models for ctr prediction</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 18th ACM Conference on Recommender Systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 94–104</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_incollection" id="bib.bib15">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">R. Wang, B. Fu, G. Fu, and M. Wang (2017)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep &amp; cross network for ad click predictions</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the ADKDD’17</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1–7</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib16">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">R. Wang, R. Shivanna, D. Cheng, S. Jain, D. Lin, L. Hong, and E. Chi (2021)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Dcn v2: improved deep &amp; cross network and practical lessons for web-scale learning to rank systems</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the web conference 2021</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1785–1797</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.SS1.SSS3.p1" title="4.1.3. Baselines ‣ 4.1. Experiment Settings ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§4.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib44">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Wang, Z. Yang, Z. Zhang, Z. Wang, J. Yang, S. Wen, P. Jiang, and K. Gai (2024b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scaling laws for online advertisement retrieval</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2411.13322</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib23">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Wang, J. Chen, and J. Zhu (2024c)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">ReMoE: fully differentiable mixture-of-experts with relu routing</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">CoRR</span> <span class="ltx_text ltx_bib_volume">abs/2412.14711</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref ltx_bib_external" href="https://doi.org/10.48550/arXiv.2412.14711" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.48550/ARXIV.2412.14711" title="">Document</a>,
+<span class="ltx_text ltx_bib_external">2412.14711</span></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS4.SSS0.Px1.p1" title="ReLU Routing ‣ 3.4. Sparse MoE in RankMixer ‣ 3. Methodology ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§3.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib2">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[36]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">J. Zhai, L. Liao, X. Liu, Y. Wang, R. Li, X. Cao, L. Gao, Z. Gong, F. Gu, J. He, <span class="ltx_text ltx_bib_etal">et al.</span></span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Actions speak louder than words: trillion-parameter sequential transducers for generative recommendations</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Forty-first International Conference on Machine Learning</span>,
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib10">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">X. Zhai, A. Kolesnikov, N. Houlsby, and L. Beyer (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scaling vision transformers</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF conference on computer vision and pattern recognition</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 12104–12113</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib4">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[38]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">B. Zhang, L. Luo, Y. Chen, J. Nie, X. Liu, S. Li, Y. Zhao, Y. Hao, Y. Yao, E. D. Wen, <span class="ltx_text ltx_bib_etal">et al.</span></span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Wukong: towards a scaling law for large-scale recommendation</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Forty-first International Conference on Machine Learning</span>,
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.SS1.SSS3.p1" title="4.1.3. Baselines ‣ 4.1. Experiment Settings ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§4.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib18">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">B. Zhang, L. Luo, X. Liu, J. Li, Z. Chen, W. Zhang, X. Wei, Y. Hao, M. Tsang, W. Wang, <span class="ltx_text ltx_bib_etal">et al.</span> (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">DHEN: a deep and hierarchical ensemble network for large-scale click-through rate prediction</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2203.11014</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p1" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.SS1.SSS3.p1" title="4.1.3. Baselines ‣ 4.1. Experiment Settings ‣ 4. Experiments ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§4.1.3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib13">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhang, Y. Hou, H. Lu, Y. Chen, W. X. Zhao, and J. Wen (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scaling law of large sequential recommendation models</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 18th ACM Conference on Recommender Systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 444–453</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib50">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">W. Zhang, J. Qin, W. Guo, R. Tang, and X. He (2021)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep learning for click-through rate estimation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2104.10584</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib29">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhou, X. Zhu, C. Song, Y. Fan, H. Zhu, X. Ma, Y. Yan, J. Jin, H. Li, and K. Gai (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deep interest network for click-through rate prediction</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">KDD ’18</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 1059–1068</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9781450355520</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3219819.3219823" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3219819.3219823" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1. Introduction ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S3.SS2.p1" title="3.2. Input Layer and Feature Tokenization ‣ 3. Methodology ‣ RankMixer: Scaling Up Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">§3.2</span></a>.
+</span>
+</li>
+</ul>
+</section>
+</article></article></div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{"format": "arxiv_tex", "toc": [{"id": "tex-section-1", "title": "摘要", "level": 1}, {"id": "S1", "title": "1. 引言", "level": 1}, {"id": "S2", "title": "2. 相关工作", "level": 1}, {"id": "S3", "title": "3. 方法", "level": 1}, {"id": "S3.SS1", "title": "3.1. 整体架构", "level": 2}, {"id": "S3.SS2", "title": "3.2. 输入层与特征词元化", "level": 2}, {"id": "S3.SS3", "title": "3.3. RankMixer 模块", "level": 2}, {"id": "S3.SS3.SSS1", "title": "3.3.1. 多头词元混合", "level": 3}, {"id": "S3.SS3.SSS2", "title": "3.3.2. 逐词元FFN", "level": 3}, {"id": "S3.SS4", "title": "3.4. RankMixer中的稀疏MoE", "level": 2}, {"id": "S3.SS5", "title": "3.5. 扩展方向", "level": 2}, {"id": "S4", "title": "4. 实验", "level": 1}, {"id": "S4.SS1", "title": "4.1. 实验设置", "level": 2}, {"id": "S4.SS1.SSS1", "title": "4.1.1. 数据集与环境", "level": 3}, {"id": "S4.SS1.SSS2", "title": "4.1.2. 评估指标", "level": 3}, {"id": "S4.SS1.SSS3", "title": "4.1.3. 基线", "level": 3}, {"id": "S4.SS2", "title": "4.2. 与SOTA方法的比较", "level": 2}, {"id": "S4.SS3", "title": "4.3. 不同模型的缩放定律", "level": 2}, {"id": "S4.SS4", "title": "4.4. 消融实验", "level": 2}, {"id": "S4.SS5", "title": "4.5. 稀疏 MoE 的可扩展性与专家均衡", "level": 2}, {"id": "S4.SS6", "title": "4.6. 在线服务成本", "level": 2}, {"id": "S4.SS7", "title": "4.7. 在线性能", "level": 2}, {"id": "S5", "title": "5. 结论", "level": 1}, {"id": "bib", "title": "参考文献", "level": 1}], "stats": {"format": "arxiv_tex", "converter": "LaTeXML", "text_chars": 29475, "sections": 24, "figures": 4, "tables": 6, "table_cells": 208, "mathml": 142, "graphics": 4, "references": 42, "warnings": ["Warning:not_parsed:POSTSUBSCRIPT.RELOP.UNKNOWN>OPEN MathParser failed to match rule 'Anything' at method.tex; line 42 col 0"], "language": "zh-CN"}, "extra_head": "\u003cstyle>\n.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}\n.tex-paper .ltx_title_document{display:none}\n.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}\n.tex-paper .ltx_creator{display:inline-block;margin-right:1em}\n.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}\n.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}\n.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}\n.tex-paper .ltx_para{margin:0}\n.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}\n.tex-paper .ltx_title_paragraph{font-size:17px}\n.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}\n.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}\n.tex-paper .ltx_font_sansserif{font-family:sans-serif}\n.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}\n.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}\n.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}\n.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}\n.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}\n.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}\n.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}\n.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}\n.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}\n.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}\n.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}\n.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}\n.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}\n.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}\n.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}\n.tex-paper math{font-size:1em;line-height:normal;font-family:math}\n.tex-paper math[display=\"block\"]{margin:.2em 0;white-space:nowrap}\n.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}\n.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}\n.tex-paper .ltx_bibblock{display:block}\n.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}\n.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}\n.tex-paper .ltx_toc{display:none}\n.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}\n.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}\n.tex-paper .ltx_tag{margin-right:.35em}\n.tex-paper [id]{scroll-margin-top:24px}\n\u003c/style>"}</script>
+<script>
+const tocPanel=document.querySelector('.paper-toc');
+if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
+tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

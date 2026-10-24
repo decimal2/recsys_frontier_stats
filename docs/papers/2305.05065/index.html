@@ -1,0 +1,2090 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>TIGER：使用生成式检索的推荐系统</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style><style>
+.paper-reader main,.paper-reader>header{max-width:1180px}
+.paper-original-title{font-size:16px;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.paper-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.paper-actions a{padding:8px 14px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:14px}
+.paper-actions a:first-child{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paper-reading-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:36px;align-items:start;margin-top:30px}
+.paper-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;border-right:1px solid var(--line);padding-right:14px;font-size:13px}
+.paper-toc summary{font-size:14px;font-weight:600;cursor:pointer;padding:4px 0 10px}
+.paper-toc ol{list-style:none;padding:0;margin:0}
+.paper-toc li{margin:0;padding:4px 0;line-height:1.5}
+.paper-toc a{color:var(--muted);display:block;padding:2px 4px;border-radius:4px}
+.paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
+.paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
+.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
+.paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
+.paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
+.paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
+.paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
+.paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
+.paper-fulltext figure a{display:block}
+.paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
+.paper-fulltext .paper-equation{padding:8px 0}
+.paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
+.paper-fulltext .paper-inline-math{display:inline-block;vertical-align:middle;max-height:2.3em;width:auto;background:white;max-width:100%}
+.paper-fulltext .paper-reference{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.paper-fulltext .paper-source-page{display:block;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin:32px 0 18px;padding-top:8px;text-align:right}
+.paper-fulltext table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:14px}
+.paper-fulltext td,.paper-fulltext th{padding:6px 10px;border:1px solid var(--line)}
+.paper-bottom{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+.paper-library{display:grid;gap:0;margin:24px 0}
+.paper-entry{padding:26px 0;border-top:1px solid var(--line)}
+.paper-entry h2{display:block;font-size:21px;margin:6px 0}
+.paper-entry .original{display:block;margin-bottom:12px}
+.paper-entry .paper-actions{margin-bottom:0}
+.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+@media(max-width:800px){
+ .paper-reading-layout{display:block;margin-top:20px}
+ .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
+ .paper-toc[open] ol{max-height:55vh;overflow:auto}
+ .paper-fulltext{font-size:16px;line-height:1.9}
+ .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
+ .paper-reader h1{font-size:26px}
+}
+@media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
+</style><style>
+.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}
+.tex-paper .ltx_title_document{display:none}
+.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}
+.tex-paper .ltx_creator{display:inline-block;margin-right:1em}
+.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
+.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_para{margin:0}
+.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
+.tex-paper .ltx_title_paragraph{font-size:17px}
+.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}
+.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}
+.tex-paper .ltx_font_sansserif{font-family:sans-serif}
+.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}
+.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}
+.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}
+.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}
+.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}
+.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}
+.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}
+.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}
+.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}
+.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}
+.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}
+.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}
+.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}
+.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}
+.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+.tex-paper math{font-size:1em;line-height:normal;font-family:math}
+.tex-paper math[display="block"]{margin:.2em 0;white-space:nowrap}
+.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}
+.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}
+.tex-paper .ltx_bibblock{display:block}
+.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}
+.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}
+.tex-paper .ltx_toc{display:none}
+.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}
+.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
+.tex-paper .ltx_tag{margin-right:.35em}
+.tex-paper [id]{scroll-margin-top:24px}
+</style></head><body class="paper-reader">
+<header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
+<main><div class="eyebrow">PAPER LIBRARY / TIGER</div><h1>TIGER：使用生成式检索的推荐系统</h1><p class="paper-original-title">Recommender Systems with Generative Retrieval</p>
+<p class="muted">Google · arXiv 2305.05065 · 译文对应 v3</p>
+<div class="paper-actions"><a href="https://arxiv.org/abs/2305.05065v3" target="_blank" rel="noopener">英文 arXiv ↗</a>
+<a href="../index.html">全部论文</a></div>
+<p class="muted">中文全文 · 章节、公式和参考文献支持直接跳转</p>
+<div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
+<ol><li class="toc-level-1"><a href="#tex-section-1">摘要</a></li><li class="toc-level-1"><a href="#S1">1 引言</a></li><li class="toc-level-1"><a href="#S2">2 相关工作</a></li><li class="toc-level-1"><a href="#S3">3 所提出的框架</a></li><li class="toc-level-2"><a href="#S3.SS1">3.1 语义ID生成</a></li><li class="toc-level-2"><a href="#S3.SS2">3.2 使用语义 ID 的生成式召回</a></li><li class="toc-level-1"><a href="#S4">4 实验</a></li><li class="toc-level-2"><a href="#S4.SS1">4.1 序列推荐上的性能</a></li><li class="toc-level-2"><a href="#S4.SS2">4.2 物品表示</a></li><li class="toc-level-2"><a href="#S4.SS3">4.3 新能力</a></li><li class="toc-level-2"><a href="#S4.SS4">4.4 消融实验</a></li><li class="toc-level-2"><a href="#S4.SS5">4.5 无效 ID</a></li><li class="toc-level-1"><a href="#S5">5 结论</a></li><li class="toc-level-1"><a href="#bib">参考文献</a></li><li class="toc-level-1"><a href="#A1">Appendix A 相关工作（续）</a></li><li class="toc-level-1"><a href="#A2">Appendix B 基线</a></li><li class="toc-level-1"><a href="#A3">Appendix C 数据集统计</a></li><li class="toc-level-1"><a href="#A4">Appendix D 对 P5 数据预处理的修改</a></li><li class="toc-level-1"><a href="#A5">Appendix E 讨论</a></li></ol></details><article class="paper-fulltext" aria-label="论文全文"><article class="ltx_document ltx_authors_1line tex-paper">
+<h1 class="ltx_title ltx_title_document">基于生成式检索的推荐系统</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">
+Shashank Rajput<sup class="ltx_sup">⋆</sup>
+<br class="ltx_break"/>University of Wisconsin-Madison
+Nikhil Mehta<sup class="ltx_sup">⋆</sup>
+<br class="ltx_break"/>Google DeepMind
+Anima Singh
+<br class="ltx_break"/>Google DeepMind
+Raghunandan Keshavan 
+<br class="ltx_break"/>Google
+Trung Vu
+<br class="ltx_break"/>Google
+Lukasz Heldt
+<br class="ltx_break"/>Google
+Lichan Hong
+<br class="ltx_break"/>Google DeepMind
+Yi Tay
+<br class="ltx_break"/>Google DeepMind
+Vinh Q. Tran
+<br class="ltx_break"/>Google
+Jonah Samost
+<br class="ltx_break"/>Google
+Maciej Kula
+<br class="ltx_break"/>Google DeepMind
+Ed H. Chi
+<br class="ltx_break"/>Google DeepMind
+Maheswaran Sathiamoorthy
+<br class="ltx_break"/>Google DeepMind
+</span><span class="ltx_author_notes"><sup class="ltx_sup">⋆</sup> Equal contribution. Work done when SR was at Google.Correspondence to rajput.shashank11@gmail.com, nikhilmehta@google.com,
+nlogn@google.com.</span></span>
+</div>
+<div class="ltx_abstract" id="tex-section-1">
+<h6 class="ltx_title ltx_title_abstract">摘要</h6>
+<p class="ltx_p">现代推荐系统通过将查询和候选物品嵌入到同一个统一空间中，随后进行近似最近邻搜索，以在给定查询嵌入的情况下选出排名靠前的候选，从而实现大规模召回。在本文中，我们提出一种新颖的生成式召回方法，其中召回模型自回归地解码目标候选的标识符。为此，我们为每个物品创建语义上有意义的码字元组，用作语义ID（Semantic ID）。给定用户会话中物品的语义ID，训练一个基于Transformer的序列到序列模型来预测用户接下来将与之交互的物品的语义ID。我们表明，使用所提出范式训练的推荐系统在各种数据集上显著优于当前的SOTA模型。此外，我们还表明，将语义ID纳入序列到序列模型可增强其泛化能力，这一点由对没有先前交互历史的物品所观察到的召回性能提升所证实。</p>
+</div>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1 </span>引言</h2>
+<figure class="ltx_figure ltx_align_floatright" id="S1.F1"><a href="assets/3193b6aabbf56943.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S1.F1.g1" loading="lazy" src="assets/3193b6aabbf56943.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 1</span>: </span><span class="ltx_text" style="font-size:90%;">用于生成式推荐器的Transformer索引（<em class="ltx_emph ltx_font_italic">Transformer Index for GEnerative Recommenders</em>，TIGER）框架概览。在TIGER中，通过将每个物品表示为离散语义令牌的元组，序列推荐被表述为生成式召回任务。</span></figcaption>
+</figure>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p">推荐系统帮助用户发现感兴趣的内容，广泛存在于视频<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib4" title="">4</a>, <a class="ltx_ref" href="#bib.bib43" title="">43</a>, <a class="ltx_ref" href="#bib.bib9" title="">9</a>]</cite>、应用<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib3" title="">3</a>]</cite>、商品<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib6" title="">6</a>, <a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite>和音乐<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib18" title="">18</a>, <a class="ltx_ref" href="#bib.bib19" title="">19</a>]</cite>等各种推荐领域。现代推荐系统采用召回—排序策略，其中在召回阶段选出一组可行候选，随后使用排序模型对其进行排序。由于排序模型仅处理其接收到的候选，因此期望召回阶段输出高度相关的候选。</p>
+</div>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p">构建召回模型有标准且成熟的方法。矩阵分解<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib19" title="">19</a>]</cite>在同一空间中学习查询和候选的嵌入。为了更好地捕捉数据中的非线性，近年来，采用内积将查询和候选嵌入映射到同一空间的双编码器架构<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib39" title="">39</a>]</cite>（即一个塔用于查询，另一个用于候选）变得流行。为了在推理期间使用这些模型，使用候选塔创建存储所有物品嵌入的索引。对于给定查询，使用查询塔获得其嵌入，并使用近似最近邻（ANN）算法进行召回。近年来，双编码器架构也被扩展到序列推荐<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib11" title="">11</a>, <a class="ltx_ref" href="#bib.bib24" title="">24</a>, <a class="ltx_ref" href="#bib.bib41" title="">41</a>, <a class="ltx_ref" href="#bib.bib17" title="">17</a>, <a class="ltx_ref" href="#bib.bib32" title="">32</a>, <a class="ltx_ref" href="#bib.bib6" title="">6</a>, <a class="ltx_ref" href="#bib.bib44" title="">44</a>]</cite>，显式地考虑用户—物品交互的顺序。</p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p">我们提出一种为序列推荐构建生成式召回模型的新范式。与传统的查询—候选匹配方法不同，我们的方法使用端到端生成模型直接预测候选ID。
+我们提出利用Transformer<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib36" title="">36</a>]</cite>记忆（参数）作为推荐系统召回的端到端索引，这令人联想到Tay等人<cite class="ltx_cite ltx_citemacro_citep">[<a class="ltx_ref" href="#bib.bib34" title="">34</a>]</cite>将Transformer记忆用于文档召回的作法。我们将我们的方法称为<span class="ltx_text ltx_font_italic">用于生成式推荐器的Transformer索引</span>（TIGER）。TIGER的高层概览如图<a class="ltx_ref" href="#S1.F1" title="Figure 1 ‣ 1 Introduction ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">1</span></a>所示。TIGER的独特之处在于一种新颖的物品语义表示，称为“语义ID”（Semantic ID）——即从每个物品的内容信息导出的令牌序列。具体而言，给定物品的文本特征，我们使用预训练的文本编码器（例如SentenceT5<cite class="ltx_cite ltx_citemacro_citep">[<a class="ltx_ref" href="#bib.bib27" title="">27</a>]</cite>）生成稠密内容嵌入。然后对物品的嵌入应用量化方案，形成一组有序的令牌/码字，我们将其称为该物品的语义ID。最终，这些语义ID用于在序列推荐任务上训练Transformer模型。</p>
+</div>
+<div class="ltx_para" id="S1.p4">
+<p class="ltx_p">将物品表示为语义令牌序列具有许多优势。在语义有意义的数据上训练Transformer记忆可以实现相似物品之间的知识共享。这使我们能够摒弃先前在推荐模型中用作物品特征的原子化随机物品ID<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib33" title="">33</a>, <a class="ltx_ref" href="#bib.bib42" title="">42</a>, <a class="ltx_ref" href="#bib.bib11" title="">11</a>, <a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite>。借助物品的语义令牌表示，模型更不易受推荐系统中固有反馈回路<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib1" title="">1</a>, <a class="ltx_ref" href="#bib.bib26" title="">26</a>, <a class="ltx_ref" href="#bib.bib39" title="">39</a>]</cite>的影响，从而使模型能够泛化到语料库中新添加的物品。此外，使用令牌序列进行物品表示有助于缓解与物品语料库规模相关的挑战；可用令牌表示的物品数量是序列中每个令牌基数之积。通常，物品语料库的规模可达数十亿量级，为每个物品学习唯一嵌入可能占用大量内存。虽然可以采用基于随机哈希的技术<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib16" title="">16</a>]</cite>来缩减物品表示空间，但在本工作中，我们表明使用语义上有意义的令牌进行物品表示是一种有吸引力的替代方案。本工作的主要贡献总结如下：</p>
+<ol class="ltx_enumerate" id="S1.I1">
+<li class="ltx_item" id="S1.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">1.</span>
+<div class="ltx_para" id="S1.I1.i1.p1">
+<p class="ltx_p">我们提出TIGER，一种新颖的基于生成式召回的推荐框架，它为每个物品分配语义ID，并训练召回模型来预测给定用户可能接触的物品的语义ID。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">2.</span>
+<div class="ltx_para" id="S1.I1.i2.p1">
+<p class="ltx_p">我们表明，以召回率和NDCG指标衡量，TIGER在多个数据集上优于现有的SOTA推荐系统。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">3.</span>
+<div class="ltx_para" id="S1.I1.i3.p1">
+<p class="ltx_p">我们发现，这种生成式召回的新范式为序列推荐系统带来了两项额外能力：1. 能够推荐新的和不频繁出现的物品，从而改善冷启动推荐；以及2. 能够使用可调参数生成多样化的推荐。</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="ltx_para ltx_noindent" id="S1.p5">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">论文概览。</span>在<a class="ltx_ref" href="#S2" title="2 Related Work ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Section</span> <span class="ltx_text ltx_ref_tag">2</span></a>中，我们简要综述了推荐系统、生成式召回以及本文所使用的语义ID生成技术的相关文献。在<a class="ltx_ref" href="#S3" title="3 Proposed Framework ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Section</span> <span class="ltx_text ltx_ref_tag">3</span></a>中，我们解释了所提出的框架，并概述了我们用于语义ID生成的各种技术。我们在<a class="ltx_ref" href="#S4" title="4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Section</span> <span class="ltx_text ltx_ref_tag">4</span></a>中给出实验结果，并在<a class="ltx_ref" href="#S5" title="5 Conclusion ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Section</span> <span class="ltx_text ltx_ref_tag">5</span></a>中对论文进行总结。</p>
+</div>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2 </span>相关工作</h2>
+<section class="ltx_paragraph" id="S2.SS0.SSS0.Px1">
+<h4 class="ltx_title ltx_title_paragraph">序列推荐器。</h4>
+<div class="ltx_para" id="S2.SS0.SSS0.Px1.p1">
+<p class="ltx_p">在推荐系统中使用深度序列模型已发展出丰富的文献。GRU4REC<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib11" title="">11</a>]</cite>首次使用基于GRU的RNN进行序列推荐。
+Li等人<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib24" title="">24</a>]</cite>提出了神经注意力会话推荐（NARM），其中使用注意力机制与GRU层来跟踪用户的长期意图。Zhang等人提出的AttRec<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib41" title="">41</a>]</cite>使用自注意力机制对用户在当前会话中的意图进行建模，并通过度量学习对用户—物品亲和度建模来确保个性化。同时，Kang等人也提出了SASRec<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib17" title="">17</a>]</cite>，其使用类似于仅解码器Transformer模型的自注意力。受掩码语言建模在语言任务中取得成功的启发，BERT4Rec<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib32" title="">32</a>]</cite>和Transformers4Rec<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib6" title="">6</a>]</cite>利用带有掩码策略的Transformer模型完成序列推荐任务。<math alttext="\text{S}^{3}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m1"><semantics><msup><mtext>S</mtext><mn>3</mn></msup><annotation encoding="application/x-tex">\text{S}^{3}</annotation></semantics></math>-Rec<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib44" title="">44</a>]</cite>通过在四个自监督任务上进行预训练改进了数据表示，而不仅仅是掩码。上述模型为每个物品学习高维嵌入，并在最大内积搜索（MIPS）空间中进行ANN以预测下一个物品。相比之下，我们提出的技术TIGER使用生成式召回直接预测下一个物品的语义ID。</p>
+</div>
+<div class="ltx_para" id="S2.SS0.SSS0.Px1.p2">
+<p class="ltx_p">P5<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite>微调预训练大语言模型以用于<em class="ltx_emph ltx_font_italic">多任务</em>推荐系统。P5模型依赖LLM分词器（SentencePiece分词器<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib29" title="">29</a>]</cite>）从随机分配的物品ID生成令牌。而我们使用基于物品内容信息学习得到的语义ID表示。在我们的实验（<a class="ltx_ref" href="#S4.T2" title="In 4.2 Item Representation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Table</span> <span class="ltx_text ltx_ref_tag">2</span></a>）中，我们证明基于物品语义ID表示的推荐系统比使用随机码获得的结果好得多。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S2.SS0.SSS0.Px2">
+<h4 class="ltx_title ltx_title_paragraph">语义ID。</h4>
+<div class="ltx_para" id="S2.SS0.SSS0.Px2.p1">
+<p class="ltx_p">Hou<em class="ltx_emph ltx_font_italic">等人</em>提出了VQ-Rec<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib12" title="">12</a>]</cite>，利用内容信息生成用于物品表示的“码”（类似于语义ID）。然而，他们的重点在于构建可迁移的推荐系统，并未以生成式方式将码用于召回。虽然他们也使用乘积量化<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib15" title="">15</a>]</cite>生成码，但我们使用RQ-VAE生成语义ID，从而得到物品的层次化表示（第<a class="ltx_ref" href="#S4.SS2" title="4.2 Item Representation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">4.2</span></a>节）。在与我们同期的工作中，Singh等人<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib31" title="">31</a>]</cite>表明，在大规模推荐系统中，层次化语义ID可用于替代排序模型中的物品ID，从而改善模型泛化能力。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S2.SS0.SSS0.Px3">
+<h4 class="ltx_title ltx_title_paragraph">生成式召回。</h4>
+<div class="ltx_para" id="S2.SS0.SSS0.Px3.p1">
+<p class="ltx_p">尽管过去已提出学习搜索索引的技术<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib20" title="">20</a>]</cite>，但生成式召回是近期发展起来的用于文档召回的方法，其任务是从数据库中返回一组相关文档。一些例子包括GENRE<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib5" title="">5</a>]</cite>、DSI<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib34" title="">34</a>]</cite>、
+NCI<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib37" title="">37</a>]</cite>和CGR<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib22" title="">22</a>]</cite>。关于相关工作的更详细内容见附录<a class="ltx_ref" href="#A1" title="Appendix A Related Work (cont.) ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">A</span></a>。据我们所知，我们是首个使用物品语义ID表示为推荐系统提出生成式召回的工作。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3 </span>所提出的框架</h2>
+<figure class="ltx_figure" id="S3.F2">
+<div class="ltx_flex_figure">
+<div class="ltx_flex_cell ltx_flex_size_2">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="S3.F2.sf1"><a href="assets/ea596fe68d288d9e.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F2.sf1.g1" loading="lazy" src="assets/ea596fe68d288d9e.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(a)</span> </span><span class="ltx_text" style="font-size:90%;">使用内容嵌入量化为物品生成语义ID。</span></figcaption>
+</figure>
+</div>
+<div class="ltx_flex_cell ltx_flex_size_2">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="S3.F2.sf2"><a href="assets/d0e009f7aa528589.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F2.sf2.g1" loading="lazy" src="assets/d0e009f7aa528589.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(b)</span> </span><span class="ltx_text" style="font-size:90%;">用于构建生成式召回所用序列到序列模型的基于Transformer的编码器—解码器设置。</span></figcaption>
+</figure>
+</div>
+</div>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 2</span>: </span><span class="ltx_text" style="font-size:90%;">TIGER中所用建模方法的概览。</span></figcaption>
+</figure>
+<div class="ltx_para" id="S3.p1">
+<p class="ltx_p">我们提出的框架包含两个阶段：</p>
+<ol class="ltx_enumerate" id="S3.I1">
+<li class="ltx_item" id="S3.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">1.</span>
+<div class="ltx_para" id="S3.I1.i1.p1">
+<p class="ltx_p"><em class="ltx_emph ltx_font_italic">使用内容特征生成语义ID。</em>这涉及将物品内容特征编码为嵌入向量，并将该嵌入量化为语义码字元组。所得的码字元组称为该物品的语义ID。</p>
+</div>
+</li>
+<li class="ltx_item" id="S3.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">2.</span>
+<div class="ltx_para" id="S3.I1.i2.p1">
+<p class="ltx_p"><em class="ltx_emph ltx_font_italic">在语义ID上训练生成式推荐系统。</em>使用语义ID序列在序列推荐任务上训练Transformer模型。</p>
+</div>
+</li>
+</ol>
+</div>
+<section class="ltx_subsection" id="S3.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.1 </span>语义ID生成</h3>
+<div class="ltx_para" id="S3.SS1.p1">
+<p class="ltx_p">在本节中，我们描述推荐语料库中物品的语义ID生成过程。我们假设每个物品都有相关联的内容特征，这些特征捕捉有用的语义信息（<span class="ltx_text ltx_font_italic">例如</span>标题或描述或图像）。此外，我们假设可以使用预训练的内容编码器生成语义嵌入<math alttext="{\bm{x}}\in\mathbb{R}^{d}" class="ltx_Math" display="inline" id="S3.SS1.p1.m1"><semantics><mrow><mi>𝒙</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">{\bm{x}}\in\mathbb{R}^{d}</annotation></semantics></math>。例如，可以使用Sentence-T5<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib27" title="">27</a>]</cite>和BERT<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib7" title="">7</a>]</cite>等通用预训练文本编码器将物品的文本特征转换为语义嵌入。随后对语义嵌入进行量化，为每个物品生成语义ID。图<a class="ltx_ref" href="#S3.F2.sf1" title="Figure 2(a) ‣ Figure 2 ‣ 3 Proposed Framework ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">2(a)</span></a>给出了该过程的高层概览。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p2">
+<p class="ltx_p">我们将语义ID定义为长度为<math alttext="m" class="ltx_Math" display="inline" id="S3.SS1.p2.m1"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>的码字元组。
+元组中的每个码字来自不同的码本。因此，语义ID可唯一表示的物品数量等于各码本大小之积。
+尽管不同的语义ID生成技术会导致ID具有不同的语义特性，但我们希望它们至少具有以下特性：
+<em class="ltx_emph ltx_font_italic">相似物品（内容特征相似或其语义嵌入接近的物品）应具有重叠的语义ID。</em>
+例如，比较语义ID为<math alttext="(10,21,35)" class="ltx_Math" display="inline" id="S3.SS1.p2.m2"><semantics><mrow><mo stretchy="false">(</mo><mn>10</mn><mo>,</mo><mn>21</mn><mo>,</mo><mn>35</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(10,21,35)</annotation></semantics></math>的物品与语义ID为<math alttext="(10,21,40)" class="ltx_Math" display="inline" id="S3.SS1.p2.m3"><semantics><mrow><mo stretchy="false">(</mo><mn>10</mn><mo>,</mo><mn>21</mn><mo>,</mo><mn>40</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(10,21,40)</annotation></semantics></math>的物品，前者应比ID为<math alttext="(10,23,32)" class="ltx_Math" display="inline" id="S3.SS1.p2.m4"><semantics><mrow><mo stretchy="false">(</mo><mn>10</mn><mo>,</mo><mn>23</mn><mo>,</mo><mn>32</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(10,23,32)</annotation></semantics></math>的物品更相似。接下来，我们讨论用于语义ID生成的量化方案。</p>
+</div>
+<figure class="ltx_figure" id="S3.F3"><a href="assets/6eedd3e8c501bce2.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F3.g1" loading="lazy" src="assets/6eedd3e8c501bce2.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 3</span>: </span><span class="ltx_text" style="font-size:90%;">RQ-VAE：在图中，DNN编码器输出的向量（例如<math alttext="{\bm{r}}_{0}" class="ltx_Math" display="inline" id="S3.F3.m12"><semantics><msub><mi>𝒓</mi><mn>0</mn></msub><annotation encoding="application/x-tex">{\bm{r}}_{0}</annotation></semantics></math>，由蓝色条表示）被送入量化器，量化器迭代工作。首先，在第一级码本中找到与<math alttext="{\bm{r}}_{0}" class="ltx_Math" display="inline" id="S3.F3.m13"><semantics><msub><mi>𝒓</mi><mn>0</mn></msub><annotation encoding="application/x-tex">{\bm{r}}_{0}</annotation></semantics></math>最接近的向量。设该最接近的向量为<math alttext="{\bm{e}}_{c_{0}}" class="ltx_Math" display="inline" id="S3.F3.m14"><semantics><msub><mi>𝒆</mi><msub><mi>c</mi><mn>0</mn></msub></msub><annotation encoding="application/x-tex">{\bm{e}}_{c_{0}}</annotation></semantics></math>（由红色条表示）。然后，残差误差计算为<math alttext="{\bm{r}}_{1}:={\bm{r}}_{0}-{\bm{e}}_{c_{0}}" class="ltx_Math" display="inline" id="S3.F3.m15"><semantics><mrow><msub><mi>𝒓</mi><mn>1</mn></msub><mo lspace="0.278em" rspace="0.278em">:=</mo><mrow><msub><mi>𝒓</mi><mn>0</mn></msub><mo>−</mo><msub><mi>𝒆</mi><msub><mi>c</mi><mn>0</mn></msub></msub></mrow></mrow><annotation encoding="application/x-tex">{\bm{r}}_{1}:={\bm{r}}_{0}-{\bm{e}}_{c_{0}}</annotation></semantics></math>。将其送入量化器的第二级，并重复该过程：在第二级中找到与<math alttext="{\bm{r}}_{1}" class="ltx_Math" display="inline" id="S3.F3.m16"><semantics><msub><mi>𝒓</mi><mn>1</mn></msub><annotation encoding="application/x-tex">{\bm{r}}_{1}</annotation></semantics></math>最接近的向量，设为<math alttext="{\bm{e}}_{c_{1}}" class="ltx_Math" display="inline" id="S3.F3.m17"><semantics><msub><mi>𝒆</mi><msub><mi>c</mi><mn>1</mn></msub></msub><annotation encoding="application/x-tex">{\bm{e}}_{c_{1}}</annotation></semantics></math>（由绿色条表示），然后第二级残差误差计算为<math alttext="{\bm{r}}_{2}={\bm{r}}_{1}-{\bm{e}}_{c_{1}}^{\prime}" class="ltx_Math" display="inline" id="S3.F3.m18"><semantics><mrow><msub><mi>𝒓</mi><mn>2</mn></msub><mo>=</mo><mrow><msub><mi>𝒓</mi><mn>1</mn></msub><mo>−</mo><msubsup><mi>𝒆</mi><msub><mi>c</mi><mn>1</mn></msub><mo>′</mo></msubsup></mrow></mrow><annotation encoding="application/x-tex">{\bm{r}}_{2}={\bm{r}}_{1}-{\bm{e}}_{c_{1}}^{\prime}</annotation></semantics></math>。接着，对<math alttext="{\bm{r}}_{2}" class="ltx_Math" display="inline" id="S3.F3.m19"><semantics><msub><mi>𝒓</mi><mn>2</mn></msub><annotation encoding="application/x-tex">{\bm{r}}_{2}</annotation></semantics></math>第三次重复该过程。语义码计算为<math alttext="{\bm{e}}_{c_{0}},{\bm{e}}_{c_{1}}," class="ltx_Math" display="inline" id="S3.F3.m20"><semantics><mrow><mrow><msub><mi>𝒆</mi><msub><mi>c</mi><mn>0</mn></msub></msub><mo>,</mo><msub><mi>𝒆</mi><msub><mi>c</mi><mn>1</mn></msub></msub></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">{\bm{e}}_{c_{0}},{\bm{e}}_{c_{1}},</annotation></semantics></math>和<math alttext="{\bm{e}}_{c_{2}}" class="ltx_Math" display="inline" id="S3.F3.m21"><semantics><msub><mi>𝒆</mi><msub><mi>c</mi><mn>2</mn></msub></msub><annotation encoding="application/x-tex">{\bm{e}}_{c_{2}}</annotation></semantics></math>在各自码本中的索引。在图中所示的示例中，这得到码<math alttext="(7,1,4)" class="ltx_Math" display="inline" id="S3.F3.m22"><semantics><mrow><mo stretchy="false">(</mo><mn>7</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(7,1,4)</annotation></semantics></math>。</span></figcaption>
+</figure>
+<div class="ltx_para" id="S3.SS1.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">用于语义 ID 的 RQ-VAE。</span>残差量化变分自编码器（Residual-Quantized Variational AutoEncoder，RQ-VAE）<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib40" title="">40</a>]</cite>是一种多级向量量化器，它对残差施加量化以生成码字元组（又称语义 ID）。该自编码器通过更新量化码本和 DNN 编码器-解码器参数进行联合训练。<a class="ltx_ref" href="#S3.F3" title="In 3.1 Semantic ID Generation ‣ 3 Proposed Framework ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Fig.</span> <span class="ltx_text ltx_ref_tag">3</span></a>展示了通过残差量化生成语义 ID 的过程。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p4">
+<p class="ltx_p">RQ-VAE 首先对输入 <math alttext="{\bm{x}}" class="ltx_Math" display="inline" id="S3.SS1.p4.m1"><semantics><mi>𝒙</mi><annotation encoding="application/x-tex">{\bm{x}}</annotation></semantics></math> 进行编码，所用编码器为 <math alttext="{\mathcal{E}}" class="ltx_Math" display="inline" id="S3.SS1.p4.m2"><semantics><mi class="ltx_font_mathcaligraphic">ℰ</mi><annotation encoding="application/x-tex">{\mathcal{E}}</annotation></semantics></math>，以学习潜在表示 <math alttext="{\bm{z}}:={\mathcal{E}}({\bm{x}})" class="ltx_Math" display="inline" id="S3.SS1.p4.m3"><semantics><mrow><mi>𝒛</mi><mo lspace="0.278em" rspace="0.278em">:=</mo><mrow><mi class="ltx_font_mathcaligraphic">ℰ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>𝒙</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">{\bm{z}}:={\mathcal{E}}({\bm{x}})</annotation></semantics></math>。在第零层（<math alttext="d=0" class="ltx_Math" display="inline" id="S3.SS1.p4.m4"><semantics><mrow><mi>d</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">d=0</annotation></semantics></math>），初始残差直接定义为 <math alttext="{\bm{r}}_{0}:={\bm{z}}" class="ltx_Math" display="inline" id="S3.SS1.p4.m5"><semantics><mrow><msub><mi>𝒓</mi><mn>0</mn></msub><mo lspace="0.278em" rspace="0.278em">:=</mo><mi>𝒛</mi></mrow><annotation encoding="application/x-tex">{\bm{r}}_{0}:={\bm{z}}</annotation></semantics></math>。
+在每一层 <math alttext="d" class="ltx_Math" display="inline" id="S3.SS1.p4.m6"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>，我们有一个码本 <math alttext="{\mathcal{C}}_{d}:=\{{\bm{e}}_{k}\}_{k=1}^{K}" class="ltx_Math" display="inline" id="S3.SS1.p4.m7"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒞</mi><mi>d</mi></msub><mo lspace="0.278em" rspace="0.278em">:=</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>𝒆</mi><mi>k</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></msubsup></mrow><annotation encoding="application/x-tex">{\mathcal{C}}_{d}:=\{{\bm{e}}_{k}\}_{k=1}^{K}</annotation></semantics></math>，其中 <math alttext="K" class="ltx_Math" display="inline" id="S3.SS1.p4.m8"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 为码本大小。
+然后，将 <math alttext="{\bm{r}}_{0}" class="ltx_Math" display="inline" id="S3.SS1.p4.m9"><semantics><msub><mi>𝒓</mi><mn>0</mn></msub><annotation encoding="application/x-tex">{\bm{r}}_{0}</annotation></semantics></math> 量化，即将其映射到该层码本中最近的嵌入。
+最近嵌入 <math alttext="{\bm{e}}_{c_{d}}" class="ltx_Math" display="inline" id="S3.SS1.p4.m10"><semantics><msub><mi>𝒆</mi><msub><mi>c</mi><mi>d</mi></msub></msub><annotation encoding="application/x-tex">{\bm{e}}_{c_{d}}</annotation></semantics></math> 在 <math alttext="d=0" class="ltx_Math" display="inline" id="S3.SS1.p4.m11"><semantics><mrow><mi>d</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">d=0</annotation></semantics></math> 处的索引，即 <math alttext="c_{0}=\operatorname*{arg\,min}_{i}\|{\bm{r}}_{0}-{\bm{e}}_{k}\|" class="ltx_Math" display="inline" id="S3.SS1.p4.m12"><semantics><mrow><msub><mi>c</mi><mn>0</mn></msub><mo>=</mo><mrow><msub><mrow><mi>arg</mi><mo lspace="0.170em">⁢</mo><mi>min</mi></mrow><mi>i</mi></msub><mo>⁡</mo><mrow><mo stretchy="false">‖</mo><mrow><msub><mi>𝒓</mi><mn>0</mn></msub><mo>−</mo><msub><mi>𝒆</mi><mi>k</mi></msub></mrow><mo stretchy="false">‖</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">c_{0}=\operatorname*{arg\,min}_{i}\|{\bm{r}}_{0}-{\bm{e}}_{k}\|</annotation></semantics></math>，表示第零个码字。
+对于下一层 <math alttext="d=1" class="ltx_Math" display="inline" id="S3.SS1.p4.m13"><semantics><mrow><mi>d</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">d=1</annotation></semantics></math>，残差定义为 <math alttext="{\bm{r}}_{1}:={\bm{r}}_{0}-{\bm{e}}_{c_{0}}" class="ltx_Math" display="inline" id="S3.SS1.p4.m14"><semantics><mrow><msub><mi>𝒓</mi><mn>1</mn></msub><mo lspace="0.278em" rspace="0.278em">:=</mo><mrow><msub><mi>𝒓</mi><mn>0</mn></msub><mo>−</mo><msub><mi>𝒆</mi><msub><mi>c</mi><mn>0</mn></msub></msub></mrow></mrow><annotation encoding="application/x-tex">{\bm{r}}_{1}:={\bm{r}}_{0}-{\bm{e}}_{c_{0}}</annotation></semantics></math>。
+然后，与第零层类似，第一层的编码通过在第一层的码本中找到最接近 <math alttext="{\bm{r}}_{1}" class="ltx_Math" display="inline" id="S3.SS1.p4.m15"><semantics><msub><mi>𝒓</mi><mn>1</mn></msub><annotation encoding="application/x-tex">{\bm{r}}_{1}</annotation></semantics></math> 的嵌入来计算。
+该过程递归重复 <math alttext="m" class="ltx_Math" display="inline" id="S3.SS1.p4.m16"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math> 次，以得到表示语义 ID 的 <math alttext="m" class="ltx_Math" display="inline" id="S3.SS1.p4.m17"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math> 个码字组成的元组。
+这种递归方法从粗到细的粒度近似输入。
+注意，我们选择使用大小为 <math alttext="K" class="ltx_Math" display="inline" id="S3.SS1.p4.m18"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 的独立码本，为 <math alttext="m" class="ltx_Math" display="inline" id="S3.SS1.p4.m19"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math> 个层级中的每一层各设置一个，而不是使用单个大小为 <math alttext="mK" class="ltx_Math" display="inline" id="S3.SS1.p4.m20"><semantics><mrow><mi>m</mi><mo>⁢</mo><mi>K</mi></mrow><annotation encoding="application/x-tex">mK</annotation></semantics></math> 的码本。
+这样做是因为残差的范数往往随着层数增加而减小，从而允许不同层级具有不同的粒度。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p5">
+<p class="ltx_p">一旦我们得到语义 ID <math alttext="(c_{0},\dots,c_{m-1})" class="ltx_Math" display="inline" id="S3.SS1.p5.m1"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mn>0</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>c</mi><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{0},\dots,c_{m-1})</annotation></semantics></math>，<math alttext="{\bm{z}}" class="ltx_Math" display="inline" id="S3.SS1.p5.m2"><semantics><mi>𝒛</mi><annotation encoding="application/x-tex">{\bm{z}}</annotation></semantics></math> 的量化表示便计算为 <math alttext="\widehat{{\bm{z}}}:=\sum_{d=0}^{m-1}{\bm{e}}_{c_{i}}" class="ltx_Math" display="inline" id="S3.SS1.p5.m3"><semantics><mrow><mover accent="true"><mi>𝒛</mi><mo>^</mo></mover><mo lspace="0.278em" rspace="0.111em">:=</mo><mrow><msubsup><mo>∑</mo><mrow><mi>d</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></msubsup><msub><mi>𝒆</mi><msub><mi>c</mi><mi>i</mi></msub></msub></mrow></mrow><annotation encoding="application/x-tex">\widehat{{\bm{z}}}:=\sum_{d=0}^{m-1}{\bm{e}}_{c_{i}}</annotation></semantics></math>。
+然后将 <math alttext="\widehat{{\bm{z}}}" class="ltx_Math" display="inline" id="S3.SS1.p5.m4"><semantics><mover accent="true"><mi>𝒛</mi><mo>^</mo></mover><annotation encoding="application/x-tex">\widehat{{\bm{z}}}</annotation></semantics></math> 传递给解码器，解码器尝试重建输入 <math alttext="{\bm{x}}" class="ltx_Math" display="inline" id="S3.SS1.p5.m5"><semantics><mi>𝒙</mi><annotation encoding="application/x-tex">{\bm{x}}</annotation></semantics></math>，所用映射为 <math alttext="\widehat{{\bm{z}}}" class="ltx_Math" display="inline" id="S3.SS1.p5.m6"><semantics><mover accent="true"><mi>𝒛</mi><mo>^</mo></mover><annotation encoding="application/x-tex">\widehat{{\bm{z}}}</annotation></semantics></math>。RQ-VAE 损失定义为 <math alttext="{\mathcal{L}}({\bm{x}}):={\mathcal{L}}_{\text{recon}}+{\mathcal{L}}_{\text{%
+rqvae}}" class="ltx_Math" display="inline" id="S3.SS1.p5.m7"><semantics><mrow><mrow><mi class="ltx_font_mathcaligraphic">ℒ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>𝒙</mi><mo rspace="0.278em" stretchy="false">)</mo></mrow></mrow><mo rspace="0.278em">:=</mo><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>recon</mtext></msub><mo>+</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>rqvae</mtext></msub></mrow></mrow><annotation encoding="application/x-tex">{\mathcal{L}}({\bm{x}}):={\mathcal{L}}_{\text{recon}}+{\mathcal{L}}_{\text{%
+rqvae}}</annotation></semantics></math>，其中 <math alttext="{\mathcal{L}}_{\text{recon}}:=\|{\bm{x}}-\widehat{{\bm{x}}}\|^{2}" class="ltx_Math" display="inline" id="S3.SS1.p5.m8"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>recon</mtext></msub><mo lspace="0.278em" rspace="0.278em">:=</mo><msup><mrow><mo stretchy="false">‖</mo><mrow><mi>𝒙</mi><mo>−</mo><mover accent="true"><mi>𝒙</mi><mo>^</mo></mover></mrow><mo stretchy="false">‖</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">{\mathcal{L}}_{\text{recon}}:=\|{\bm{x}}-\widehat{{\bm{x}}}\|^{2}</annotation></semantics></math>，且 <math alttext="{\mathcal{L}}_{\text{rqvae}}:=\sum_{d=0}^{m-1}{\|\mbox{sg}[{\bm{r}}_{i}]-{\bm{%
+e}}_{c_{i}}\|^{2}}+\beta\|{\bm{r}}_{i}-\mbox{sg}[{\bm{e}}_{c_{i}}]\|^{2}" class="ltx_Math" display="inline" id="S3.SS1.p5.m9"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>rqvae</mtext></msub><mo lspace="0.278em" rspace="0.111em">:=</mo><mrow><mrow><msubsup><mo rspace="0em">∑</mo><mrow><mi>d</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></msubsup><msup><mrow><mo stretchy="false">‖</mo><mrow><mrow><mtext>sg</mtext><mo>⁢</mo><mrow><mo stretchy="false">[</mo><msub><mi>𝒓</mi><mi>i</mi></msub><mo stretchy="false">]</mo></mrow></mrow><mo>−</mo><msub><mi>𝒆</mi><msub><mi>c</mi><mi>i</mi></msub></msub></mrow><mo stretchy="false">‖</mo></mrow><mn>2</mn></msup></mrow><mo>+</mo><mrow><mi>β</mi><mo>⁢</mo><msup><mrow><mo stretchy="false">‖</mo><mrow><msub><mi>𝒓</mi><mi>i</mi></msub><mo>−</mo><mrow><mtext>sg</mtext><mo>⁢</mo><mrow><mo stretchy="false">[</mo><msub><mi>𝒆</mi><msub><mi>c</mi><mi>i</mi></msub></msub><mo stretchy="false">]</mo></mrow></mrow></mrow><mo stretchy="false">‖</mo></mrow><mn>2</mn></msup></mrow></mrow></mrow><annotation encoding="application/x-tex">{\mathcal{L}}_{\text{rqvae}}:=\sum_{d=0}^{m-1}{\|\mbox{sg}[{\bm{r}}_{i}]-{\bm{%
+e}}_{c_{i}}\|^{2}}+\beta\|{\bm{r}}_{i}-\mbox{sg}[{\bm{e}}_{c_{i}}]\|^{2}</annotation></semantics></math>。
+这里 <math alttext="\widehat{{\bm{x}}}" class="ltx_Math" display="inline" id="S3.SS1.p5.m10"><semantics><mover accent="true"><mi>𝒙</mi><mo>^</mo></mover><annotation encoding="application/x-tex">\widehat{{\bm{x}}}</annotation></semantics></math> 是解码器的输出，而 <span class="ltx_text ltx_markedasmath">sg</span> 是停止梯度操作 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib35" title="">35</a>]</cite>。该损失联合训练编码器、解码器和码本。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p6">
+<p class="ltx_p">如 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib40" title="">40</a>]</cite> 所提出的，为防止 RQ-VAE 出现码本坍缩（即大多数输入仅被映射到少数几个码本向量），我们使用基于 k-means 聚类的码本初始化。具体而言，我们在第一个训练批次上应用 k-means 算法，并将质心用作初始化。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p7">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">量化的其他替代方案。</span>生成语义 ID 的一个简单替代方案是使用局部敏感哈希（LSH）。我们在小节 <a class="ltx_ref" href="#S4.SS2" title="4.2 Item Representation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">4.2</span></a> 中进行了消融研究，发现 RQ-VAE 确实优于 LSH。另一种选择是分层使用 k-means 聚类 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib34" title="">34</a>]</cite>，但它在不同簇之间丢失了语义含义 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib37" title="">37</a>]</cite>。我们还尝试了 VQ-VAE，虽然它在召回阶段生成候选时与 RQ-VAE 表现相似，但它丢失了 ID 的层次性质，而这种层次性质赋予了第 <a class="ltx_ref" href="#S4.SS3" title="4.3 New Capabilities ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">4.3</span></a> 节中讨论的许多新能力。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p8">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">处理冲突。</span>取决于语义嵌入的分布、码本大小的选择以及码字长度，可能会发生语义冲突（<math alttext="i.e." class="ltx_Math" display="inline" id="S3.SS1.p8.m1"><semantics><mrow><mrow><mi>i</mi><mo lspace="0em" rspace="0.167em">.</mo><mi>e</mi></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">i.e.</annotation></semantics></math>，即多个物品映射到同一语义 ID）。为了消除冲突，我们在有序语义编码的末尾附加一个额外的 token，使它们唯一。例如，如果两个物品共享语义 ID <math alttext="(12,24,52)" class="ltx_Math" display="inline" id="S3.SS1.p8.m2"><semantics><mrow><mo stretchy="false">(</mo><mn>12</mn><mo>,</mo><mn>24</mn><mo>,</mo><mn>52</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(12,24,52)</annotation></semantics></math>，我们附加额外的 token 来区分它们，将这两个物品分别表示为 <math alttext="(12,24,52,0)" class="ltx_Math" display="inline" id="S3.SS1.p8.m3"><semantics><mrow><mo stretchy="false">(</mo><mn>12</mn><mo>,</mo><mn>24</mn><mo>,</mo><mn>52</mn><mo>,</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(12,24,52,0)</annotation></semantics></math> 和 <math alttext="(12,24,52,1)" class="ltx_Math" display="inline" id="S3.SS1.p8.m4"><semantics><mrow><mo stretchy="false">(</mo><mn>12</mn><mo>,</mo><mn>24</mn><mo>,</mo><mn>52</mn><mo>,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(12,24,52,1)</annotation></semantics></math>。为了检测冲突，我们维护一个将语义 ID 映射到相应物品的查找表。注意，冲突检测与修正在 RQ-VAE 模型训练完成后仅进行一次。此外，由于语义 ID 是整数元组，与高维嵌入相比，查找表在存储方面是高效的。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.2 </span>使用语义 ID 的生成式召回</h3>
+<div class="ltx_para" id="S3.SS2.p1">
+<p class="ltx_p">我们通过按时间顺序对每个用户交互过的物品进行排序，为每个用户构建物品序列。然后，给定形式为 <math alttext="(\text{item}_{1},\dots,\text{item}_{n})" class="ltx_Math" display="inline" id="S3.SS2.p1.m1"><semantics><mrow><mo stretchy="false">(</mo><msub><mtext>item</mtext><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mtext>item</mtext><mi>n</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\text{item}_{1},\dots,\text{item}_{n})</annotation></semantics></math> 的序列，推荐系统的任务是预测下一个物品 <math alttext="\text{item}_{n+1}" class="ltx_Math" display="inline" id="S3.SS2.p1.m2"><semantics><msub><mtext>item</mtext><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">\text{item}_{n+1}</annotation></semantics></math>。我们提出一种直接预测下一个物品语义 ID 的生成式方法。形式化地，设 <math alttext="(c_{i,0},\dots,c_{i,m-1})" class="ltx_Math" display="inline" id="S3.SS2.p1.m3"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mrow><mi>i</mi><mo>,</mo><mn>0</mn></mrow></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>c</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{i,0},\dots,c_{i,m-1})</annotation></semantics></math> 为长度为 <math alttext="m" class="ltx_Math" display="inline" id="S3.SS2.p1.m4"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math> 的语义 ID，对应的物品为 <math alttext="\text{item}_{i}" class="ltx_Math" display="inline" id="S3.SS2.p1.m5"><semantics><msub><mtext>item</mtext><mi>i</mi></msub><annotation encoding="application/x-tex">\text{item}_{i}</annotation></semantics></math>。然后，我们将物品序列转换为序列 <math alttext="(c_{1,0},\dots,c_{1,m-1},c_{2,0},\dots,c_{2,m-1},\dots,c_{n,0},\dots,c_{n,m-1})" class="ltx_Math" display="inline" id="S3.SS2.p1.m6"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mrow><mn>1</mn><mo>,</mo><mn>0</mn></mrow></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>c</mi><mrow><mn>1</mn><mo>,</mo><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></mrow></msub><mo>,</mo><msub><mi>c</mi><mrow><mn>2</mn><mo>,</mo><mn>0</mn></mrow></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>c</mi><mrow><mn>2</mn><mo>,</mo><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></mrow></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>c</mi><mrow><mi>n</mi><mo>,</mo><mn>0</mn></mrow></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>c</mi><mrow><mi>n</mi><mo>,</mo><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{1,0},\dots,c_{1,m-1},c_{2,0},\dots,c_{2,m-1},\dots,c_{n,0},\dots,c_{n,m-1})</annotation></semantics></math>。接着训练序列到序列模型来预测 <math alttext="\text{item}_{n+1}" class="ltx_Math" display="inline" id="S3.SS2.p1.m7"><semantics><msub><mtext>item</mtext><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">\text{item}_{n+1}</annotation></semantics></math> 的语义 ID，即 <math alttext="(c_{n+1,0},\dots,c_{n+1,m-1})" class="ltx_Math" display="inline" id="S3.SS2.p1.m8"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mrow><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><mo>,</mo><mn>0</mn></mrow></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>c</mi><mrow><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><mo>,</mo><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{n+1,0},\dots,c_{n+1,m-1})</annotation></semantics></math>。
+鉴于我们框架的生成性质，解码器生成的语义 ID 可能不匹配推荐语料库中的任何物品。然而，正如我们在附录（<a class="ltx_ref" href="#A5.F6" title="In Appendix E Discussion ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Fig.</span> <span class="ltx_text ltx_ref_tag">6</span></a>）中所示，此类事件发生的概率很低。我们在附录 <a class="ltx_ref" href="#A5" title="Appendix E Discussion ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">E</span></a> 中进一步讨论了如何处理此类事件。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4 </span>实验</h2>
+<div class="ltx_para" id="S4.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">数据集。</span>我们在 Amazon Product Reviews 数据集 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib10" title="">10</a>]</cite> 的三个公开真实世界基准上评估所提出的框架，该数据集包含 1996 年 5 月至 2014 年 7 月的用户评论和物品元数据。具体而言，我们将 Amazon Product Reviews 数据集的三个类别用于序列推荐任务：“Beauty”“Sports and Outdoors”和“Toys and Games”。我们在附录 <a class="ltx_ref" href="#A3" title="Appendix C Dataset Statistics ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">C</span></a> 中讨论数据集统计和预处理。</p>
+</div>
+<div class="ltx_para" id="S4.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">评估指标。</span>我们使用 top-k Recall（Recall@K）和 <math alttext="K=5,10" class="ltx_Math" display="inline" id="S4.p2.m1"><semantics><mrow><mi>K</mi><mo>=</mo><mrow><mn>5</mn><mo>,</mo><mn>10</mn></mrow></mrow><annotation encoding="application/x-tex">K=5,10</annotation></semantics></math> 的归一化折损累计增益（NDCG@K）来评估推荐性能。</p>
+</div>
+<div class="ltx_para ltx_noindent" id="S4.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">RQ-VAE 实现细节。</span>如第 <a class="ltx_ref" href="#S3.SS1" title="3.1 Semantic ID Generation ‣ 3 Proposed Framework ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">3.1</span></a> 节所讨论的，RQ-VAE 用于量化物品的语义嵌入。我们使用预训练的 Sentence-T5 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib27" title="">27</a>]</cite> 模型来获取数据集中每个物品的语义嵌入。具体而言，我们使用物品的内容特征（如标题、价格、品牌和类别）构造一个句子，然后将其传递给预训练的 Sentence-T5 模型，以获得维度为 768 的物品语义嵌入。</p>
+</div>
+<div class="ltx_para" id="S4.p4">
+<p class="ltx_p">RQ-VAE 模型由三个组件组成：
+一个 DNN 编码器，将输入的语义嵌入编码为潜在表示，
+一个残差量化器，输出量化表示，以及
+一个 DNN 解码器，将量化表示解码回语义输入嵌入空间。
+编码器有三个中间层，大小分别为 512、256 和 128，使用 ReLU 激活，最终潜在表示维度为 <math alttext="32" class="ltx_Math" display="inline" id="S4.p4.m1"><semantics><mn>32</mn><annotation encoding="application/x-tex">32</annotation></semantics></math>。
+为了量化该表示，进行三级残差量化。对于每一级，维护一个基数为 <math alttext="256" class="ltx_Math" display="inline" id="S4.p4.m2"><semantics><mn>256</mn><annotation encoding="application/x-tex">256</annotation></semantics></math> 的码本，其中码本中的每个向量维度为 <math alttext="32" class="ltx_Math" display="inline" id="S4.p4.m3"><semantics><mn>32</mn><annotation encoding="application/x-tex">32</annotation></semantics></math>。在计算总损失时，我们使用 <math alttext="\beta=0.25" class="ltx_Math" display="inline" id="S4.p4.m4"><semantics><mrow><mi>β</mi><mo>=</mo><mn>0.25</mn></mrow><annotation encoding="application/x-tex">\beta=0.25</annotation></semantics></math>。RQ-VAE 模型训练 20k 个 epoch 以确保高码本使用率（<math alttext="\geq 80\%" class="ltx_Math" display="inline" id="S4.p4.m5"><semantics><mrow><mi></mi><mo>≥</mo><mrow><mn>80</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">\geq 80\%</annotation></semantics></math>）。我们使用 Adagrad 优化器，学习率为 0.4，批次大小为 1024。训练完成后，我们使用学习到的编码器和量化组件为每个物品生成一个 3 元组语义 ID。为避免多个物品被映射到同一语义 ID，我们为共享相同前三个码字的物品添加一个唯一的 <math alttext="4^{th}" class="ltx_Math" display="inline" id="S4.p4.m6"><semantics><msup><mn>4</mn><mrow><mi>t</mi><mo>⁢</mo><mi>h</mi></mrow></msup><annotation encoding="application/x-tex">4^{th}</annotation></semantics></math> 编码，<math alttext="i.e." class="ltx_Math" display="inline" id="S4.p4.m7"><semantics><mrow><mrow><mi>i</mi><mo lspace="0em" rspace="0.167em">.</mo><mi>e</mi></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">i.e.</annotation></semantics></math> 两个与元组（7，1，4）关联的物品分别被分配为（7，1，4，0）和（7，1，4，1）（如果没有冲突，我们仍将 0 分配为第四个码字）。这使得推荐语料库中每个物品都获得一个长度为 4 的唯一语义 ID。
+<br class="ltx_break"/></p>
+</div>
+<div class="ltx_para ltx_noindent" id="S4.p5">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">序列到序列模型实现细节。</span>我们使用开源的 T5X 框架 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib28" title="">28</a>]</cite> 实现基于 Transformer 的编码器-解码器架构。为使模型能够处理序列推荐任务的输入，序列到序列模型的词表包含每个语义码字的 token。具体而言，词表包含 1024（<math alttext="256\times 4" class="ltx_Math" display="inline" id="S4.p5.m1"><semantics><mrow><mn>256</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">256\times 4</annotation></semantics></math>）个 token 来表示语料库中的物品。除物品的语义码字外，我们还在词表中添加用户特定的 token。为限制词表大小，我们仅为用户 ID 添加 2000 个 token。我们使用哈希技巧 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib38" title="">38</a>]</cite> 将原始用户 ID 映射到 2000 个用户 ID token 之一。我们将输入序列构造为：用户 ID token 后接对应用户物品交互历史的语义 ID token 序列。我们发现，将用户 ID 添加到输入中可使模型对召回的物品进行个性化。</p>
+</div>
+<div class="ltx_para" id="S4.p6">
+<p class="ltx_p">我们为基于 Transformer 的编码器和解码器模型各使用 4 层，每层具有 6 个维度为 64 的自注意力头。我们对所有层使用 ReLU 激活函数。MLP 维度和输入维度分别设置为 1024 和 128。我们使用的 dropout 为 0.1。总体而言，该模型约有 13 百万个参数。我们针对“Beauty”和“Sports and Outdoors”数据集训练该模型 200k 步。由于“Toys and Games”数据集规模较小，仅训练 100k 步。我们使用的批次大小为 256。学习率为 <math alttext="0.01" class="ltx_Math" display="inline" id="S4.p6.m1"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math>，用于前 10k 步，之后遵循逆平方根衰减调度。</p>
+</div>
+<section class="ltx_subsection" id="S4.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1 </span>序列推荐上的性能</h3>
+<figure class="ltx_figure" id="S4.F4">
+<div class="ltx_flex_figure">
+<div class="ltx_flex_cell ltx_flex_size_2">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="S4.F4.sf1"><a href="assets/8bc7b65d291c46cd.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F4.sf1.g1" loading="lazy" src="assets/8bc7b65d291c46cd.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(a)</span> </span><span class="ltx_text" style="font-size:90%;">数据集中所有物品的真实类别分布，按第一个码字 <math alttext="c_{1}" class="ltx_Math" display="inline" id="S4.F4.sf1.m2"><semantics><msub><mi>c</mi><mn>1</mn></msub><annotation encoding="application/x-tex">c_{1}</annotation></semantics></math> 的值着色。</span></figcaption>
+</figure>
+</div>
+<div class="ltx_flex_cell ltx_flex_size_2">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="S4.F4.sf2"><a href="assets/c4af0a473a7a3d2f.webp" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F4.sf2.g1" loading="lazy" src="assets/c4af0a473a7a3d2f.webp"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(b)</span> </span><span class="ltx_text" style="font-size:90%;">语义 ID 为 <math alttext="(c_{1},*,*)" class="ltx_Math" display="inline" id="S4.F4.sf2.m4"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mn>1</mn></msub><mo rspace="0em">,</mo><mo lspace="0em" rspace="0em">∗</mo><mo rspace="0em">,</mo><mo lspace="0em" rspace="0em">∗</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{1},*,*)</annotation></semantics></math> 的物品的类别分布，其中 <math alttext="c_{1}\in\{1,2,3,4\}" class="ltx_Math" display="inline" id="S4.F4.sf2.m5"><semantics><mrow><msub><mi>c</mi><mn>1</mn></msub><mo>∈</mo><mrow><mo stretchy="false">{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>4</mn><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">c_{1}\in\{1,2,3,4\}</annotation></semantics></math>。类别根据第二个语义 token <math alttext="c_{2}" class="ltx_Math" display="inline" id="S4.F4.sf2.m6"><semantics><msub><mi>c</mi><mn>2</mn></msub><annotation encoding="application/x-tex">c_{2}</annotation></semantics></math> 进行颜色编码。</span></figcaption>
+</figure>
+</div>
+</div>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 4</span>: </span><span class="ltx_text" style="font-size:90%;">在 Amazon Beauty 数据集上对 RQ-VAE 语义 ID <math alttext="(c_{1},c_{2},c_{3},c_{4})" class="ltx_Math" display="inline" id="S4.F4.m5"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mn>1</mn></msub><mo>,</mo><msub><mi>c</mi><mn>2</mn></msub><mo>,</mo><msub><mi>c</mi><mn>3</mn></msub><mo>,</mo><msub><mi>c</mi><mn>4</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{1},c_{2},c_{3},c_{4})</annotation></semantics></math> 的定性研究。我们表明，真实类别分布在不同语义 token 上。此外，RQVAE 语义 ID 形成了物品的层次结构，其中第一个语义 token（<math alttext="c_{1}" class="ltx_Math" display="inline" id="S4.F4.m6"><semantics><msub><mi>c</mi><mn>1</mn></msub><annotation encoding="application/x-tex">c_{1}</annotation></semantics></math>）对应粗粒度类别，而第二/第三个语义 token（<math alttext="c_{2}" class="ltx_Math" display="inline" id="S4.F4.m7"><semantics><msub><mi>c</mi><mn>2</mn></msub><annotation encoding="application/x-tex">c_{2}</annotation></semantics></math>/<math alttext="c_{3}" class="ltx_Math" display="inline" id="S4.F4.m8"><semantics><msub><mi>c</mi><mn>3</mn></msub><annotation encoding="application/x-tex">c_{3}</annotation></semantics></math>）对应细粒度类别。</span></figcaption>
+</figure>
+<div class="ltx_para" id="S4.SS1.p1">
+<p class="ltx_p">在本节中，我们将所提出的生成式召回框架与以下序列推荐方法进行比较（这些方法在附录 <a class="ltx_ref" href="#A2" title="Appendix B Baselines ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">B</span></a> 中简要描述）：GRU4Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib11" title="">11</a>]</cite>、Caser <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib33" title="">33</a>]</cite>、HGN <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib25" title="">25</a>]</cite>、SASRec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib17" title="">17</a>]</cite>、BERT4Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib32" title="">32</a>]</cite>、FDSA <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib42" title="">42</a>]</cite>、S<sup class="ltx_sup">3</sup>-Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib44" title="">44</a>]</cite> 和 P5 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite>。
+值得注意的是，所有基线（P5 除外）都使用双编码器学习高维向量空间，即将用户过去的物品交互和候选物品编码为高维表示，并使用 <a href="#id3"><span class="ltx_glossaryref" href="#id3" title="Maximum Inner Product Search"><span class="ltx_text ltx_glossary_long">最大内积搜索</span></span></a>（<a href="#id3"><abbr class="ltx_glossaryref" href="#id3" title="Maximum Inner Product Search"><span class="ltx_text ltx_glossary_short">MIPS</span></abbr></a>）来召回用户接下来可能交互的下一个候选物品。相比之下，我们<em class="ltx_emph ltx_font_italic">新颖的</em>生成式召回框架使用序列到序列模型直接逐 token 预测物品的语义 ID。</p>
+</div>
+<figure class="ltx_table" id="S4.T1">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>: </span><span class="ltx_text" style="font-size:90%;">序列推荐上的性能比较。最后一行展示了 TIGER 相对于最佳基线的百分比提升。粗体（下划线）用于表示最佳（次佳）指标。</span></figcaption>
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:682.5pt;height:221.3pt;vertical-align:-1.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<p class="ltx_p">
+<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<span class="ltx_tbody">
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt ltx_rowspan ltx_rowspan_2" style="padding-left:2.0pt;padding-right:2.0pt;">Methods</span>
+<span class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_4" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">Sports and Outdoors</span></span>
+<span class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_4" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">Beauty</span></span>
+<span class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_4" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">Toys and Games</span></span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@10</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@10</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@10</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@10</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@10</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@10</span>
+</span></span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">P5 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0061</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0041</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0095</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0052</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0163</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0107</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0254</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0136</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0070</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0050</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0121</span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0066</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">Caser <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib33" title="">33</a>]</cite></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0116</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0072</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0194</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0097</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0205</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0131</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0347</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0176</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0166</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0107</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0270</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0141</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">HGN <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib25" title="">25</a>]</cite></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0189</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0120</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0313</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0159</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0325</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0206</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0512</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0266</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0321</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0221</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0497</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0277</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">GRU4Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib11" title="">11</a>]</cite></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0129</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0086</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0204</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0110</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0164</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0099</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0283</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0137</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0097</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0059</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0176</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0084</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">BERT4Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib32" title="">32</a>]</cite></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0115</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0075</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0191</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0099</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0203</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0124</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0347</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0170</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0116</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0071</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0203</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0099</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">FDSA <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib42" title="">42</a>]</cite></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0182</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0122</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0288</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0156</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0267</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0163</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0407</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0208</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0228</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0140</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0381</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0189</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">SASRec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib17" title="">17</a>]</cite></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0233</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0154</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0350</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0192</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0387</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0249</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0605</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0318</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0463</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0306</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0675</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0374</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">S<sup class="ltx_sup">3</sup>-Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib44" title="">44</a>]</cite></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0251</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0161</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0385</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0204</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0387</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0244</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0647</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0327</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0443</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0294</span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0700</span></span>
+<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0376</span></span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">TIGER [Ours]</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0264</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0181</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0400</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0225</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0454</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0321</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0648</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0384</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0521</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0371</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0712</span></span>
+<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0432</span></span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_th ltx_th_row ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+5.22%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+12.55%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+3.90%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+10.29%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+17.31%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+29.04%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+0.15%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+17.43%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+12.53%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+21.24%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+1.71%</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+14.97%</span></span></span>
+</span>
+</span></p>
+</span></div>
+</figure>
+<div class="ltx_para" id="S4.SS1.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">推荐性能。</span>我们在序列推荐任务上对所提出的 TIGER 进行了广泛分析，并与上述基线进行比较。除 P5 外，所有基线的结果均取自公开可访问的结果<span class="ltx_note ltx_role_footnote" id="footnote1"><sup class="ltx_note_mark">1</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">1</sup>
+<span class="ltx_tag ltx_tag_note">1</span>
+              
+              
+              
+              
+              
+              
+              
+            https://github.com/aHuiWang/CIKM2020-S3Rec</span></span></span>，由 Zhou <em class="ltx_emph ltx_font_italic">等人</em> <cite class="ltx_cite ltx_citemacro_citep">[<a class="ltx_ref" href="#bib.bib44" title="">44</a>]</cite>提供。对于 P5，我们使用作者提供的源代码。然而，为了公平比较，我们更新了数据预处理方法，使其与其他基线和我们的方法保持一致。我们在附录 <a class="ltx_ref" href="#A4" title="Appendix D Modifications to the P5 data preprocessing ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">D</span></a> 中提供了与我们的修改相关的进一步细节。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p3">
+<p class="ltx_p">结果如表<a class="ltx_ref" href="#S4.T1" title="Table 1 ‣ 4.1 Performance on Sequential Recommendation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">1</span></a>所示。我们观察到 TIGER 始终优于现有基线<span class="ltx_note ltx_role_footnote" id="footnote2"><sup class="ltx_note_mark">2</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">2</sup>
+<span class="ltx_tag ltx_tag_note">2</span>
+              
+              
+              
+              
+              
+              
+              
+            我们在表<a class="ltx_ref" href="#A5.T9" title="Table 9 ‣ Appendix E Discussion ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">9</span></a>中表明，TIGER 各项指标的标准误差不显著。</span></span></span>。我们看到在我们考虑的三个基准上均有显著提升。特别地，TIGER 在 Beauty 基准上明显优于次优基线，具体而言，相较于 SASRec，最高获得29%的 NDCG@5 提升；此外获得17.3%的 Recall@5 提升，其比较基线为 S<sup class="ltx_sup">3</sup>-Rec。类似地，在 Toys and Games 数据集上，TIGER 分别获得21%和15%的提升，对应指标为 NDCG@5 和 NDCG@10。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2 </span>物品表示</h3>
+<div class="ltx_para" id="S4.SS2.p1">
+<p class="ltx_p">在本节中，我们分析 RQ-VAE 语义 ID 的几个重要特性。具体而言，我们首先进行定性分析，以观察语义 ID 的层次结构特性。接着，我们通过将性能与另一种基于哈希的量化方法进行对比，来评估我们使用 RQ-VAE 进行量化这一设计选择的重要性。最后，我们进行消融实验，通过将 TIGER 与使用随机 ID 作为物品表示的序列到序列模型进行比较，来研究使用语义 ID 的重要性。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">定性分析。</span>我们在图<a class="ltx_ref" href="#S4.F4" title="Figure 4 ‣ 4.1 Performance on Sequential Recommendation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">4</span></a>中分析了为 Amazon Beauty 数据集学习到的 RQ-VAE 语义 ID。为便于说明，我们将 RQ-VAE 的层数设为3，码本大小分别为4、16和256，<span class="ltx_text ltx_font_italic">即</span>对于给定物品的语义 ID <math alttext="(c_{1},c_{2},c_{3})" class="ltx_Math" display="inline" id="S4.SS2.p2.m1"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mn>1</mn></msub><mo>,</mo><msub><mi>c</mi><mn>2</mn></msub><mo>,</mo><msub><mi>c</mi><mn>3</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{1},c_{2},c_{3})</annotation></semantics></math>，<math alttext="0\leq c_{1}\leq 3" class="ltx_Math" display="inline" id="S4.SS2.p2.m2"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>c</mi><mn>1</mn></msub><mo>≤</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">0\leq c_{1}\leq 3</annotation></semantics></math>、<math alttext="0\leq c_{2}\leq 15" class="ltx_Math" display="inline" id="S4.SS2.p2.m3"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>c</mi><mn>2</mn></msub><mo>≤</mo><mn>15</mn></mrow><annotation encoding="application/x-tex">0\leq c_{2}\leq 15</annotation></semantics></math>和<math alttext="0\leq c_{3}\leq 255" class="ltx_Math" display="inline" id="S4.SS2.p2.m4"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>c</mi><mn>3</mn></msub><mo>≤</mo><mn>255</mn></mrow><annotation encoding="application/x-tex">0\leq c_{3}\leq 255</annotation></semantics></math>。在图<a class="ltx_ref" href="#S4.F4.sf1" title="Figure 4(a) ‣ Figure 4 ‣ 4.1 Performance on Sequential Recommendation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">4(a)</span></a>中，我们用<math alttext="c_{1}" class="ltx_Math" display="inline" id="S4.SS2.p2.m5"><semantics><msub><mi>c</mi><mn>1</mn></msub><annotation encoding="application/x-tex">c_{1}</annotation></semantics></math>标注每个物品的类别，以在数据集的整体类别分布中可视化<math alttext="c_{1}" class="ltx_Math" display="inline" id="S4.SS2.p2.m6"><semantics><msub><mi>c</mi><mn>1</mn></msub><annotation encoding="application/x-tex">c_{1}</annotation></semantics></math>特有的类别。如图<a class="ltx_ref" href="#S4.F4.sf1" title="Figure 4(a) ‣ Figure 4 ‣ 4.1 Performance on Sequential Recommendation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">4(a)</span></a>所示，<math alttext="c_{1}" class="ltx_Math" display="inline" id="S4.SS2.p2.m7"><semantics><msub><mi>c</mi><mn>1</mn></msub><annotation encoding="application/x-tex">c_{1}</annotation></semantics></math>捕获了物品的高层类别。例如，<math alttext="c_{1}=3" class="ltx_Math" display="inline" id="S4.SS2.p2.m8"><semantics><mrow><msub><mi>c</mi><mn>1</mn></msub><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">c_{1}=3</annotation></semantics></math>包含大部分与“Hair”相关的产品。类似地，具有<math alttext="c_{1}=1" class="ltx_Math" display="inline" id="S4.SS2.p2.m9"><semantics><mrow><msub><mi>c</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">c_{1}=1</annotation></semantics></math>的多数物品是用于面部、唇部和眼部的“Makeup”和“Skin”产品。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p3">
+<p class="ltx_p">我们还通过固定<math alttext="c_{1}" class="ltx_Math" display="inline" id="S4.SS2.p3.m1"><semantics><msub><mi>c</mi><mn>1</mn></msub><annotation encoding="application/x-tex">c_{1}</annotation></semantics></math>并可视化<math alttext="c_{2}" class="ltx_Math" display="inline" id="S4.SS2.p3.m2"><semantics><msub><mi>c</mi><mn>2</mn></msub><annotation encoding="application/x-tex">c_{2}</annotation></semantics></math>所有可能取值的类别分布，结果见<a class="ltx_ref" href="#S4.F4.sf2" title="In Figure 4 ‣ 4.1 Performance on Sequential Recommendation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Fig.</span> <span class="ltx_text ltx_ref_tag">4(b)</span></a>，来可视化 RQ-VAE 语义 ID 的层次结构特性。我们再次发现，第二个码字<math alttext="c_{2}" class="ltx_Math" display="inline" id="S4.SS2.p3.m3"><semantics><msub><mi>c</mi><mn>2</mn></msub><annotation encoding="application/x-tex">c_{2}</annotation></semantics></math>进一步将<math alttext="c_{1}" class="ltx_Math" display="inline" id="S4.SS2.p3.m4"><semantics><msub><mi>c</mi><mn>1</mn></msub><annotation encoding="application/x-tex">c_{1}</annotation></semantics></math>所捕获的高层语义划分为细粒度类别。RQ-VAE 学习到的语义 ID 的层次结构特性开辟了一系列新能力，这些将在第<a class="ltx_ref" href="#S4.SS3" title="4.3 New Capabilities ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">4.3</span></a>节中讨论。与基于随机原子 ID 学习物品嵌入的现有推荐系统不同，TIGER 使用语义 ID，其中语义相似的物品具有重叠的码字，这使得模型能够有效地共享数据集中语义相似物品的知识。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">哈希与 RQ-VAE 语义 ID 的比较。</span>我们通过将 RQ-VAE 与局部敏感哈希（LSH）<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib14" title="">14</a>, <a class="ltx_ref" href="#bib.bib13" title="">13</a>, <a class="ltx_ref" href="#bib.bib2" title="">2</a>]</cite>用于语义 ID 生成进行对比，来研究 RQ-VAE 在我们框架中的重要性。LSH 是一种流行的哈希技术，可以很容易地适配我们的设定。为生成 LSH 语义 ID，我们使用<math alttext="h" class="ltx_Math" display="inline" id="S4.SS2.p4.m1"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>个随机超平面<math alttext="{\bm{w}}_{1},\dots,{\bm{w}}_{h}" class="ltx_Math" display="inline" id="S4.SS2.p4.m2"><semantics><mrow><msub><mi>𝒘</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>𝒘</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">{\bm{w}}_{1},\dots,{\bm{w}}_{h}</annotation></semantics></math>对嵌入向量<math alttext="{\bm{x}}" class="ltx_Math" display="inline" id="S4.SS2.p4.m3"><semantics><mi>𝒙</mi><annotation encoding="application/x-tex">{\bm{x}}</annotation></semantics></math>执行随机投影，并计算如下二值向量：<math alttext="(1_{{\bm{w}}_{1}^{\top}{\bm{x}}&gt;0},\dots,1_{{\bm{w}}_{h}^{\top}{\bm{x}}&gt;0})" class="ltx_Math" display="inline" id="S4.SS2.p4.m4"><semantics><mrow><mo stretchy="false">(</mo><msub><mn>1</mn><mrow><mrow><msubsup><mi>𝒘</mi><mn>1</mn><mo>⊤</mo></msubsup><mo>⁢</mo><mi>𝒙</mi></mrow><mo>&gt;</mo><mn>0</mn></mrow></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mn>1</mn><mrow><mrow><msubsup><mi>𝒘</mi><mi>h</mi><mo>⊤</mo></msubsup><mo>⁢</mo><mi>𝒙</mi></mrow><mo>&gt;</mo><mn>0</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(1_{{\bm{w}}_{1}^{\top}{\bm{x}}&gt;0},\dots,1_{{\bm{w}}_{h}^{\top}{\bm{x}}&gt;0})</annotation></semantics></math>。该向量按<math alttext="c_{0}=\sum_{i=1}^{h}2^{i-1}1_{{\bm{w}}_{i}^{\top}{\bm{x}}&gt;0}" class="ltx_Math" display="inline" id="S4.SS2.p4.m5"><semantics><mrow><msub><mi>c</mi><mn>0</mn></msub><mo rspace="0.111em">=</mo><mrow><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>h</mi></msubsup><mrow><msup><mn>2</mn><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msup><mo>⁢</mo><msub><mn>1</mn><mrow><mrow><msubsup><mi>𝒘</mi><mi>i</mi><mo>⊤</mo></msubsup><mo>⁢</mo><mi>𝒙</mi></mrow><mo>&gt;</mo><mn>0</mn></mrow></msub></mrow></mrow></mrow><annotation encoding="application/x-tex">c_{0}=\sum_{i=1}^{h}2^{i-1}1_{{\bm{w}}_{i}^{\top}{\bm{x}}&gt;0}</annotation></semantics></math>转换为整数编码。此过程使用一组独立的随机超平面重复<math alttext="m" class="ltx_Math" display="inline" id="S4.SS2.p4.m6"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>次，得到<math alttext="m" class="ltx_Math" display="inline" id="S4.SS2.p4.m7"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>个码字<math alttext="(c_{0},c_{1},\dots,c_{m-1})" class="ltx_Math" display="inline" id="S4.SS2.p4.m8"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mn>0</mn></msub><mo>,</mo><msub><mi>c</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>c</mi><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{0},c_{1},\dots,c_{m-1})</annotation></semantics></math>，我们将其称为 LSH 语义 ID。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p5">
+<p class="ltx_p">在表<a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.2 Item Representation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">2</span></a>中，我们将 LSH 语义 ID 与我们所提出的 RQ-VAE 语义 ID 的性能进行比较。在该实验中，对于 LSH 语义 ID，我们使用<math alttext="h=8" class="ltx_Math" display="inline" id="S4.SS2.p5.m1"><semantics><mrow><mi>h</mi><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">h=8</annotation></semantics></math>个随机超平面并设置<math alttext="m=4" class="ltx_Math" display="inline" id="S4.SS2.p5.m2"><semantics><mrow><mi>m</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">m=4</annotation></semantics></math>，以确保基数与 RQ-VAE 相当。超平面的参数从标准正态分布中随机采样，这确保了超平面具有球对称性。我们的结果表明 RQ-VAE 始终优于 LSH。这说明，在给定相同的基于内容的语义嵌入的情况下，通过非线性<a href="#id1"><span class="ltx_glossaryref" href="#id1" title="Deep Neural Network"><span class="ltx_text ltx_glossary_long">深度神经网络</span></span></a>（<a href="#id1"><abbr class="ltx_glossaryref" href="#id1" title="Deep Neural Network"><span class="ltx_text ltx_glossary_short">DNN</span></abbr></a>）架构学习语义 ID，比使用随机投影能获得更好的量化效果。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p6">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">随机 ID 与语义 ID 的比较。</span>我们还在生成式检索推荐系统中比较了语义 ID 的重要性。具体而言，我们将随机生成的 ID 与语义 ID 进行比较。为生成随机 ID 基线，我们为每个物品分配<math alttext="m" class="ltx_Math" display="inline" id="S4.SS2.p6.m1"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>个随机码字。长度为<math alttext="m" class="ltx_Math" display="inline" id="S4.SS2.p6.m2"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>的物品随机 ID 即为<math alttext="(c_{1},\dots,c_{m})" class="ltx_Math" display="inline" id="S4.SS2.p6.m3"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>c</mi><mi>m</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{1},\dots,c_{m})</annotation></semantics></math>，其中<math alttext="c_{i}" class="ltx_Math" display="inline" id="S4.SS2.p6.m4"><semantics><msub><mi>c</mi><mi>i</mi></msub><annotation encoding="application/x-tex">c_{i}</annotation></semantics></math>从<math alttext="\{1,2,\dots,K\}" class="ltx_Math" display="inline" id="S4.SS2.p6.m5"><semantics><mrow><mo stretchy="false">{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mi>K</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{1,2,\dots,K\}</annotation></semantics></math>中均匀随机采样。我们将随机 ID 基线的<math alttext="m=4" class="ltx_Math" display="inline" id="S4.SS2.p6.m6"><semantics><mrow><mi>m</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">m=4</annotation></semantics></math>和<math alttext="K=255" class="ltx_Math" display="inline" id="S4.SS2.p6.m7"><semantics><mrow><mi>K</mi><mo>=</mo><mn>255</mn></mrow><annotation encoding="application/x-tex">K=255</annotation></semantics></math>设置为与 RQ-VAE 语义 ID 相近的基数。随机 ID 与 RQ-VAE 及 LSH 语义 ID 的比较如表<a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.2 Item Representation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">2</span></a>所示。我们看到语义 ID 始终优于随机 ID 基线，凸显了利用基于内容的语义信息的重要性。</p>
+</div>
+<figure class="ltx_table" id="S4.T2">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 2</span>: </span><span class="ltx_text" style="font-size:90%;">用于生成式检索的不同 ID 生成技术的消融实验。我们表明 RQ-VAE 语义 ID（SID）的性能显著优于哈希 SID 和随机 ID。</span></figcaption>
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:562.9pt;height:95.3pt;vertical-align:-1.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<p class="ltx_p">
+<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<span class="ltx_thead">
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt ltx_rowspan ltx_rowspan_2">Methods</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Sports and Outdoors</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Beauty</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Toys and Games</span></span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@10</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@10</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@10</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@10</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@5</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@10</span>
+</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@10</span>
+</span></span></span>
+</span>
+<span class="ltx_tbody">
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">Random ID</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.007</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.005</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0116</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0063</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0296</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0205</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0434</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0250</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0362</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0270</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0448</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0298</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row">LSH SID</span>
+<span class="ltx_td ltx_align_center">0.0215</span>
+<span class="ltx_td ltx_align_center">0.0146</span>
+<span class="ltx_td ltx_align_center">0.0321</span>
+<span class="ltx_td ltx_align_center">0.0180</span>
+<span class="ltx_td ltx_align_center">0.0379</span>
+<span class="ltx_td ltx_align_center">0.0259</span>
+<span class="ltx_td ltx_align_center">0.0533</span>
+<span class="ltx_td ltx_align_center">0.0309</span>
+<span class="ltx_td ltx_align_center">0.0412</span>
+<span class="ltx_td ltx_align_center">0.0299</span>
+<span class="ltx_td ltx_align_center">0.0566</span>
+<span class="ltx_td ltx_align_center">0.0349</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">RQ-VAE SID</span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0264</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0181</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0400</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0225</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0454</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0321</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0648</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0384</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0521</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0371</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0712</span></span>
+<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0432</span></span></span>
+</span>
+</span></p>
+</span></div>
+</figure>
+</section>
+<section class="ltx_subsection" id="S4.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.3 </span>新能力</h3>
+<div class="ltx_para" id="S4.SS3.p1">
+<p class="ltx_p">我们描述直接源自我们所提出的生成式检索框架的两项新能力，即冷启动推荐和推荐多样性。我们将这些能力称为“新”能力，是因为现有的序列推荐模型（参见第<a class="ltx_ref" href="#S4.SS1" title="4.1 Performance on Sequential Recommendation ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">4.1</span></a>节中的基线）无法直接用于满足这些真实世界的用例。这些能力源于基于 RQ-VAE 的语义 ID 与我们框架的生成式检索方法之间的协同作用。我们在以下各节中讨论 TIGER 如何在这些设定中使用。</p>
+</div>
+<figure class="ltx_figure" id="S4.F5">
+<div class="ltx_flex_figure">
+<div class="ltx_flex_cell ltx_flex_size_2">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="S4.F5.sf1"><a href="assets/3e9ad1dd04f3b2ad.png" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F5.sf1.g1" loading="lazy" src="assets/3e9ad1dd04f3b2ad.png"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(a)</span> </span><span class="ltx_text" style="font-size:90%;">Recall@K 与 K 的关系，（<math alttext="\epsilon=0.1" class="ltx_Math" display="inline" id="S4.F5.sf1.m2"><semantics><mrow><mi>ϵ</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\epsilon=0.1</annotation></semantics></math>）。</span></figcaption>
+</figure>
+</div>
+<div class="ltx_flex_cell ltx_flex_size_2">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="S4.F5.sf2"><a href="assets/efafdc5d0baff5dc.png" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F5.sf2.g1" loading="lazy" src="assets/efafdc5d0baff5dc.png"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(b)</span> </span><span class="ltx_text" style="font-size:90%;">Recall@10 与 <math alttext="\epsilon" class="ltx_Math" display="inline" id="S4.F5.sf2.m2"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math> 的关系。</span></figcaption>
+</figure>
+</div>
+</div>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 5</span>: </span><span class="ltx_text" style="font-size:90%;">冷启动召回设定下的性能。</span></figcaption>
+</figure>
+<div class="ltx_para" id="S4.SS3.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">冷启动推荐。</span>在本节中，我们研究我们所提出框架的冷启动推荐能力。由于真实世界推荐语料库的快速变化特性，新物品不断被引入。由于新添加的物品在训练语料库中缺乏用户曝光，使用随机原子 ID 作为物品表示的现有推荐模型无法检索新物品作为候选。相比之下，TIGER 框架可以轻松执行冷启动推荐，因为它在预测下一个物品时利用了物品语义。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.p3">
+<p class="ltx_p">对于此分析，我们考虑来自 Amazon Reviews 的 Beauty 数据集。为模拟新添加的物品，我们从训练数据划分中移除5%的测试物品。我们将这些被移除的物品称为<em class="ltx_emph ltx_font_italic">未见物品</em>。从训练划分中移除物品确保了关于未见物品不存在数据泄漏。
+与前文一样，我们使用长度为4的语义 ID 来表示物品，其中前3个词元使用 RQ-VAE 生成，第<math alttext="4^{th}" class="ltx_Math" display="inline" id="S4.SS3.p3.m1"><semantics><msup><mn>4</mn><mrow><mi>t</mi><mo>⁢</mo><mi>h</mi></mrow></msup><annotation encoding="application/x-tex">4^{th}</annotation></semantics></math>个词元用于确保所有已见物品都存在唯一 ID。我们在训练划分上训练 RQ-VAE 量化器和序列到序列模型。训练完成后，我们使用 RQ-VAE 模型为数据集中的所有物品生成语义 ID，包括物品语料库中的任何未见物品。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.p4">
+<p class="ltx_p">给定模型预测的语义 ID <math alttext="(c_{1},c_{2},c_{3},c_{4})" class="ltx_Math" display="inline" id="S4.SS3.p4.m1"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mn>1</mn></msub><mo>,</mo><msub><mi>c</mi><mn>2</mn></msub><mo>,</mo><msub><mi>c</mi><mn>3</mn></msub><mo>,</mo><msub><mi>c</mi><mn>4</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{1},c_{2},c_{3},c_{4})</annotation></semantics></math>，我们检索具有相同对应 ID 的已见物品。注意，根据定义，模型预测的每个语义 ID 最多只能匹配训练数据集中的一个物品。此外，具有相同前三个语义词元<math alttext="i.e." class="ltx_Math" display="inline" id="S4.SS3.p4.m2"><semantics><mrow><mrow><mi>i</mi><mo lspace="0em" rspace="0.167em">.</mo><mi>e</mi></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">i.e.</annotation></semantics></math> <math alttext="(c_{1},c_{2},c_{3})" class="ltx_Math" display="inline" id="S4.SS3.p4.m3"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mn>1</mn></msub><mo>,</mo><msub><mi>c</mi><mn>2</mn></msub><mo>,</mo><msub><mi>c</mi><mn>3</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{1},c_{2},c_{3})</annotation></semantics></math>的未见物品会被加入检索候选列表。最后，在检索一组 top-K 候选时，我们引入一个超参数<math alttext="\epsilon" class="ltx_Math" display="inline" id="S4.SS3.p4.m4"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>，它指定了我们框架所选未见物品的最大比例。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.p5">
+<p class="ltx_p">我们在<a class="ltx_ref" href="#S4.F5" title="In 4.3 New Capabilities ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Fig.</span> <span class="ltx_text ltx_ref_tag">5</span></a>中比较了 TIGER 与 k 近邻（KNN）方法在冷启动推荐设定下的性能。对于 KNN，我们使用语义表示空间来执行最近邻搜索。我们将基于 KNN 的基线称为 Semantic_KNN。<a class="ltx_ref" href="#S4.F5.sf1" title="In Figure 5 ‣ 4.3 New Capabilities ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Fig.</span> <span class="ltx_text ltx_ref_tag">5(a)</span></a>表明，我们的框架在<math alttext="\epsilon=0.1" class="ltx_Math" display="inline" id="S4.SS3.p5.m1"><semantics><mrow><mi>ϵ</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\epsilon=0.1</annotation></semantics></math>下，在所有 Recall@K 指标上始终优于 Semantic_KNN。在<a class="ltx_ref" href="#S4.F5.sf2" title="In Figure 5 ‣ 4.3 New Capabilities ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">Fig.</span> <span class="ltx_text ltx_ref_tag">5(b)</span></a>中，我们提供了我们的方法与 Semantic_KNN 在不同<math alttext="\epsilon" class="ltx_Math" display="inline" id="S4.SS3.p5.m2"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>取值下的比较。对于所有<math alttext="\epsilon\geq 0.1" class="ltx_Math" display="inline" id="S4.SS3.p5.m3"><semantics><mrow><mi>ϵ</mi><mo>≥</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\epsilon\geq 0.1</annotation></semantics></math>设置，我们的方法都优于基线。</p>
+</div>
+<figure class="ltx_table ltx_align_floatright" id="S4.T3">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 3</span>: </span><span class="ltx_text" style="font-size:90%;">模型为 Beauty 数据集预测的类别分布的熵。熵越高，表示模型预测的物品越多样。</span></figcaption>
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:267.2pt;height:72pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<p class="ltx_p">
+<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<span class="ltx_thead">
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Temperature</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Entropy@10</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Entropy@20</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Entropy@50</span></span>
+</span>
+<span class="ltx_tbody">
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_center ltx_border_t">T = 1.0</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.76</span>
+<span class="ltx_td ltx_align_center ltx_border_t">1.14</span>
+<span class="ltx_td ltx_align_center ltx_border_t">1.70</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_center">T = 1.5</span>
+<span class="ltx_td ltx_align_center">1.14</span>
+<span class="ltx_td ltx_align_center">1.52</span>
+<span class="ltx_td ltx_align_center">2.06</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_center ltx_border_bb">T = 2.0</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">1.38</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">1.76</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">2.28</span></span>
+</span>
+</span></p>
+</span></div>
+</figure>
+<div class="ltx_para" id="S4.SS3.p6">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">推荐多样性。</span>虽然 Recall 和 NDCG 是用于评估推荐系统的主要指标，但预测的多样性是另一个关键关注目标。多样性差的推荐系统可能有损用户的长期参与度。在这里，我们讨论我们的生成式检索框架如何用于预测多样的物品。我们表明，解码过程中基于温度的采样可以有效地用于控制模型预测的多样性。虽然基于温度的采样可以应用于任何现有推荐模型，但得益于 RQ-VAE 语义 ID 的特性，TIGER 允许在不同层次级别上进行采样。例如，对语义 ID 的第一个词元进行采样允许从粗粒度类别中检索物品，而对第二个/第三个词元进行采样则允许在某一类别内采样物品。</p>
+</div>
+<figure class="ltx_table" id="S4.T4">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 4</span>: </span><span class="ltx_text" style="font-size:90%;">基于温度解码的推荐多样性。</span></figcaption>
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:722.1pt;height:145pt;vertical-align:-1.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<p class="ltx_p">
+<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<span class="ltx_tbody">
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r ltx_border_tt">Target Category</span>
+<span class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_2">Most-common Categories for top-10 predicted items</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_th ltx_th_row ltx_border_r"></span>
+<span class="ltx_td ltx_align_center ltx_border_t">T = 1.0</span>
+<span class="ltx_td ltx_align_center ltx_border_t">T = 2.0</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r ltx_border_t">Hair Styling Products</span>
+<span class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Hair Styling Products</span>
+<span class="ltx_td ltx_align_left ltx_border_t">Hair Styling Products, Hair Styling Tools, Skin Face</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">Tools Nail</span>
+<span class="ltx_td ltx_align_left ltx_border_r">Tools Nail</span>
+<span class="ltx_td ltx_align_left">Tools Nail, Makeup Nails</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">Makeup Nails</span>
+<span class="ltx_td ltx_align_left ltx_border_r">Makeup Nails</span>
+<span class="ltx_td ltx_align_left">Makeup Nails, Skin Hands &amp; Nails, Tools Nail</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">
+<span class="ltx_inline-block ltx_align_left">
+<span class="ltx_p">Skin Eyes</span>
+</span></span>
+<span class="ltx_td ltx_align_left ltx_border_r">
+<span class="ltx_inline-block ltx_align_left">
+<span class="ltx_p">Skin Eyes</span>
+</span></span>
+<span class="ltx_td ltx_align_left">
+<span class="ltx_inline-block ltx_align_left">
+<span class="ltx_p">Hair Relaxers, Skin Face, Hair Styling Products, Skin Eyes</span>
+</span></span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">
+<span class="ltx_inline-block ltx_align_left">
+<span class="ltx_p">Makeup Face</span>
+</span></span>
+<span class="ltx_td ltx_align_left ltx_border_r">
+<span class="ltx_inline-block ltx_align_left">
+<span class="ltx_p">Tools Makeup Brushes,Makeup Face</span>
+</span></span>
+<span class="ltx_td ltx_align_left">
+<span class="ltx_inline-block ltx_align_left">
+<span class="ltx_p">Tools Makeup Brushes, Makeup Face,Skin Face, Makeup Sets, Hair Styling Tools</span>
+</span></span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb ltx_border_r">
+<span class="ltx_inline-block ltx_align_left">
+<span class="ltx_p">Hair Loss Products</span>
+</span></span>
+<span class="ltx_td ltx_align_left ltx_border_bb ltx_border_r">
+<span class="ltx_inline-block ltx_align_left">
+<span class="ltx_p">Hair Loss Products,Skin Face, Skin Body</span>
+</span></span>
+<span class="ltx_td ltx_align_left ltx_border_bb">
+<span class="ltx_inline-block ltx_align_left">
+<span class="ltx_p">Skin Face, Hair Loss Products, Hair Shampoos,Hair &amp; Scalp Treatments, Hair Conditioners</span>
+</span></span></span>
+</span>
+</span></p>
+</span></div>
+</figure>
+<div class="ltx_para" id="S4.SS3.p7">
+<p class="ltx_p">我们使用 Entropy@K 指标定量衡量预测的多样性，其中熵是针对模型预测的 top-K 物品的真实类别分布计算的。我们在表<a class="ltx_ref" href="#S4.T3" title="Table 3 ‣ 4.3 New Capabilities ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">3</span></a>中报告了不同温度值下的 Entropy@K。我们观察到，解码阶段的温度采样可以有效地用于增加物品真实类别的多样性。我们还在表<a class="ltx_ref" href="#S4.T4" title="Table 4 ‣ 4.3 New Capabilities ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">4</span></a>中进行了定性分析。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.4 </span>消融实验</h3>
+<div class="ltx_para" id="S4.SS4.p1">
+<p class="ltx_p">我们在表<a class="ltx_ref" href="#S4.T5" title="Table 5 ‣ 4.4 Ablation Study ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">5</span></a>中衡量了改变序列到序列模型层数的影响。我们看到，随着我们增大网络，指标略有提升。我们还衡量了提供用户信息的影响，其结果在附录中的表<a class="ltx_ref" href="#A5.T8" title="Table 8 ‣ Appendix E Discussion ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">8</span></a>中给出。</p>
+</div>
+<figure class="ltx_table" id="S4.T5">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 5</span>: </span><span class="ltx_text" style="font-size:90%;">不同层数下的 Recall 和 NDCG 指标。</span></figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Number of Layers</th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Recall@5</th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">NDCG@5</th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Recall@10</th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">NDCG@10</th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">3</th>
+<td class="ltx_td ltx_align_left ltx_border_t">0.04499</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.03062</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.06699</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.03768</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">4</th>
+<td class="ltx_td ltx_align_left">0.0454</td>
+<td class="ltx_td ltx_align_left">0.0321</td>
+<td class="ltx_td ltx_align_left">0.0648</td>
+<td class="ltx_td ltx_align_left">0.0384</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">5</th>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.04633</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.03206</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.06596</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.03834</td>
+</tr>
+</tbody>
+</table>
+</figure>
+</section>
+<section class="ltx_subsection" id="S4.SS5">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.5 </span>无效 ID</h3>
+<div class="ltx_para" id="S4.SS5.p1">
+<p class="ltx_p">由于模型自回归地解码目标语义 ID 的码字，模型有可能预测出无效 ID（即，不映射到推荐数据集中任何物品的 ID）。在我们的实验中，我们使用长度为<math alttext="4" class="ltx_Math" display="inline" id="S4.SS5.p1.m1"><semantics><mn>4</mn><annotation encoding="application/x-tex">4</annotation></semantics></math>的语义 ID，每个码字的基数为<math alttext="256" class="ltx_Math" display="inline" id="S4.SS5.p1.m2"><semantics><mn>256</mn><annotation encoding="application/x-tex">256</annotation></semantics></math>（即，每一级的码本大小 = 256）。该组合所张成的可能 ID 数为<math alttext="=256^{4}" class="ltx_Math" display="inline" id="S4.SS5.p1.m3"><semantics><mrow><mi></mi><mo>=</mo><msup><mn>256</mn><mn>4</mn></msup></mrow><annotation encoding="application/x-tex">=256^{4}</annotation></semantics></math>，约为4万亿。另一方面，我们所考虑数据集中的物品数为10K-20K（见表<a class="ltx_ref" href="#A3.T6" title="Table 6 ‣ Appendix C Dataset Statistics ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">6</span></a>）。尽管有效 ID 的数量仅占整个 ID 空间的一小部分，但我们观察到模型几乎总是预测出有效 ID。我们将 TIGER 产生的无效 ID 比例表示为检索物品数<math alttext="K" class="ltx_Math" display="inline" id="S4.SS5.p1.m4"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>的函数，并在图<a class="ltx_ref" href="#A5.F6" title="Figure 6 ‣ Appendix E Discussion ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">6</span></a>中进行可视化。对于 top-10预测，三个数据集的无效 ID 比例在<math alttext="\sim 0.1\%-1.6\%" class="ltx_Math" display="inline" id="S4.SS5.p1.m5"><semantics><mrow><mi></mi><mo>∼</mo><mrow><mrow><mn>0.1</mn><mo>%</mo></mrow><mo>−</mo><mrow><mn>1.6</mn><mo>%</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\sim 0.1\%-1.6\%</annotation></semantics></math>之间变化。为抵消无效 ID 的影响并始终获得 top-10有效 ID，我们可以增大束搜索大小并过滤掉无效 ID。</p>
+</div>
+<div class="ltx_para" id="S4.SS5.p2">
+<p class="ltx_p">需要注意的是，尽管会生成无效 ID，TIGER 与用于序列推荐的其他流行方法相比仍取得了最先进的性能。处理无效词元的一种扩展方法是在模型生成无效词元时进行前缀匹配。语义 ID 的前缀匹配将允许检索与模型生成的词元具有相似语义含义的物品。鉴于我们 RQ-VAE 词元的层次结构特性，前缀匹配可以看作是模型预测物品类别而非物品索引。注意，这样的扩展可以进一步提高 recall/NDCG 指标。我们将此类扩展留作未来工作。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5 </span>结论</h2>
+<div class="ltx_para" id="S5.p1">
+<p class="ltx_p">本文提出了一种名为 TIGER 的新范式，使用生成模型在推荐系统中召回候选。该方法的基础是一种新颖的物品语义 ID 表示，它在内容嵌入上使用分层量化器（RQ-VAE）来生成构成语义 ID 的词元。我们的框架所提供的模型可以在无需构建索引的情况下进行训练和部署——transformer 记忆充当物品的语义索引。我们注意到，我们的嵌入表基数不会随物品空间基数的增长而线性增长，这相对于需要在训练期间创建大型嵌入表或为每个物品生成索引的系统而言是有利的。通过在三个数据集上的实验，我们表明我们的模型能够达到 SOTA 的召回性能，同时能泛化到新的、未见过的物品。</p>
+</div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">参考文献</h2>
+<ul class="ltx_biblist">
+<li class="ltx_bibitem" id="bib.bib1">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[1]</span>
+<span class="ltx_bibblock">
+Himan Abdollahpouri, Masoud Mansoury, Robin Burke, and Bamshad Mobasher.
+
+</span>
+<span class="ltx_bibblock">The unfairness of popularity bias in recommendation.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:1907.13286</span>, 2019.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib2">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[2]</span>
+<span class="ltx_bibblock">
+Moses S Charikar.
+
+</span>
+<span class="ltx_bibblock">Similarity estimation techniques from rounding algorithms.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the thiry-fourth annual ACM symposium on
+Theory of computing</span>, pages 380–388, 2002.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib3">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[3]</span>
+<span class="ltx_bibblock">
+Heng-Tze Cheng, Levent Koc, Jeremiah Harmsen, Tal Shaked, Tushar Chandra,
+Hrishi Aradhye, Glen Anderson, Greg Corrado, Wei Chai, Mustafa Ispir, et al.
+
+</span>
+<span class="ltx_bibblock">Wide &amp; deep learning for recommender systems.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 1st workshop on deep learning for
+recommender systems</span>, pages 7–10, 2016.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib4">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[4]</span>
+<span class="ltx_bibblock">
+Paul Covington, Jay Adams, and Emre Sargin.
+
+</span>
+<span class="ltx_bibblock">Deep neural networks for youtube recommendations.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 10th ACM conference on recommender
+systems</span>, pages 191–198, 2016.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib5">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[5]</span>
+<span class="ltx_bibblock">
+Nicola De Cao, Gautier Izacard, Sebastian Riedel, and Fabio Petroni.
+
+</span>
+<span class="ltx_bibblock">Autoregressive entity retrieval.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:2010.00904</span>, 2020.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib6">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[6]</span>
+<span class="ltx_bibblock">
+Gabriel de Souza Pereira Moreira, Sara Rabhi, Jeong Min Lee, Ronay Ak, and Even
+Oldridge.
+
+</span>
+<span class="ltx_bibblock">Transformers4rec: Bridging the gap between nlp and
+sequential/session-based recommendation.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Fifteenth ACM Conference on Recommender Systems</span>, pages
+143–153, 2021.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib7">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[7]</span>
+<span class="ltx_bibblock">
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
+
+</span>
+<span class="ltx_bibblock">Bert: Pre-training of deep bidirectional transformers for language
+understanding.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:1810.04805</span>, 2018.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib8">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[8]</span>
+<span class="ltx_bibblock">
+Shijie Geng, Shuchang Liu, Zuohui Fu, Yingqiang Ge, and Yongfeng Zhang.
+
+</span>
+<span class="ltx_bibblock">Recommendation as language processing (rlp): A unified pretrain,
+personalized prompt &amp; predict paradigm (p5).
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:2203.13366</span>, 2022.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib9">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[9]</span>
+<span class="ltx_bibblock">
+Carlos A Gomez-Uribe and Neil Hunt.
+
+</span>
+<span class="ltx_bibblock">The netflix recommender system: Algorithms, business value, and
+innovation.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">ACM Transactions on Management Information Systems (TMIS)</span>,
+6(4):1–19, 2015.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib10">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[10]</span>
+<span class="ltx_bibblock">
+Ruining He and Julian McAuley.
+
+</span>
+<span class="ltx_bibblock">Ups and downs: Modeling the visual evolution of fashion trends with
+one-class collaborative filtering.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">proceedings of the 25th international conference on world
+wide web</span>, pages 507–517, 2016.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib11">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[11]</span>
+<span class="ltx_bibblock">
+Balázs Hidasi, Alexandros Karatzoglou, Linas Baltrunas, and Domonkos Tikk.
+
+</span>
+<span class="ltx_bibblock">Session-based recommendations with recurrent neural networks.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:1511.06939</span>, 2015.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib12">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[12]</span>
+<span class="ltx_bibblock">
+Yupeng Hou, Zhankui He, Julian McAuley, and Wayne Xin Zhao.
+
+</span>
+<span class="ltx_bibblock">Learning vector-quantized item representation for transferable
+sequential recommenders.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:2210.12316</span>, 2022.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib13">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[13]</span>
+<span class="ltx_bibblock">
+Piotr Indyk and Rajeev Motwani.
+
+</span>
+<span class="ltx_bibblock">Approximate nearest neighbors: towards removing the curse of
+dimensionality.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the thirtieth annual ACM symposium on Theory
+of computing</span>, pages 604–613, 1998.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib14">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[14]</span>
+<span class="ltx_bibblock">
+Piotr Indyk, Rajeev Motwani, Prabhakar Raghavan, and Santosh Vempala.
+
+</span>
+<span class="ltx_bibblock">Locality-preserving hashing in multidimensional spaces.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the twenty-ninth annual ACM symposium on
+Theory of computing</span>, pages 618–625, 1997.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib15">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[15]</span>
+<span class="ltx_bibblock">
+Herve Jegou, Matthijs Douze, and Cordelia Schmid.
+
+</span>
+<span class="ltx_bibblock">Product quantization for nearest neighbor search.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">IEEE transactions on pattern analysis and machine intelligence</span>,
+33(1):117–128, 2010.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib16">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[16]</span>
+<span class="ltx_bibblock">
+Wang-Cheng Kang, Derek Zhiyuan Cheng, Tiansheng Yao, Xinyang Yi, Ting Chen,
+Lichan Hong, and Ed H Chi.
+
+</span>
+<span class="ltx_bibblock">Learning to embed categorical features without embedding tables for
+recommendation.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:2010.10784</span>, 2020.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib17">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[17]</span>
+<span class="ltx_bibblock">
+Wang-Cheng Kang and Julian McAuley.
+
+</span>
+<span class="ltx_bibblock">Self-attentive sequential recommendation.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">2018 IEEE international conference on data mining (ICDM)</span>,
+pages 197–206. IEEE, 2018.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib18">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[18]</span>
+<span class="ltx_bibblock">
+Dongmoon Kim, Kun-su Kim, Kyo-Hyun Park, Jee-Hyong Lee, and Keon Myung Lee.
+
+</span>
+<span class="ltx_bibblock">A music recommendation system with a dynamic k-means clustering
+algorithm.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Sixth international conference on machine learning and
+applications (ICMLA 2007)</span>, pages 399–403. IEEE, 2007.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib19">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[19]</span>
+<span class="ltx_bibblock">
+Yehuda Koren, Robert Bell, and Chris Volinsky.
+
+</span>
+<span class="ltx_bibblock">Matrix factorization techniques for recommender systems.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">Computer</span>, 42(8):30–37, 2009.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib20">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[20]</span>
+<span class="ltx_bibblock">
+Tim Kraska, Alex Beutel, Ed H Chi, Jeffrey Dean, and Neoklis Polyzotis.
+
+</span>
+<span class="ltx_bibblock">The case for learned index structures.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 2018 international conference on
+management of data</span>, pages 489–504, 2018.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib21">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[21]</span>
+<span class="ltx_bibblock">
+Doyup Lee, Chiheon Kim, Saehoon Kim, Minsu Cho, and Wook-Shin Han.
+
+</span>
+<span class="ltx_bibblock">Autoregressive image generation using residual quantization.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the IEEE/CVF Conference on Computer Vision and
+Pattern Recognition</span>, pages 11523–11532, 2022.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib22">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[22]</span>
+<span class="ltx_bibblock">
+Hyunji Lee, Jaeyoung Kim, Hoyeon Chang, Hanseok Oh, Sohee Yang, Vlad Karpukhin,
+Yi Lu, and Minjoon Seo.
+
+</span>
+<span class="ltx_bibblock">Contextualized generative retrieval.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:2210.02068</span>, 2022.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib23">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[23]</span>
+<span class="ltx_bibblock">
+Hyunji Lee, Sohee Yang, Hanseok Oh, and Minjoon Seo.
+
+</span>
+<span class="ltx_bibblock">Generative retrieval for long sequences.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:2204.13596</span>, 2022.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib24">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[24]</span>
+<span class="ltx_bibblock">
+Jing Li, Pengjie Ren, Zhumin Chen, Zhaochun Ren, Tao Lian, and Jun Ma.
+
+</span>
+<span class="ltx_bibblock">Neural attentive session-based recommendation.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 2017 ACM on Conference on Information and
+Knowledge Management</span>, pages 1419–1428, 2017.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib25">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[25]</span>
+<span class="ltx_bibblock">
+Chen Ma, Peng Kang, and Xue Liu.
+
+</span>
+<span class="ltx_bibblock">Hierarchical gating networks for sequential recommendation.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 25th ACM SIGKDD international conference
+on knowledge discovery &amp; data mining</span>, pages 825–833, 2019.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib26">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[26]</span>
+<span class="ltx_bibblock">
+Masoud Mansoury, Himan Abdollahpouri, Mykola Pechenizkiy, Bamshad Mobasher, and
+Robin Burke.
+
+</span>
+<span class="ltx_bibblock">Feedback loop and bias amplification in recommender systems, 2020.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib27">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[27]</span>
+<span class="ltx_bibblock">
+Jianmo Ni, Gustavo Hernandez Abrego, Noah Constant, Ji Ma, Keith Hall, Daniel
+Cer, and Yinfei Yang.
+
+</span>
+<span class="ltx_bibblock">Sentence-t5: Scalable sentence encoders from pre-trained text-to-text
+models.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Findings of the Association for Computational Linguistics:
+ACL 2022</span>, pages 1864–1874, Dublin, Ireland, May 2022. Association for
+Computational Linguistics.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib28">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[28]</span>
+<span class="ltx_bibblock">
+Adam Roberts, Hyung Won Chung, Anselm Levskaya, Gaurav Mishra, James Bradbury,
+Daniel Andor, Sharan Narang, Brian Lester, Colin Gaffney, Afroz Mohiuddin,
+Curtis Hawthorne, Aitor Lewkowycz, Alex Salcianu, Marc van Zee, Jacob Austin,
+Sebastian Goodman, Livio Baldini Soares, Haitang Hu, Sasha Tsvyashchenko,
+Aakanksha Chowdhery, Jasmijn Bastings, Jannis Bulian, Xavier Garcia, Jianmo
+Ni, Andrew Chen, Kathleen Kenealy, Jonathan H. Clark, Stephan Lee, Dan
+Garrette, James Lee-Thorp, Colin Raffel, Noam Shazeer, Marvin Ritter, Maarten
+Bosma, Alexandre Passos, Jeremy Maitin-Shepard, Noah Fiedel, Mark Omernick,
+Brennan Saeta, Ryan Sepassi, Alexander Spiridonov, Joshua Newlan, and Andrea
+Gesmundo.
+
+</span>
+<span class="ltx_bibblock">Scaling up models and data with <span class="ltx_text ltx_markedasmath ltx_font_typewriter">t5x</span> and <span class="ltx_text ltx_markedasmath ltx_font_typewriter">seqio</span>.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:2203.17189</span>, 2022.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib29">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[29]</span>
+<span class="ltx_bibblock">
+Rico Sennrich, Barry Haddow, and Alexandra Birch.
+
+</span>
+<span class="ltx_bibblock">Neural machine translation of rare words with subword units.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:1508.07909</span>, 2015.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib30">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[30]</span>
+<span class="ltx_bibblock">
+Rico Sennrich, Barry Haddow, and Alexandra Birch.
+
+</span>
+<span class="ltx_bibblock">Neural machine translation of rare words with subword units.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 54th Annual Meeting of the Association for
+Computational Linguistics (Volume 1: Long Papers)</span>, pages 1715–1725, Berlin,
+Germany, August 2016. Association for Computational Linguistics.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib31">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[31]</span>
+<span class="ltx_bibblock">
+Anima Singh, Trung Vu, Raghunandan Keshavan, Nikhil Mehta, Xinyang Yi, Lichan
+Hong, Lukasz Heldt, Li Wei, Ed Chi, and Maheswaran Sathiamoorthy.
+
+</span>
+<span class="ltx_bibblock">Better generalization with semantic ids: A case study in ranking for
+recommendations.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:2306.08121</span>, 2023.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib32">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[32]</span>
+<span class="ltx_bibblock">
+Fei Sun, Jun Liu, Jian Wu, Changhua Pei, Xiao Lin, Wenwu Ou, and Peng Jiang.
+
+</span>
+<span class="ltx_bibblock">Bert4rec: Sequential recommendation with bidirectional encoder
+representations from transformer.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 28th ACM international conference on
+information and knowledge management</span>, pages 1441–1450, 2019.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib33">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[33]</span>
+<span class="ltx_bibblock">
+Jiaxi Tang and Ke Wang.
+
+</span>
+<span class="ltx_bibblock">Personalized top-n sequential recommendation via convolutional
+sequence embedding.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the eleventh ACM international conference on
+web search and data mining</span>, pages 565–573, 2018.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib34">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[34]</span>
+<span class="ltx_bibblock">
+Yi Tay, Vinh Q Tran, Mostafa Dehghani, Jianmo Ni, Dara Bahri, Harsh Mehta, Zhen
+Qin, Kai Hui, Zhe Zhao, Jai Gupta, et al.
+
+</span>
+<span class="ltx_bibblock">Transformer memory as a differentiable search index.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:2202.06991</span>, 2022.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib35">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[35]</span>
+<span class="ltx_bibblock">
+Aaron Van Den Oord, Oriol Vinyals, et al.
+
+</span>
+<span class="ltx_bibblock">Neural discrete representation learning.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">Advances in neural information processing systems</span>, 30, 2017.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib36">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[36]</span>
+<span class="ltx_bibblock">
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin.
+
+</span>
+<span class="ltx_bibblock">Attention is all you need.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">Advances in neural information processing systems</span>, 30, 2017.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib37">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[37]</span>
+<span class="ltx_bibblock">
+Yujing Wang, Yingyan Hou, Haonan Wang, Ziming Miao, Shibin Wu, Hao Sun,
+Qi Chen, Yuqing Xia, Chengmin Chi, Guoshuai Zhao, et al.
+
+</span>
+<span class="ltx_bibblock">A neural corpus indexer for document retrieval.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:2206.02743</span>, 2022.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib38">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[38]</span>
+<span class="ltx_bibblock">
+Kilian Weinberger, Anirban Dasgupta, John Langford, Alex Smola, and Josh
+Attenberg.
+
+</span>
+<span class="ltx_bibblock">Feature hashing for large scale multitask learning.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 26th annual international conference on
+machine learning</span>, pages 1113–1120, 2009.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib39">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[39]</span>
+<span class="ltx_bibblock">
+Xinyang Yi, Ji Yang, Lichan Hong, Derek Zhiyuan Cheng, Lukasz Heldt, Aditee
+Kumthekar, Zhe Zhao, Li Wei, and Ed Chi.
+
+</span>
+<span class="ltx_bibblock">Sampling-bias-corrected neural modeling for large corpus item
+recommendations.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 13th ACM Conference on Recommender
+Systems</span>, pages 269–277, 2019.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib40">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[40]</span>
+<span class="ltx_bibblock">
+Neil Zeghidour, Alejandro Luebs, Ahmed Omran, Jan Skoglund, and Marco
+Tagliasacchi.
+
+</span>
+<span class="ltx_bibblock">Soundstream: An end-to-end neural audio codec.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">CoRR</span>, abs/2107.03312, 2021.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib41">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[41]</span>
+<span class="ltx_bibblock">
+Shuai Zhang, Yi Tay, Lina Yao, and Aixin Sun.
+
+</span>
+<span class="ltx_bibblock">Next item recommendation with self-attention.
+
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_font_italic">arXiv preprint arXiv:1808.06414</span>, 2018.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib42">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[42]</span>
+<span class="ltx_bibblock">
+Tingting Zhang, Pengpeng Zhao, Yanchi Liu, Victor S Sheng, Jiajie Xu, Deqing
+Wang, Guanfeng Liu, and Xiaofang Zhou.
+
+</span>
+<span class="ltx_bibblock">Feature-level deeper self-attention network for sequential
+recommendation.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">IJCAI</span>, pages 4320–4326, 2019.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib43">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[43]</span>
+<span class="ltx_bibblock">
+Zhe Zhao, Lichan Hong, Li Wei, Jilin Chen, Aniruddh Nath, Shawn Andrews, Aditee
+Kumthekar, Maheswaran Sathiamoorthy, Xinyang Yi, and Ed Chi.
+
+</span>
+<span class="ltx_bibblock">Recommending what video to watch next: a multitask ranking system.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 13th ACM Conference on Recommender
+Systems</span>, pages 43–51, 2019.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib44">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">[44]</span>
+<span class="ltx_bibblock">
+Kun Zhou, Hui Wang, Wayne Xin Zhao, Yutao Zhu, Sirui Wang, Fuzheng Zhang,
+Zhongyuan Wang, and Ji-Rong Wen.
+
+</span>
+<span class="ltx_bibblock">S3-rec: Self-supervised learning for sequential recommendation with
+mutual information maximization.
+
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_font_italic">Proceedings of the 29th ACM International Conference on
+Information &amp; Knowledge Management</span>, pages 1893–1902, 2020.
+
+</span>
+</li>
+</ul>
+</section>
+<section class="ltx_glossary ltx_acronym ltx_list_acronym">
+<dl class="ltx_glossarylist">
+<dt class="ltx_glossaryentry" id="id1">DNN</dt>
+<dd>深度神经网络</dd>
+<dt class="ltx_glossaryentry" id="id2">DNNs</dt>
+<dd>深度神经网络</dd>
+<dt class="ltx_glossaryentry" id="id3">MIPS</dt>
+<dd>最大内积搜索</dd>
+</dl>
+</section>
+<div class="ltx_pagination ltx_role_newpage"></div>
+<section class="ltx_appendix" id="A1">
+<h2 class="ltx_title ltx_title_appendix">
+<span class="ltx_tag ltx_tag_appendix">Appendix A </span>相关工作（续）</h2>
+<section class="ltx_paragraph" id="A1.SS0.SSS0.Px1">
+<h4 class="ltx_title ltx_title_paragraph">生成式召回</h4>
+<div class="ltx_para" id="A1.SS0.SSS0.Px1.p1">
+<p class="ltx_p">文档召回传统上涉及训练一个 2-塔模型，该模型将查询和文档都映射到同一个高维向量空间，然后对所有文档执行针对该查询的 ANN 或 MIPS 以返回最接近的文档。这种技术存在一些缺点，例如需要大型嵌入表 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib22" title="">22</a>, <a class="ltx_ref" href="#bib.bib23" title="">23</a>]</cite>。生成式召回是最近提出的一种技术，旨在通过逐词元地生成文档的标题、名称或文档 id 字符串来修复传统方法的一些问题。Cao 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib5" title="">5</a>]</cite> 提出了用于实体召回的 GENRE，它使用基于 transformer 的架构，逐词元地返回给定查询中所引用实体的名称。Tay 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib34" title="">34</a>]</cite> 提出了用于文档召回的 DSI，这是第一个为每个文档分配结构化语义 DocID 的系统。然后，给定一个查询，该模型逐词元地自回归返回该文档的 DocID。DSI 的工作标志着 IR 向生成式召回方法范式的转变，并且是端到端 Transformer 在召回应用中首次成功的应用。
+随后，Lee 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib23" title="">23</a>]</cite> 表明，生成式文档召回即使在多跳设置中也很有用；在多跳设置中，复杂查询无法由单个文档直接回答，因此他们的模型以思维链的方式生成中间查询，以最终为复杂查询生成输出。
+Wang 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib37" title="">37</a>]</cite> 对基于分层 <math alttext="k" class="ltx_Math" display="inline" id="A1.SS0.SSS0.Px1.p1.m1"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-均值聚类的语义 DocID 作出补充；这些 DocID 来自 Tay 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib34" title="">34</a>]</cite>，而补充方法是提出一种专门考虑语义 DocID 中前缀的新解码器架构。
+在 CGR <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib22" title="">22</a>]</cite> 中，作者提出了一种同时利用双编码器技术和生成式召回技术的方法，允许其编码器-解码器模型的解码器学习单独的 <em class="ltx_emph ltx_font_italic">上下文化</em> 嵌入，这些嵌入在本质上存储文档信息。
+据我们所知，我们是第一个将使用自编码器（RQ-VAE <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib40" title="">40</a>, <a class="ltx_ref" href="#bib.bib21" title="">21</a>]</cite>）创建的生成式语义 ID 用于召回模型的工作。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="A1.SS0.SSS0.Px2">
+<h4 class="ltx_title ltx_title_paragraph">向量量化。</h4>
+<div class="ltx_para" id="A1.SS0.SSS0.Px2.p1">
+<p class="ltx_p">我们将向量量化称为将高维向量转换为低维码字元组的过程。最直接的技术之一是使用分层聚类，例如 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib34" title="">34</a>]</cite> 中使用的技术，其中在某一迭代中创建的簇在下一迭代中被进一步划分为子簇。另一种流行的替代方法是向量量化变分自编码器（VQ-VAE），它在 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib35" title="">35</a>]</cite> 中被提出，作为一种将自然图像编码为码序列的方法。该技术的工作原理是首先将输入向量（或图像）通过一个降低维度的编码器。较小维度的向量被划分，每个划分被单独量化，从而产生一个码序列：每个划分一个码。这些码随后被解码器用于重建原始向量（或图像）。</p>
+</div>
+<div class="ltx_para" id="A1.SS0.SSS0.Px2.p2">
+<p class="ltx_p">RQ-VAE <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib40" title="">40</a>, <a class="ltx_ref" href="#bib.bib21" title="">21</a>]</cite> 对 VQ-VAE 编码器的输出应用残差量化，以实现更低的重建误差。我们在第 <a class="ltx_ref" href="#S3.SS1" title="3.1 Semantic ID Generation ‣ 3 Proposed Framework ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">3.1</span></a> 小节中更详细地讨论该技术。
+局部敏感哈希（LSH）<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib14" title="">14</a>, <a class="ltx_ref" href="#bib.bib13" title="">13</a>]</cite> 是一种用于聚类和近似最近邻搜索的流行技术。
+我们在本文中用于聚类的特定版本是 SimHash <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib2" title="">2</a>]</cite>，它使用随机超平面来创建二进制向量，作为物品的哈希值。
+由于其计算复杂度低且具有可扩展性 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib13" title="">13</a>]</cite>，我们将其用作向量量化的基线技术。</p>
+</div>
+</section>
+</section>
+<section class="ltx_appendix" id="A2">
+<h2 class="ltx_title ltx_title_appendix">
+<span class="ltx_tag ltx_tag_appendix">Appendix B </span>基线</h2>
+<div class="ltx_para" id="A2.p1">
+<p class="ltx_p">下面我们简要描述与 TIGER 进行比较的每个基线</p>
+<ul class="ltx_itemize" id="A2.I1">
+<li class="ltx_item" id="A2.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i1.p1">
+<p class="ltx_p">GRU4Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib11" title="">11</a>]</cite> 是第一个基于 RNN 的方法，它使用定制的 GRU 来完成序列推荐任务。</p>
+</div>
+</li>
+<li class="ltx_item" id="A2.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i2.p1">
+<p class="ltx_p">Caser <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib33" title="">33</a>]</cite> 使用 CNN 架构，通过应用水平和垂直卷积操作来捕获高阶马尔可夫链，以用于序列推荐。</p>
+</div>
+</li>
+<li class="ltx_item" id="A2.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i3.p1">
+<p class="ltx_p">HGN <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib25" title="">25</a>]</cite>：分层门控网络通过一种新的门控架构捕获用户的长期和短期兴趣。</p>
+</div>
+</li>
+<li class="ltx_item" id="A2.I1.i4" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i4.p1">
+<p class="ltx_p">SASRec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib17" title="">17</a>]</cite>：自注意力序列推荐使用带因果掩码的 Transformer 对用户的序列交互进行建模。</p>
+</div>
+</li>
+<li class="ltx_item" id="A2.I1.i5" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i5.p1">
+<p class="ltx_p">BERT4Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib32" title="">32</a>]</cite>：BERT4Rec 通过使用双向自注意力 Transformer 完成推荐任务，解决了单向架构的局限性。</p>
+</div>
+</li>
+<li class="ltx_item" id="A2.I1.i6" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i6.p1">
+<p class="ltx_p">FDSA <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib42" title="">42</a>]</cite>：特征级深层自注意力网络在 Transformers 中除物品嵌入外还将物品特征纳入输入序列。</p>
+</div>
+</li>
+<li class="ltx_item" id="A2.I1.i7" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i7.p1">
+<p class="ltx_p">S<sup class="ltx_sup">3</sup>-Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib44" title="">44</a>]</cite>：用于序列推荐的自监督学习提出在自监督任务上预训练双向 Transformer，以改进序列推荐。</p>
+</div>
+</li>
+<li class="ltx_item" id="A2.I1.i8" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i8.p1">
+<p class="ltx_p">P5 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite>：P5 是一种近期方法，它使用预训练的大语言模型（LLM）将不同的推荐任务统一到单个模型中。</p>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section class="ltx_appendix" id="A3">
+<h2 class="ltx_title ltx_title_appendix">
+<span class="ltx_tag ltx_tag_appendix">Appendix C </span>数据集统计</h2>
+<figure class="ltx_table" id="A3.T6">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 6</span>: </span><span class="ltx_text" style="font-size:90%;">三个真实世界基准的数据集统计。</span></figcaption>
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:283.1pt;height:90pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<p class="ltx_p">
+<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<span class="ltx_thead">
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Dataset</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"># Users</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"># Items</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_2">Sequence Length</span></span>
+</span>
+<span class="ltx_tbody">
+<span class="ltx_tr">
+<span class="ltx_td ltx_border_t"></span>
+<span class="ltx_td ltx_th ltx_th_column ltx_border_t"></span>
+<span class="ltx_td ltx_th ltx_th_column ltx_border_t"></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Mean</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Median</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left">Beauty</span>
+<span class="ltx_td ltx_align_center">22,363</span>
+<span class="ltx_td ltx_align_center">12,101</span>
+<span class="ltx_td ltx_align_center ltx_border_t">8.87</span>
+<span class="ltx_td ltx_align_center ltx_border_t">6</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left">Sports and Outdoors</span>
+<span class="ltx_td ltx_align_center">35,598</span>
+<span class="ltx_td ltx_align_center">18,357</span>
+<span class="ltx_td ltx_align_center">8.32</span>
+<span class="ltx_td ltx_align_center">6</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_border_bb">Toys and Games</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">19,412</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">11,924</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">8.63</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">6</span></span>
+</span>
+</span></p>
+</span></div>
+</figure>
+<div class="ltx_para" id="A3.p1">
+<p class="ltx_p">我们使用 Amazon Product Reviews 数据集 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib10" title="">10</a>]</cite> 中的三个公开基准，该数据集包含 1996 年 5 月至 2014 年 7 月的用户评论和物品元数据。我们使用 Amazon Product Reviews 数据集的三个类别来完成序列推荐任务：“Beauty”、“Sports and Outdoors”和“Toys and Games”。表 <a class="ltx_ref" href="#A3.T6" title="Table 6 ‣ Appendix C Dataset Statistics ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">6</span></a> 总结了这些数据集的统计信息。我们使用用户的评论历史来创建按时间戳排序的物品序列，并过滤掉评论数少于 5 条的用户。遵循标准评估协议 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib17" title="">17</a>, <a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite>，我们使用留一法策略进行评估。对于每个物品序列，最后一项用于测试，倒数第二项用于验证，其余用于训练。在训练期间，我们将用户历史中的物品数量限制为 20。</p>
+</div>
+</section>
+<section class="ltx_appendix" id="A4">
+<h2 class="ltx_title ltx_title_appendix">
+<span class="ltx_tag ltx_tag_appendix">Appendix D </span>对 P5 数据预处理的修改</h2>
+<figure class="ltx_table" id="A4.T7">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 7</span>: </span><span class="ltx_text" style="font-size:90%;">使用标准预处理时 P5<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite> 的结果。</span></figcaption>
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:719.3pt;height:73pt;vertical-align:-1.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<p class="ltx_p">
+<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<span class="ltx_thead">
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt ltx_rowspan ltx_rowspan_2">Methods</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Sports and Outdoors</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Beauty</span></span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Toys and Games</span></span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@5</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@5</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@10</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@10</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@5</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@5</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@10</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@10</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@5</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@5</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@10</span>
+<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@10</span></span>
+</span>
+<span class="ltx_tbody">
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">P5</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0061</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0041</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0095</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0052</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0163</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0107</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0254</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0136</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0070</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0050</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0121</span>
+<span class="ltx_td ltx_align_center ltx_border_t">0.0066</span></span>
+<span class="ltx_tr">
+<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">P5-ours</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.0107</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.0076</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.01458</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.0088</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.035</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.025</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.048</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.0298</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.018</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.013</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.0235</span>
+<span class="ltx_td ltx_align_center ltx_border_bb">0.015</span></span>
+</span>
+</span></p>
+</span></div>
+</figure>
+<div class="ltx_para" id="A4.p1">
+<p class="ltx_p">P5 源代码 <span class="ltx_note ltx_role_footnote" id="footnote3"><sup class="ltx_note_mark">3</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">3</sup>
+<span class="ltx_tag ltx_tag_note">3</span>
+            
+            
+            
+            
+            
+            
+            
+          https://github.com/jeykigung/P5</span></span></span> 对 Amazon 数据集进行预处理，首先为每个用户创建会话，其中包含该用户评论过的按时间顺序排列的物品列表。在创建这些会话之后，数据集中的原始物品 ID 被重新映射为整数 <math alttext="1,2,3,\dots" class="ltx_Math" display="inline" id="A4.p1.m1"><semantics><mrow><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mi mathvariant="normal">…</mi></mrow><annotation encoding="application/x-tex">1,2,3,\dots</annotation></semantics></math> <span class="ltx_note ltx_role_footnote" id="footnote4"><sup class="ltx_note_mark">4</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">4</sup>
+<span class="ltx_tag ltx_tag_note">4</span>
+            
+            
+            
+            
+            
+            
+            
+          https://github.com/jeykigung/P5/blob/0aaa3fd8366bb6e708c8b70708291f2b0ae90c82/preprocess/data_preprocess_amazon.ipynb</span></span></span>。
+因此，第一个会话中的第一个物品得到的 id 为‘1’，第二个物品（如果之前未出现过）得到的 id 为‘2’，依此类推。值得注意的是，这种预处理方案是在创建训练集和测试集划分之前应用的。这导致生成的序列数据集中许多序列具有 <math alttext="a,a+1,a+2,\dots" class="ltx_Math" display="inline" id="A4.p1.m2"><semantics><mrow><mi>a</mi><mo>,</mo><mrow><mi>a</mi><mo>+</mo><mn>1</mn></mrow><mo>,</mo><mrow><mi>a</mi><mo>+</mo><mn>2</mn></mrow><mo>,</mo><mi mathvariant="normal">…</mi></mrow><annotation encoding="application/x-tex">a,a+1,a+2,\dots</annotation></semantics></math> 的形式。鉴于 P5 使用 Sentence Piece 分词器 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib30" title="">30</a>]</cite>（见第 4.1 节，出处为 <cite class="ltx_cite ltx_citemacro_citep">[<a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite>），用户会话中的测试物品和训练物品可能共享子词，并可能在推理期间导致信息泄漏。</p>
+</div>
+<div class="ltx_para" id="A4.p2">
+<p class="ltx_p">为解决泄漏问题，我们没有为物品分配递增的整数 id，而是分配随机整数 ID，然后创建用于训练和评估的划分。P5 的其余代码与论文中提供的源代码保持完全相同。
+该数据集的结果在表 <a class="ltx_ref" href="#A4.T7" title="Table 7 ‣ Appendix D Modifications to the P5 data preprocessing ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">7</span></a> 中作为‘P5’行报告。我们还从头实现了一个自己的 P5 版本，并且仅在序列推荐任务上训练该模型。我们的实现结果标记为‘P5-ours’。在我们的 P5 实现中，我们还能够验证：对物品 ID 使用连续整数序列有助于我们获得与 P5 中报告的指标相当或更好的指标。</p>
+</div>
+</section>
+<section class="ltx_appendix" id="A5">
+<h2 class="ltx_title ltx_title_appendix">
+<span class="ltx_tag ltx_tag_appendix">Appendix E </span>讨论</h2>
+<figure class="ltx_table" id="A5.T8">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 8</span>: </span><span class="ltx_text" style="font-size:90%;">向推荐系统提供用户信息的影响</span></figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Recall@5</th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">NDCG@5</th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Recall@10</th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">NDCG@10</th>
+<td class="ltx_td ltx_border_tt"></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t">No user information</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.04458</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.0302</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.06479</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.0367</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb">With user id (reported in the paper)</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.0454</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.0321</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.0648</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.0384</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure class="ltx_table" id="A5.T9">
+<figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 9: </span>不同数据集的指标均值和标准误（使用不同随机种子的 3 次运行计算）</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text" style="font-size:90%;">Datasets</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text" style="font-size:90%;">Recall@5</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text" style="font-size:90%;">NDCG@5</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text" style="font-size:90%;">Recall@10</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text" style="font-size:90%;">NDCG@10</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t"><span class="ltx_text" style="font-size:90%;">Beauty</span></th>
+<td class="ltx_td ltx_align_left ltx_border_t">
+<span class="ltx_text" style="font-size:90%;">0.0441 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m1"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.00069</span>
+</td>
+<td class="ltx_td ltx_align_left ltx_border_t">
+<span class="ltx_text" style="font-size:90%;">0.0309 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m2"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.00062</span>
+</td>
+<td class="ltx_td ltx_align_left ltx_border_t">
+<span class="ltx_text" style="font-size:90%;">0.0642 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m3"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.00092</span>
+</td>
+<td class="ltx_td ltx_align_left ltx_border_t">
+<span class="ltx_text" style="font-size:90%;">0.0374 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m4"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.00061</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:90%;">Sports and Outdoors</span></th>
+<td class="ltx_td ltx_align_left">
+<span class="ltx_text" style="font-size:90%;">0.0278 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m5"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.00069</span>
+</td>
+<td class="ltx_td ltx_align_left">
+<span class="ltx_text" style="font-size:90%;">0.0189 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m6"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.00043</span>
+</td>
+<td class="ltx_td ltx_align_left">
+<span class="ltx_text" style="font-size:90%;">0.0419 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m7"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.0010</span>
+</td>
+<td class="ltx_td ltx_align_left">
+<span class="ltx_text" style="font-size:90%;">0.0234 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m8"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.00048</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb"><span class="ltx_text" style="font-size:90%;">Toys and Games</span></th>
+<td class="ltx_td ltx_align_left ltx_border_bb">
+<span class="ltx_text" style="font-size:90%;">0.0518 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m9"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.00064</span>
+</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">
+<span class="ltx_text" style="font-size:90%;">0.0375 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m10"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.00039</span>
+</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">
+<span class="ltx_text" style="font-size:90%;">0.0698 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m11"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.0013</span>
+</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">
+<span class="ltx_text" style="font-size:90%;">0.0433 </span><math alttext="\pm" class="ltx_Math" display="inline" id="A5.T9.m12"><semantics><mo mathsize="90%">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math><span class="ltx_text" style="font-size:90%;"> 0.00047</span>
+</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div class="ltx_para ltx_noindent" id="A5.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">语义 ID 长度和码本大小的影响。</span> 我们尝试改变语义 ID 长度和码本大小，例如使用由 <math alttext="6" class="ltx_Math" display="inline" id="A5.p1.m1"><semantics><mn>6</mn><annotation encoding="application/x-tex">6</annotation></semantics></math> 个码字组成的 ID，每个码字来自大小为 <math alttext="64" class="ltx_Math" display="inline" id="A5.p1.m2"><semantics><mn>64</mn><annotation encoding="application/x-tex">64</annotation></semantics></math> 的码本。我们注意到 TIGER 的推荐指标对这些变化具有鲁棒性。然而，请注意，输入序列长度会随着 ID 变长（即每个物品 ID 的码字更多）而增加，这会使我们基于 transformer 的序列到序列模型的计算代价更高。
+<br class="ltx_break"/></p>
+</div>
+<figure class="ltx_figure" id="A5.F6">
+<div class="ltx_flex_figure">
+<div class="ltx_flex_cell ltx_flex_size_3">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="A5.F6.sf1"><a href="assets/7694d8f253091708.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="A5.F6.sf1.g1" loading="lazy" src="assets/7694d8f253091708.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(a)</span> </span><span class="ltx_text" style="font-size:90%;">Sports and Outdoors</span></figcaption>
+</figure>
+</div>
+<div class="ltx_flex_cell ltx_flex_size_3">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="A5.F6.sf2"><a href="assets/7f916bc41b54c100.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="A5.F6.sf2.g1" loading="lazy" src="assets/7f916bc41b54c100.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(b)</span> </span><span class="ltx_text" style="font-size:90%;">Beauty</span></figcaption>
+</figure>
+</div>
+<div class="ltx_flex_cell ltx_flex_size_3">
+<figure class="ltx_figure ltx_figure_panel ltx_align_center" id="A5.F6.sf3"><a href="assets/94b54fd629679178.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="A5.F6.sf3.g1" loading="lazy" src="assets/94b54fd629679178.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">(c)</span> </span><span class="ltx_text" style="font-size:90%;">Toys and Games</span></figcaption>
+</figure>
+</div>
+</div>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 6</span>: </span><span class="ltx_text" style="font-size:90%;">使用束搜索生成语义 ID 时，在不同 <math alttext="K" class="ltx_Math" display="inline" id="A5.F6.m3"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 取值下的无效 ID 百分比。如图所示，有 <math alttext="\sim 0.3\%-6\%" class="ltx_Math" display="inline" id="A5.F6.m4"><semantics><mrow><mi></mi><mo>∼</mo><mrow><mrow><mn>0.3</mn><mo>%</mo></mrow><mo>−</mo><mrow><mn>6</mn><mo>%</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\sim 0.3\%-6\%</annotation></semantics></math> 的 ID 是无效的，这对应于召回前 20 个物品的情形。</span></figcaption>
+</figure>
+<div class="ltx_para ltx_noindent" id="A5.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">可扩展性。</span>
+为了测试语义 ID 的可扩展性，我们运行了以下实验：我们将所有三个数据集合并，并为来自三个数据集的整个物品集合生成语义 ID。然后，我们在 Beauty 数据集上的推荐任务中使用这些语义 ID。我们将该实验的结果与仅从 Beauty 数据集生成语义 ID 的原始实验进行比较。结果见表 <a class="ltx_ref" href="#A5.T10" title="Table 10 ‣ Appendix E Discussion ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">10</span></a>。我们看到这里性能仅有小幅下降。</p>
+</div>
+<figure class="ltx_table" id="A5.T10">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 10</span>: </span><span class="ltx_text" style="font-size:90%;">通过在合并数据集上生成语义 ID 与仅在 Beauty 数据集上生成语义 ID 来测试可扩展性。</span></figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_border_tt"></td>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Recall@5</th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">NDCG@5</th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Recall@10</th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">NDCG@10</th>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t">Semantic ID [Combined datasets]</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.04355</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.3047</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.06314</td>
+<td class="ltx_td ltx_align_left ltx_border_t">0.03676</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb">Semantic ID [Amazon Beauty]</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.0454</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.0321</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.0648</td>
+<td class="ltx_td ltx_align_left ltx_border_bb">0.0384</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div class="ltx_para ltx_noindent" id="A5.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">推理成本。</span>
+尽管我们的模型在序列推荐任务上取得了显著成功，但我们注意到，由于使用束搜索进行自回归解码，我们的模型在推理期间可能比基于 ANN 的模型计算代价更高。
+我们强调，优化 TIGER 的计算效率并非这项工作的主要目标。
+相反，我们的工作开辟了一个新的研究领域：<em class="ltx_emph ltx_font_italic">基于生成式召回的推荐系统</em>。
+作为未来工作的一部分，我们将考虑使模型更小或探索其他提高推理效率的方法。</p>
+</div>
+<div class="ltx_para ltx_noindent" id="A5.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">查找表的内存成本。</span> 我们为 TIGER 维护两个查找哈希表：一个物品 ID 到语义 ID 表，以及一个语义 ID 到物品 ID 表。请注意，这两个表都只生成一次，然后被冻结：它们在基于 RQ-VAE 的语义 ID 生成模型训练之后生成，之后在序列到序列 transformer 模型的训练中保持冻结。
+每个语义 ID 由 4 个整数的元组组成，每个整数存储在 8 位中，因此每个物品总共为 32 位。
+每个物品由一个物品 ID 表示，存储为 32 位整数。
+因此，每个查找表的大小将为 <math alttext="64N" class="ltx_Math" display="inline" id="A5.p4.m1"><semantics><mrow><mn>64</mn><mo>⁢</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">64N</annotation></semantics></math> 位的量级，其中 <math alttext="N" class="ltx_Math" display="inline" id="A5.p4.m2"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math> 是数据集中的物品数量。</p>
+</div>
+<div class="ltx_para ltx_noindent" id="A5.p5">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">嵌入表的存储开销</span>。与传统推荐系统相比，TIGER使用的嵌入表要小得多。这是因为传统推荐系统为每个物品存储一个嵌入，而TIGER仅为每个语义码字存储一个嵌入。在我们的实验中，我们使用4个码字，每个码字的基数为256，用于Semantic ID表示，从而产生1024（256<math alttext="\times" class="ltx_Math" display="inline" id="A5.p5.m1"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>4）个嵌入。对于传统推荐系统，嵌入的数量为<math alttext="N" class="ltx_Math" display="inline" id="A5.p5.m2"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>，其中<math alttext="N" class="ltx_Math" display="inline" id="A5.p5.m3"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>是数据集中的物品数量。在我们的实验中，<math alttext="N" class="ltx_Math" display="inline" id="A5.p5.m4"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>的范围从10K到20K，具体取决于数据集。因此，TIGER嵌入表的存储开销为<math alttext="1024d" class="ltx_Math" display="inline" id="A5.p5.m5"><semantics><mrow><mn>1024</mn><mo>⁢</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">1024d</annotation></semantics></math>，其中<math alttext="d" class="ltx_Math" display="inline" id="A5.p5.m6"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>是嵌入的维度，而传统推荐系统中嵌入查找表的存储开销为<math alttext="Nd" class="ltx_Math" display="inline" id="A5.p5.m7"><semantics><mrow><mi>N</mi><mo>⁢</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">Nd</annotation></semantics></math>。</p>
+</div>
+</section>
+</article></article></div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{"format": "arxiv_tex", "toc": [{"id": "tex-section-1", "title": "摘要", "level": 1}, {"id": "S1", "title": "1 引言", "level": 1}, {"id": "S2", "title": "2 相关工作", "level": 1}, {"id": "S3", "title": "3 所提出的框架", "level": 1}, {"id": "S3.SS1", "title": "3.1 语义ID生成", "level": 2}, {"id": "S3.SS2", "title": "3.2 使用语义 ID 的生成式召回", "level": 2}, {"id": "S4", "title": "4 实验", "level": 1}, {"id": "S4.SS1", "title": "4.1 序列推荐上的性能", "level": 2}, {"id": "S4.SS2", "title": "4.2 物品表示", "level": 2}, {"id": "S4.SS3", "title": "4.3 新能力", "level": 2}, {"id": "S4.SS4", "title": "4.4 消融实验", "level": 2}, {"id": "S4.SS5", "title": "4.5 无效 ID", "level": 2}, {"id": "S5", "title": "5 结论", "level": 1}, {"id": "bib", "title": "参考文献", "level": 1}, {"id": "A1", "title": "Appendix A 相关工作（续）", "level": 1}, {"id": "A2", "title": "Appendix B 基线", "level": 1}, {"id": "A3", "title": "Appendix C 数据集统计", "level": 1}, {"id": "A4", "title": "Appendix D 对 P5 数据预处理的修改", "level": 1}, {"id": "A5", "title": "Appendix E 讨论", "level": 1}], "stats": {"format": "arxiv_tex", "converter": "LaTeXML", "text_chars": 34590, "sections": 19, "figures": 6, "tables": 10, "table_cells": 70, "mathml": 150, "graphics": 11, "references": 44, "warnings": ["Info:unexpected:final Unexpected option 'final' passed to natbib.sty at natbib.sty.ltxml; line 101", "Warning:unsupported:multirow Fractional row sizes for \\multirow are not yet supported. at 4_experiments.tex; line 40 col 26", "Warning:unsupported:multirow Fractional row sizes for \\multirow are not yet supported. at 4_experiments.tex; line 88 col 26", "Warning:unsupported:multirow Fractional row sizes for \\multirow are not yet supported. at Appendix_P5.tex; line 8 col 27"], "language": "zh-CN"}, "extra_head": "\u003cstyle>\n.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}\n.tex-paper .ltx_title_document{display:none}\n.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}\n.tex-paper .ltx_creator{display:inline-block;margin-right:1em}\n.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}\n.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}\n.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}\n.tex-paper .ltx_para{margin:0}\n.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}\n.tex-paper .ltx_title_paragraph{font-size:17px}\n.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}\n.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}\n.tex-paper .ltx_font_sansserif{font-family:sans-serif}\n.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}\n.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}\n.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}\n.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}\n.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}\n.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}\n.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}\n.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}\n.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}\n.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}\n.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}\n.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}\n.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}\n.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}\n.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}\n.tex-paper math{font-size:1em;line-height:normal;font-family:math}\n.tex-paper math[display=\"block\"]{margin:.2em 0;white-space:nowrap}\n.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}\n.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}\n.tex-paper .ltx_bibblock{display:block}\n.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}\n.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}\n.tex-paper .ltx_toc{display:none}\n.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}\n.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}\n.tex-paper .ltx_tag{margin-right:.35em}\n.tex-paper [id]{scroll-margin-top:24px}\n\u003c/style>"}</script>
+<script>
+const tocPanel=document.querySelector('.paper-toc');
+if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
+tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

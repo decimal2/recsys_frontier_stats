@@ -31,6 +31,7 @@ READING_STYLES = """
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
@@ -65,13 +66,15 @@ READING_STYLES = """
 
 
 def render_paper(paper, document):
+    metadata_json = json.dumps({key: document[key] for key in ("format", "toc", "stats", "extra_head")
+                               if key in document}, ensure_ascii=False).replace("<", "\\u003c")
     toc = ''.join(
         f'<li class="toc-level-{min(3, max(1, item["level"]))}"><a href="#{escape(item["id"])}">{escape(item["title"])}</a></li>'
         for item in document["toc"])
     tex_source = document.get("format") == "arxiv_tex"
     metadata = [*paper.get("companies", []), "arXiv " + paper["arxiv_id"], "译文对应 " + paper["version"]]
     if not tex_source and document["stats"].get("pages"):
-        metadata.append(f'{document["stats"]["pages"]} 页中文原稿')
+        metadata.append(f'{document["stats"]["pages"]} 页原稿')
     labels = " · ".join(metadata)
     reading_note = "中文全文 · 章节、公式和参考文献支持直接跳转" if tex_source else "中文全文 · 公式与图表可点击查看大图"
     body = f'''<p class="paper-original-title">{escape(paper['title_en'])}</p>
@@ -82,6 +85,7 @@ def render_paper(paper, document):
 <div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
 <ol>{toc}</ol></details><article class="paper-fulltext" aria-label="论文全文">{document['body_html']}</article></div>
 <div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{metadata_json}</script>
 <script>
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
@@ -135,7 +139,8 @@ def load_catalog(path):
             raise ValueError("论文目录中的 arXiv ID 重复或无效：" + identifier)
         if not re.fullmatch(r"v[1-9]\d*", paper["version"]):
             raise ValueError("论文目录需要明确 arXiv 版本：" + identifier)
-        source_keys = ("tex_project", "tex_entry") if paper.get("tex_project") else ("zh_pdf",)
+        source_keys = (("html_snapshot",) if paper.get("html_snapshot") else
+                       ("tex_project", "tex_entry") if paper.get("tex_project") else ("zh_pdf",))
         for key in ("title_zh", "title_en", "short_name", *source_keys):
             if not isinstance(paper[key], str) or not paper[key].strip():
                 raise ValueError("论文目录缺少 " + key)
@@ -160,6 +165,29 @@ def project_checksum(directory):
     return digest.hexdigest()
 
 
+def read_html_snapshot(path, asset_dir):
+    """Rebuild a published paper after temporary TeX and conversion caches are removed."""
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(path.read_text(encoding="utf-8"), "html.parser")
+    body = soup.select_one("article.paper-fulltext")
+    metadata = soup.select_one("script#paper-document-metadata")
+    if body is None or metadata is None:
+        raise ValueError("HTML 快照缺少全文或构建元数据：" + str(path))
+    document = json.loads(metadata.string or metadata.get_text())
+    if not isinstance(document.get("toc"), list) or not isinstance(document.get("stats"), dict):
+        raise ValueError("HTML 快照构建元数据无效：" + str(path))
+    document["body_html"] = body.decode_contents()
+    for source in (path.parent / "assets").glob("*"):
+        if source.is_file():
+            shutil.copy2(source, asset_dir / source.name)
+    for image in body.select('img[src^="assets/"]'):
+        target = (asset_dir / image["src"].removeprefix("assets/")).resolve()
+        if not target.is_relative_to(asset_dir.resolve()) or not target.is_file():
+            raise ValueError("HTML 快照图片不存在：" + image["src"])
+    return document
+
+
 def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json", identifiers=None, force=False):
     from .paper_html import convert_pdf
 
@@ -181,19 +209,25 @@ def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json
     built, cached, skipped = [], [], []
     for paper in papers:
         identifier = paper["arxiv_id"]
+        snapshot = ((Path(catalog_path).resolve().parent / paper["html_snapshot"]).resolve()
+                    if paper.get("html_snapshot") else None)
         tex_project = Path(paper["tex_project"]) if paper.get("tex_project") else None
         pdf_path = (source_dir / paper["zh_pdf"]).resolve() if paper.get("zh_pdf") else None
         if pdf_path and not pdf_path.is_relative_to(source_dir):
             raise ValueError("中文 PDF 必须位于 source-dir 内：" + paper["zh_pdf"])
-        if not tex_project and (not pdf_path or not pdf_path.is_file()):
+        if not snapshot and not tex_project and (not pdf_path or not pdf_path.is_file()):
             LOG.warning("跳过 %s：没有中文 PDF（%s）", paper["short_name"], pdf_path)
             skipped.append(identifier)
             continue
-        if tex_project:
+        if snapshot:
+            if not snapshot.is_file():
+                raise ValueError("找不到 HTML 全文快照：" + str(snapshot))
+            checksum = project_checksum(snapshot.parent)
+        elif tex_project:
             checksum = hashlib.sha256((project_checksum(tex_project) + "\0" + paper["tex_entry"]).encode()).hexdigest()
         else:
             checksum = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
-        converter_file = "tex_html.py" if tex_project else "paper_html.py"
+        converter_file = "paper_pages.py" if snapshot else "tex_html.py" if tex_project else "paper_html.py"
         converter_hash = hashlib.sha256(Path(__file__).with_name(converter_file).read_bytes()).hexdigest()
         destination = library / identifier
         assets = destination / "assets"
@@ -213,11 +247,13 @@ def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json
             cached.append(identifier)
             LOG.info("复用中文正文缓存：%s", paper["short_name"])
         else:
-            LOG.info("转换中文全文：%s (%s)", paper["short_name"], tex_project or pdf_path.name)
+            LOG.info("构建中文全文：%s (%s)", paper["short_name"], snapshot or tex_project or pdf_path.name)
             with tempfile.TemporaryDirectory(prefix=identifier + "-", dir=cache_dir) as temporary:
                 staged = Path(temporary) / "assets"
                 staged.mkdir()
-                if tex_project:
+                if snapshot:
+                    document = read_html_snapshot(snapshot, staged)
+                elif tex_project:
                     from .tex_html import convert_tex
                     document = convert_tex(tex_project, paper["tex_entry"], staged,
                                            cache_dir / (identifier + "-tex-build"), paper.get("latexml_root"))
@@ -239,7 +275,7 @@ def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json
             (destination / legacy_pdf).unlink(missing_ok=True)
         for warning in document["stats"].get("warnings", []):
             LOG.warning("%s 全文转换提示：%s", paper["short_name"], warning)
-        public = {key: value for key, value in paper.items() if key not in {"zh_pdf", "tex_project", "tex_entry", "latexml_root"}}
+        public = {key: value for key, value in paper.items() if key not in {"zh_pdf", "tex_project", "tex_entry", "latexml_root", "html_snapshot"}}
         public.update(url=f"papers/{identifier}/index.html", stats=document["stats"], source_sha256=checksum)
         published[identifier] = public
         LOG.info("中文论文页面已生成：%s；%s", destination / "index.html", document["stats"])

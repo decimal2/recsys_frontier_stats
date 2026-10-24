@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
 import fitz
 
-from paper_pipeline.tex_html import XML_ID, _figure_asset, _prepare_bindings, _tools, convert_tex
+from paper_pipeline.tex_html import XML_ID, _bibliography_inputs, _figure_asset, _normalize_html_tables, _normalize_subfigure_wrappers, _prepare_bindings, _tools, convert_tex
 
 
 class TexHtmlTests(unittest.TestCase):
@@ -52,6 +52,44 @@ class TexHtmlTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "图资源不存在"):
             _figure_asset(node, self.source, self.assets)
 
+    def test_rotated_pdf_trim_uses_display_coordinates(self):
+        self.make_figure()
+        with fitz.open(self.source / "figure.pdf") as original:
+            original[0].set_rotation(90)
+            original.save(self.source / "rotated.pdf")
+        node = ET.Element("graphics", {"candidates": "rotated.pdf", "options": "trim=10pt 20pt 10pt 20pt,clip=true"})
+        url = _figure_asset(node, self.source, self.assets)
+        svg = ET.parse(self.root / url).getroot()
+        self.assertAlmostEqual(float(svg.get("width").removesuffix("pt")), 140 - 20 * 72 / 72.27, places=2)
+        self.assertAlmostEqual(float(svg.get("height").removesuffix("pt")), 220 - 40 * 72 / 72.27, places=2)
+
+    def test_subfigure_layout_fix_preserves_content_ids_and_processing_instructions(self):
+        xml = self.build / "document.xml"
+        xml.write_text('<?xml version="1.0"?><?latexml class="acmart"?>'
+                       '<document xmlns="http://dlmf.nist.gov/LaTeXML"><figure xml:id="F1">'
+                       '<block><figure xml:id="F1.a"><caption>子图</caption></figure></block>'
+                       '</figure><block class="keep"><figure xml:id="F2"/></block></document>')
+        self.assertEqual(_normalize_subfigure_wrappers(xml), 1)
+        content = xml.read_text()
+        self.assertIn('<?latexml class="acmart"?>', content)
+        self.assertIn('xml:id="F1.a"', content)
+        self.assertIn("子图", content)
+        self.assertIn('<block class="keep">', content)
+
+    def test_adjustbox_tables_preserve_merged_cells_and_math(self):
+        soup = BeautifulSoup('<article><p id="results"><span><span class="ltx_tabular">'
+                             '<span class="ltx_tr"><span class="ltx_td ltx_colspan_2">Score</span></span>'
+                             '<span class="ltx_tr"><span class="ltx_td ltx_rowspan_2">0.87'
+                             '<math><mi>x</mi></math></span></span></span></span></p></article>', 'html.parser')
+        original_text = soup.get_text()
+        self.assertEqual(_normalize_html_tables(soup.article), 1)
+        self.assertEqual(soup.get_text(), original_text)
+        self.assertEqual(soup.select_one("td[colspan]")["colspan"], "2")
+        self.assertEqual(soup.select_one("td[rowspan]")["rowspan"], "2")
+        self.assertEqual(str(soup.math), "<math><mi>x</mi></math>")
+        self.assertEqual(soup.find(id="results").name, "div")
+        self.assertIsNone(soup.table.find_parent("span"))
+
     def test_missing_converter_is_explicit_not_a_pdf_fallback(self):
         with patch.dict(os.environ, {}, clear=True), patch("shutil.which", return_value=None):
             with self.assertRaisesRegex(RuntimeError, "LaTeXML"):
@@ -62,6 +100,31 @@ class TexHtmlTests(unittest.TestCase):
         (self.source / "main.tex").write_text(r"\documentclass{article}\begin{document}\lipsum[1]\end{document}")
         with self.assertRaisesRegex(ValueError, "实际用于正文"):
             _prepare_bindings(self.source, self.build)
+
+    def test_paper_specific_adapter_survives_standard_binding_refresh(self):
+        (self.source / "googledeepmind.cls").write_text("fixture")
+        overrides = self.build / "bindings-overrides"
+        overrides.mkdir()
+        adapter = "# paper-specific optional argument support\n1;\n"
+        (overrides / "tcolorbox.sty.ltxml").write_text(adapter)
+        for _ in range(2):
+            bindings = _prepare_bindings(self.source, self.build)
+            self.assertEqual((bindings / "tcolorbox.sty.ltxml").read_text(), adapter)
+
+    def test_bibliography_month_fix_preserves_source_and_defined_macros(self):
+        original = '@article{a, title={Paper}, month=July, year={2025}}\n'
+        original += '@string{August="Late August"}\n@article{b, month=August}\n'
+        original += '@dataset{dataset_key, title={Original Dataset}, howpublished={https://example.org/data}}\n'
+        bibliography = self.source / "refs.bib"
+        bibliography.write_text(original)
+        xml = ET.fromstring('<document xmlns="http://dlmf.nist.gov/LaTeXML">'
+                            '<bibliography files="refs"/></document>')
+        args = _bibliography_inputs(xml, self.source, self.build)
+        self.assertEqual(bibliography.read_text(), original)
+        normalized = Path(args[0].removeprefix("--bibliography=")).read_text()
+        self.assertIn("month={July}", normalized)
+        self.assertIn("month=August", normalized)
+        self.assertIn("@misc{dataset_key, title={Original Dataset}, howpublished={https://example.org/data}}", normalized)
 
     @unittest.skipUnless(os.environ.get("LATEXML_ROOT") or shutil.which("latexmlc"), "LaTeXML not installed")
     def test_real_tex_preserves_chinese_math_tables_graphics_and_citations(self):

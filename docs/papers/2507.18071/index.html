@@ -1,0 +1,836 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>组序列策略优化</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style><style>
+.paper-reader main,.paper-reader>header{max-width:1180px}
+.paper-original-title{font-size:16px;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.paper-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.paper-actions a{padding:8px 14px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:14px}
+.paper-actions a:first-child{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paper-reading-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:36px;align-items:start;margin-top:30px}
+.paper-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;border-right:1px solid var(--line);padding-right:14px;font-size:13px}
+.paper-toc summary{font-size:14px;font-weight:600;cursor:pointer;padding:4px 0 10px}
+.paper-toc ol{list-style:none;padding:0;margin:0}
+.paper-toc li{margin:0;padding:4px 0;line-height:1.5}
+.paper-toc a{color:var(--muted);display:block;padding:2px 4px;border-radius:4px}
+.paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
+.paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
+.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
+.paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
+.paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
+.paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
+.paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
+.paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
+.paper-fulltext figure a{display:block}
+.paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
+.paper-fulltext .paper-equation{padding:8px 0}
+.paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
+.paper-fulltext .paper-inline-math{display:inline-block;vertical-align:middle;max-height:2.3em;width:auto;background:white;max-width:100%}
+.paper-fulltext .paper-reference{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.paper-fulltext .paper-source-page{display:block;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin:32px 0 18px;padding-top:8px;text-align:right}
+.paper-fulltext table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:14px}
+.paper-fulltext td,.paper-fulltext th{padding:6px 10px;border:1px solid var(--line)}
+.paper-bottom{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+.paper-library{display:grid;gap:0;margin:24px 0}
+.paper-entry{padding:26px 0;border-top:1px solid var(--line)}
+.paper-entry h2{display:block;font-size:21px;margin:6px 0}
+.paper-entry .original{display:block;margin-bottom:12px}
+.paper-entry .paper-actions{margin-bottom:0}
+.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+@media(max-width:800px){
+ .paper-reading-layout{display:block;margin-top:20px}
+ .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
+ .paper-toc[open] ol{max-height:55vh;overflow:auto}
+ .paper-fulltext{font-size:16px;line-height:1.9}
+ .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
+ .paper-reader h1{font-size:26px}
+}
+@media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
+</style><style>
+.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}
+.tex-paper .ltx_title_document{display:none}
+.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}
+.tex-paper .ltx_creator{display:inline-block;margin-right:1em}
+.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
+.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_para{margin:0}
+.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
+.tex-paper .ltx_title_paragraph{font-size:17px}
+.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}
+.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}
+.tex-paper .ltx_font_sansserif{font-family:sans-serif}
+.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}
+.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}
+.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}
+.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}
+.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}
+.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}
+.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}
+.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}
+.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}
+.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}
+.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}
+.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}
+.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}
+.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}
+.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+.tex-paper math{font-size:1em;line-height:normal;font-family:math}
+.tex-paper math[display="block"]{margin:.2em 0;white-space:nowrap}
+.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}
+.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}
+.tex-paper .ltx_bibblock{display:block}
+.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}
+.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}
+.tex-paper .ltx_toc{display:none}
+.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}
+.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
+.tex-paper .ltx_tag{margin-right:.35em}
+.tex-paper [id]{scroll-margin-top:24px}
+</style></head><body class="paper-reader">
+<header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
+<main><div class="eyebrow">PAPER LIBRARY / GSPO</div><h1>组序列策略优化</h1><p class="paper-original-title">Group Sequence Policy Optimization</p>
+<p class="muted">Alibaba · arXiv 2507.18071 · 译文对应 v2</p>
+<div class="paper-actions"><a href="https://arxiv.org/abs/2507.18071v2" target="_blank" rel="noopener">英文 arXiv ↗</a>
+<a href="../index.html">全部论文</a></div>
+<p class="muted">中文全文 · 章节、公式和参考文献支持直接跳转</p>
+<div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
+<ol><li class="toc-level-1"><a href="#tex-section-1">摘要</a></li><li class="toc-level-1"><a href="#S1">1 引言</a></li><li class="toc-level-1"><a href="#S2">2 预备知识</a></li><li class="toc-level-1"><a href="#S3">3 动机</a></li><li class="toc-level-1"><a href="#S4">4 算法</a></li><li class="toc-level-2"><a href="#S4.SS1">4.1 GSPO：组序列策略优化</a></li><li class="toc-level-2"><a href="#S4.SS2">4.2 梯度分析</a></li><li class="toc-level-2"><a href="#S4.SS3">4.3 GSPO-token：一种词元级目标变体</a></li><li class="toc-level-1"><a href="#S5">5 实验与讨论</a></li><li class="toc-level-2"><a href="#S5.SS1">5.1 实证结果</a></li><li class="toc-level-2"><a href="#S5.SS2">5.2 关于裁剪比例的有趣观察</a></li><li class="toc-level-2"><a href="#S5.SS3">5.3 GSPO 对 MoE 训练的益处</a></li><li class="toc-level-2"><a href="#S5.SS4">5.4 GSPO 对强化学习基础设施的益处</a></li><li class="toc-level-1"><a href="#S6">6 结论</a></li><li class="toc-level-1"><a href="#bib">参考文献</a></li></ol></details><article class="paper-fulltext" aria-label="论文全文"><article class="ltx_document ltx_authors_1line tex-paper">
+<h1 class="ltx_title ltx_title_document">组序列策略优化</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">
+<span class="ltx_text ltx_font_bold">Chujie Zheng   Shixuan Liu   Mingze Li   Xiong-Hui Chen   Bowen Yu<span class="ltx_note ltx_role_footnotemark" id="footnotex1"><sup class="ltx_note_mark">†</sup></span>
+<br class="ltx_break"/>Chang Gao   Kai Dang   Yuqiong Liu   Rui Men   An Yang   Jingren Zhou   Junyang Lin </span>
+<br class="ltx_break"/>
+Qwen Team, Alibaba Inc
+</span><span class="ltx_author_notes"><span class="ltx_text ltx_font_bold">Corresponding authors: Chujie Zheng, Bowen Yu.</span></span></span>
+</div>
+<div class="ltx_abstract" id="tex-section-1">
+<h6 class="ltx_title ltx_title_abstract">摘要</h6>
+<p class="ltx_p">本文提出组序列策略优化（GSPO），这是一种用于训练大语言模型的稳定、高效且性能优异的强化学习算法。
+与以往采用词元级重要性比率的算法不同，GSPO 基于序列似然定义重要性比率，并在序列级执行裁剪、奖励和优化。
+我们展示出，与 GRPO 算法相比，GSPO 实现了更优的训练效率和性能，尤其显著稳定了混合专家（MoE）强化学习训练，并具有简化强化学习基础设施设计的潜力。
+GSPO 的这些优点为最新 Qwen3 模型的显著提升做出了贡献。</p>
+</div>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1 </span>引言</h2>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p">强化学习（RL）已成为扩展语言模型的关键范式 <cite class="ltx_cite ltx_citemacro_citep">(OpenAI, <a class="ltx_ref" href="#bib.bib3" title="">2024</a>; DeepSeek-AI, <a class="ltx_ref" href="#bib.bib1" title="">2025</a>; Qwen, <a class="ltx_ref" href="#bib.bib5" title="">2025b</a>, <a class="ltx_ref" href="#bib.bib4" title="">a</a>)</cite>。
+通过大规模强化学习，语言模型能够进行更深入、更长的推理过程，从而获得解决复杂问题（如竞赛级数学和编程）的能力。</p>
+</div>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p">要在投入更多计算资源的情况下成功扩展强化学习，首要前提是保持稳定且鲁棒的训练动态。
+然而，当前最先进的强化学习算法（以 GRPO 为代表 <cite class="ltx_cite ltx_citemacro_citep">(Shao et al., <a class="ltx_ref" href="#bib.bib7" title="">2024</a>)</cite>）在训练超大规模语言模型时表现出严重的稳定性问题，往往导致灾难性的、不可逆的模型崩溃 <cite class="ltx_cite ltx_citemacro_citep">(Qwen, <a class="ltx_ref" href="#bib.bib4" title="">2025a</a>; MiniMax, <a class="ltx_ref" href="#bib.bib2" title="">2025</a>)</cite>。
+这种不稳定性阻碍了通过持续强化学习训练来拓展语言模型能力边界的努力。</p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p">本文指出，GRPO 的不稳定性源于其算法设计中对重要性采样权重的根本性误用和失效。
+这引入了高方差的训练噪声，该噪声随着回复长度增加而逐步累积，并被裁剪机制进一步放大，最终导致模型崩溃。</p>
+</div>
+<div class="ltx_para" id="S1.p4">
+<p class="ltx_p">为解决这些核心局限，我们提出 <span class="ltx_text ltx_font_bold">组序列策略优化（GSPO）</span>，一种用于训练大语言模型的新型强化学习算法。
+GSPO 的关键创新在于其有理论依据的、基于序列似然的重要性比率定义 <cite class="ltx_cite ltx_citemacro_citep">(Zheng et al., <a class="ltx_ref" href="#bib.bib8" title="">2023</a>)</cite>，这与重要性采样的基本原理相一致。
+此外，GSPO 将归一化奖励计算为对同一查询的多个回复的优势，确保了序列级奖励与优化之间的一致性。</p>
+</div>
+<div class="ltx_para" id="S1.p5">
+<p class="ltx_p">我们的实证评估展示出，GSPO 在训练稳定性、效率和性能方面显著优于 GRPO。
+关键的是，GSPO 从根本上解决大型混合专家（MoE）模型强化学习训练中的稳定性挑战，消除了对复杂稳定化策略的需求，并展现出简化强化学习基础设施的潜力。
+GSPO 的这些优点最终为最新 Qwen3 模型的卓越性能提升做出了贡献。
+我们设想 GSPO 将成为一个稳健且可扩展的算法基础，使基于语言模型的大规模强化学习训练得以持续发展。</p>
+</div>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2 </span>预备知识</h2>
+<section class="ltx_paragraph" id="S2.SS0.SSS0.Px1">
+<h4 class="ltx_title ltx_title_paragraph">符号说明</h4>
+<div class="ltx_para" id="S2.SS0.SSS0.Px1.p1">
+<p class="ltx_p">在本文中，将由 <math alttext="\theta" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m1"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> 参数化的自回归语言模型定义为策略 <math alttext="\pi_{\theta}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m2"><semantics><msub><mi>π</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\pi_{\theta}</annotation></semantics></math>。
+我们用 <math alttext="x" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m3"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> 表示查询，用 <math alttext="\mathcal{D}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m4"><semantics><mi class="ltx_font_mathcaligraphic">𝒟</mi><annotation encoding="application/x-tex">\mathcal{D}</annotation></semantics></math> 表示查询集。
+给定回复 <math alttext="y" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m5"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>，其对应查询为 <math alttext="x" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m6"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>，其在策略 <math alttext="\pi_{\theta}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m7"><semantics><msub><mi>π</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\pi_{\theta}</annotation></semantics></math> 下的似然记为 <math alttext="\pi_{\theta}(y|x)=\prod_{t=1}^{|y|}\pi_{\theta}(y_{t}|x,y_{&lt;t})" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m8"><semantics><mrow><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>y</mi><mo fence="false">|</mo><mi>x</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">=</mo><mrow><msubsup><mo>∏</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><mi>y</mi><mo stretchy="false">|</mo></mrow></msubsup><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>t</mi></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">\pi_{\theta}(y|x)=\prod_{t=1}^{|y|}\pi_{\theta}(y_{t}|x,y_{&lt;t})</annotation></semantics></math>，其中 <math alttext="|y|" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m9"><semantics><mrow><mo stretchy="false">|</mo><mi>y</mi><mo stretchy="false">|</mo></mrow><annotation encoding="application/x-tex">|y|</annotation></semantics></math> 表示 <math alttext="y" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m10"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math> 中的词元数量。
+查询-回复对 <math alttext="(x,y)" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m11"><semantics><mrow><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x,y)</annotation></semantics></math> 可由验证器 <math alttext="r" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m12"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math> 打分，得到一个奖励 <math alttext="r(x,y)\in[0,1]" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px1.p1.m13"><semantics><mrow><mrow><mi>r</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow></mrow><mo>∈</mo><mrow><mo stretchy="false">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">r(x,y)\in[0,1]</annotation></semantics></math>。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S2.SS0.SSS0.Px2">
+<h4 class="ltx_title ltx_title_paragraph">近端策略优化（PPO）</h4>
+<div class="ltx_para" id="S2.SS0.SSS0.Px2.p1">
+<p class="ltx_p">利用由旧策略 <math alttext="\pi_{\theta_{\text{old}}}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px2.p1.m1"><semantics><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><annotation encoding="application/x-tex">\pi_{\theta_{\text{old}}}</annotation></semantics></math> 生成的样本，PPO <cite class="ltx_cite ltx_citemacro_citep">(Schulman et al., <a class="ltx_ref" href="#bib.bib6" title="">2017</a>)</cite> 通过裁剪机制将策略更新约束在旧策略的近端区域内。
+具体而言，PPO 采用以下目标进行策略优化（为简洁起见，后文省略 KL 正则项，因为它并非本文关注的重点）：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx1">
+<tbody id="S2.E1"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle\mathcal{J}_{\text{PPO}}(\theta)=\mathbb{E}_{x\sim\mathcal{D},\,y%
+\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{|y|}\sum_{t=1}^{|y|}\min%
+\left(w_{t}(\theta)\widehat{A}_{t},\,\mathrm{clip}\left(w_{t}(\theta),1-{%
+\varepsilon},1+{\varepsilon}\right)\widehat{A}_{t}\right)\right]," class="ltx_math_unparsed" display="inline" id="S2.E1.m1"><semantics><mrow><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒥</mi><mtext>PPO</mtext></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><mi>y</mi><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><mi>y</mi><mo stretchy="false">|</mo></mrow></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><mi>y</mi><mo stretchy="false">|</mo></mrow></munderover></mstyle><mrow><mi>min</mi><mo>⁡</mo><mrow><mo>(</mo><mrow><msub><mi>w</mi><mi>t</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>t</mi></msub></mrow><mo rspace="0.337em">,</mo><mrow><mi>clip</mi><mo>⁢</mo><mrow><mo>(</mo><mrow><msub><mi>w</mi><mi>t</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><mn>1</mn><mo>−</mo><mi>ε</mi></mrow><mo>,</mo><mrow><mn>1</mn><mo>+</mo><mi>ε</mi></mrow><mo>)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>t</mi></msub></mrow><mo>)</mo></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle\mathcal{J}_{\text{PPO}}(\theta)=\mathbb{E}_{x\sim\mathcal{D},\,y%
+\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{|y|}\sum_{t=1}^{|y|}\min%
+\left(w_{t}(\theta)\widehat{A}_{t},\,\mathrm{clip}\left(w_{t}(\theta),1-{%
+\varepsilon},1+{\varepsilon}\right)\widehat{A}_{t}\right)\right],</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(1)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中词元 <math alttext="y_{t}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px2.p1.m2"><semantics><msub><mi>y</mi><mi>t</mi></msub><annotation encoding="application/x-tex">y_{t}</annotation></semantics></math> 的重要性比率定义为
+<math alttext="w_{t}(\theta)=\frac{\pi_{\theta}(y_{t}|x,y_{&lt;t})}{\pi_{\theta_{\text{old}}}(y_%
+{t}|x,y_{&lt;t})}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px2.p1.m3"><semantics><mrow><mrow><msub><mi>w</mi><mi>t</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>t</mi></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>t</mi></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">w_{t}(\theta)=\frac{\pi_{\theta}(y_{t}|x,y_{&lt;t})}{\pi_{\theta_{\text{old}}}(y_%
+{t}|x,y_{&lt;t})}</annotation></semantics></math>，
+优势 <math alttext="\widehat{A}_{t}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px2.p1.m4"><semantics><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\widehat{A}_{t}</annotation></semantics></math> 属于 <math alttext="y_{t}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px2.p1.m5"><semantics><msub><mi>y</mi><mi>t</mi></msub><annotation encoding="application/x-tex">y_{t}</annotation></semantics></math>，由另一个价值模型估计，而 <math alttext="\varepsilon" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px2.p1.m6"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math> 是重要性比率的裁剪范围。</p>
+</div>
+<div class="ltx_para" id="S2.SS0.SSS0.Px2.p2">
+<p class="ltx_p">PPO 在实践中的核心挑战在于其严重依赖价值模型。
+具体而言，价值模型的规模通常与策略模型相当，带来相当大的内存和计算负担。
+此外，算法有效性取决于其价值估计的可靠性。
+虽然获得可靠的价值模型本身就具有挑战性，但确保其可扩展至更长的回复和更复杂的任务则面临更大挑战。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S2.SS0.SSS0.Px3">
+<h4 class="ltx_title ltx_title_paragraph">组相对策略优化（GRPO）</h4>
+<div class="ltx_para" id="S2.SS0.SSS0.Px3.p1">
+<p class="ltx_p">GRPO <cite class="ltx_cite ltx_citemacro_citep">(Shao et al., <a class="ltx_ref" href="#bib.bib7" title="">2024</a>)</cite> 通过计算同一查询的一组回复中每个回复的相对优势，绕过了对价值模型的需求。
+具体而言，GRPO 优化以下目标：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx2">
+<tbody id="S2.E2"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle\mathcal{J}_{\text{GRPO}}(\theta)=\mathbb{E}_{x\sim\mathcal{D},\,%
+\{y_{i}\}_{i=1}^{G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}%
+\sum_{i=1}^{G}\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\min\left(w_{i,t}(\theta)%
+\widehat{A}_{i,t},\,\mathrm{clip}\left(w_{i,t}(\theta),1-{\varepsilon},1+{%
+\varepsilon}\right)\widehat{A}_{i,t}\right)\right]," class="ltx_math_unparsed" display="inline" id="S2.E2.m1"><semantics><mrow><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒥</mi><mtext>GRPO</mtext></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></munderover></mstyle><mrow><mi>min</mi><mo>⁡</mo><mrow><mo>(</mo><mrow><msub><mi>w</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow><mo rspace="0.337em">,</mo><mrow><mi>clip</mi><mo>⁢</mo><mrow><mo>(</mo><mrow><msub><mi>w</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><mn>1</mn><mo>−</mo><mi>ε</mi></mrow><mo>,</mo><mrow><mn>1</mn><mo>+</mo><mi>ε</mi></mrow><mo>)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow><mo>)</mo></mrow></mrow></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle\mathcal{J}_{\text{GRPO}}(\theta)=\mathbb{E}_{x\sim\mathcal{D},\,%
+\{y_{i}\}_{i=1}^{G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}%
+\sum_{i=1}^{G}\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\min\left(w_{i,t}(\theta)%
+\widehat{A}_{i,t},\,\mathrm{clip}\left(w_{i,t}(\theta),1-{\varepsilon},1+{%
+\varepsilon}\right)\widehat{A}_{i,t}\right)\right],</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(2)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="G" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px3.p1.m1"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math> 是对每个查询 <math alttext="x" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px3.p1.m2"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> 生成的回复数量（即组大小），重要性比率 <math alttext="w_{i,t}(\theta)" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px3.p1.m3"><semantics><mrow><msub><mi>w</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">w_{i,t}(\theta)</annotation></semantics></math> 和优势 <math alttext="\widehat{A}_{i,t}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px3.p1.m4"><semantics><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">\widehat{A}_{i,t}</annotation></semantics></math> 均针对词元 <math alttext="y_{i,t}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px3.p1.m5"><semantics><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">y_{i,t}</annotation></semantics></math>，分别为：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx3">
+<tbody id="S2.E3"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle w_{i,t}(\theta)=\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{%
+\theta_{\text{old}}}(y_{i,t}|x,y_{i,&lt;t})},\quad\ \widehat{A}_{i,t}=\widehat{A}%
+_{i}=\frac{r(x,y_{i})-\mathrm{mean}\left(\{r(x,y_{i})\}_{i=1}^{G}\right)}{%
+\mathrm{std}\left(\{r(x,y_{i})\}_{i=1}^{G}\right)}," class="ltx_Math" display="inline" id="S2.E3.m1"><semantics><mrow><mrow><mrow><mrow><msub><mi>w</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac></mstyle></mrow><mo rspace="1.667em">,</mo><mrow><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><mrow><mi>r</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo>−</mo><mrow><mi>mean</mi><mo>⁢</mo><mrow><mo>(</mo><msubsup><mrow><mo stretchy="false">{</mo><mrow><mi>r</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>)</mo></mrow></mrow></mrow><mrow><mi>std</mi><mo>⁢</mo><mrow><mo>(</mo><msubsup><mrow><mo stretchy="false">{</mo><mrow><mi>r</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>)</mo></mrow></mrow></mfrac></mstyle></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle w_{i,t}(\theta)=\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{%
+\theta_{\text{old}}}(y_{i,t}|x,y_{i,&lt;t})},\quad\ \widehat{A}_{i,t}=\widehat{A}%
+_{i}=\frac{r(x,y_{i})-\mathrm{mean}\left(\{r(x,y_{i})\}_{i=1}^{G}\right)}{%
+\mathrm{std}\left(\{r(x,y_{i})\}_{i=1}^{G}\right)},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(3)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="y_{i}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px3.p1.m6"><semantics><msub><mi>y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">y_{i}</annotation></semantics></math> 中的所有词元共享与 <math alttext="\widehat{A}_{i}" class="ltx_Math" display="inline" id="S2.SS0.SSS0.Px3.p1.m7"><semantics><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub><annotation encoding="application/x-tex">\widehat{A}_{i}</annotation></semantics></math> 相同的优势。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3 </span>动机</h2>
+<div class="ltx_para" id="S3.p1">
+<p class="ltx_p">模型规模、稀疏性（例如在混合专家模型中）以及回复长度的增长，要求在强化学习过程中使用大的采样轨迹批量大小，以最大化硬件利用率。
+为提高样本效率，标准做法是将大批量的采样轨迹数据划分为多个小批量用于梯度更新。
+这一过程不可避免地引入离策略学习设置，即回复 <math alttext="y" class="ltx_Math" display="inline" id="S3.p1.m1"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math> 采样自旧策略 <math alttext="\pi_{\theta_{\text{old}}}" class="ltx_Math" display="inline" id="S3.p1.m2"><semantics><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><annotation encoding="application/x-tex">\pi_{\theta_{\text{old}}}</annotation></semantics></math>，而非当前正在优化的策略 <math alttext="\pi_{\theta}" class="ltx_Math" display="inline" id="S3.p1.m3"><semantics><msub><mi>π</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\pi_{\theta}</annotation></semantics></math>。
+这也解释了 PPO 和 GRPO 中裁剪机制的必要性，该机制可防止过度“离策略”的样本参与梯度估计。</p>
+</div>
+<div class="ltx_para" id="S3.p2">
+<p class="ltx_p">尽管裁剪等机制旨在管理这种离策略偏差，但我们发现 GRPO 中存在一个更根本的问题：<span class="ltx_text ltx_font_italic">其目标函数是不适定的</span>。
+在长回复任务上训练大型模型时，该问题尤为严重，会导致灾难性的模型崩溃。
+GRPO 目标函数的不适定性源于对重要性采样权重的误用。
+重要性采样的原理是估计函数 <math alttext="f" class="ltx_Math" display="inline" id="S3.p2.m1"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math> 在目标分布 <math alttext="\pi_{\text{tar}}" class="ltx_Math" display="inline" id="S3.p2.m2"><semantics><msub><mi>π</mi><mtext>tar</mtext></msub><annotation encoding="application/x-tex">\pi_{\text{tar}}</annotation></semantics></math> 下的期望，其做法是对从行为分布 <math alttext="\pi_{\text{beh}}" class="ltx_Math" display="inline" id="S3.p2.m3"><semantics><msub><mi>π</mi><mtext>beh</mtext></msub><annotation encoding="application/x-tex">\pi_{\text{beh}}</annotation></semantics></math> 中抽取的样本重新加权：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx4">
+<tbody id="S3.E4"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle\mathbb{E}_{z\sim\pi_{\text{tar}}}\left[f(z)\right]=\mathbb{E}_{z%
+\sim\pi_{\text{beh}}}\left[\frac{\pi_{\text{tar}}(z)}{\pi_{\text{beh}}(z)}\,f(%
+z)\right]." class="ltx_Math" display="inline" id="S3.E4.m1"><semantics><mrow><mrow><mrow><msub><mi>𝔼</mi><mrow><mi>z</mi><mo>∼</mo><msub><mi>π</mi><mtext>tar</mtext></msub></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mi>f</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo></mrow></mrow><mo>]</mo></mrow></mrow><mo>=</mo><mrow><msub><mi>𝔼</mi><mrow><mi>z</mi><mo>∼</mo><msub><mi>π</mi><mtext>beh</mtext></msub></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mrow><msub><mi>π</mi><mtext>tar</mtext></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><mtext>beh</mtext></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo></mrow></mrow></mfrac></mstyle><mo lspace="0.170em">⁢</mo><mi>f</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo></mrow></mrow><mo>]</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\displaystyle\mathbb{E}_{z\sim\pi_{\text{tar}}}\left[f(z)\right]=\mathbb{E}_{z%
+\sim\pi_{\text{beh}}}\left[\frac{\pi_{\text{tar}}(z)}{\pi_{\text{beh}}(z)}\,f(%
+z)\right].</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(4)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">关键在于，这依赖于对多个样本（<math alttext="N\gg 1" class="ltx_Math" display="inline" id="S3.p2.m4"><semantics><mrow><mi>N</mi><mo>≫</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N\gg 1</annotation></semantics></math>）取平均，这些样本来自行为分布 <math alttext="\pi_{\text{beh}}" class="ltx_Math" display="inline" id="S3.p2.m5"><semantics><msub><mi>π</mi><mtext>beh</mtext></msub><annotation encoding="application/x-tex">\pi_{\text{beh}}</annotation></semantics></math>，这样重要性权重 <math alttext="\frac{\pi_{\text{tar}}(z)}{\pi_{\text{beh}}(z)}" class="ltx_Math" display="inline" id="S3.p2.m6"><semantics><mfrac><mrow><msub><mi>π</mi><mtext>tar</mtext></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><mtext>beh</mtext></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo></mrow></mrow></mfrac><annotation encoding="application/x-tex">\frac{\pi_{\text{tar}}(z)}{\pi_{\text{beh}}(z)}</annotation></semantics></math> 才能有效校正分布不匹配。</p>
+</div>
+<div class="ltx_para" id="S3.p3">
+<p class="ltx_p">相比之下，GRPO 将重要性权重 <math alttext="\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{\text{old}}}(y_{i,t}|x,y_%
+{i,&lt;t})}" class="ltx_Math" display="inline" id="S3.p3.m1"><semantics><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac><annotation encoding="application/x-tex">\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{\text{old}}}(y_{i,t}|x,y_%
+{i,&lt;t})}</annotation></semantics></math> 应用于每个词元位置 <math alttext="t" class="ltx_Math" display="inline" id="S3.p3.m2"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>。
+由于该权重基于单个样本 <math alttext="y_{i,t}" class="ltx_Math" display="inline" id="S3.p3.m3"><semantics><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">y_{i,t}</annotation></semantics></math>，该样本来自每个下一词元分布 <math alttext="\pi_{\theta_{\text{old}}}(\cdot|x,y_{i,&lt;t})" class="ltx_math_unparsed" display="inline" id="S3.p3.m4"><semantics><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi_{\theta_{\text{old}}}(\cdot|x,y_{i,&lt;t})</annotation></semantics></math>，它无法发挥预期的分布校正作用。
+相反，它向训练梯度中引入高方差噪声，该噪声在长序列上累积，并被裁剪机制加剧。
+我们通过实证观察到，这可能导致往往不可逆的模型崩溃。
+一旦发生崩溃，恢复训练也无济于事，即使回退到之前的检查点并仔细调优超参数（例如裁剪范围）、延长生成长度或切换强化学习查询也是如此。</p>
+</div>
+<div class="ltx_para" id="S3.p4">
+<p class="ltx_p">上述观察表明 GRPO 设计中存在一个根本问题。
+词元级重要性权重的失效指向一条核心原则：<span class="ltx_text ltx_font_bold">优化目标的单位应与奖励的单位相匹配</span>。
+由于奖励是赋予整个序列的，在词元级应用离策略校正似乎有问题。
+这促使我们放弃词元级目标，转而探索利用重要性权重并直接在<span class="ltx_text ltx_font_italic">序列级</span>进行优化。</p>
+</div>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4 </span>算法</h2>
+<section class="ltx_subsection" id="S4.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1 </span>GSPO：组序列策略优化</h3>
+<div class="ltx_para" id="S4.SS1.p1">
+<p class="ltx_p">虽然 GRPO 中的词元级重要性权重 <math alttext="\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{\text{old}}}(y_{i,t}|x,y_%
+{i,&lt;t})}" class="ltx_Math" display="inline" id="S4.SS1.p1.m1"><semantics><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac><annotation encoding="application/x-tex">\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{\text{old}}}(y_{i,t}|x,y_%
+{i,&lt;t})}</annotation></semantics></math> 存在问题，但我们观察到，在语言生成的语境下，<span class="ltx_text ltx_font_italic">序列级</span>重要性权重 <math alttext="\frac{\pi_{\theta}(y|x)}{\pi_{\theta_{\text{old}}}(y|x)}" class="ltx_Math" display="inline" id="S4.SS1.p1.m2"><semantics><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>y</mi><mo fence="false">|</mo><mi>x</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>y</mi><mo fence="false">|</mo><mi>x</mi></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac><annotation encoding="application/x-tex">\frac{\pi_{\theta}(y|x)}{\pi_{\theta_{\text{old}}}(y|x)}</annotation></semantics></math> 具有清晰的理论含义：它反映了回复 <math alttext="y" class="ltx_Math" display="inline" id="S4.SS1.p1.m3"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>（从 <math alttext="\pi_{\theta_{\text{old}}}(\cdot|x)" class="ltx_math_unparsed" display="inline" id="S4.SS1.p1.m4"><semantics><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi_{\theta_{\text{old}}}(\cdot|x)</annotation></semantics></math> 采样）偏离 <math alttext="\pi_{\theta}(\cdot|x)" class="ltx_math_unparsed" display="inline" id="S4.SS1.p1.m5"><semantics><mrow><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi_{\theta}(\cdot|x)</annotation></semantics></math> 的程度，这自然地与序列级奖励相一致，也可作为裁剪机制的有意义指标。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p2">
+<p class="ltx_p">基于这一直接的观察，我们提出 <span class="ltx_text ltx_font_bold">组序列策略优化（GSPO）</span>算法。
+GSPO 采用以下序列级优化目标：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx5">
+<tbody id="S4.E5"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle\mathcal{J}_{\text{GSPO}}(\theta)=\mathbb{E}_{x\sim\mathcal{D},\,%
+\{y_{i}\}_{i=1}^{G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}%
+\sum_{i=1}^{G}\min\left(s_{i}(\theta)\widehat{A}_{i},\,\mathrm{clip}\left(s_{i%
+}(\theta),1-{\varepsilon},1+{\varepsilon}\right)\widehat{A}_{i}\right)\right]," class="ltx_math_unparsed" display="inline" id="S4.E5.m1"><semantics><mrow><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒥</mi><mtext>GSPO</mtext></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><mi>min</mi><mo>⁡</mo><mrow><mo>(</mo><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub></mrow><mo rspace="0.337em">,</mo><mrow><mi>clip</mi><mo>⁢</mo><mrow><mo>(</mo><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><mn>1</mn><mo>−</mo><mi>ε</mi></mrow><mo>,</mo><mrow><mn>1</mn><mo>+</mo><mi>ε</mi></mrow><mo>)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub></mrow><mo>)</mo></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle\mathcal{J}_{\text{GSPO}}(\theta)=\mathbb{E}_{x\sim\mathcal{D},\,%
+\{y_{i}\}_{i=1}^{G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}%
+\sum_{i=1}^{G}\min\left(s_{i}(\theta)\widehat{A}_{i},\,\mathrm{clip}\left(s_{i%
+}(\theta),1-{\varepsilon},1+{\varepsilon}\right)\widehat{A}_{i}\right)\right],</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(5)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中我们采用基于组的优势估计：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx6">
+<tbody id="S4.E6"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle\widehat{A}_{i}=\frac{r(x,y_{i})-\mathrm{mean}\left(\{r(x,y_{i})%
+\}_{i=1}^{G}\right)}{\mathrm{std}\left(\{r(x,y_{i})\}_{i=1}^{G}\right)}," class="ltx_Math" display="inline" id="S4.E6.m1"><semantics><mrow><mrow><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><mrow><mi>r</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo>−</mo><mrow><mi>mean</mi><mo>⁢</mo><mrow><mo>(</mo><msubsup><mrow><mo stretchy="false">{</mo><mrow><mi>r</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>)</mo></mrow></mrow></mrow><mrow><mi>std</mi><mo>⁢</mo><mrow><mo>(</mo><msubsup><mrow><mo stretchy="false">{</mo><mrow><mi>r</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>)</mo></mrow></mrow></mfrac></mstyle></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle\widehat{A}_{i}=\frac{r(x,y_{i})-\mathrm{mean}\left(\{r(x,y_{i})%
+\}_{i=1}^{G}\right)}{\mathrm{std}\left(\{r(x,y_{i})\}_{i=1}^{G}\right)},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(6)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">并定义重要性比率 <math alttext="s_{i}(\theta)" class="ltx_Math" display="inline" id="S4.SS1.p2.m1"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">s_{i}(\theta)</annotation></semantics></math>，其依据是序列似然 <cite class="ltx_cite ltx_citemacro_citep">(Zheng et al., <a class="ltx_ref" href="#bib.bib8" title="">2023</a>)</cite>：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx7">
+<tbody id="S4.E7"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle s_{i}(\theta)=\left(\frac{\pi_{\theta}(y_{i}|x)}{\pi_{\theta_{%
+\text{old}}}(y_{i}|x)}\right)^{\frac{1}{|y_{i}|}}=\exp\left(\frac{1}{|y_{i}|}%
+\sum_{t=1}^{|y_{i}|}\log\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{%
+\text{old}}}(y_{i,t}|x,y_{i,&lt;t})}\right)." class="ltx_Math" display="inline" id="S4.E7.m1"><semantics><mrow><mrow><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><msup><mrow><mo>(</mo><mstyle displaystyle="true"><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>i</mi></msub><mo fence="false">|</mo><mi>x</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>i</mi></msub><mo fence="false">|</mo><mi>x</mi></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac></mstyle><mo>)</mo></mrow><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></msup><mo>=</mo><mrow><mi>exp</mi><mo>⁡</mo><mrow><mo>(</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></munderover></mstyle><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><mstyle displaystyle="true"><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac></mstyle></mrow></mrow></mrow><mo>)</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\displaystyle s_{i}(\theta)=\left(\frac{\pi_{\theta}(y_{i}|x)}{\pi_{\theta_{%
+\text{old}}}(y_{i}|x)}\right)^{\frac{1}{|y_{i}|}}=\exp\left(\frac{1}{|y_{i}|}%
+\sum_{t=1}^{|y_{i}|}\log\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{%
+\text{old}}}(y_{i,t}|x,y_{i,&lt;t})}\right).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(7)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">因此，GSPO 对整个回复而非单个词元应用裁剪，以将过度“离策略”的样本排除在梯度估计之外，这与序列级奖励和优化都相匹配。
+注意，我们在 <math alttext="s_{i}(\theta)" class="ltx_Math" display="inline" id="S4.SS1.p2.m2"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">s_{i}(\theta)</annotation></semantics></math> 中采用长度归一化，以减小方差并将 <math alttext="s_{i}(\theta)" class="ltx_Math" display="inline" id="S4.SS1.p2.m3"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">s_{i}(\theta)</annotation></semantics></math> 控制在统一的数值范围内。
+否则，少数几个词元的似然变化就可能导致序列级重要性比率剧烈波动，且不同长度回复的重要性比率将需要不同的裁剪范围。
+我们还注意到，由于重要性比率的定义不同，GSPO 与以往算法（如 GRPO）中的裁剪范围通常存在数量级差异。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2 </span>梯度分析</h3>
+<div class="ltx_para" id="S4.SS2.p1">
+<p class="ltx_p">我们可以推导出 GSPO 目标的梯度如下（为简洁起见省略裁剪）：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx8">
+<tbody id="S4.E8"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle\nabla_{\theta}\mathcal{J}_{\text{GSPO}}(\theta)=" class="ltx_Math" display="inline" id="S4.E8.m1"><semantics><mrow><mrow><mrow><msub><mo>∇</mo><mi>θ</mi></msub><msub><mi class="ltx_font_mathcaligraphic">𝒥</mi><mtext>GSPO</mtext></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mi></mi></mrow><annotation encoding="application/x-tex">\displaystyle\nabla_{\theta}\mathcal{J}_{\text{GSPO}}(\theta)=</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle\ \nabla_{\theta}\mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{%
+G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}s_{i}(%
+\theta)\widehat{A}_{i}\right]" class="ltx_math_unparsed" display="inline" id="S4.E8.m2"><semantics><mrow><mrow><msub><mo>∇</mo><mi>θ</mi></msub><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub></mrow><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub></mrow></mrow></mrow><mo>]</mo></mrow></mrow><annotation encoding="application/x-tex">\displaystyle\ \nabla_{\theta}\mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{%
+G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}s_{i}(%
+\theta)\widehat{A}_{i}\right]</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(8)</span></td>
+</tr></tbody>
+<tbody id="S4.E9"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle=" class="ltx_Math" display="inline" id="S4.E9.m1"><semantics><mo>=</mo><annotation encoding="application/x-tex">\displaystyle=</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle\ \mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{%
+\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}s_{i}(\theta)%
+\widehat{A}_{i}\cdot\nabla_{\theta}\log s_{i}(\theta)\right]" class="ltx_math_unparsed" display="inline" id="S4.E9.m2"><semantics><mrow><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><mrow><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub></mrow><mo lspace="0.222em" rspace="0.222em">⋅</mo><mrow><mrow><msub><mo rspace="0.167em">∇</mo><mi>θ</mi></msub><mi>log</mi></mrow><mo lspace="0.167em">⁡</mo><msub><mi>s</mi><mi>i</mi></msub></mrow></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow><annotation encoding="application/x-tex">\displaystyle\ \mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{%
+\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}s_{i}(\theta)%
+\widehat{A}_{i}\cdot\nabla_{\theta}\log s_{i}(\theta)\right]</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(9)</span></td>
+</tr></tbody>
+<tbody id="S4.E10"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle=" class="ltx_Math" display="inline" id="S4.E10.m1"><semantics><mo>=</mo><annotation encoding="application/x-tex">\displaystyle=</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle\ \mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{%
+\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}\left(\frac{\pi_{%
+\theta}(y_{i}|x)}{\pi_{\theta_{\text{old}}}(y_{i}|x)}\right)^{\frac{1}{|y_{i}|%
+}}\widehat{A}_{i}\cdot\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\nabla_{\theta}\log%
+\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})\right]." class="ltx_math_unparsed" display="inline" id="S4.E10.m2"><semantics><mrow><mrow><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><mrow><mrow><msup><mrow><mo>(</mo><mstyle displaystyle="true"><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>i</mi></msub><mo fence="false">|</mo><mi>x</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>i</mi></msub><mo fence="false">|</mo><mi>x</mi></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac></mstyle><mo>)</mo></mrow><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></msup><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub></mrow><mo lspace="0.222em" rspace="0.222em">⋅</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></mstyle></mrow><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></munderover></mstyle><mrow><mrow><mrow><msub><mo lspace="0.167em" rspace="0.167em">∇</mo><mi>θ</mi></msub><mi>log</mi></mrow><mo lspace="0.167em">⁡</mo><msub><mi>π</mi><mi>θ</mi></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\displaystyle\ \mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{%
+\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}\left(\frac{\pi_{%
+\theta}(y_{i}|x)}{\pi_{\theta_{\text{old}}}(y_{i}|x)}\right)^{\frac{1}{|y_{i}|%
+}}\widehat{A}_{i}\cdot\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\nabla_{\theta}\log%
+\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})\right].</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(10)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">作为对比，GRPO 目标的梯度如下（注意 <math alttext="\widehat{A}_{i,t}=\widehat{A}_{i}" class="ltx_Math" display="inline" id="S4.SS2.p1.m1"><semantics><mrow><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\widehat{A}_{i,t}=\widehat{A}_{i}</annotation></semantics></math>）：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx9">
+<tbody id="S4.E11"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle\nabla_{\theta}\mathcal{J}_{\text{GRPO}}(\theta)=" class="ltx_Math" display="inline" id="S4.E11.m1"><semantics><mrow><mrow><mrow><msub><mo>∇</mo><mi>θ</mi></msub><msub><mi class="ltx_font_mathcaligraphic">𝒥</mi><mtext>GRPO</mtext></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mi></mi></mrow><annotation encoding="application/x-tex">\displaystyle\nabla_{\theta}\mathcal{J}_{\text{GRPO}}(\theta)=</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle\ \nabla_{\theta}\mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{%
+G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}\frac{%
+1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}w_{i,t}(\theta)\widehat{A}_{i,t}\right]" class="ltx_math_unparsed" display="inline" id="S4.E11.m2"><semantics><mrow><mrow><msub><mo>∇</mo><mi>θ</mi></msub><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub></mrow><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></munderover></mstyle><mrow><msub><mi>w</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow><annotation encoding="application/x-tex">\displaystyle\ \nabla_{\theta}\mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{%
+G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}\frac{%
+1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}w_{i,t}(\theta)\widehat{A}_{i,t}\right]</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(11)</span></td>
+</tr></tbody>
+<tbody id="S4.E12"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle=" class="ltx_Math" display="inline" id="S4.E12.m1"><semantics><mo>=</mo><annotation encoding="application/x-tex">\displaystyle=</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle\ \mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{%
+\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}\widehat{A}_{i}%
+\cdot\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t%
+})}{\pi_{\theta_{\text{old}}}(y_{i,t}|x,y_{i,&lt;t})}\nabla_{\theta}\log\pi_{%
+\theta}(y_{i,t}|x,y_{i,&lt;t})\right]." class="ltx_math_unparsed" display="inline" id="S4.E12.m2"><semantics><mrow><mrow><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><mrow><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub><mo lspace="0.222em" rspace="0.222em">⋅</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></mstyle></mrow><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></munderover></mstyle><mrow><mstyle displaystyle="true"><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac></mstyle><mo lspace="0.167em">⁢</mo><mrow><mrow><msub><mo rspace="0.167em">∇</mo><mi>θ</mi></msub><mi>log</mi></mrow><mo lspace="0.167em">⁡</mo><msub><mi>π</mi><mi>θ</mi></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\displaystyle\ \mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{%
+\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}\widehat{A}_{i}%
+\cdot\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t%
+})}{\pi_{\theta_{\text{old}}}(y_{i,t}|x,y_{i,&lt;t})}\nabla_{\theta}\log\pi_{%
+\theta}(y_{i,t}|x,y_{i,&lt;t})\right].</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(12)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">因此，GSPO 与 GRPO 的根本区别在于<span class="ltx_text ltx_font_italic">它们如何对词元的对数似然梯度进行加权</span>。
+在 GRPO 中，词元根据各自的“重要性权重” <math alttext="\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{\text{old}}}(y_{i,t}|x,y_%
+{i,&lt;t})}" class="ltx_Math" display="inline" id="S4.SS2.p1.m2"><semantics><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac><annotation encoding="application/x-tex">\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{\text{old}}}(y_{i,t}|x,y_%
+{i,&lt;t})}</annotation></semantics></math> 加权。
+然而，这些不等的权重可能在 <math alttext="(0,1+\varepsilon]" class="ltx_Math" display="inline" id="S4.SS2.p1.m3"><semantics><mrow><mo stretchy="false">(</mo><mn>0</mn><mo>,</mo><mrow><mn>1</mn><mo>+</mo><mi>ε</mi></mrow><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">(0,1+\varepsilon]</annotation></semantics></math>（对于 <math alttext="\widehat{A}_{i}&gt;0" class="ltx_Math" display="inline" id="S4.SS2.p1.m4"><semantics><mrow><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\widehat{A}_{i}&gt;0</annotation></semantics></math>）或 <math alttext="[1-\varepsilon,+\infty)" class="ltx_Math" display="inline" id="S4.SS2.p1.m5"><semantics><mrow><mo stretchy="false">[</mo><mrow><mn>1</mn><mo>−</mo><mi>ε</mi></mrow><mo>,</mo><mrow><mo>+</mo><mi mathvariant="normal">∞</mi></mrow><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">[1-\varepsilon,+\infty)</annotation></semantics></math>（对于 <math alttext="\widehat{A}_{i}&lt;0" class="ltx_Math" display="inline" id="S4.SS2.p1.m6"><semantics><mrow><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\widehat{A}_{i}&lt;0</annotation></semantics></math>）之间变化，其影响不可忽略，并且随着训练推进可能累积并导致不可预测的后果。
+相比之下，GSPO 对回复中的所有词元赋予相同权重，消除了 GRPO 的这一不稳定因素。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S4.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.3 </span>GSPO-token：一种词元级目标变体</h3>
+<div class="ltx_para" id="S4.SS3.p1">
+<p class="ltx_p">在多轮强化学习等场景中，我们可能希望获得比序列级更细粒度的优势调整。
+为此，我们引入 GSPO 的词元级目标变体，即 <span class="ltx_text ltx_font_bold">GSPO-token</span>，以允许按词元定制优势：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx10">
+<tbody id="S4.E13"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle\mathcal{J}_{\text{GSPO-token}}(\theta)=\mathbb{E}_{x\sim\mathcal%
+{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}%
+{G}\sum_{i=1}^{G}\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\min\left(s_{i,t}(\theta%
+)\widehat{A}_{i,t},\,\mathrm{clip}\left(s_{i,t}(\theta),1-{\varepsilon},1+{%
+\varepsilon}\right)\widehat{A}_{i,t}\right)\right]," class="ltx_math_unparsed" display="inline" id="S4.E13.m1"><semantics><mrow><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">𝒥</mi><mtext>GSPO-token</mtext></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></munderover></mstyle><mrow><mi>min</mi><mo>⁡</mo><mrow><mo>(</mo><mrow><msub><mi>s</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow><mo rspace="0.337em">,</mo><mrow><mi>clip</mi><mo>⁢</mo><mrow><mo>(</mo><mrow><msub><mi>s</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><mn>1</mn><mo>−</mo><mi>ε</mi></mrow><mo>,</mo><mrow><mn>1</mn><mo>+</mo><mi>ε</mi></mrow><mo>)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow><mo>)</mo></mrow></mrow></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle\mathcal{J}_{\text{GSPO-token}}(\theta)=\mathbb{E}_{x\sim\mathcal%
+{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}%
+{G}\sum_{i=1}^{G}\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\min\left(s_{i,t}(\theta%
+)\widehat{A}_{i,t},\,\mathrm{clip}\left(s_{i,t}(\theta),1-{\varepsilon},1+{%
+\varepsilon}\right)\widehat{A}_{i,t}\right)\right],</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(13)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx11">
+<tbody id="S4.E14"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle s_{i,t}(\theta)=\mathrm{sg}\left[s_{i}(\theta)\right]\cdot\frac{%
+\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\mathrm{sg}\left[\pi_{\theta}(y_{i,t}|x,y_{i%
+,&lt;t})\right]}," class="ltx_Math" display="inline" id="S4.E14.m1"><semantics><mrow><mrow><mrow><msub><mi>s</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mrow><mi>sg</mi><mo>⁢</mo><mrow><mo>[</mo><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.055em">]</mo></mrow></mrow><mo rspace="0.222em">⋅</mo><mstyle displaystyle="true"><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><mi>sg</mi><mo>⁢</mo><mrow><mo>[</mo><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mo>]</mo></mrow></mrow></mfrac></mstyle></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle s_{i,t}(\theta)=\mathrm{sg}\left[s_{i}(\theta)\right]\cdot\frac{%
+\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\mathrm{sg}\left[\pi_{\theta}(y_{i,t}|x,y_{i%
+,&lt;t})\right]},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(14)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">且 <math alttext="\mathrm{sg}[\cdot]" class="ltx_Math" display="inline" id="S4.SS3.p1.m1"><semantics><mrow><mi>sg</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathrm{sg}[\cdot]</annotation></semantics></math> 表示只取数值而停止梯度，对应于 PyTorch 中的 <span class="ltx_text ltx_font_typewriter">detach</span> 操作。
+GSPO-token 的梯度可推导为：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_align ltx_eqn_table" id="S6.EGx12">
+<tbody id="S4.E15"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle\nabla_{\theta}\mathcal{J}_{\text{GSPO-token}}(\theta)=" class="ltx_Math" display="inline" id="S4.E15.m1"><semantics><mrow><mrow><mrow><msub><mo>∇</mo><mi>θ</mi></msub><msub><mi class="ltx_font_mathcaligraphic">𝒥</mi><mtext>GSPO-token</mtext></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mi></mi></mrow><annotation encoding="application/x-tex">\displaystyle\nabla_{\theta}\mathcal{J}_{\text{GSPO-token}}(\theta)=</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle\ \nabla_{\theta}\mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{%
+G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}\frac{%
+1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}s_{i,t}(\theta)\widehat{A}_{i,t}\right]" class="ltx_math_unparsed" display="inline" id="S4.E15.m2"><semantics><mrow><mrow><msub><mo>∇</mo><mi>θ</mi></msub><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub></mrow><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></munderover></mstyle><mrow><msub><mi>s</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow><annotation encoding="application/x-tex">\displaystyle\ \nabla_{\theta}\mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{%
+G}\sim\pi_{\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}\frac{%
+1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}s_{i,t}(\theta)\widehat{A}_{i,t}\right]</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(15)</span></td>
+</tr></tbody>
+<tbody id="S4.E16"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle=" class="ltx_Math" display="inline" id="S4.E16.m1"><semantics><mo>=</mo><annotation encoding="application/x-tex">\displaystyle=</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle\ \mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{%
+\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}s_{i}(\theta)%
+\cdot\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\widehat{A}_{i,t}\frac{\nabla_{%
+\theta}\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}\right]" class="ltx_math_unparsed" display="inline" id="S4.E16.m2"><semantics><mrow><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><mrow><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo rspace="0.055em" stretchy="false">)</mo></mrow></mrow><mo rspace="0.222em">⋅</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></mstyle></mrow><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></munderover></mstyle><mrow><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mstyle displaystyle="true"><mfrac><mrow><mrow><msub><mo>∇</mo><mi>θ</mi></msub><msub><mi>π</mi><mi>θ</mi></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac></mstyle></mrow></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow><annotation encoding="application/x-tex">\displaystyle\ \mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{%
+\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}s_{i}(\theta)%
+\cdot\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\widehat{A}_{i,t}\frac{\nabla_{%
+\theta}\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}\right]</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(16)</span></td>
+</tr></tbody>
+<tbody id="S4.E17"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle=" class="ltx_Math" display="inline" id="S4.E17.m1"><semantics><mo>=</mo><annotation encoding="application/x-tex">\displaystyle=</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle\ \mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{%
+\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}\left(\frac{\pi_{%
+\theta}(y_{i}|x)}{\pi_{\theta_{\text{old}}}(y_{i}|x)}\right)^{\frac{1}{|y_{i}|%
+}}\cdot\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\widehat{A}_{i,t}\nabla_{\theta}%
+\log\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})\right]." class="ltx_math_unparsed" display="inline" id="S4.E17.m2"><semantics><mrow><mrow><msub><mi>𝔼</mi><mrow><mi>x</mi><mo>∼</mo><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo rspace="0.337em">,</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></msubsup><mo>∼</mo><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo fence="false" rspace="0.167em" stretchy="false">|</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></msub><mo>⁢</mo><mrow><mo>[</mo><mrow><mstyle displaystyle="true"><mfrac><mn>1</mn><mi>G</mi></mfrac></mstyle><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>G</mi></munderover></mstyle><mrow><mrow><msup><mrow><mo>(</mo><mstyle displaystyle="true"><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>i</mi></msub><mo fence="false">|</mo><mi>x</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>i</mi></msub><mo fence="false">|</mo><mi>x</mi></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac></mstyle><mo rspace="0.055em">)</mo></mrow><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></msup><mo rspace="0.222em">⋅</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></mfrac></mstyle></mrow><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo stretchy="false">|</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">|</mo></mrow></munderover></mstyle><mrow><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo lspace="0.167em">⁢</mo><mrow><mrow><msub><mo rspace="0.167em">∇</mo><mi>θ</mi></msub><mi>log</mi></mrow><mo lspace="0.167em">⁡</mo><msub><mi>π</mi><mi>θ</mi></msub></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow></mrow></mrow><mo>]</mo></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\displaystyle\ \mathbb{E}_{x\sim\mathcal{D},\,\{y_{i}\}_{i=1}^{G}\sim\pi_{%
+\theta_{\text{old}}}(\cdot|x)}\left[\frac{1}{G}\sum_{i=1}^{G}\left(\frac{\pi_{%
+\theta}(y_{i}|x)}{\pi_{\theta_{\text{old}}}(y_{i}|x)}\right)^{\frac{1}{|y_{i}|%
+}}\cdot\frac{1}{|y_{i}|}\sum_{t=1}^{|y_{i}|}\widehat{A}_{i,t}\nabla_{\theta}%
+\log\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})\right].</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(17)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">注意，项 <math alttext="\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\mathrm{sg}\left[\pi_{\theta}(y_{i,t}|%
+x,y_{i,&lt;t})\right]}" class="ltx_Math" display="inline" id="S4.SS3.p1.m2"><semantics><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><mi>sg</mi><mo>⁢</mo><mrow><mo>[</mo><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mo>]</mo></mrow></mrow></mfrac><annotation encoding="application/x-tex">\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\mathrm{sg}\left[\pi_{\theta}(y_{i,t}|%
+x,y_{i,&lt;t})\right]}</annotation></semantics></math> 的数值为 1，因此 <math alttext="s_{i,t}(\theta)" class="ltx_Math" display="inline" id="S4.SS3.p1.m3"><semantics><mrow><msub><mi>s</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">s_{i,t}(\theta)</annotation></semantics></math> 在数值上等于 <math alttext="s_{i}(\theta)" class="ltx_Math" display="inline" id="S4.SS3.p1.m4"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">s_{i}(\theta)</annotation></semantics></math>。
+对比式（<a class="ltx_ref" href="#S4.E5" title="In 4.1 GSPO: Group Sequence Policy Optimization ‣ 4 Algorithm ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">5</span></a>）与式（<a class="ltx_ref" href="#S4.E13" title="In 4.3 GSPO-token: A Token-level Objective Variant ‣ 4 Algorithm ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">13</span></a>），以及式（<a class="ltx_ref" href="#S4.E10" title="In 4.2 Gradient Analysis ‣ 4 Algorithm ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">10</span></a>）与式（<a class="ltx_ref" href="#S4.E17" title="In 4.3 GSPO-token: A Token-level Objective Variant ‣ 4 Algorithm ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">17</span></a>），当我们将回复 <math alttext="y_{i}" class="ltx_Math" display="inline" id="S4.SS3.p1.m5"><semantics><msub><mi>y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">y_{i}</annotation></semantics></math> 中所有词元的优势设为相同值（即 <math alttext="\widehat{A}_{i,t}=\widehat{A}_{i}" class="ltx_Math" display="inline" id="S4.SS3.p1.m6"><semantics><mrow><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\widehat{A}_{i,t}=\widehat{A}_{i}</annotation></semantics></math>）时，GSPO-token 与 GSPO 在优化目标、裁剪条件和理论梯度上数值完全相同，而 GSPO-token 具有按词元调整优势的更高灵活性。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5 </span>实验与讨论</h2>
+<section class="ltx_subsection" id="S5.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.1 </span>实证结果</h3>
+<div class="ltx_para" id="S5.SS1.p1">
+<p class="ltx_p">我们使用从 Qwen3-30B-A3B-Base 微调得到的冷启动模型进行实验，并报告训练奖励曲线以及模型在 AIME’24（平均 Pass@1，对 32 次采样取平均）、LiveCodeBench（202410-202502，平均 Pass@1，对 8 次采样取平均）和 CodeForces（Elo 评分）基准上的性能曲线。
+在强化学习训练期间，每批采样轨迹数据被划分为四个小批量用于梯度更新。
+在 GSPO 中，我们将式（<a class="ltx_ref" href="#S4.E5" title="In 4.1 GSPO: Group Sequence Policy Optimization ‣ 4 Algorithm ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">5</span></a>）中的左、右裁剪范围分别设为 3e-4 和 4e-4。
+我们以 GRPO 作为基线进行对比，并将式（<a class="ltx_ref" href="#S2.E2" title="In Group Relative Policy Optimization (GRPO) ‣ 2 Preliminaries ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">2</span></a>）中的左、右裁剪范围分别设为 0.2 和 0.27，我们已仔细调优这些值以确保公平比较。
+注意，GRPO 需要采用 Routing Replay 训练策略才能使 MoE 强化学习正常收敛，我们将在 § <a class="ltx_ref" href="#S5.SS3" title="5.3 Benefit of GSPO for MoE Training ‣ 5 Experiments and Discussion ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">5.3</span></a> 中额外讨论这一点，而 <span class="ltx_text ltx_font_italic">GSPO 已消除了对该策略的需求</span>。</p>
+</div>
+<div class="ltx_para" id="S5.SS1.p2">
+<p class="ltx_p">图<a class="ltx_ref" href="#S5.F1" title="Figure 1 ‣ 5.1 Empirical Results ‣ 5 Experiments and Discussion ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">1</span></a>表明，使用 GSPO 的训练自始至终稳定进行。
+我们观察到，<span class="ltx_text ltx_font_bold">GSPO 能够通过增加训练计算量、定期更新查询集以及延长生成长度，持续带来性能提升</span>。
+此外，在相同的训练计算量和消耗的查询数下，GSPO 还展现出优于 GRPO 的训练效率，取得了更好的训练准确率和基准性能。
+最后，我们已成功将 GSPO 应用于最新 Qwen3 模型的强化学习训练，有力证明了 GSPO 在释放大语言模型强化学习扩展能力方面的有效性。</p>
+</div>
+<figure class="ltx_figure" id="S5.F1"><a href="assets/e2f176fe707dabbe.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S5.F1.g1" loading="lazy" src="assets/e2f176fe707dabbe.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1: </span>
+从 Qwen3-30B-A3B-Base 微调的冷启动模型的训练曲线。
+GSPO 的训练效率显著高于 GRPO。
+</figcaption>
+</figure>
+</section>
+<section class="ltx_subsection" id="S5.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.2 </span>关于裁剪比例的有趣观察</h3>
+<div class="ltx_para" id="S5.SS2.p1">
+<p class="ltx_p">GSPO 与 GRPO 的一个关键区别在于，它裁剪的是整个回复，而不是单个词元。
+特别是，如图<a class="ltx_ref" href="#S5.F2" title="Figure 2 ‣ 5.2 Curious Observation on Clipping Fractions ‣ 5 Experiments and Discussion ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">2</span></a>所示，我们观察到 GSPO 与 GRPO 的裁剪词元比例之间存在两个数量级的差异（而调整裁剪范围并不会改变这一数量级上的差距）。
+然而，尽管 GSPO 裁剪了显著更多的词元、因而用于训练（或梯度估计）的词元更少，其训练效率仍高于 GRPO。
+这一反直觉的发现——裁剪更大比例的词元反而带来更优的训练效率——进一步表明，GRPO 的词元级梯度估计本质上是有噪声的，对样本利用而言效率低下。
+相比之下，GSPO 的序列级方法提供了更可靠、更有效的学习信号。</p>
+</div>
+<figure class="ltx_figure" id="S5.F2"><a href="assets/ee6615735056b772.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S5.F2.g1" loading="lazy" src="assets/ee6615735056b772.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2: </span>
+GSPO 与 GRPO 在强化学习训练过程中的平均裁剪词元比例。
+</figcaption>
+</figure>
+</section>
+<section class="ltx_subsection" id="S5.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.3 </span>GSPO 对 MoE 训练的益处</h3>
+<section class="ltx_paragraph" id="S5.SS3.SSS0.Px1">
+<h4 class="ltx_title ltx_title_paragraph">背景</h4>
+<div class="ltx_para" id="S5.SS3.SSS0.Px1.p1">
+<p class="ltx_p">与稠密模型的强化学习训练相比，MoE 模型的稀疏激活特性带来了独特的稳定性挑战。
+特别是，我们发现，在采用 GRPO 算法时，MoE 模型的<span class="ltx_text ltx_font_italic">专家激活波动</span>会阻碍强化学习训练正常收敛。
+具体而言，在一次或多次梯度更新之后，同一回复所激活的专家可能发生显著变化。
+例如，对于48层的 Qwen3-30B-A3B-Base 模型，在每次强化学习梯度更新之后，对于同一个采样轨迹样本，约有10%的专家在新策略<math alttext="\pi_{\theta}" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px1.p1.m1"><semantics><msub><mi>π</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\pi_{\theta}</annotation></semantics></math>下激活，而与旧策略<math alttext="\pi_{\theta_{\text{old}}}" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px1.p1.m2"><semantics><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><annotation encoding="application/x-tex">\pi_{\theta_{\text{old}}}</annotation></semantics></math>下激活的专家不同。
+这一现象在更深的 MoE 模型中更为突出，它使词元级重要性比率<math alttext="w_{i,t}(\theta)=\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{\text{old%
+}}}(y_{i,t}|x,y_{i,&lt;t})}" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px1.p1.m3"><semantics><mrow><mrow><msub><mi>w</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">w_{i,t}(\theta)=\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{\text{old%
+}}}(y_{i,t}|x,y_{i,&lt;t})}</annotation></semantics></math>剧烈波动并进一步失效，如§<a class="ltx_ref" href="#S3" title="3 Motivation ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">3</span></a>和<a class="ltx_ref" href="#S4.SS2" title="4.2 Gradient Analysis ‣ 4 Algorithm ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">4.2</span></a>所述，从而阻碍强化学习训练的正常收敛。</p>
+</div>
+</section>
+<section class="ltx_paragraph" id="S5.SS3.SSS0.Px2">
+<h4 class="ltx_title ltx_title_paragraph">我们此前的方法</h4>
+<div class="ltx_para" id="S5.SS3.SSS0.Px2.p1">
+<p class="ltx_p">为应对这一挑战，我们此前采用了<span class="ltx_text ltx_font_bold">路由回放</span>训练策略。
+具体而言，我们在<math alttext="\pi_{\theta_{\text{old}}}" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px2.p1.m1"><semantics><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><annotation encoding="application/x-tex">\pi_{\theta_{\text{old}}}</annotation></semantics></math>中缓存激活的专家，并于<math alttext="\pi_{\theta}" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px2.p1.m2"><semantics><msub><mi>π</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\pi_{\theta}</annotation></semantics></math>中“回放”这些路由模式，以计算重要性比率<math alttext="w_{i,t}(\theta)=\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{\text{old%
+}}}(y_{i,t}|x,y_{i,&lt;t})}" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px2.p1.m3"><semantics><mrow><mrow><msub><mi>w</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">w_{i,t}(\theta)=\frac{\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})}{\pi_{\theta_{\text{old%
+}}}(y_{i,t}|x,y_{i,&lt;t})}</annotation></semantics></math>。
+这样一来，对于每个词元<math alttext="y_{i,t}" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px2.p1.m4"><semantics><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">y_{i,t}</annotation></semantics></math>，<math alttext="\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px2.p1.m5"><semantics><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})</annotation></semantics></math>和<math alttext="\pi_{\theta_{\text{old}}}(y_{i,t}|x,y_{i,&lt;t})" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px2.p1.m6"><semantics><mrow><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi_{\theta_{\text{old}}}(y_{i,t}|x,y_{i,&lt;t})</annotation></semantics></math>共享相同的激活网络，从而使我们能够恢复词元级重要性比率的稳定性，并确保在各次梯度更新中优化一致的激活网络。
+图<a class="ltx_ref" href="#S5.F3" title="Figure 3 ‣ Our Previous Approach ‣ 5.3 Benefit of GSPO for MoE Training ‣ 5 Experiments and Discussion ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">3</span></a>表明，路由回放是 MoE 模型 GRPO 训练正常收敛的一项关键技术。</p>
+</div>
+<figure class="ltx_figure" id="S5.F3"><a href="assets/ba01cb5646574b60.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S5.F3.g1" loading="lazy" src="assets/ba01cb5646574b60.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3: </span>
+路由回放策略在 MoE 模型 GRPO 训练的正常收敛中起着关键作用。
+</figcaption>
+</figure>
+</section>
+<section class="ltx_paragraph" id="S5.SS3.SSS0.Px3">
+<h4 class="ltx_title ltx_title_paragraph">GSPO 的益处</h4>
+<div class="ltx_para" id="S5.SS3.SSS0.Px3.p1">
+<p class="ltx_p">尽管路由回放使 MoE 模型的 GRPO 训练能够正常收敛，但其复用路由模式的做法会带来额外的内存和通信开销，还可能限制 MoE 模型的实际容量。
+相比之下，如图<a class="ltx_ref" href="#S5.F1" title="Figure 1 ‣ 5.1 Empirical Results ‣ 5 Experiments and Discussion ‣ Group Sequence Policy Optimization"><span class="ltx_text ltx_ref_tag">1</span></a>所示，GSPO 消除了对路由回放的依赖，完全能够按常规方式计算重要性比率<math alttext="s_{i}(\theta)" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px3.p1.m1"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">s_{i}(\theta)</annotation></semantics></math>、正常收敛并稳定优化。
+关键洞见在于，GSPO 只关注序列似然（即<math alttext="\pi_{\theta}(y_{i}|x)" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px3.p1.m2"><semantics><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mi>i</mi></msub><mo fence="false">|</mo><mi>x</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi_{\theta}(y_{i}|x)</annotation></semantics></math>），而对单个词元的似然（即<math alttext="\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})" class="ltx_Math" display="inline" id="S5.SS3.SSS0.Px3.p1.m3"><semantics><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo fence="false">|</mo><mrow><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><mrow><mi></mi><mo>&lt;</mo><mi>t</mi></mrow></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi_{\theta}(y_{i,t}|x,y_{i,&lt;t})</annotation></semantics></math>）不敏感。
+由于 MoE 模型始终保持着其语言建模能力，序列似然不会剧烈波动。
+总之，GSPO 从根本上解决了 MoE 模型中的专家激活波动问题，无需路由回放这类复杂的变通方案。
+这不仅简化并稳定了训练过程，还使模型能够在没有人为约束的情况下发挥其全部容量。</p>
+</div>
+</section>
+</section>
+<section class="ltx_subsection" id="S5.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.4 </span>GSPO 对强化学习基础设施的益处</h3>
+<div class="ltx_para" id="S5.SS4.p1">
+<p class="ltx_p">鉴于训练引擎（如 Megatron）与推理引擎（如 SGLang 和 vLLM）之间的精度差异，实践中我们通常使用训练引擎重新计算采样回复在旧策略<math alttext="\pi_{\theta_{\text{old}}}" class="ltx_Math" display="inline" id="S5.SS4.p1.m1"><semantics><msub><mi>π</mi><msub><mi>θ</mi><mtext>old</mtext></msub></msub><annotation encoding="application/x-tex">\pi_{\theta_{\text{old}}}</annotation></semantics></math>下的似然。
+然而，GSPO 仅使用序列级而非词元级的似然进行优化，直观上，前者对精度差异的容忍度高得多。
+因此，GSPO 使得可以直接使用推理引擎返回的似然进行优化，从而避免用训练引擎重新计算。
+这在部分轨迹采样和多轮强化学习等场景以及训练-推理分离的框架中尤为有益。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S6">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">6 </span>结论</h2>
+<div class="ltx_para" id="S6.p1">
+<p class="ltx_p">我们提出了组序列策略优化（GSPO），一种用于训练大语言模型的新强化学习算法。
+遵循重要性采样的基本原理，GSPO 基于序列似然定义重要性比率，并进行序列级的裁剪、奖励和优化。
+与 GRPO 相比，GSPO 展现出显著更优的训练稳定性、效率和性能，并在 MoE 模型的大规模强化学习训练中表现出特别的效力，为最新 Qwen3 模型的卓越提升奠定了基础。
+以 GSPO 作为可扩展的算法基石，我们将继续扩展强化学习，并期待由此带来智能方面的根本性进步。</p>
+</div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">参考文献</h2>
+<ul class="ltx_biblist">
+<li class="ltx_bibitem" id="bib.bib1">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">DeepSeek-AI [2025]</span>
+<span class="ltx_bibblock">
+DeepSeek-AI.
+
+</span>
+<span class="ltx_bibblock">Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2501.12948</em>, 2025.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib2">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">MiniMax [2025]</span>
+<span class="ltx_bibblock">
+MiniMax.
+
+</span>
+<span class="ltx_bibblock">Minimax-m1: Scaling test-time compute efficiently with lightning attention.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2506.13585</em>, 2025.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib3">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">OpenAI [2024]</span>
+<span class="ltx_bibblock">
+OpenAI.
+
+</span>
+<span class="ltx_bibblock">Learning to reason with LLMs, 2024.
+
+</span>
+<span class="ltx_bibblock">URL <a class="ltx_ref ltx_url ltx_font_typewriter" href="https://openai.com/index/learning-to-reason-with-llms/" title="">https://openai.com/index/learning-to-reason-with-llms/</a>.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib4">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Qwen [2025a]</span>
+<span class="ltx_bibblock">
+Team Qwen.
+
+</span>
+<span class="ltx_bibblock">Qwen3 technical report.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2505.09388</em>, 2025a.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib5">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Qwen [2025b]</span>
+<span class="ltx_bibblock">
+Team Qwen.
+
+</span>
+<span class="ltx_bibblock">Qwq-32b: Embracing the power of reinforcement learning, March 2025b.
+
+</span>
+<span class="ltx_bibblock">URL <a class="ltx_ref ltx_url ltx_font_typewriter" href="https://qwenlm.github.io/blog/qwq-32b/" title="">https://qwenlm.github.io/blog/qwq-32b/</a>.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib6">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Schulman et al. [2017]</span>
+<span class="ltx_bibblock">
+John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov.
+
+</span>
+<span class="ltx_bibblock">Proximal policy optimization algorithms.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:1707.06347</em>, 2017.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib7">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Shao et al. [2024]</span>
+<span class="ltx_bibblock">
+Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei Zhang, Mingchuan Zhang, Y. K. Li, Y. Wu, and Daya Guo.
+
+</span>
+<span class="ltx_bibblock">Deepseekmath: Pushing the limits of mathematical reasoning in open language models.
+
+</span>
+<span class="ltx_bibblock"><em class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2402.03300</em>, 2024.
+
+</span>
+</li>
+<li class="ltx_bibitem" id="bib.bib8">
+<span class="ltx_tag ltx_role_refnum ltx_tag_bibitem">Zheng et al. [2023]</span>
+<span class="ltx_bibblock">
+Chujie Zheng, Pei Ke, Zheng Zhang, and Minlie Huang.
+
+</span>
+<span class="ltx_bibblock">Click: Controllable text generation with sequence likelihood contrastive learning.
+
+</span>
+<span class="ltx_bibblock">In <em class="ltx_emph ltx_font_italic">Findings of the Association for Computational Linguistics: ACL 2023</em>, 2023.
+
+</span>
+<span class="ltx_bibblock">URL <a class="ltx_ref ltx_url ltx_font_typewriter" href="https://aclanthology.org/2023.findings-acl.65/" title="">https://aclanthology.org/2023.findings-acl.65/</a>.
+
+</span>
+</li>
+</ul>
+</section>
+</article></article></div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{"format": "arxiv_tex", "toc": [{"id": "tex-section-1", "title": "摘要", "level": 1}, {"id": "S1", "title": "1 引言", "level": 1}, {"id": "S2", "title": "2 预备知识", "level": 1}, {"id": "S3", "title": "3 动机", "level": 1}, {"id": "S4", "title": "4 算法", "level": 1}, {"id": "S4.SS1", "title": "4.1 GSPO：组序列策略优化", "level": 2}, {"id": "S4.SS2", "title": "4.2 梯度分析", "level": 2}, {"id": "S4.SS3", "title": "4.3 GSPO-token：一种词元级目标变体", "level": 2}, {"id": "S5", "title": "5 实验与讨论", "level": 1}, {"id": "S5.SS1", "title": "5.1 实证结果", "level": 2}, {"id": "S5.SS2", "title": "5.2 关于裁剪比例的有趣观察", "level": 2}, {"id": "S5.SS3", "title": "5.3 GSPO 对 MoE 训练的益处", "level": 2}, {"id": "S5.SS4", "title": "5.4 GSPO 对强化学习基础设施的益处", "level": 2}, {"id": "S6", "title": "6 结论", "level": 1}, {"id": "bib", "title": "参考文献", "level": 1}], "stats": {"format": "arxiv_tex", "converter": "LaTeXML", "text_chars": 16492, "sections": 15, "figures": 3, "tables": 0, "table_cells": 0, "mathml": 97, "graphics": 3, "references": 8, "warnings": ["Warning:expected:\u003cnumber> Missing number, treated as zero at colm2024_conference.tex; line 38 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 86 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 86 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 107 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 107 col 0", "Warning:not_parsed:UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Anything' at colm2024_conference.tex; line 137 col 94", "Warning:not_parsed:UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Anything' at colm2024_conference.tex; line 152 col 415", "Warning:not_parsed:UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Anything' at colm2024_conference.tex; line 152 col 467", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 160 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 160 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 189 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 189 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 194 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 194 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 201 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 201 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 213 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 213 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 218 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 218 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 237 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 237 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 254 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 254 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 261 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 261 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 268 col 0", "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at colm2024_conference.tex; line 268 col 0"], "language": "zh-CN"}, "extra_head": "\u003cstyle>\n.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}\n.tex-paper .ltx_title_document{display:none}\n.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}\n.tex-paper .ltx_creator{display:inline-block;margin-right:1em}\n.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}\n.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}\n.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}\n.tex-paper .ltx_para{margin:0}\n.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}\n.tex-paper .ltx_title_paragraph{font-size:17px}\n.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}\n.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}\n.tex-paper .ltx_font_sansserif{font-family:sans-serif}\n.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}\n.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}\n.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}\n.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}\n.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}\n.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}\n.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}\n.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}\n.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}\n.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}\n.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}\n.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}\n.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}\n.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}\n.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}\n.tex-paper math{font-size:1em;line-height:normal;font-family:math}\n.tex-paper math[display=\"block\"]{margin:.2em 0;white-space:nowrap}\n.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}\n.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}\n.tex-paper .ltx_bibblock{display:block}\n.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}\n.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}\n.tex-paper .ltx_toc{display:none}\n.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}\n.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}\n.tex-paper .ltx_tag{margin-right:.35em}\n.tex-paper [id]{scroll-margin-top:24px}\n\u003c/style>"}</script>
+<script>
+const tocPanel=document.querySelector('.paper-toc');
+if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
+tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

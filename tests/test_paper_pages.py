@@ -7,7 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from paper_pipeline.cli import _main
-from paper_pipeline.paper_pages import build_papers, load_catalog
+from paper_pipeline.paper_pages import build_papers, load_catalog, render_paper
 
 
 class PaperPagesTests(unittest.TestCase):
@@ -137,6 +137,30 @@ class PaperPagesTests(unittest.TestCase):
         with patch("paper_pipeline.paper_html.convert_pdf", side_effect=AssertionError("must not fall back")):
             with self.assertRaisesRegex(ValueError, "找不到中文 TeX 工程"):
                 build_papers(self.source, self.output, self.catalog)
+
+    def test_snapshot_rebuild_needs_neither_tex_pdf_nor_conversion_cache(self):
+        snapshot = self.root / "docs/papers/2510.26104/index.html"
+        (snapshot.parent / "assets").mkdir(parents=True)
+        (snapshot.parent / "assets/figure.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"/>')
+        record = {key: value for key, value in self.records[0].items() if key != "zh_pdf"}
+        record.update(html_snapshot=str(snapshot.relative_to(self.root)),
+                      arxiv_url="https://arxiv.org/abs/2510.26104v3")
+        document = {"format": "arxiv_tex", "body_html": '<h2 id="intro">引言</h2><p>完整译文</p>'
+                    '<math><mi>x</mi></math><img src="assets/figure.svg">',
+                    "toc": [{"id": "intro", "title": "引言", "level": 1}],
+                    "stats": {"mathml": 1}, "extra_head": "<style>.tex-paper{line-height:1.8}</style>"}
+        snapshot.write_text(render_paper(record, document))
+        self.catalog.write_text(json.dumps({"papers": [record]}))
+        with patch("paper_pipeline.tex_html.convert_tex", side_effect=AssertionError("no TeX needed")), \
+             patch("paper_pipeline.paper_html.convert_pdf", side_effect=AssertionError("no PDF needed")):
+            result = build_papers(self.root / "missing-source", self.output, self.catalog)
+        page = self.output / "site/papers/2510.26104/index.html"
+        self.assertEqual(result["built"], ["2510.26104"])
+        self.assertIn("完整译文", page.read_text())
+        self.assertIn("<math>", page.read_text())
+        self.assertIn(".tex-paper{line-height:1.8}", page.read_text())
+        self.assertTrue((page.parent / "assets/figure.svg").is_file())
+        self.assertNotIn("html_snapshot", (page.parents[1] / "catalog.json").read_text())
 
 
 if __name__ == "__main__":

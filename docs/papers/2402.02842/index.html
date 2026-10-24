@@ -1,0 +1,1471 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Trinity：统一多兴趣、长尾兴趣与长期兴趣</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style><style>
+.paper-reader main,.paper-reader>header{max-width:1180px}
+.paper-original-title{font-size:16px;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.paper-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.paper-actions a{padding:8px 14px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:14px}
+.paper-actions a:first-child{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paper-reading-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:36px;align-items:start;margin-top:30px}
+.paper-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;border-right:1px solid var(--line);padding-right:14px;font-size:13px}
+.paper-toc summary{font-size:14px;font-weight:600;cursor:pointer;padding:4px 0 10px}
+.paper-toc ol{list-style:none;padding:0;margin:0}
+.paper-toc li{margin:0;padding:4px 0;line-height:1.5}
+.paper-toc a{color:var(--muted);display:block;padding:2px 4px;border-radius:4px}
+.paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
+.paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
+.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
+.paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
+.paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
+.paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
+.paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
+.paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
+.paper-fulltext figure a{display:block}
+.paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
+.paper-fulltext .paper-equation{padding:8px 0}
+.paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
+.paper-fulltext .paper-inline-math{display:inline-block;vertical-align:middle;max-height:2.3em;width:auto;background:white;max-width:100%}
+.paper-fulltext .paper-reference{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.paper-fulltext .paper-source-page{display:block;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin:32px 0 18px;padding-top:8px;text-align:right}
+.paper-fulltext table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:14px}
+.paper-fulltext td,.paper-fulltext th{padding:6px 10px;border:1px solid var(--line)}
+.paper-bottom{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+.paper-library{display:grid;gap:0;margin:24px 0}
+.paper-entry{padding:26px 0;border-top:1px solid var(--line)}
+.paper-entry h2{display:block;font-size:21px;margin:6px 0}
+.paper-entry .original{display:block;margin-bottom:12px}
+.paper-entry .paper-actions{margin-bottom:0}
+.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+@media(max-width:800px){
+ .paper-reading-layout{display:block;margin-top:20px}
+ .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
+ .paper-toc[open] ol{max-height:55vh;overflow:auto}
+ .paper-fulltext{font-size:16px;line-height:1.9}
+ .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
+ .paper-reader h1{font-size:26px}
+}
+@media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
+</style><style>
+.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}
+.tex-paper .ltx_title_document{display:none}
+.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}
+.tex-paper .ltx_creator{display:inline-block;margin-right:1em}
+.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
+.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_para{margin:0}
+.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
+.tex-paper .ltx_title_paragraph{font-size:17px}
+.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}
+.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}
+.tex-paper .ltx_font_sansserif{font-family:sans-serif}
+.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}
+.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}
+.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}
+.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}
+.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}
+.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}
+.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}
+.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}
+.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}
+.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}
+.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}
+.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}
+.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}
+.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}
+.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+.tex-paper math{font-size:1em;line-height:normal;font-family:math}
+.tex-paper math[display="block"]{margin:.2em 0;white-space:nowrap}
+.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}
+.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}
+.tex-paper .ltx_bibblock{display:block}
+.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}
+.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}
+.tex-paper .ltx_toc{display:none}
+.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}
+.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
+.tex-paper .ltx_tag{margin-right:.35em}
+.tex-paper [id]{scroll-margin-top:24px}
+</style></head><body class="paper-reader">
+<header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
+<main><div class="eyebrow">PAPER LIBRARY / Trinity</div><h1>Trinity：统一多兴趣、长尾兴趣与长期兴趣</h1><p class="paper-original-title">Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One</p>
+<p class="muted">ByteDance · arXiv 2402.02842 · 译文对应 v1</p>
+<div class="paper-actions"><a href="https://arxiv.org/abs/2402.02842v1" target="_blank" rel="noopener">英文 arXiv ↗</a>
+<a href="../index.html">全部论文</a></div>
+<p class="muted">中文全文 · 章节、公式和参考文献支持直接跳转</p>
+<div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
+<ol><li class="toc-level-1"><a href="#tex-section-1">摘要</a></li><li class="toc-level-1"><a href="#S1">1. 引言</a></li><li class="toc-level-1"><a href="#S2">2. 相关工作</a></li><li class="toc-level-1"><a href="#S3">3. Trinity 基础框架</a></li><li class="toc-level-1"><a href="#S4">4. 大规模推荐系统中的兴趣建模</a></li><li class="toc-level-2"><a href="#S4.SS1">4.1. 多兴趣</a></li><li class="toc-level-2"><a href="#S4.SS2">4.2. 长尾兴趣</a></li><li class="toc-level-2"><a href="#S4.SS3">4.3. 长期兴趣</a></li><li class="toc-level-2"><a href="#S4.SS4">4.4. 实现细节</a></li><li class="toc-level-1"><a href="#S5">5. 实验</a></li><li class="toc-level-2"><a href="#S5.SS1">5.1. Trinity 的聚类系统</a></li><li class="toc-level-2"><a href="#S5.SS2">5.2. 在线实验</a></li><li class="toc-level-2"><a href="#S5.SS3">5.3. Trinity-M 的全面性与互补性</a></li><li class="toc-level-2"><a href="#S5.SS4">5.4. 哪些内容从 Trinity-LT 中受益？</a></li><li class="toc-level-2"><a href="#S5.SS5">5.5. Trinity-L 的种子分布</a></li><li class="toc-level-1"><a href="#S6">6. 结论</a></li><li class="toc-level-1"><a href="#bib">参考文献</a></li></ol></details><article class="paper-fulltext" aria-label="论文全文"><article class="ltx_document ltx_authors_1line ltx_leqno tex-paper">
+<h1 class="ltx_title ltx_title_document">Trinity：将多兴趣/长尾兴趣/长期兴趣融于一体</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Jing Yan, Liu Jiang, Jianfei Cui, Zhichen Zhao*, Xingyan Bin, Feng Zhang and Zuotao Liu
+</span><span class="ltx_author_notes">
+<span class="ltx_contact ltx_role_email"><a href="mailto:yanjing.rec,jiangliu.reco,cuijianfei.ies,binxingyan,feng.zhang,michael.liu@bytedance.com,%20*zhaozc10@gmail.com">yanjing.rec,jiangliu.reco,cuijianfei.ies,binxingyan,feng.zhang,michael.liu@bytedance.com, *zhaozc10@gmail.com</a>
+</span>
+<span class="ltx_contact ltx_role_affiliation"><span class="ltx_text ltx_affiliation_institution">ByteDance</span><span class="ltx_text ltx_affiliation_city">Beijing</span><span class="ltx_text ltx_affiliation_country">China</span>
+</span></span></span>
+</div>
+<div class="ltx_abstract" id="tex-section-1">
+<h6 class="ltx_title ltx_title_abstract">摘要</h6>
+<p class="ltx_p">推荐系统中的兴趣建模一直是提升用户体验的永恒话题，而典型的兴趣建模任务（例如多兴趣、长尾兴趣和长期兴趣）已在许多现有工作中得到研究。
+然而，其中大多数工作只是孤立地考虑单一兴趣，而忽视了它们之间的相互关系。
+在本文中，我们认为这些任务都面临一个共同的“兴趣遗忘”问题，并且存在一种能够同时缓解该问题的解决方案。我们发现长期线索可以作为基石，因为它们能够揭示多兴趣并厘清长尾兴趣。受此观察启发，我们在检索阶段提出了一个新颖且统一的框架“Trinity”，以
+解决兴趣遗忘问题并改进多个兴趣建模任务。我们构建了一个实时聚类系统，使我们能够将物品投影到可枚举的簇中，并在这些簇上计算统计兴趣直方图。
+基于这些直方图，Trinity 能够识别出投放不足的主题，并且在面对新兴热点话题时保持稳定。由于计算开销适中，Trinity 更适合大规模工业场景。
+其衍生的检索器已部署于抖音的推荐系统，显著提升了用户体验和留存率。
+我们相信，这些实践经验可以很好地推广到其他场景。</p>
+</div>
+<div class="ltx_keywords">兴趣建模，兴趣遗忘，统计方法
+</div>
+<span class="ltx_note ltx_note_frontmatter ltx_role_copyright"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">†</sup><span class="ltx_note_type">copyright: </span>none</span></span></span>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section"><span class="ltx_tag ltx_tag_section">1. </span>引言</h2>
+<figure class="ltx_figure" id="S1.F1"><a href="assets/9e8081b760cce4c8.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S1.F1.g1" loading="lazy" src="assets/9e8081b760cce4c8.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1. </span>Trinity 的兴趣互惠关系与启示。多兴趣/长期兴趣/长尾兴趣相互依赖、相互强化。详细示例见正文。</figcaption>
+</figure>
+<figure class="ltx_figure" id="S1.F2"><a href="assets/f1ca580f81ded562.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S1.F2.g1" loading="lazy" src="assets/f1ca580f81ded562.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2. </span>所提出的 Trinity 框架：(a) 训练过程。(b) 通过将用户的长期行为序列投影为直方图并结合定制化策略，可以捕获多兴趣。(c) 通过将用户行为与全局簇流行度进行比较，可以厘清对长尾主题的兴趣。(d) 训练阶段产生的时间无关嵌入被用于 i2i 搜索检索。</figcaption>
+</figure>
+<figure class="ltx_figure" id="S1.F3"><a href="assets/5e0a39321387c68d.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S1.F3.g1" loading="lazy" src="assets/5e0a39321387c68d.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3. </span>一个采样用户观看历史，展示了其短期兴趣（如游戏/脱口秀）以及长期兴趣（由虚线连接）——对经济学的关注。</figcaption>
+</figure>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p">大规模工业推荐系统（RS）每天面临海量请求，并应捕获每个用户的兴趣。
+随着日活跃用户（DAU）及其在平台上花费时间的增长，兴趣建模变得越来越具有挑战性和多样化。
+新出现的问题可归类为：(1) 多兴趣，即用户可能对许多主题和话题感兴趣（在抖音中，根据我们提出的聚类系统，大多数用户拥有超过<math alttext="10" class="ltx_Math" display="inline" id="S1.p1.m1"><semantics><mn>10</mn><annotation encoding="application/x-tex">10</annotation></semantics></math>个感兴趣话题）。
+(2) 长尾兴趣，指仅吸引小众受众的不热门主题。
+(3) 长期兴趣，主要描述用户愿意持续观看的主题，而非近期热点话题或新兴趋势。
+例如，在图<a class="ltx_ref" href="#S1.F3" title="Figure 3 ‣ 1. Introduction ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">3</span></a>中，一位用户大约六个月前观看了许多游戏和脱口秀视频。在上个月，她沉迷于舞蹈和健身主题。如今她观看一些研究进展，同时她多年来一直关注经济新闻。这里提到的所有话题都可定义为多兴趣。游戏/脱口秀/舞蹈/健身是长期兴趣主题，它们可能偶尔被我们的系统“遗忘”，但如果被投放仍然会吸引她。研究进展是一个典型的长尾主题，几乎无法吸引所有人，但可以被相当多的用户所欣赏（这也是我们同样关注长尾兴趣的原因）。在这种情况下，研究进展有机会成为多兴趣。</p>
+</div>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p">本文的核心思想在于，我们认为多兴趣/长尾兴趣/长期兴趣是相互依赖、相互强化的。因此，我们旨在同时改进这些兴趣建模任务。
+如图<a class="ltx_ref" href="#S1.F1" title="Figure 1 ‣ 1. Introduction ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">1</span></a>所示，我们有一些富有洞察力的观察。首先，用户近期的行为序列很容易被若干热点话题所主导，因此我们需要长期线索来识别多兴趣中的其余话题。其次，在完整的工业系统中，热门主题已被充分投放，我们所考虑的多兴趣本质上指的是全局长尾主题。
+例如，在抖音中大多数用户接受新闻和快照，而我们必须匹配书法及其受众。
+最后，长尾兴趣也依赖于长期线索，因为一个人是否真正对某个话题感兴趣只能通过长期观察来确认。
+受这些观察启发，我们考虑同时改进多个兴趣建模任务。</p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p">然而，对这些兴趣建模至关重要却相当困难：在当前系统中，我们采用在线学习模型对候选进行排序，这些模型以流式范式训练，自然倾向于新到来的样本。
+因此，由于相应训练样本的偶尔缺失，它们可能“遗忘”某些感兴趣的主题，导致“兴趣遗忘”问题，并使投放效果恶化。现有方法专注于修改在线学习框架，并引入额外的预测头和记录用户过往行为的特征。然而，此类方法付出了过多的计算开销，且它们只考虑兴趣建模任务之一而忽视了它们之间的相互关系。</p>
+</div>
+<div class="ltx_para" id="S1.p4">
+<p class="ltx_p">在本文中，
+我们发现兴趣遗忘问题本质上是由在线学习框架本身造成的，修改它可能收效甚微。相反，我们提出了一个基于统计的框架“Trinity”。Trinity 首先理解长期线索，并将用户兴趣汇总为统计直方图，据此我们可以轻松区分多兴趣/长尾兴趣/长期兴趣主题。然后，
+通过定制化策略选出投放不足的主题以提升用户体验。由于 Trinity 基于长期统计信息建模，它在表示多种兴趣方面坚不可摧，同时能够抵御兴趣遗忘问题。
+Trinity 由三个独立的检索器组成：用于多兴趣的 Trinity-M、用于长尾兴趣的 Trinity-LT 和用于长期兴趣的 Trinity-L，如第<a class="ltx_ref" href="#S4" title="4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">4</span></a>节所示。
+据我们所知，Trinity 是首个将多种兴趣建模融合进统一框架的工作，并创新性地将长序列线索（长度<math alttext="\geq 1000" class="ltx_Math" display="inline" id="S1.p4.m1"><semantics><mrow><mi></mi><mo>≥</mo><mn>1000</mn></mrow><annotation encoding="application/x-tex">\geq 1000</annotation></semantics></math>）引入检索阶段。</p>
+</div>
+<div class="ltx_para" id="S1.p5">
+<p class="ltx_p">与专注于单一兴趣建模任务的现有方法相比，Trinity 具有一些显著优势：(1) 基于统计直方图，每个感兴趣的簇都得到清晰评估，不会被遗忘或忽视。(2) 由于物品被独占性地分配到索引，计算开销随感兴趣主题的增长呈线性增加，优于现有方法。(3) 基于其聚类系统，整个投放流程更具可解释性和可管理性。我们可以制定更先进的策略以达到更好的用户体验。
+Trinity 极大地惠及工业推荐系统，我们已在抖音和抖音极速版上线了上述检索器。</p>
+</div>
+<div class="ltx_para" id="S1.p6">
+<p class="ltx_p">总之，本文的贡献如下：</p>
+<ol class="ltx_enumerate" id="S1.I1">
+<li class="ltx_item" id="S1.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(1)</span>
+<div class="ltx_para" id="S1.I1.i1.p1">
+<p class="ltx_p">我们揭示了多兴趣/长尾兴趣/长期兴趣之间的关系，并展示了它们之间的相互关系。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(2)</span>
+<div class="ltx_para" id="S1.I1.i2.p1">
+<p class="ltx_p">我们提出了新颖且统一的 Trinity 框架，它同时改进多个兴趣建模任务。</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(3)</span>
+<div class="ltx_para" id="S1.I1.i3.p1">
+<p class="ltx_p">我们展示了 Trinity 以可承受的计算开销实现的详细方案，推动了大规模工业推荐系统的发展。</p>
+</div>
+</li>
+</ol>
+</div>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section"><span class="ltx_tag ltx_tag_section">2. </span>相关工作</h2>
+<div class="ltx_para" id="S2.p1">
+<p class="ltx_p">在本节中，我们将现有工作归纳为多兴趣、长尾兴趣和长期兴趣领域，并讨论我们的工作与它们的不同之处。</p>
+</div>
+<div class="ltx_para" id="S2.p2">
+<p class="ltx_p">近期，考虑多兴趣建模的流行方法之一是 MIND<cite class="ltx_cite ltx_citemacro_citep">(Li<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib128" title="Multi-interest network with dynamic routing for recommendation at tmall">2019</a>)</cite>。它提出多个用户表示（本文中也称为“头”）以从多个领域中检索候选，并已成为工业应用中的主流方法。ComiRec<cite class="ltx_cite ltx_citemacro_citep">(Cen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib144" title="Controllable multi-interest framework for recommendation">2020</a>)</cite>进一步考虑多样性以提升系统性能。MVKE<cite class="ltx_cite ltx_citemacro_citep">(Xu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib129" title="Mixture of virtual-kernel experts for multi-objective user profile modeling">2022</a>)</cite>使用称为“虚拟核”的子专家网络来捕获用户在各种任务和话题上的偏好，并将它们组合以输出综合结果。一些工作从不同角度考虑用户兴趣，例如 Jiang<cite class="ltx_cite ltx_citemacro_citep">(Jiang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib130" title="What aspect do you like: multi-scale time-aware user interest modeling for micro-video recommendation">2020</a>)</cite>等人探讨了多尺度时间效应对用户兴趣的影响。<cite class="ltx_cite ltx_citemacro_citep">(Tan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib131" title="Dynamic memory based attention network for sequential recommendation">2021a</a>, <a class="ltx_ref" href="#bib.bib132" title="Sparse-interest network for sequential recommendation">b</a>)</cite>将类似思想引入序列推荐场景。Xie 等人<cite class="ltx_cite ltx_citemacro_citep">(Xie<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib133" title="Rethinking multi-interest learning for candidate matching in recommender systems">2023</a>)</cite>改进了负采样和路由算法以解决多兴趣学习中的训练问题。由于这些方法训练多个用户表示以覆盖各种用户偏好，我们将它们归纳为“Multi-U”类方法。上述所有方法都专注于修改现有的在线学习框架，而我们提出的工作依赖于长期统计信息。</p>
+</div>
+<div class="ltx_para" id="S2.p3">
+<p class="ltx_p">长尾物品缺乏用户反馈或协同数据，因此有许多方法专注于多模态或图方法<cite class="ltx_cite ltx_citemacro_citep">(Yin<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib138" title="Challenging the long tail recommendation">2012</a>; Johnson and Ng, <a class="ltx_ref" href="#bib.bib139" title="Enhancing long tail item recommendations using tripartite graphs and markov process">2017</a>; Luke<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib140" title="Recommending long-tail items using extended tripartite graphs">2018</a>)</cite>以改进表示和预测。
+Huang 和 Wu<cite class="ltx_cite ltx_citemacro_citep">(Huang and Wu, <a class="ltx_ref" href="#bib.bib136" title="A novel topic-based framework for recommending long tail products">2019</a>)</cite>在主题模型中提取产品画像和相似产品。
+而 Kumar 等人<cite class="ltx_cite ltx_citemacro_citep">(Singla<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib137" title="Harnessing gans for zero-shot learning of new classes in visual speech recognition">2020</a>)</cite>则改用少样本学习实现长尾推荐。
+请注意，本文并非精确聚焦于长尾物品。长尾兴趣主要指小众话题，但其物品未必晦涩难懂。</p>
+</div>
+<div class="ltx_para" id="S2.p4">
+<p class="ltx_p">在长期兴趣领域，Pi 等人<cite class="ltx_cite ltx_citemacro_citep">(Pi<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib135" title="Practice on long sequential user behavior modeling for click-through rate prediction">2019</a>)</cite>通过将最耗资源的部分从整个模型中解耦到单独模块，直接改进了长序列建模。他们通过触发事件而非请求来更新用户表示，并支持数千长度的序列。
+捕获长期兴趣最著名的方法是搜索式兴趣模型（SIM<cite class="ltx_cite ltx_citemacro_citep">(Pi<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib134" title="Search-based user interest modeling with lifelong sequential behavior data for click-through rate prediction">2020</a>)</cite>）。它搜索过往与话题相关的行为序列以补充衡量用户偏好，但主要用于排序模型。
+我们的方法避免了在模型中直接涉及长序列，因为这可能难以良好扩展。相反，我们利用簇和总体兴趣分布来挖掘长期线索。</p>
+</div>
+<div class="ltx_para" id="S2.p5">
+<p class="ltx_p">我们的工作在训练过程中采用 VQ-VAE<cite class="ltx_cite ltx_citemacro_citep">(van den Oord<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib141" title="Neural discrete representation learning">2017</a>)</cite>将物品分配到索引，同时构建层次聚类系统。它分配簇嵌入并允许物品寻找其最近邻。借此我们可以将未标注物品投影到可枚举的簇中，并处理用户行为序列。
+其变体<cite class="ltx_cite ltx_citemacro_citep">(Zhan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib142" title="Learning discrete representations via constrained clustering for effective and efficient dense retrieval">2022</a>; Huang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib143" title="Learning discrete document representations in web search">2023</a>)</cite>已被广泛应用于信息检索。</p>
+</div>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section"><span class="ltx_tag ltx_tag_section">3. </span>Trinity 基础框架</h2>
+<div class="ltx_para" id="S3.p1">
+<p class="ltx_p">在本节中，我们首先阐述 Trinity 的核心思想，并介绍其基础训练框架。使用 Trinity 框架改进多兴趣/长尾兴趣/长期兴趣的细节安排在第<a class="ltx_ref" href="#S4" title="4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">4</span></a>节。</p>
+</div>
+<div class="ltx_para" id="S3.p2">
+<p class="ltx_p">如图<a class="ltx_ref" href="#S1.F1" title="Figure 1 ‣ 1. Introduction ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">1</span></a>所示，我们同时考虑多种兴趣。与现有工作不同，我们认为兴趣建模并非孤立的任务，相反，这些兴趣相互依赖、相互强化。
+因此，统筹考虑全局对系统大有裨益。
+我们有以下三个视角：</p>
+</div>
+<div class="ltx_para" id="S3.p3">
+<p class="ltx_p">1) 长期兴趣揭示多兴趣。用户的短期兴趣可能被新兴趋势和不可预测的热点话题所主导，导致其行为序列中的物品同质化。通过引入更长的行为序列，我们可以找出哪些话题构成多兴趣
+并获得更全面的用户偏好。</p>
+</div>
+<div class="ltx_para" id="S3.p4">
+<p class="ltx_p">2) 多兴趣因长尾兴趣而有价值。
+多兴趣提供了广泛的内容主题集合，其中热点话题和小众主题都能被捕获。
+然而，在完整的推荐系统中，热点话题（如新闻、游戏）的物品已被现有检索和排序阶段充分评估和投放。当我们思考多兴趣时，我们实际上关注的是某些不常见的主题，如科学和诗歌。</p>
+</div>
+<div class="ltx_para" id="S3.p5">
+<p class="ltx_p">3) 长期兴趣厘清长尾兴趣。长尾主题只吸引小众受众，而许多播放只是出于随意兴趣。要找出持续消费这些主题的真正受众，我们需要回溯长期行为记录。</p>
+</div>
+<div class="ltx_para" id="S3.p6">
+<p class="ltx_p">目前，各兴趣之间的相互关系是连贯的，并启发我们同时对其建模。但在在线学习框架中实现它仍然困难。现有工作一直在努力解决兴趣遗忘问题。然而，
+在线学习模型被迫拟合当前样本，因此它们不可避免地倾向于新到来的样本和热门物品（占据大多数曝光）。如果某些话题的样本变得稀少，相应的兴趣将被逐渐遗忘。我们将这一现象总结为“兴趣遗忘问题”，在在线学习框架中缓解它需要大量人力。</p>
+</div>
+<div class="ltx_para" id="S3.p7">
+<p class="ltx_p">本文不修改在线学习框架，而是尝试采用另一种工具：<span class="ltx_text ltx_font_bold">统计</span>。基于长期行为提取的统计线索能够清晰地揭示每一个感兴趣的主题，并且在新兴趋势出现时保持稳定。因此，它有效缓解了兴趣遗忘问题，并能区分多兴趣、长尾兴趣与长期兴趣。具体而言，我们构建了一个兴趣聚类系统。随后，用户的历史行为被投影到该系统中，得到长期行为直方图。最后，我们可以基于直方图实施定制化的投放策略。只要我们检索长期行为，长期兴趣建模就得到改善，并且我们按如下方式改善其他方面：</p>
+</div>
+<div class="ltx_para" id="S3.p8">
+<p class="ltx_p">(1) 按行为计数对直方图降序排序，选取前 k 个聚类并对其进行分散，确保中间聚类的物品不被头部聚类所支配。这提供了全面的结果并改善了多兴趣。</p>
+</div>
+<div class="ltx_para" id="S3.p9">
+<p class="ltx_p">(2) 对于每个全局长尾聚类，如果当前用户频繁消费该主题的物品，我们就增强其投放。这将小众主题与其受众匹配起来，从而改善长尾兴趣。</p>
+</div>
+<div class="ltx_para" id="S3.p10">
+<p class="ltx_p">考虑到实现，我们需要以下工具：一个可由嵌入构建、并能够均匀地度量长期行为与近期行为的聚类系统；一个可将行为映射到聚类、从而实时形成用户直方图的存储系统；以及一系列投放策略。</p>
+</div>
+<div class="ltx_para" id="S3.p11">
+<p class="ltx_p">在图<a class="ltx_ref" href="#S1.F2" title="Figure 2 ‣ 1. Introduction ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">2</span></a>(a)中，我们展示了 Trinity 的基本框架。训练阶段主要由一个 SIM（基于搜索的兴趣模型 <cite class="ltx_cite ltx_citemacro_citep">(Pi<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib134" title="Search-based user interest modeling with lifelong sequential behavior data for click-through rate prediction">2020</a>)</cite>）头和一个 VQ-VAE <cite class="ltx_cite ltx_citemacro_citep">(van den Oord<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib141" title="Neural discrete representation learning">2017</a>)</cite> 结构组成。对于每个物品，我们首先搜索其 SIM 序列，并提取两者的嵌入（记为绿色立方块），分别记为 <math alttext="\mathbf{x}" class="ltx_Math" display="inline" id="S3.p11.m1"><semantics><mi>𝐱</mi><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math> 和 <math alttext="[\mathbf{b}_{1},\mathbf{b}_{2},\dots\mathbf{b}_{i}]" class="ltx_Math" display="inline" id="S3.p11.m2"><semantics><mrow><mo stretchy="false">[</mo><msub><mi>𝐛</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐛</mi><mn>2</mn></msub><mo>,</mo><mrow><mi mathvariant="normal">…</mi><mo>⁢</mo><msub><mi>𝐛</mi><mi>i</mi></msub></mrow><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[\mathbf{b}_{1},\mathbf{b}_{2},\dots\mathbf{b}_{i}]</annotation></semantics></math>，对应于 <math alttext="i\leq N_{b}" class="ltx_Math" display="inline" id="S3.p11.m3"><semantics><mrow><mi>i</mi><mo>≤</mo><msub><mi>N</mi><mi>b</mi></msub></mrow><annotation encoding="application/x-tex">i\leq N_{b}</annotation></semantics></math>。行为序列嵌入经均值池化形成用户侧表示 <math alttext="\mathbf{b}=\sum_{i}\mathbf{b}_{i}/{N_{b}}" class="ltx_Math" display="inline" id="S3.p11.m4"><semantics><mrow><mi>𝐛</mi><mo rspace="0.111em">=</mo><mrow><msub><mo>∑</mo><mi>i</mi></msub><mrow><msub><mi>𝐛</mi><mi>i</mi></msub><mo>/</mo><msub><mi>N</mi><mi>b</mi></msub></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathbf{b}=\sum_{i}\mathbf{b}_{i}/{N_{b}}</annotation></semantics></math>。同时，我们准备一级和二级可学习聚类 <math alttext="c^{1}_{j}" class="ltx_Math" display="inline" id="S3.p11.m5"><semantics><msubsup><mi>c</mi><mi>j</mi><mn>1</mn></msubsup><annotation encoding="application/x-tex">c^{1}_{j}</annotation></semantics></math>、<math alttext="c^{2}_{k}" class="ltx_Math" display="inline" id="S3.p11.m6"><semantics><msubsup><mi>c</mi><mi>k</mi><mn>2</mn></msubsup><annotation encoding="application/x-tex">c^{2}_{k}</annotation></semantics></math>，其中 <math alttext="j" class="ltx_Math" display="inline" id="S3.p11.m7"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math> 属于 <math alttext="1\dots J" class="ltx_Math" display="inline" id="S3.p11.m8"><semantics><mrow><mn>1</mn><mo>⁢</mo><mi mathvariant="normal">…</mi><mo>⁢</mo><mi>J</mi></mrow><annotation encoding="application/x-tex">1\dots J</annotation></semantics></math>，<math alttext="k" class="ltx_Math" display="inline" id="S3.p11.m9"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> 属于 <math alttext="1\dots K" class="ltx_Math" display="inline" id="S3.p11.m10"><semantics><mrow><mn>1</mn><mo>⁢</mo><mi mathvariant="normal">…</mi><mo>⁢</mo><mi>K</mi></mrow><annotation encoding="application/x-tex">1\dots K</annotation></semantics></math>（记为黄色立方块），并分配它们的嵌入 <math alttext="\mathbf{e}_{j}^{1}" class="ltx_Math" display="inline" id="S3.p11.m11"><semantics><msubsup><mi>𝐞</mi><mi>j</mi><mn>1</mn></msubsup><annotation encoding="application/x-tex">\mathbf{e}_{j}^{1}</annotation></semantics></math> 和 <math alttext="\mathbf{e}_{k}^{2}" class="ltx_Math" display="inline" id="S3.p11.m12"><semantics><msubsup><mi>𝐞</mi><mi>k</mi><mn>2</mn></msubsup><annotation encoding="application/x-tex">\mathbf{e}_{k}^{2}</annotation></semantics></math>。<math alttext="J" class="ltx_Math" display="inline" id="S3.p11.m13"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math> 和 <math alttext="K" class="ltx_Math" display="inline" id="S3.p11.m14"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> 分别设为 128 和 1024。我们搜索当前物品的前 1 个最近邻聚类（例如 ID=4 和 1，见图<a class="ltx_ref" href="#S1.F2" title="Figure 2 ‣ 1. Introduction ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">2</span></a>），记为 <math alttext="\mathbf{c}_{\hat{j}}^{1}" class="ltx_Math" display="inline" id="S3.p11.m15"><semantics><msubsup><mi>𝐜</mi><mover accent="true"><mi>j</mi><mo>^</mo></mover><mn>1</mn></msubsup><annotation encoding="application/x-tex">\mathbf{c}_{\hat{j}}^{1}</annotation></semantics></math> 和 <math alttext="\mathbf{c}_{\hat{k}}^{2}" class="ltx_Math" display="inline" id="S3.p11.m16"><semantics><msubsup><mi>𝐜</mi><mover accent="true"><mi>k</mi><mo>^</mo></mover><mn>2</mn></msubsup><annotation encoding="application/x-tex">\mathbf{c}_{\hat{k}}^{2}</annotation></semantics></math>，并对 (<math alttext="\mathbf{b}" class="ltx_Math" display="inline" id="S3.p11.m17"><semantics><mi>𝐛</mi><annotation encoding="application/x-tex">\mathbf{b}</annotation></semantics></math>, <math alttext="\mathbf{x}" class="ltx_Math" display="inline" id="S3.p11.m18"><semantics><mi>𝐱</mi><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math>)、(<math alttext="\mathbf{b}" class="ltx_Math" display="inline" id="S3.p11.m19"><semantics><mi>𝐛</mi><annotation encoding="application/x-tex">\mathbf{b}</annotation></semantics></math>, <math alttext="\mathbf{e}_{\hat{j}}^{1}" class="ltx_Math" display="inline" id="S3.p11.m20"><semantics><msubsup><mi>𝐞</mi><mover accent="true"><mi>j</mi><mo>^</mo></mover><mn>1</mn></msubsup><annotation encoding="application/x-tex">\mathbf{e}_{\hat{j}}^{1}</annotation></semantics></math>) 和 (<math alttext="\mathbf{b}" class="ltx_Math" display="inline" id="S3.p11.m21"><semantics><mi>𝐛</mi><annotation encoding="application/x-tex">\mathbf{b}</annotation></semantics></math>, <math alttext="\mathbf{e}_{\hat{k}}^{2}" class="ltx_Math" display="inline" id="S3.p11.m22"><semantics><msubsup><mi>𝐞</mi><mover accent="true"><mi>k</mi><mo>^</mo></mover><mn>2</mn></msubsup><annotation encoding="application/x-tex">\mathbf{e}_{\hat{k}}^{2}</annotation></semantics></math>) 对应用二元交叉熵（BCE）损失函数：</p>
+</div>
+<div class="ltx_para" id="S3.p12">
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_table" id="S3.E1">
+<tbody>
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline" id="S3.E1X">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equationgroup ltx_align_left">(1)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle L=\sum_{p}\sum_{\mathbf{A}=\mathbf{x},\mathbf{e}_{\hat{j}}^{1},%
+\mathbf{e}_{\hat{k}}^{2}}y_{p}{\rm log}(\sigma(\mathbf{b}_{p}^{T}\mathbf{A}_{p%
+}))+(1-y_{p}){\rm log}(1-\sigma(\mathbf{b}_{p}^{T}\mathbf{A}_{p}))," class="ltx_Math" display="inline" id="S3.E1X.m2"><semantics><mrow><mrow><mi>L</mi><mo>=</mo><mrow><mrow><mstyle displaystyle="true"><munder><mo movablelimits="false">∑</mo><mi>p</mi></munder></mstyle><mrow><mstyle displaystyle="true"><munder><mo movablelimits="false">∑</mo><mrow><mi>𝐀</mi><mo>=</mo><mrow><mi>𝐱</mi><mo>,</mo><msubsup><mi>𝐞</mi><mover accent="true"><mi>j</mi><mo>^</mo></mover><mn>1</mn></msubsup><mo>,</mo><msubsup><mi>𝐞</mi><mover accent="true"><mi>k</mi><mo>^</mo></mover><mn>2</mn></msubsup></mrow></mrow></munder></mstyle><mrow><msub><mi>y</mi><mi>p</mi></msub><mo>⁢</mo><mi>log</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>σ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msubsup><mi>𝐛</mi><mi>p</mi><mi>T</mi></msubsup><mo>⁢</mo><msub><mi>𝐀</mi><mi>p</mi></msub></mrow><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>+</mo><mrow><mrow><mo stretchy="false">(</mo><mrow><mn>1</mn><mo>−</mo><msub><mi>y</mi><mi>p</mi></msub></mrow><mo stretchy="false">)</mo></mrow><mo>⁢</mo><mi>log</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mn>1</mn><mo>−</mo><mrow><mi>σ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msubsup><mi>𝐛</mi><mi>p</mi><mi>T</mi></msubsup><mo>⁢</mo><msub><mi>𝐀</mi><mi>p</mi></msub></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle L=\sum_{p}\sum_{\mathbf{A}=\mathbf{x},\mathbf{e}_{\hat{j}}^{1},%
+\mathbf{e}_{\hat{k}}^{2}}y_{p}{\rm log}(\sigma(\mathbf{b}_{p}^{T}\mathbf{A}_{p%
+}))+(1-y_{p}){\rm log}(1-\sigma(\mathbf{b}_{p}^{T}\mathbf{A}_{p})),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr>
+</tbody>
+</table></div>
+<p class="ltx_p">其中下标 <math alttext="p" class="ltx_Math" display="inline" id="S3.p12.m1"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math> 表示一个批次中的样本索引。这里，<math alttext="y=1" class="ltx_Math" display="inline" id="S3.p12.m2"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math> 的条件是用户看完该视频、与其交互（点赞/分享/关注/评论），或观看时长超过 10 秒。此外，我们加入一些随机负样本以获得更具判别性的嵌入。注意，物品与聚类之间的分配关系在实时训练过程中通过最近邻搜索确定，我们将该信息写入键值存储（键=物品 ID，值=[一级聚类 ID，二级聚类 ID]）。我们的实现遵循 VQ-VAE 中的相同设计：聚类的梯度直接施加在物品上，而聚类嵌入则由其所属物品嵌入的移动平均来更新。这里我们使用两级的层次聚类系统。细粒度的二级层次旨在筛选物品，而粗粒度的一级层次避免重复主题并起到分散作用（详见第<a class="ltx_ref" href="#S4.SS1" title="4.1. Multi-interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">4.1</span></a>节的示例）。</p>
+</div>
+<div class="ltx_para" id="S3.p13">
+<p class="ltx_p">由于物品嵌入由 SIM 头训练，而 SIM 头涉及跨度很广时间范围内的行为记录，近期物品和非常“陈旧”的物品被同时优化并均匀地度量。这为我们提供了一个基于协同的、随时间变化的且时间无偏的聚类系统（这是多模态特征无法实现的）。更重要的是，无限多的物品被离散化为可枚举的聚类集合，这使得聚类级别的统计成为可能。</p>
+</div>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4. </span>大规模推荐系统中的兴趣建模</h2>
+<div class="ltx_para" id="S4.p1">
+<p class="ltx_p">在上一节中，我们展示了训练过程。在本节中，我们介绍具体且实用的策略，以分别解决兴趣遗忘问题并改善多兴趣、长尾兴趣和长期兴趣建模。注意，本文只关注检索阶段。原因有两方面：一方面，检索器为排序模型确定候选。如果我们在这一阶段丢失了感兴趣的主题，排序模型也无能为力去改善兴趣建模。另一方面，检索器始终采用近似最近邻（ANN）搜索系统以提高计算效率。在排序模型对每个候选进行穷举评估的精确计算场景中，我们可以通过分散来提升某些主题，从而“记住”它们。然而，我们几乎无法采用同样的思路，因为近似计算在一开始就丢弃了一些候选。</p>
+</div>
+<section class="ltx_subsection" id="S4.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1. </span>多兴趣</h3>
+<div class="ltx_para" id="S4.SS1.p1">
+<p class="ltx_p">改善多兴趣建模的关键思路是：在用户的统计直方图中选取强度中等但显著的聚类，这些聚类已被用户消费过，但容易被模型遗忘。给定每个聚类上的行为计数，投放充分、投放不足以及不感兴趣的主题便清晰可见。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p2">
+<p class="ltx_p">如图<a class="ltx_ref" href="#S1.F2" title="Figure 2 ‣ 1. Introduction ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">2</span></a>(b)所示，在服务阶段，对于每个请求，我们首先提取用户的长期行为序列（长度=2500）。注意，该序列仅存储满足 <math alttext="playtime\geq 10s" class="ltx_Math" display="inline" id="S4.SS1.p2.m1"><semantics><mrow><mrow><mi>p</mi><mo>⁢</mo><mi>l</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>y</mi><mo>⁢</mo><mi>t</mi><mo>⁢</mo><mi>i</mi><mo>⁢</mo><mi>m</mi><mo>⁢</mo><mi>e</mi></mrow><mo>≥</mo><mrow><mn>10</mn><mo>⁢</mo><mi>s</mi></mrow></mrow><annotation encoding="application/x-tex">playtime\geq 10s</annotation></semantics></math> 或已被看完或交互（点赞/关注/分享/评论）的物品 ID。然后，实时从第<a class="ltx_ref" href="#S3" title="3. The Basic Trinity Framework ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">3</span></a>节所述的键值存储中读取相应的聚类 ID，并将其组织为一级和二级直方图 <math alttext="\mathbf{h}^{1}=[h^{1}_{1},h^{1}_{2},\dots h^{1}_{J}]" class="ltx_Math" display="inline" id="S4.SS1.p2.m2"><semantics><mrow><msup><mi>𝐡</mi><mn>1</mn></msup><mo>=</mo><mrow><mo stretchy="false">[</mo><msubsup><mi>h</mi><mn>1</mn><mn>1</mn></msubsup><mo>,</mo><msubsup><mi>h</mi><mn>2</mn><mn>1</mn></msubsup><mo>,</mo><mrow><mi mathvariant="normal">…</mi><mo>⁢</mo><msubsup><mi>h</mi><mi>J</mi><mn>1</mn></msubsup></mrow><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{h}^{1}=[h^{1}_{1},h^{1}_{2},\dots h^{1}_{J}]</annotation></semantics></math> 和 <math alttext="\mathbf{h}^{2}=[h^{2}_{1},h^{2}_{2},\dots h^{1}_{K}]" class="ltx_Math" display="inline" id="S4.SS1.p2.m3"><semantics><mrow><msup><mi>𝐡</mi><mn>2</mn></msup><mo>=</mo><mrow><mo stretchy="false">[</mo><msubsup><mi>h</mi><mn>1</mn><mn>2</mn></msubsup><mo>,</mo><msubsup><mi>h</mi><mn>2</mn><mn>2</mn></msubsup><mo>,</mo><mrow><mi mathvariant="normal">…</mi><mo>⁢</mo><msubsup><mi>h</mi><mi>K</mi><mn>1</mn></msubsup></mrow><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{h}^{2}=[h^{2}_{1},h^{2}_{2},\dots h^{1}_{K}]</annotation></semantics></math>，其中每个条形对应第 <math alttext="j" class="ltx_Math" display="inline" id="S4.SS1.p2.m4"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>/<math alttext="k" class="ltx_Math" display="inline" id="S4.SS1.p2.m5"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> 个聚类的行为计数。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p3">
+<p class="ltx_p">通过简单地按降序对直方图排序，用户的兴趣分布便清晰可见。例如，若排序后的直方图为 <math alttext="[50,20,20,4,2,0,0,0]" class="ltx_Math" display="inline" id="S4.SS1.p3.m1"><semantics><mrow><mo stretchy="false">[</mo><mn>50</mn><mo>,</mo><mn>20</mn><mo>,</mo><mn>20</mn><mo>,</mo><mn>4</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[50,20,20,4,2,0,0,0]</annotation></semantics></math>，对应索引为 <math alttext="[10,33,100,91,62,21,5,83]" class="ltx_Math" display="inline" id="S4.SS1.p3.m2"><semantics><mrow><mo stretchy="false">[</mo><mn>10</mn><mo>,</mo><mn>33</mn><mo>,</mo><mn>100</mn><mo>,</mo><mn>91</mn><mo>,</mo><mn>62</mn><mo>,</mo><mn>21</mn><mo>,</mo><mn>5</mn><mo>,</mo><mn>83</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[10,33,100,91,62,21,5,83]</annotation></semantics></math>，则 ID=10 的聚类是用户的主要兴趣（我们将拥有最强响应的聚类定义为“主要兴趣”）。然而，在索引=33 和 100 处也存在显著响应，这构成了本文关注的“多兴趣”（主要兴趣也是多兴趣的一部分，但它们通常已被现有检索器充分投放）。91 和 62 的聚类被视为探索性兴趣，它们可能成为用户的多兴趣或全局长尾兴趣。其他聚类则被忽略。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p4">
+<p class="ltx_p">受这一观察启发，我们引入一种基于策略的检索器来改善多兴趣建模。首先，我们读取用户过去行为的聚类 ID：<math alttext="{(c^{1}_{i},c^{2}_{i})}_{i=1}^{L}" class="ltx_Math" display="inline" id="S4.SS1.p4.m1"><semantics><msubsup><mrow><mo stretchy="false">(</mo><msubsup><mi>c</mi><mi>i</mi><mn>1</mn></msubsup><mo>,</mo><msubsup><mi>c</mi><mi>i</mi><mn>2</mn></msubsup><mo stretchy="false">)</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></msubsup><annotation encoding="application/x-tex">{(c^{1}_{i},c^{2}_{i})}_{i=1}^{L}</annotation></semantics></math>，其中 <math alttext="L\leq 2500" class="ltx_Math" display="inline" id="S4.SS1.p4.m2"><semantics><mrow><mi>L</mi><mo>≤</mo><mn>2500</mn></mrow><annotation encoding="application/x-tex">L\leq 2500</annotation></semantics></math>。在每一对中，二级聚类 ID 作为一级聚类的子节点附加。由此得到形如 <math alttext="c^{1}_{j}[h^{1}_{j}]\Rightarrow c^{2}_{jk}[h^{2}_{jk}]" class="ltx_Math" display="inline" id="S4.SS1.p4.m3"><semantics><mrow><mrow><msubsup><mi>c</mi><mi>j</mi><mn>1</mn></msubsup><mo>⁢</mo><mrow><mo stretchy="false">[</mo><msubsup><mi>h</mi><mi>j</mi><mn>1</mn></msubsup><mo stretchy="false">]</mo></mrow></mrow><mo stretchy="false">⇒</mo><mrow><msubsup><mi>c</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup><mo>⁢</mo><mrow><mo stretchy="false">[</mo><msubsup><mi>h</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup><mo stretchy="false">]</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">c^{1}_{j}[h^{1}_{j}]\Rightarrow c^{2}_{jk}[h^{2}_{jk}]</annotation></semantics></math> 的结构化数据，其中“<math alttext="\Rightarrow" class="ltx_Math" display="inline" id="S4.SS1.p4.m4"><semantics><mo stretchy="false">⇒</mo><annotation encoding="application/x-tex">\Rightarrow</annotation></semantics></math>”表示一对多映射关系。注意，在训练阶段，物品各自搜索其最近的聚类，因此一级聚类和二级聚类仅在统计上相关。不同一级聚类下可能存在相同的二级聚类，因此我们在 <math alttext="h^{2}_{jk}" class="ltx_Math" display="inline" id="S4.SS1.p4.m5"><semantics><msubsup><mi>h</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup><annotation encoding="application/x-tex">h^{2}_{jk}</annotation></semantics></math> 中需要双重下标。在后续步骤中，一级聚类用作分散方法，我们仅利用二级聚类来投放物品。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p5">
+<p class="ltx_p">首先，我们选取满足 <math alttext="h_{j}^{1}" class="ltx_Math" display="inline" id="S4.SS1.p5.m1"><semantics><msubsup><mi>h</mi><mi>j</mi><mn>1</mn></msubsup><annotation encoding="application/x-tex">h_{j}^{1}</annotation></semantics></math> 大于 <math alttext="T_{p}=30" class="ltx_Math" display="inline" id="S4.SS1.p5.m2"><semantics><mrow><msub><mi>T</mi><mi>p</mi></msub><mo>=</mo><mn>30</mn></mrow><annotation encoding="application/x-tex">T_{p}=30</annotation></semantics></math> 且其每个二级聚类满足 <math alttext="h_{jk}^{2}" class="ltx_Math" display="inline" id="S4.SS1.p5.m3"><semantics><msubsup><mi>h</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup><annotation encoding="application/x-tex">h_{jk}^{2}</annotation></semantics></math> 大于 <math alttext="T_{s}=10" class="ltx_Math" display="inline" id="S4.SS1.p5.m4"><semantics><mrow><msub><mi>T</mi><mi>s</mi></msub><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">T_{s}=10</annotation></semantics></math> 的一级聚类。然后，为每个一级聚类随机选择一个二级聚类。如果聚类数量不足，我们从上述一级聚类中选取 <math alttext="h_{jk}^{2}" class="ltx_Math" display="inline" id="S4.SS1.p5.m5"><semantics><msubsup><mi>h</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup><annotation encoding="application/x-tex">h_{jk}^{2}</annotation></semantics></math> 最大的二级聚类。如果聚类数量仍不足，我们按从大到小的顺序逐个收集二级聚类。在上述每一步中，我们都去除重复的聚类。该算法总结于算法<a class="ltx_ref" href="#alg1" title="In 4.1. Multi-interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">1</span></a>，它通过添加一个重排模型来评估所选聚类的候选，从而形成额外的检索器，命名为“Trinity-M”。</p>
+</div>
+<div class="ltx_para" id="S4.SS1.p6">
+<p class="ltx_p">某些中间聚类可能会被主要感兴趣的主题所支配，因为存在模型偏差（模型认为聚类 A 的大多数物品优于聚类 B 的物品），所以在单一的双塔检索器中，它们无法获得足够的曝光。然而，在 Trinity-M 中，我们在每个一级聚类中只选择一个二级聚类。这起到了类似分散的作用，我们可以收集到互补的聚类集合，它们不会被遗忘。通过“唤醒”这些主题，用户找回了部分兴趣，并对我们的系统感到更满意。在第<a class="ltx_ref" href="#S5.SS3" title="5.3. The Comprehensiveness and Complementariness of Trinity-M ‣ 5. Experiments ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">5.3</span></a>节中，我们展示了 Trinity-M 的互补性和全面性，这带来了显著改善的用户体验以及更多样化的系统。注意，我们在 Trinity 框架中通过将行为投影到聚类来引入长序列线索，同时避免在在线学习模型中直接使用长序列线索（检索器必须管理数十亿候选，我们几乎无法像排序模型那样使用 SIM <cite class="ltx_cite ltx_citemacro_citep">(Pi<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib134" title="Search-based user interest modeling with lifelong sequential behavior data for click-through rate prediction">2020</a>)</cite>）。据我们所知，Trinity 是首个在检索阶段成功利用长序列线索（<math alttext="\geq 1000" class="ltx_Math" display="inline" id="S4.SS1.p6.m1"><semantics><mrow><mi></mi><mo>≥</mo><mn>1000</mn></mrow><annotation encoding="application/x-tex">\geq 1000</annotation></semantics></math>）的工作。</p>
+</div>
+<figure class="ltx_float ltx_algorithm" id="alg1">
+<div class="ltx_listing ltx_lst_numbers_left ltx_listing">
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">Data:</span> Structural data <math alttext="c^{1}_{j}[h^{1}_{j}]\Rightarrow c^{2}_{jk}[h^{2}_{jk}]" class="ltx_Math" display="inline" id="alg1.m1"><semantics><mrow><mrow><msubsup><mi>c</mi><mi>j</mi><mn>1</mn></msubsup><mo>⁢</mo><mrow><mo stretchy="false">[</mo><msubsup><mi>h</mi><mi>j</mi><mn>1</mn></msubsup><mo stretchy="false">]</mo></mrow></mrow><mo stretchy="false">⇒</mo><mrow><msubsup><mi>c</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup><mo>⁢</mo><mrow><mo stretchy="false">[</mo><msubsup><mi>h</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup><mo stretchy="false">]</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">c^{1}_{j}[h^{1}_{j}]\Rightarrow c^{2}_{jk}[h^{2}_{jk}]</annotation></semantics></math>, threshold <math alttext="T_{p}=30" class="ltx_Math" display="inline" id="alg1.m2"><semantics><mrow><msub><mi>T</mi><mi>p</mi></msub><mo>=</mo><mn>30</mn></mrow><annotation encoding="application/x-tex">T_{p}=30</annotation></semantics></math>, <math alttext="T_{s}=10" class="ltx_Math" display="inline" id="alg1.m3"><semantics><mrow><msub><mi>T</mi><mi>s</mi></msub><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">T_{s}=10</annotation></semantics></math>, <math alttext="N_{M}=10" class="ltx_Math" display="inline" id="alg1.m4"><semantics><mrow><msub><mi>N</mi><mi>M</mi></msub><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">N_{M}=10</annotation></semantics></math>
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">Result:</span> Secondary cluster set <math alttext="R_{M}" class="ltx_Math" display="inline" id="alg1.m5"><semantics><msub><mi>R</mi><mi>M</mi></msub><annotation encoding="application/x-tex">R_{M}</annotation></semantics></math>
+</div>
+<div class="ltx_listingline">
+<math alttext="R_{M}\leftarrow\emptyset" class="ltx_Math" display="inline" id="alg1.m6"><semantics><mrow><msub><mi>R</mi><mi>M</mi></msub><mo stretchy="false">←</mo><mi mathvariant="normal">∅</mi></mrow><annotation encoding="application/x-tex">R_{M}\leftarrow\emptyset</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">
+<math alttext="p\leftarrow 0" class="ltx_Math" display="inline" id="alg1.m7"><semantics><mrow><mi>p</mi><mo stretchy="false">←</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">p\leftarrow 0</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">foreach</span> <em class="ltx_emph ltx_font_italic"><math alttext="c^{1}_{j}" class="ltx_Math" display="inline" id="alg1.m8"><semantics><msubsup><mi>c</mi><mi>j</mi><mn>1</mn></msubsup><annotation encoding="application/x-tex">c^{1}_{j}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">do</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<span class="ltx_text ltx_font_bold">if</span> <em class="ltx_emph ltx_font_italic"><math alttext="h^{1}_{j}\geq T_{p}" class="ltx_Math" display="inline" id="alg1.m9"><semantics><mrow><msubsup><mi>h</mi><mi>j</mi><mn>1</mn></msubsup><mo>≥</mo><msub><mi>T</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">h^{1}_{j}\geq T_{p}</annotation></semantics></math> and <math alttext="\forall c^{2}_{jk}" class="ltx_Math" display="inline" id="alg1.m10"><semantics><mrow><mo rspace="0.167em">∀</mo><msubsup><mi>c</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\forall c^{2}_{jk}</annotation></semantics></math>, <math alttext="h^{2}_{jk}\geq T_{s}" class="ltx_Math" display="inline" id="alg1.m11"><semantics><mrow><msubsup><mi>h</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup><mo>≥</mo><msub><mi>T</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">h^{2}_{jk}\geq T_{s}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">then</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+randomly choose one secondary cluster <math alttext="c^{2}_{j\hat{k}}" class="ltx_Math" display="inline" id="alg1.m12"><semantics><msubsup><mi>c</mi><mrow><mi>j</mi><mo>⁢</mo><mover accent="true"><mi>k</mi><mo>^</mo></mover></mrow><mn>2</mn></msubsup><annotation encoding="application/x-tex">c^{2}_{j\hat{k}}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<span class="ltx_text ltx_font_bold">if</span> <em class="ltx_emph ltx_font_italic"><math alttext="c^{2}_{j\hat{k}}\notin R_{M}" class="ltx_Math" display="inline" id="alg1.m13"><semantics><mrow><msubsup><mi>c</mi><mrow><mi>j</mi><mo>⁢</mo><mover accent="true"><mi>k</mi><mo>^</mo></mover></mrow><mn>2</mn></msubsup><mo>∉</mo><msub><mi>R</mi><mi>M</mi></msub></mrow><annotation encoding="application/x-tex">c^{2}_{j\hat{k}}\notin R_{M}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">then</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<math alttext="R_{M}\leftarrow R_{M}\cup\{c^{2}_{j\hat{k}}\}" class="ltx_Math" display="inline" id="alg1.m14"><semantics><mrow><msub><mi>R</mi><mi>M</mi></msub><mo stretchy="false">←</mo><mrow><msub><mi>R</mi><mi>M</mi></msub><mo>∪</mo><mrow><mo stretchy="false">{</mo><msubsup><mi>c</mi><mrow><mi>j</mi><mo>⁢</mo><mover accent="true"><mi>k</mi><mo>^</mo></mover></mrow><mn>2</mn></msubsup><mo stretchy="false">}</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">R_{M}\leftarrow R_{M}\cup\{c^{2}_{j\hat{k}}\}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>    end if
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>    end if
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+</div>
+<div class="ltx_listingline"> end foreach
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">if</span> <em class="ltx_emph ltx_font_italic"><math alttext="|R_{M}|\geq N_{M}" class="ltx_Math" display="inline" id="alg1.m15"><semantics><mrow><mrow><mo stretchy="false">|</mo><msub><mi>R</mi><mi>M</mi></msub><mo stretchy="false">|</mo></mrow><mo>≥</mo><msub><mi>N</mi><mi>M</mi></msub></mrow><annotation encoding="application/x-tex">|R_{M}|\geq N_{M}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">then</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<math alttext="R_{M}\leftarrow\{randomchoose(R_{M},N_{M})\}" class="ltx_Math" display="inline" id="alg1.m16"><semantics><mrow><msub><mi>R</mi><mi>M</mi></msub><mo stretchy="false">←</mo><mrow><mo stretchy="false">{</mo><mrow><mi>r</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>n</mi><mo>⁢</mo><mi>d</mi><mo>⁢</mo><mi>o</mi><mo>⁢</mo><mi>m</mi><mo>⁢</mo><mi>c</mi><mo>⁢</mo><mi>h</mi><mo>⁢</mo><mi>o</mi><mo>⁢</mo><mi>o</mi><mo>⁢</mo><mi>s</mi><mo>⁢</mo><mi>e</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>R</mi><mi>M</mi></msub><mo>,</mo><msub><mi>N</mi><mi>M</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">R_{M}\leftarrow\{randomchoose(R_{M},N_{M})\}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<span class="ltx_text ltx_font_bold">return</span> <math alttext="R_{M}" class="ltx_Math" display="inline" id="alg1.m17"><semantics><msub><mi>R</mi><mi>M</mi></msub><annotation encoding="application/x-tex">R_{M}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+
+</div>
+<div class="ltx_listingline"> end if
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">foreach</span> <em class="ltx_emph ltx_font_italic"><math alttext="c^{1}_{j}" class="ltx_Math" display="inline" id="alg1.m18"><semantics><msubsup><mi>c</mi><mi>j</mi><mn>1</mn></msubsup><annotation encoding="application/x-tex">c^{1}_{j}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">do</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<span class="ltx_text ltx_font_bold">if</span> <em class="ltx_emph ltx_font_italic"><math alttext="h^{1}_{j}\geq T_{p}" class="ltx_Math" display="inline" id="alg1.m19"><semantics><mrow><msubsup><mi>h</mi><mi>j</mi><mn>1</mn></msubsup><mo>≥</mo><msub><mi>T</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">h^{1}_{j}\geq T_{p}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">then</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<math alttext="c^{2}_{j\hat{k}}\leftarrow argmax(h^{2}_{jk})" class="ltx_Math" display="inline" id="alg1.m20"><semantics><mrow><msubsup><mi>c</mi><mrow><mi>j</mi><mo>⁢</mo><mover accent="true"><mi>k</mi><mo>^</mo></mover></mrow><mn>2</mn></msubsup><mo stretchy="false">←</mo><mrow><mi>a</mi><mo>⁢</mo><mi>r</mi><mo>⁢</mo><mi>g</mi><mo>⁢</mo><mi>m</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>x</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msubsup><mi>h</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">c^{2}_{j\hat{k}}\leftarrow argmax(h^{2}_{jk})</annotation></semantics></math> , where <math alttext="c^{2}_{jk}\notin R_{M}" class="ltx_Math" display="inline" id="alg1.m21"><semantics><mrow><msubsup><mi>c</mi><mrow><mi>j</mi><mo>⁢</mo><mi>k</mi></mrow><mn>2</mn></msubsup><mo>∉</mo><msub><mi>R</mi><mi>M</mi></msub></mrow><annotation encoding="application/x-tex">c^{2}_{jk}\notin R_{M}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<math alttext="R_{M}\leftarrow R_{M}\cup\{c^{2}_{j\hat{k}}\}" class="ltx_Math" display="inline" id="alg1.m22"><semantics><mrow><msub><mi>R</mi><mi>M</mi></msub><mo stretchy="false">←</mo><mrow><msub><mi>R</mi><mi>M</mi></msub><mo>∪</mo><mrow><mo stretchy="false">{</mo><msubsup><mi>c</mi><mrow><mi>j</mi><mo>⁢</mo><mover accent="true"><mi>k</mi><mo>^</mo></mover></mrow><mn>2</mn></msubsup><mo stretchy="false">}</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">R_{M}\leftarrow R_{M}\cup\{c^{2}_{j\hat{k}}\}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>    end if
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+</div>
+<div class="ltx_listingline"> end foreach
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">if</span> <em class="ltx_emph ltx_font_italic"><math alttext="|R_{M}|\geq N_{M}" class="ltx_Math" display="inline" id="alg1.m23"><semantics><mrow><mrow><mo stretchy="false">|</mo><msub><mi>R</mi><mi>M</mi></msub><mo stretchy="false">|</mo></mrow><mo>≥</mo><msub><mi>N</mi><mi>M</mi></msub></mrow><annotation encoding="application/x-tex">|R_{M}|\geq N_{M}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">then</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<math alttext="R_{M}\leftarrow\{randomchoose(R_{M},N_{M})\}" class="ltx_Math" display="inline" id="alg1.m24"><semantics><mrow><msub><mi>R</mi><mi>M</mi></msub><mo stretchy="false">←</mo><mrow><mo stretchy="false">{</mo><mrow><mi>r</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>n</mi><mo>⁢</mo><mi>d</mi><mo>⁢</mo><mi>o</mi><mo>⁢</mo><mi>m</mi><mo>⁢</mo><mi>c</mi><mo>⁢</mo><mi>h</mi><mo>⁢</mo><mi>o</mi><mo>⁢</mo><mi>o</mi><mo>⁢</mo><mi>s</mi><mo>⁢</mo><mi>e</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>R</mi><mi>M</mi></msub><mo>,</mo><msub><mi>N</mi><mi>M</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">R_{M}\leftarrow\{randomchoose(R_{M},N_{M})\}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<span class="ltx_text ltx_font_bold">return</span> <math alttext="R_{M}" class="ltx_Math" display="inline" id="alg1.m25"><semantics><msub><mi>R</mi><mi>M</mi></msub><annotation encoding="application/x-tex">R_{M}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+
+</div>
+<div class="ltx_listingline"> end if
+</div>
+<div class="ltx_listingline">sort all <math alttext="c^{2}" class="ltx_Math" display="inline" id="alg1.m26"><semantics><msup><mi>c</mi><mn>2</mn></msup><annotation encoding="application/x-tex">c^{2}</annotation></semantics></math> by <math alttext="h^{2}" class="ltx_Math" display="inline" id="alg1.m27"><semantics><msup><mi>h</mi><mn>2</mn></msup><annotation encoding="application/x-tex">h^{2}</annotation></semantics></math> from largest to smallest;
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">while</span> <em class="ltx_emph ltx_font_italic"><math alttext="|R_{M}|&lt;N_{M}" class="ltx_Math" display="inline" id="alg1.m28"><semantics><mrow><mrow><mo stretchy="false">|</mo><msub><mi>R</mi><mi>M</mi></msub><mo stretchy="false">|</mo></mrow><mo>&lt;</mo><msub><mi>N</mi><mi>M</mi></msub></mrow><annotation encoding="application/x-tex">|R_{M}|&lt;N_{M}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">do</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<span class="ltx_text ltx_font_bold">if</span> <em class="ltx_emph ltx_font_italic"><math alttext="c^{2}_{p}\notin R_{M}" class="ltx_Math" display="inline" id="alg1.m29"><semantics><mrow><msubsup><mi>c</mi><mi>p</mi><mn>2</mn></msubsup><mo>∉</mo><msub><mi>R</mi><mi>M</mi></msub></mrow><annotation encoding="application/x-tex">c^{2}_{p}\notin R_{M}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">then</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<math alttext="R_{M}\leftarrow R_{M}\cup\{c^{2}_{p}\}" class="ltx_Math" display="inline" id="alg1.m30"><semantics><mrow><msub><mi>R</mi><mi>M</mi></msub><mo stretchy="false">←</mo><mrow><msub><mi>R</mi><mi>M</mi></msub><mo>∪</mo><mrow><mo stretchy="false">{</mo><msubsup><mi>c</mi><mi>p</mi><mn>2</mn></msubsup><mo stretchy="false">}</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">R_{M}\leftarrow R_{M}\cup\{c^{2}_{p}\}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<math alttext="p\leftarrow p+1" class="ltx_Math" display="inline" id="alg1.m31"><semantics><mrow><mi>p</mi><mo stretchy="false">←</mo><mrow><mi>p</mi><mo>+</mo><mn>1</mn></mrow></mrow><annotation encoding="application/x-tex">p\leftarrow p+1</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>    end if
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+</div>
+<div class="ltx_listingline"> end while
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">return</span> <math alttext="R_{M}" class="ltx_Math" display="inline" id="alg1.m32"><semantics><msub><mi>R</mi><mi>M</mi></msub><annotation encoding="application/x-tex">R_{M}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">
+</div>
+</div>
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_float"><span class="ltx_text ltx_font_bold">Algorithm 1</span> </span>用于多兴趣的 Trinity 检索器</figcaption>
+</figure>
+<figure class="ltx_table" id="S4.T1">
+<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_t">Aspect</th>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">Multi-U</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">Trinity-M</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_t">Flexibility</th>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">⊗</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">✓⃝</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_t" rowspan="2">Efficiency</th>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">deteriorates with</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">consistently keeps</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">many heads</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">linear increasing</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_t" rowspan="2">Explainability</th>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">semantically</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">semantically</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">ambiguous</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">meaningful</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_t" rowspan="2">Extensibility</th>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">has not</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">has been achieved</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">been validated</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">in this paper</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_b ltx_border_t">Fungibility</th>
+<td class="ltx_td ltx_align_justify ltx_border_b ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">feasible</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_b ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">only complementary</span>
+</span>
+</td>
+</tr>
+</tbody>
+</table>
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 1. </span>Multi-U 类方法与 Trinity-M 的比较。</figcaption>
+</figure>
+<div class="ltx_para" id="S4.SS1.p7">
+<p class="ltx_p">我们在表<a class="ltx_ref" href="#S4.T1" title="Table 1 ‣ 4.1. Multi-interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">1</span></a>中比较 Trinity-M 与“Multi-U”类方法的优缺点。这里我们用“Multi-U”来概括大多数现有工作，它们训练多个用户表示（头）并搜索多个候选结果以捕捉多兴趣。最著名的 Multi-U 方法有 MIND <cite class="ltx_cite ltx_citemacro_citep">(Li<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib128" title="Multi-interest network with dynamic routing for recommendation at tmall">2019</a>)</cite>、ComiRec <cite class="ltx_cite ltx_citemacro_citep">(Cen<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib144" title="Controllable multi-interest framework for recommendation">2020</a>)</cite> 和 MVKE <cite class="ltx_cite ltx_citemacro_citep">(Xu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib129" title="Mixture of virtual-kernel experts for multi-objective user profile modeling">2022</a>)</cite>。</p>
+<ol class="ltx_enumerate" id="S4.I1">
+<li class="ltx_item" id="S4.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(1)</span>
+<div class="ltx_para" id="S4.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">灵活性</span>。它衡量我们能否灵活地调整感兴趣的主题。在 Trinity-M 中，策略是定制化的，因此扩展所考虑的主题、跳过头部聚类以及实施主题采样都会很容易。然而，Multi-U 方法若不训练新模型，就无法提供轻松的解决方案。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(2)</span>
+<div class="ltx_para" id="S4.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">效率</span>。效率描述随着考虑的主题增多，服务成本如何增加。对于 Multi-U 方法，当我们引入一个额外的头时，就要多执行一次 u2i 搜索。然而，如图<a class="ltx_ref" href="#S4.F4" title="Figure 4 ‣ 4.1. Multi-interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">4</span></a>所示，物品可能会被多个头冗余搜索。因此，我们拥有的头越多，通过增加头所能检索到的唯一候选就越少。相反，在 Trinity-M 中，物品被确定性地且排他地分配到聚类。当我们增加额外的聚类时，它们只会带来补充性候选。找到更多感兴趣的聚类的开销始终是线性的额外开销。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(3)</span>
+<div class="ltx_para" id="S4.I1.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">可解释性</span>。可解释性描述特定头/聚类的语义含义。在 Multi-U 方法中，各个头被约束去学习不同的样本，然而我们几乎无法控制训练过程或指定要优化的特定主题。在 Trinity-M 中，聚类本身具有语义含义（见第<a class="ltx_ref" href="#S5.SS1" title="5.1. Clustering System of Trinity ‣ 5. Experiments ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">5.1</span></a>节），我们知道我们正在考虑哪些主题。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i4" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(4)</span>
+<div class="ltx_para" id="S4.I1.i4.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">可扩展性</span>。可扩展性衡量该方法能否扩展到其他场景。Multi-U 方法很少为长尾或长期兴趣建模任务提供解决方案。而 Trinity 同时改善这些兴趣建模问题，如下文所示。</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i5" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(5)</span>
+<div class="ltx_para" id="S4.I1.i5.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">可替代性</span>。可替代性指我们能否用所提出的方法替代现有检索器。在这方面，Multi-U 方法可以作为替代方案，因为它们的多个头容易覆盖单个 u2i 模型的候选。然而，由于 Trinity 基于长期统计建模，新兴物品/主题难以在时间上凸显。因此，我们将 Trinity-M 用作额外的检索器，只考虑其补充功能。</p>
+</div>
+</li>
+</ol>
+</div>
+<figure class="ltx_figure" id="S4.F4"><a href="assets/be4bf57aa245ccfd.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F4.g1" loading="lazy" src="assets/be4bf57aa245ccfd.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4. </span>在 Multi-U 方法中，每个用户表示（黄色虚线圆圈）单独搜索候选，因此一些物品（实心空心圆圈）可能被检索多次（灰色越深表示检索次数越多）。随着头数量增加，冗余计算开销大幅增长。然而，在 Trinity 中物品被排他地分配，每个物品最多只能被检索一次。</figcaption>
+</figure>
+</section>
+<section class="ltx_subsection" id="S4.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2. </span>长尾兴趣</h3>
+<div class="ltx_para" id="S4.SS2.p1">
+<p class="ltx_p">对于长尾兴趣，我们的思路是基于聚类将个人兴趣分布与全局兴趣分布进行比较。首先，我们需要自动识别/定义全局长尾聚类。然后，我们检查用户的统计直方图在这些聚类上是否存在显著响应。满足这一标准的聚类被收集起来，形成额外的检索器。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p2">
+<p class="ltx_p">受<cite class="ltx_cite ltx_citemacro_citep">(Yi<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib127" title="Sampling-bias-corrected neural modeling for large corpus item recommendations">2019</a>)</cite>启发，我们采用类似的流式频率估计，但将其应用于聚类而非物品。具体而言，聚类 <math alttext="c_{k}" class="ltx_Math" display="inline" id="S4.SS2.p2.m1"><semantics><msub><mi>c</mi><mi>k</mi></msub><annotation encoding="application/x-tex">c_{k}</annotation></semantics></math>（对于长尾兴趣，我们只考虑二级聚类）由哈希函数 <math alttext="\mathcal{H}" class="ltx_Math" display="inline" id="S4.SS2.p2.m2"><semantics><mi class="ltx_font_mathcaligraphic">ℋ</mi><annotation encoding="application/x-tex">\mathcal{H}</annotation></semantics></math> 映射，当它出现在训练流中时，其出现间隔由下式计算</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_table" id="S4.E2">
+<tbody>
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline" id="S4.E2X">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equationgroup ltx_align_left">(2)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle B[\mathcal{H}(c_{k})]\leftarrow(1-\alpha)\cdot B[\mathcal{H}(c_{%
+k})]+\alpha\cdot(t-A[\mathcal{H}(c_{k})])," class="ltx_Math" display="inline" id="S4.E2X.m2"><semantics><mrow><mrow><mrow><mi>B</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mrow><mi class="ltx_font_mathcaligraphic">ℋ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow><mo stretchy="false">←</mo><mrow><mrow><mrow><mrow><mo stretchy="false">(</mo><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><mo rspace="0.055em" stretchy="false">)</mo></mrow><mo rspace="0.222em">⋅</mo><mi>B</mi></mrow><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mrow><mi class="ltx_font_mathcaligraphic">ℋ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow><mo>+</mo><mrow><mi>α</mi><mo lspace="0.222em" rspace="0.222em">⋅</mo><mrow><mo stretchy="false">(</mo><mrow><mi>t</mi><mo>−</mo><mrow><mi>A</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mrow><mi class="ltx_font_mathcaligraphic">ℋ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle B[\mathcal{H}(c_{k})]\leftarrow(1-\alpha)\cdot B[\mathcal{H}(c_{%
+k})]+\alpha\cdot(t-A[\mathcal{H}(c_{k})]),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr>
+</tbody>
+</table></div>
+<p class="ltx_p">其中 <math alttext="A[\mathcal{H}(c_{k})]" class="ltx_Math" display="inline" id="S4.SS2.p2.m3"><semantics><mrow><mi>A</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mrow><mi class="ltx_font_mathcaligraphic">ℋ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">A[\mathcal{H}(c_{k})]</annotation></semantics></math> 记录该簇最后一次出现的时间戳。<math alttext="t-A[\mathcal{H}(c_{k})]" class="ltx_Math" display="inline" id="S4.SS2.p2.m4"><semantics><mrow><mi>t</mi><mo>−</mo><mrow><mi>A</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mrow><mi class="ltx_font_mathcaligraphic">ℋ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">t-A[\mathcal{H}(c_{k})]</annotation></semantics></math> 表示最近一次出现的间隔，<math alttext="B[\mathcal{H}(c)]" class="ltx_Math" display="inline" id="S4.SS2.p2.m5"><semantics><mrow><mi>B</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mrow><mi class="ltx_font_mathcaligraphic">ℋ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>c</mi><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">B[\mathcal{H}(c)]</annotation></semantics></math> 是其全局滑动平均。这在图<a class="ltx_ref" href="#S1.F2" title="Figure 2 ‣ 1. Introduction ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">2</span></a>(c) 中进行了说明。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p3">
+<p class="ltx_p">一般来说，我们可以从出现间隔较大的簇中识别出全局长尾主题。然而，出现间隔大的簇并非只由长尾主题构成。还存在一些“并列”簇，它们代表热门话题，但由于训练偶然性而只包含少量条目。我们移除条目数少于 <math alttext="T_{i}=3" class="ltx_Math" display="inline" id="S4.SS2.p3.m1"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">T_{i}=3</annotation></semantics></math> 的簇，从而有效避免并列簇。在我们的实现中，我们按出现间隔排序，将前 600 个簇（覆盖约 22% 次曝光）定义为长尾簇，且其中不含并列簇。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p4">
+<p class="ltx_p">在定义长尾簇之后，我们检查用户的统计直方图。如果一个簇的行为计数超过 <math alttext="T_{l}=3" class="ltx_Math" display="inline" id="S4.SS2.p4.m1"><semantics><mrow><msub><mi>T</mi><mi>l</mi></msub><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">T_{l}=3</annotation></semantics></math>，则被视为对长尾兴趣的“确信”响应，并予以纳入。
+我们引入一个采样器来选择 <math alttext="N_{LT}=20" class="ltx_Math" display="inline" id="S4.SS2.p4.m2"><semantics><mrow><msub><mi>N</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub><mo>=</mo><mn>20</mn></mrow><annotation encoding="application/x-tex">N_{LT}=20</annotation></semantics></math> 个簇，其中每个簇被采样的概率为</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_table" id="S4.E3">
+<tbody>
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline" id="S4.E3X">
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_left" rowspan="1"><span class="ltx_tag ltx_tag_equationgroup ltx_align_left">(3)</span></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle Pr(c_{k})=\frac{(\beta+h_{k})^{\alpha}}{\sum_{q=1}^{K}(\beta+h_{%
+q})^{\alpha}}" class="ltx_Math" display="inline" id="S4.E3X.m2"><semantics><mrow><mrow><mi>P</mi><mo>⁢</mo><mi>r</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mstyle displaystyle="true"><mfrac><msup><mrow><mo stretchy="false">(</mo><mrow><mi>β</mi><mo>+</mo><msub><mi>h</mi><mi>k</mi></msub></mrow><mo stretchy="false">)</mo></mrow><mi>α</mi></msup><mrow><msubsup><mo>∑</mo><mrow><mi>q</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></msubsup><msup><mrow><mo lspace="0em" stretchy="false">(</mo><mrow><mi>β</mi><mo>+</mo><msub><mi>h</mi><mi>q</mi></msub></mrow><mo stretchy="false">)</mo></mrow><mi>α</mi></msup></mrow></mfrac></mstyle></mrow><annotation encoding="application/x-tex">\displaystyle Pr(c_{k})=\frac{(\beta+h_{k})^{\alpha}}{\sum_{q=1}^{K}(\beta+h_{%
+q})^{\alpha}}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr>
+</tbody>
+</table></div>
+<p class="ltx_p">。超参数 <math alttext="\alpha" class="ltx_Math" display="inline" id="S4.SS2.p4.m3"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math> 调整该分布（例如，<math alttext="\alpha=0" class="ltx_Math" display="inline" id="S4.SS2.p4.m4"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha=0</annotation></semantics></math> 形成均匀分布），我们使用 <math alttext="\beta" class="ltx_Math" display="inline" id="S4.SS2.p4.m5"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math> 作为平滑项。在我们的实现中，我们设置 <math alttext="\alpha=0.75" class="ltx_Math" display="inline" id="S4.SS2.p4.m6"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.75</mn></mrow><annotation encoding="application/x-tex">\alpha=0.75</annotation></semantics></math> 和 <math alttext="\beta=0.1" class="ltx_Math" display="inline" id="S4.SS2.p4.m7"><semantics><mrow><mi>β</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\beta=0.1</annotation></semantics></math>。所设计的采样器在用户体验和多样性方面均优于均匀随机采样器，因为属于头部簇的条目更可能被消费（见第<a class="ltx_ref" href="#S5.SS2" title="5.2. Online Experiments ‣ 5. Experiments ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">5.2</span></a>节）。
+注意，与 Trinity-M 重复的簇已在第一步中被移除。</p>
+</div>
+<div class="ltx_para" id="S4.SS2.p5">
+<p class="ltx_p">上述算法总结在算法<a class="ltx_ref" href="#alg2" title="In 4.2. Long-tail Interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">2</span></a>中。在收集到
+次级簇之后，我们将其中的条目输入重排序模型以获得检索结果。该检索器记为 Trinity-LT。</p>
+</div>
+<figure class="ltx_float ltx_algorithm" id="alg2">
+<div class="ltx_listing ltx_lst_numbers_left ltx_listing">
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">Data:</span> <math alttext="c^{2}_{k}[h^{2}_{k}]" class="ltx_Math" display="inline" id="alg2.m1"><semantics><mrow><msubsup><mi>c</mi><mi>k</mi><mn>2</mn></msubsup><mo>⁢</mo><mrow><mo stretchy="false">[</mo><msubsup><mi>h</mi><mi>k</mi><mn>2</mn></msubsup><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">c^{2}_{k}[h^{2}_{k}]</annotation></semantics></math>, global occurrence intervals <math alttext="{B[\mathcal{H}(c)]}" class="ltx_Math" display="inline" id="alg2.m2"><semantics><mrow><mi>B</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mrow><mi class="ltx_font_mathcaligraphic">ℋ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>c</mi><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">{B[\mathcal{H}(c)]}</annotation></semantics></math>, threshold <math alttext="T_{i}=3" class="ltx_Math" display="inline" id="alg2.m3"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">T_{i}=3</annotation></semantics></math>, <math alttext="T_{l}=3" class="ltx_Math" display="inline" id="alg2.m4"><semantics><mrow><msub><mi>T</mi><mi>l</mi></msub><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">T_{l}=3</annotation></semantics></math>, <math alttext="N_{C}=600" class="ltx_Math" display="inline" id="alg2.m5"><semantics><mrow><msub><mi>N</mi><mi>C</mi></msub><mo>=</mo><mn>600</mn></mrow><annotation encoding="application/x-tex">N_{C}=600</annotation></semantics></math>, <math alttext="N_{LT}=20" class="ltx_Math" display="inline" id="alg2.m6"><semantics><mrow><msub><mi>N</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub><mo>=</mo><mn>20</mn></mrow><annotation encoding="application/x-tex">N_{LT}=20</annotation></semantics></math>
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">Result:</span> Secondary cluster set <math alttext="R_{LT}" class="ltx_Math" display="inline" id="alg2.m7"><semantics><msub><mi>R</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub><annotation encoding="application/x-tex">R_{LT}</annotation></semantics></math>
+</div>
+<div class="ltx_listingline">
+<math alttext="R_{LT}\leftarrow\emptyset" class="ltx_Math" display="inline" id="alg2.m8"><semantics><mrow><msub><mi>R</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub><mo stretchy="false">←</mo><mi mathvariant="normal">∅</mi></mrow><annotation encoding="application/x-tex">R_{LT}\leftarrow\emptyset</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">
+<math alttext="C\leftarrow\emptyset" class="ltx_Math" display="inline" id="alg2.m9"><semantics><mrow><mi>C</mi><mo stretchy="false">←</mo><mi mathvariant="normal">∅</mi></mrow><annotation encoding="application/x-tex">C\leftarrow\emptyset</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">foreach</span> <em class="ltx_emph ltx_font_italic"><math alttext="c_{k}" class="ltx_Math" display="inline" id="alg2.m10"><semantics><msub><mi>c</mi><mi>k</mi></msub><annotation encoding="application/x-tex">c_{k}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">do</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<span class="ltx_text ltx_font_bold">if</span> <em class="ltx_emph ltx_font_italic"><math alttext="c_{k}" class="ltx_Math" display="inline" id="alg2.m11"><semantics><msub><mi>c</mi><mi>k</mi></msub><annotation encoding="application/x-tex">c_{k}</annotation></semantics></math> has equal or more than <math alttext="T_{i}" class="ltx_Math" display="inline" id="alg2.m12"><semantics><msub><mi>T</mi><mi>i</mi></msub><annotation encoding="application/x-tex">T_{i}</annotation></semantics></math> items</em> <span class="ltx_text ltx_font_bold">then</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<math alttext="C\leftarrow C\cup\{c_{k}\}" class="ltx_Math" display="inline" id="alg2.m13"><semantics><mrow><mi>C</mi><mo stretchy="false">←</mo><mrow><mi>C</mi><mo>∪</mo><mrow><mo stretchy="false">{</mo><msub><mi>c</mi><mi>k</mi></msub><mo stretchy="false">}</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">C\leftarrow C\cup\{c_{k}\}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>    end if
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+</div>
+<div class="ltx_listingline"> end foreach
+</div>
+<div class="ltx_listingline">
+</div>
+<div class="ltx_listingline">sort clusters <math alttext="{c}_{k}\in C" class="ltx_Math" display="inline" id="alg2.m14"><semantics><mrow><msub><mi>c</mi><mi>k</mi></msub><mo>∈</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">{c}_{k}\in C</annotation></semantics></math> by <math alttext="B[\mathcal{H}(c_{k})]" class="ltx_Math" display="inline" id="alg2.m15"><semantics><mrow><mi>B</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mrow><mi class="ltx_font_mathcaligraphic">ℋ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">B[\mathcal{H}(c_{k})]</annotation></semantics></math>, from largest to smallest;
+</div>
+<div class="ltx_listingline">
+choose top <math alttext="N_{C}" class="ltx_Math" display="inline" id="alg2.m16"><semantics><msub><mi>N</mi><mi>C</mi></msub><annotation encoding="application/x-tex">N_{C}</annotation></semantics></math> clusters as <math alttext="C" class="ltx_Math" display="inline" id="alg2.m17"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">foreach</span> <em class="ltx_emph ltx_font_italic"><math alttext="c^{2}_{k}" class="ltx_Math" display="inline" id="alg2.m18"><semantics><msubsup><mi>c</mi><mi>k</mi><mn>2</mn></msubsup><annotation encoding="application/x-tex">c^{2}_{k}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">do</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<span class="ltx_text ltx_font_bold">if</span> <em class="ltx_emph ltx_font_italic"><math alttext="c^{2}_{k}\in C" class="ltx_Math" display="inline" id="alg2.m19"><semantics><mrow><msubsup><mi>c</mi><mi>k</mi><mn>2</mn></msubsup><mo>∈</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">c^{2}_{k}\in C</annotation></semantics></math> and <math alttext="h^{2}_{k}\geq T_{l}" class="ltx_Math" display="inline" id="alg2.m20"><semantics><mrow><msubsup><mi>h</mi><mi>k</mi><mn>2</mn></msubsup><mo>≥</mo><msub><mi>T</mi><mi>l</mi></msub></mrow><annotation encoding="application/x-tex">h^{2}_{k}\geq T_{l}</annotation></semantics></math> and <math alttext="c^{2}_{k}\notin R_{LT}" class="ltx_Math" display="inline" id="alg2.m21"><semantics><mrow><msubsup><mi>c</mi><mi>k</mi><mn>2</mn></msubsup><mo>∉</mo><msub><mi>R</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub></mrow><annotation encoding="application/x-tex">c^{2}_{k}\notin R_{LT}</annotation></semantics></math></em> <span class="ltx_text ltx_font_bold">then</span>
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+<math alttext="R_{LT}\leftarrow R_{LT}\cup\{c^{2}_{k}\}" class="ltx_Math" display="inline" id="alg2.m22"><semantics><mrow><msub><mi>R</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub><mo stretchy="false">←</mo><mrow><msub><mi>R</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub><mo>∪</mo><mrow><mo stretchy="false">{</mo><msubsup><mi>c</mi><mi>k</mi><mn>2</mn></msubsup><mo stretchy="false">}</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">R_{LT}\leftarrow R_{LT}\cup\{c^{2}_{k}\}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>     <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>    end if
+</div>
+<div class="ltx_listingline">  <span class="ltx_rule" style="width:1px;height:100%;background:black;display:inline-block;"> </span>   
+</div>
+<div class="ltx_listingline"> end foreach
+</div>
+<div class="ltx_listingline">
+<math alttext="R_{LT}\leftarrow\{sampler(R_{LT},N_{LT})\}" class="ltx_Math" display="inline" id="alg2.m23"><semantics><mrow><msub><mi>R</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub><mo stretchy="false">←</mo><mrow><mo stretchy="false">{</mo><mrow><mi>s</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>m</mi><mo>⁢</mo><mi>p</mi><mo>⁢</mo><mi>l</mi><mo>⁢</mo><mi>e</mi><mo>⁢</mo><mi>r</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>R</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub><mo>,</mo><msub><mi>N</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">R_{LT}\leftarrow\{sampler(R_{LT},N_{LT})\}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">
+<span class="ltx_text ltx_font_bold">return</span> <math alttext="R_{LT}" class="ltx_Math" display="inline" id="alg2.m24"><semantics><msub><mi>R</mi><mrow><mi>L</mi><mo>⁢</mo><mi>T</mi></mrow></msub><annotation encoding="application/x-tex">R_{LT}</annotation></semantics></math>;
+</div>
+<div class="ltx_listingline">
+</div>
+</div>
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_float"><span class="ltx_text ltx_font_bold">Algorithm 2</span> </span>用于长尾兴趣的 Trinity 检索器</figcaption>
+</figure>
+</section>
+<section class="ltx_subsection" id="S4.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.3. </span>长期兴趣</h3>
+<div class="ltx_para" id="S4.SS3.p1">
+<p class="ltx_p">如第<a class="ltx_ref" href="#S3" title="3. The Basic Trinity Framework ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">3</span></a>节所述，SIM 头同时优化用户过去较长时间的行为条目和当前条目。因此我们认为生成的条目嵌入表示长期线索，并构建一个 i2i 检索器来捕获用户的长期兴趣。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.p2">
+<p class="ltx_p">如图<a class="ltx_ref" href="#S1.F2" title="Figure 2 ‣ 1. Introduction ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">2</span></a>(d) 所示，我们训练一个预排序模型，从用户过去的行为序列中选择种子。为捕获全面的兴趣，任何 <math alttext="playtime\geq 10s" class="ltx_Math" display="inline" id="S4.SS3.p2.m1"><semantics><mrow><mrow><mi>p</mi><mo>⁢</mo><mi>l</mi><mo>⁢</mo><mi>a</mi><mo>⁢</mo><mi>y</mi><mo>⁢</mo><mi>t</mi><mo>⁢</mo><mi>i</mi><mo>⁢</mo><mi>m</mi><mo>⁢</mo><mi>e</mi></mrow><mo>≥</mo><mrow><mn>10</mn><mo>⁢</mo><mi>s</mi></mrow></mrow><annotation encoding="application/x-tex">playtime\geq 10s</annotation></semantics></math>、完播或互动（点赞/分享/评论/关注）反馈都被视为正标签。该模型遵循常规的双塔架构，并引入随机负样本。</p>
+</div>
+<div class="ltx_para" id="S4.SS3.p3">
+<p class="ltx_p">在对用户的行为条目（长度为 <math alttext="\leq" class="ltx_Math" display="inline" id="S4.SS3.p3.m1"><semantics><mo>≤</mo><annotation encoding="application/x-tex">\leq</annotation></semantics></math> 2500）进行排序后，我们将它们投射到 Trinity 聚类系统中，并通过限制同一簇的候选不超过 <math alttext="T_{c}" class="ltx_Math" display="inline" id="S4.SS3.p3.m2"><semantics><msub><mi>T</mi><mi>c</mi></msub><annotation encoding="application/x-tex">T_{c}</annotation></semantics></math> 来进行分散。然后我们随机选择 <math alttext="N_{L}" class="ltx_Math" display="inline" id="S4.SS3.p3.m3"><semantics><msub><mi>N</mi><mi>L</mi></msub><annotation encoding="application/x-tex">N_{L}</annotation></semantics></math> 个种子，其范围为排名前 <math alttext="N_{s}" class="ltx_Math" display="inline" id="S4.SS3.p3.m4"><semantics><msub><mi>N</mi><mi>s</mi></msub><annotation encoding="application/x-tex">N_{s}</annotation></semantics></math> 的条目，并以 Trinity 嵌入度量的相似度搜索条目。与 Trinity-M 和 Trinity-LT 类似，搜索到的条目被输入重排序模型，形成 Trinity-L 检索器。注意长期线索已被 Trinity-M 和 Trinity-LT 利用，我们引入 Trinity-L 作为轻量化的补充扩展。</p>
+</div>
+<figure class="ltx_figure" id="S4.F5"><a href="assets/7efc56e798bad9bb.webp" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F5.g1" loading="lazy" src="assets/7efc56e798bad9bb.webp"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 5. </span>属于 Trinity 簇的条目的可视化。同一行的条目共享相同的次级簇 ID。</figcaption>
+</figure>
+</section>
+<section class="ltx_subsection" id="S4.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.4. </span>实现细节</h3>
+<div class="ltx_para" id="S4.SS4.p1">
+<p class="ltx_p">所提出的三个检索器选择簇并聚合其所属条目，同时保留 10K-100K 个候选，这对于后续排序阶段仍然过大。因此我们采用重排序模型将候选缩减至约 1000 个。重排序模型遵循双塔架构，但在服务阶段不借助 ANN 即可精确预测排名。</p>
+</div>
+<div class="ltx_para" id="S4.SS4.p2">
+<p class="ltx_p">重排序模型的目标是预测视频播放时长。具体而言，观看时长在 2 秒以内的样本为负样本。对于其余正样本，我们使用其播放时长（截断为至多 5 分钟）来对批内 Softmax 损失 <cite class="ltx_cite ltx_citemacro_citep">(Yi<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib127" title="Sampling-bias-corrected neural modeling for large corpus item recommendations">2019</a>)</cite> 加权。事实上，这样的模型已被部署为主要检索器，称为“停留时长检索器”，我们只是将其复用为其他检索器的重排序模型。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5. </span>实验</h2>
+<div class="ltx_para" id="S5.p1">
+<p class="ltx_p">在本节中，我们展示 Trinity 的性能。首先，我们展示对其聚类系统的可视化分析，验证所提出模型的一些有趣性质。
+然后，我们展示额外检索器在我们大规模工业场景中的在线性能。
+我们还对它们进行详细分析，以弄清它们如何改进兴趣建模任务以及用户体验。</p>
+</div>
+<section class="ltx_subsection" id="S5.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.1. </span>Trinity 的聚类系统</h3>
+<div class="ltx_para" id="S5.SS1.p1">
+<p class="ltx_p">在图<a class="ltx_ref" href="#S4.F5" title="Figure 5 ‣ 4.3. Long-term Interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">5</span></a>中，我们可视化了属于 Trinity 簇的一些条目。同一行的条目共享相同的次级簇 ID，我们用（簇 ID，条目 ID）来指代它们。
+Trinity 聚类系统与从人类视角出发的直观聚类系统（记为标签系统）之间最重要的区别在于其聚类方式。
+例如，在第一行中，所有条目都与亲子关系有关，而非育儿，这在人类视角下并不常见。这些条目来自新闻、法律等多个标签，甚至最后一个例子（A,c）讲的是实际上并不发生的假想亲子关系。类似的现象可以在 B 的簇中观察到，其中条目都与英俊男性有关，无论其是真人还是动画模型。一个簇的主题聚焦于一个非常规话题，并覆盖多个标签方面。</p>
+</div>
+<div class="ltx_para" id="S5.SS1.p2">
+<p class="ltx_p">第三行展示了一个更为常见的分类学示例，其中三个条目都与教育有关，且每个条目解释一个子主题（职业、经济学和育儿）的知识。
+最令人惊讶的例子来自最后一行。这些条目展示了三个地方的景点和食物，而这些地方位于同一个省。
+因此我们可以得出 Trinity 聚类的另一个性质：其分类学随一般主题而变化。在教育主题下，它按学科对条目分类，而在旅游主题下，它将条目划分为地理分箱。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S5.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.2. </span>在线实验</h3>
+<figure class="ltx_table" id="S5.T2">
+<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_th ltx_th_row ltx_border_r ltx_border_tt ltx_border_t"></th>
+<td class="ltx_td ltx_align_center ltx_border_r ltx_border_tt ltx_border_t" colspan="4">Douyin</td>
+<td class="ltx_td ltx_align_center ltx_border_tt ltx_border_t" colspan="4">Douyin Lite</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_r">Retrievers</th>
+<td class="ltx_td ltx_align_center ltx_border_t">Watch Time</td>
+<td class="ltx_td ltx_align_center ltx_border_t">AAD</td>
+<td class="ltx_td ltx_align_center ltx_border_t">AAH</td>
+<td class="ltx_td ltx_align_center ltx_border_r ltx_border_t">AT</td>
+<td class="ltx_td ltx_align_center ltx_border_t">Watch Time</td>
+<td class="ltx_td ltx_align_center ltx_border_t">AAD</td>
+<td class="ltx_td ltx_align_center ltx_border_t">AAH</td>
+<td class="ltx_td ltx_align_center ltx_border_t">AT</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_r ltx_border_t">MIND <cite class="ltx_cite ltx_citemacro_citep">(Li<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib128" title="Multi-interest network with dynamic routing for recommendation at tmall">2019</a>)</cite> (6 heads*)</th>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.093%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.009%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.033%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_r ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-0.472%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.176%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.051%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p ltx_align_center">-0.270%</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_r">Trinity-M</th>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.118%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.008%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.046%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_r">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.153%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.178%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.018%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.078%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.038%</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_r ltx_border_t">Trinity-LT</th>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.069%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.019%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_r ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.546%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.060%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_r">Trinity-LT (uniform sampling)</th>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_r">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.154%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p ltx_align_center">-</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-</span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_bb ltx_border_b ltx_border_r ltx_border_t">Trinity-L</th>
+<td class="ltx_td ltx_align_justify ltx_border_bb ltx_border_b ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.051%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_bb ltx_border_b ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.009%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_bb ltx_border_b ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.020%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_bb ltx_border_b ltx_border_r ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-0.080%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_bb ltx_border_b ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.069%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_bb ltx_border_b ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.014%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_bb ltx_border_b ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">+0.029%</span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_border_bb ltx_border_b ltx_border_t">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p">-0.081%</span>
+</span>
+</td>
+</tr>
+</tbody>
+</table>
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 2. </span>在线 A/B 实验结果，以观看时长（Watch Time）、平均活跃天数（AAD）、平均活跃小时数（AAH）和平均标签数（AT）衡量。</figcaption>
+</figure>
+<div class="ltx_para" id="S5.SS2.p1">
+<p class="ltx_p">我们进行在线 A/B 实验，并展示大规模工业推荐系统在抖音和抖音极速版上的结果。
+如上所述，我们仅将三个额外检索器 Trinity-M、Trinity-LT 和 Trinity-L 上线到整个系统，并报告其性能。</p>
+</div>
+<div class="ltx_para ltx_noindent" id="S5.SS2.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">指标</span>。推荐算法的最终目标是改善用户体验，这通常用日活跃用户数（DAU）来衡量。然而，DAU 在 A/B 实验中很难被观察到，因此我们需要替代指标。在本文中，我们使用平均活跃天数（AAD）作为描述用户体验的替代指标。当用户首次到达平台时，他/她被随机分组到对照组或实验组。然后我们统计其在实验期间内的活跃天数，并计算两组之间的平均差异。
+对于大多数应用而言，DAU 是最关键的指标。然而，在抖音中，许多用户几乎每天都登录，因此 AAD 无法描述他们的体验。为解决这个问题，我们提出一个额外的指标平均活跃小时数（AAH），它以类似 AAD 的方式计算用户的活跃小时数。
+对于多兴趣和长尾兴趣建模，预期多样性会得到改善。因此我们还引入平均标签数（AT），它统计所有条目中被消费了多少个标签。此外，我们还采用观看时长作为辅助指标。</p>
+</div>
+<div class="ltx_para" id="S5.SS2.p3">
+<p class="ltx_p">在表<a class="ltx_ref" href="#S5.T2" title="Table 2 ‣ 5.2. Online Experiments ‣ 5. Experiments ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">2</span></a>中我们展示在线性能，其中只列出统计显著的指标。
+我们已经详尽地验证了 Multi-U 方法，在可接受的计算开销内没有一种方法获得显著提升。为简洁起见，我们在此报告 MIND <cite class="ltx_cite ltx_citemacro_citep">(Li<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib128" title="Multi-interest network with dynamic routing for recommendation at tmall">2019</a>)</cite> 的结果，其使用 6 个服务头，并省略其他。这样的成本远超我们的预算，该方法不可行。
+一个出乎意料的观察是 MIND 削弱了多样性，这意味着所有这些头重复地检索一些热门话题。
+相反，Trinity-M 在有限开销下显著提升了抖音和抖音极速版上的 AAD 和 AAH，并成功部署。
+我们提供对 Trinity-LT 的消融实验，其中均匀采样意味着使用均匀分布的采样器来选择簇。均匀采样器组对用户体验没有正向影响，多样性改善也较少，这验证了用户响应较大的簇更可能被消费。
+Trinity-L 也显著提升了抖音和抖音极速版上的 AAD 和 AAH。一个有趣的观察是，与 Trinity-M 相比，Trinity-L 对 AAH 的贡献小得多，但达到了有竞争力的 AAD 提升。这意味着多兴趣建模主要使高活跃用户（过去一个月活跃超过 20 天）受益。这与我们的预期一致，因为高活跃用户更可能发现新的感兴趣话题。</p>
+</div>
+<figure class="ltx_figure" id="S5.F6"><a href="assets/7871669783f72183.webp" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S5.F6.g1" loading="lazy" src="assets/7871669783f72183.webp"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 6. </span>多个检索器的头部检索结果。两个用户由方框分隔，我们仅展示 MIND 和 Trinity-M 的补充话题。</figcaption>
+</figure>
+</section>
+<section class="ltx_subsection" id="S5.SS3">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.3. </span>Trinity-M 的全面性与互补性</h3>
+<div class="ltx_para" id="S5.SS3.p1">
+<p class="ltx_p">在图<a class="ltx_ref" href="#S5.F6" title="Figure 6 ‣ 5.2. Online Experiments ‣ 5. Experiments ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">6</span></a>中，我们可视化了对于 2 个用户，停留时长检索器、MIND 和 Trinity-M 能够检索到的话题。这里我们展示排名最高的结果，因为只有这些候选才能被输入后续排序阶段。注意 MIND 和 Trinity-M 能够检索到其剩余话题，但为简洁可视化我们将其省略。</p>
+</div>
+<div class="ltx_para" id="S5.SS3.p2">
+<p class="ltx_p">对于第一个用户，停留时长检索器仅提供诸如体育和游戏等热门话题。MIND 检索到若干额外话题，如电视剧和旅游。这里书法是一个相当正面的例子，因为它是一个长尾话题。Trinity-M 另外提供了更多话题（历史、天文和农业）。Trinity-M 检索到的簇不仅更全面，而且倾向长尾话题。</p>
+</div>
+<div class="ltx_para" id="S5.SS3.p3">
+<p class="ltx_p">然而，第二个用户的例子则大不相同。该用户的兴趣主要来自游戏、育儿和新闻等热门话题。出乎意料的是，即便是热门话题也无法被单一的停留时长检索器完全检索到。而 Trinity-M 提供了新闻和动画的互补结果。注意最后一列中的“游戏”与第一列中的不同，因为它是描述主机游戏的子类别。
+在抖音中，按 Trinity 的聚类系统衡量，大多数用户拥有超过 10 个感兴趣的次级簇，因此只有 Trinity-M 满足我们对多兴趣建模的需求。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S5.SS4">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.4. </span>哪些内容从 Trinity-LT 中受益？</h3>
+<div class="ltx_para" id="S5.SS4.p1">
+<p class="ltx_p">Trinity-LT 背后的动机是改善全局长尾主题的分发，而在我们的实现中我们使用 Trinity 自身提供的分类学。在本部分中，我们转而基于标签系统验证长尾主题的分发，该标签系统主要来自人类视角。根据我们的实践经验，当条目的预估得到改善时，其长期曝光会显著增加，反之亦然。因此我们可以简单地检查 Trinity-LT 引起的曝光分布变化，以验证其对长尾兴趣建模的影响。</p>
+</div>
+<figure class="ltx_table" id="S5.T3">
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Themes</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Finance</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Laws</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Photography</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Career</th>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">VV</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">+0.904%</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">+0.478%</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">+0.389%</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">+0.230</th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_tt">Themes</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">Movie</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">Games</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">Variety</td>
+<td class="ltx_td ltx_align_center ltx_border_tt">TV drama</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_b ltx_border_t">VV</td>
+<td class="ltx_td ltx_align_center ltx_border_b ltx_border_t">-0.520%</td>
+<td class="ltx_td ltx_align_center ltx_border_b ltx_border_t">-0.349%</td>
+<td class="ltx_td ltx_align_center ltx_border_b ltx_border_t">-0.349%</td>
+<td class="ltx_td ltx_align_center ltx_border_b ltx_border_t">-0.322%</td>
+</tr>
+</tbody>
+</table>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 3. </span>由 Trinity-LT 引起的曝光分布变化。</figcaption>
+</figure>
+<div class="ltx_para" id="S5.SS4.p2">
+<p class="ltx_p">在表<a class="ltx_ref" href="#S5.T3" title="Table 3 ‣ 5.4. What contents benefit from Trinity-LT? ‣ 5. Experiments ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">3</span></a>中我们展示上述提到的曝光分布变化，其中 VV（视频播放）指特定主题的曝光。一些典型的被提升的主题是金融（+0.904%）、法律（+0.478%）、摄影（+0.389%）和职业（+0.230%）。在我们的平台中，它们都被认定为小众话题。
+注意结果是在整个市场范围内计算的，在 Trinity-LT 中这些主题被提升得更为显著。
+相反，热门话题占据的曝光较少，因此 Trinity-LT 将小众主题与其受众匹配，并总体上降低热门主题的曝光，这符合我们的预期。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S5.SS5">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">5.5. </span>Trinity-L 的种子分布</h3>
+<div class="ltx_para" id="S5.SS5.p1">
+<p class="ltx_p">这里我们分析 Trinity-L 的性质。
+由于用户 2500 长度的过去行为序列中的每个条目都可能被选为种子，我们预期 Trinity-L 会检索到更早的种子。与现有的 i2i 检索器（其种子由近期行为上的规则选出，并使用常规在线学习模型嵌入）相比，Trinity-L 拥有更多 7-15 天前（+67%）和 15-30 天前（+28%）的种子。在实验中，Trinity-L 为中等活跃用户（活跃超过 10 天但少于 20 天，统计范围为过去 30 天）提供最早的种子，并在该群体上获得显著的 AAD 提升。这表明精细化的长期兴趣建模带来更好的用户体验，
+并且 Trinity-L 确实捕获了长期线索以改善用户体验。
+注意这里的“精细化”需要 Trinity 嵌入，因为若没有它们，即使在长期种子上我们也无法获得显著的 AAD 提升。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S6">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">6. </span>结论</h2>
+<div class="ltx_para" id="S6.p1">
+<p class="ltx_p">在本文中，我们聚焦于检索阶段的多兴趣/长尾/长期兴趣建模。我们发现，在线学习框架难以解决广泛存在的兴趣遗忘问题，于是提出了一个统一的、基于统计的框架来应对该问题：Trinity。基于一个协同且时变的聚类系统，Trinity 派生出三个独立的检索器（Trinity-M、Trinity-LT 和 Trinity-L），分别对应不同的兴趣方面。Trinity-M 和 Trinity-LT 支持定制化策略，并检索目标主题。而 Trinity-L 则找回一些已被遗忘的感兴趣主题。所有检索器均已部署在抖音和抖音极速版上，并显著提升了用户体验。我们认为长期统计量直接缓解了兴趣遗忘问题，并且是专为大规模工业系统量身定制的。</p>
+</div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">参考文献</h2>
+<ul class="ltx_biblist" id="bib.L1">
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib144">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Cen, J. Zhang, X. Zou, C. Zhou, H. Yang, and J. Tang (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Controllable multi-interest framework for recommendation</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">KDD ’20</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 2942–2951</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9781450379984</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3394486.3403344" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3394486.3403344" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.SS1.p7" title="4.1. Multi-interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§4.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib143">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">R. Huang, D. Zhang, W. Lu, H. Li, M. Wang, D. Shi, J. Fan, Z. Cheng, S. Gu, and D. Yin (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Learning discrete document representations in web search</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">KDD ’23</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 4185–4194</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9798400701030</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3580305.3599854" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3580305.3599854" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p5" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib136">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">X. Huang and F. Wu (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">A novel topic-based framework for recommending long tail products</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Computers &amp; Industrial Engineering</span> <span class="ltx_text ltx_bib_volume">137</span>, <span class="ltx_text ltx_bib_pages"> pp. 106063</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text issn ltx_bib_external">ISSN 0360-8352</span>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/https%3A//doi.org/10.1016/j.cie.2019.106063" title="">Document</a>,
+<a class="ltx_ref ltx_bib_external" href="https://www.sciencedirect.com/science/article/pii/S0360835219305224" title="">Link</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p3" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib130">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Jiang, W. Wang, Y. Wei, Z. Gao, Y. Wang, and L. Nie (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">What aspect do you like: multi-scale time-aware user interest modeling for micro-video recommendation</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 28th ACM International Conference on Multimedia</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">MM ’20</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 3487–3495</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9781450379885</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3394171.3413653" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3394171.3413653" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib139">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Johnson and Y. Ng (2017)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Enhancing long tail item recommendations using tripartite graphs and markov process</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the International Conference on Web Intelligence</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">WI ’17</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 761–768</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9781450349512</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3106426.3106439" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3106426.3106439" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p3" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib128">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">C. Li, Z. Liu, M. Wu, Y. Xu, H. Zhao, P. Huang, G. Kang, Q. Chen, W. Li, and D. L. Lee (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Multi-interest network with dynamic routing for recommendation at tmall</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 28th ACM International Conference on Information and Knowledge Management</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">CIKM ’19</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 2615–2623</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9781450369763</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3357384.3357814" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3357384.3357814" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.SS1.p7" title="4.1. Multi-interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§4.1</span></a>,
+<a class="ltx_ref" href="#S5.SS2.p3" title="5.2. Online Experiments ‣ 5. Experiments ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§5.2</span></a>,
+<a class="ltx_ref" href="#S5.T2" title="In 5.2. Online Experiments ‣ 5. Experiments ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">Table 2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib140">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">A. Luke, J. Johnson, and Y. Ng (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Recommending long-tail items using extended tripartite graphs</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">2018 IEEE International Conference on Big Knowledge (ICBK)</span>,
+</span>
+<span class="ltx_bibblock">Vol. <span class="ltx_text ltx_bib_volume"></span>, <span class="ltx_text ltx_bib_pages"> pp. 123–130</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1109/ICBK.2018.00024" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p3" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib135">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Q. Pi, W. Bian, G. Zhou, X. Zhu, and K. Gai (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Practice on long sequential user behavior modeling for click-through rate prediction</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">KDD ’19</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 2671–2679</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9781450362016</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3292500.3330666" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3292500.3330666" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p4" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib134">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Q. Pi, X. Zhu, G. Zhou, Y. Zhang, Z. Wang, L. Ren, Y. Fan, and K. Gai (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Search-based user interest modeling with lifelong sequential behavior data for click-through rate prediction</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">CoRR</span> <span class="ltx_text ltx_bib_volume">abs/2006.05639</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref ltx_bib_external" href="https://arxiv.org/abs/2006.05639" title="">Link</a>,
+<span class="ltx_text ltx_bib_external">2006.05639</span></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p4" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S3.p11" title="3. The Basic Trinity Framework ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§3</span></a>,
+<a class="ltx_ref" href="#S4.SS1.p6" title="4.1. Multi-interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§4.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib137">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Singla, D. Sahrawat, S. Maheshwari, D. Mahata, A. Stent, Y. Yin, R. Shah, and R. Zimmermann (2020)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Harnessing gans for zero-shot learning of new classes in visual speech recognition</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Proceedings of the AAAI Conference on Artificial Intelligence</span> <span class="ltx_text ltx_bib_volume">34</span>, <span class="ltx_text ltx_bib_pages"> pp. 2645–2652</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1609/aaai.v34i03.5649" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p3" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib131">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Q. Tan, J. Zhang, N. Liu, X. Huang, H. Yang, J. Zhou, and X. Hu (2021a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Dynamic memory based attention network for sequential recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Proceedings of the AAAI Conference on Artificial Intelligence</span> <span class="ltx_text ltx_bib_volume">35</span> (<span class="ltx_text ltx_bib_number">5</span>), <span class="ltx_text ltx_bib_pages"> pp. 4384–4392</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref ltx_bib_external" href="https://ojs.aaai.org/index.php/AAAI/article/view/16564" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1609/aaai.v35i5.16564" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib132">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Q. Tan, J. Zhang, J. Yao, N. Liu, J. Zhou, H. Yang, and X. Hu (2021b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Sparse-interest network for sequential recommendation</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 14th ACM International Conference on Web Search and Data Mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">WSDM ’21</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 598–606</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9781450382977</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3437963.3441811" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3437963.3441811" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib141">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">A. van den Oord, O. Vinyals, and K. Kavukcuoglu (2017)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Neural discrete representation learning</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">CoRR</span> <span class="ltx_text ltx_bib_volume">abs/1711.00937</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><a class="ltx_ref ltx_bib_external" href="http://arxiv.org/abs/1711.00937" title="">Link</a>,
+<span class="ltx_text ltx_bib_external">1711.00937</span></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p5" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S3.p11" title="3. The Basic Trinity Framework ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib133">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Xie, J. Gao, P. Zhou, Q. Ye, Y. Hua, J. B. Kim, F. Wu, and S. Kim (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Rethinking multi-interest learning for candidate matching in recommender systems</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 17th ACM Conference on Recommender Systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">RecSys ’23</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 283–293</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9798400702419</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3604915.3608766" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3604915.3608766" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib129">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Xu, M. Zhao, L. Liu, L. Xiao, X. Zhang, and B. Zhang (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Mixture of virtual-kernel experts for multi-objective user profile modeling</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">KDD ’22</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 4257–4267</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9781450393850</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3534678.3539062" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3534678.3539062" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p2" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.SS1.p7" title="4.1. Multi-interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§4.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_proceedings" id="bib.bib127">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">X. Yi, J. Yang, L. Hong, D. Z. Cheng, L. Heldt, A. A. Kumthekar, Z. Zhao, L. Wei, and E. Chi (Eds.) (2019)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Sampling-bias-corrected neural modeling for large corpus item recommendations</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.SS2.p2" title="4.2. Long-tail Interest ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§4.2</span></a>,
+<a class="ltx_ref" href="#S4.SS4.p2" title="4.4. Implement Details ‣ 4. Interest Modeling in Large-scale Recommender System ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§4.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib138">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Yin, B. Cui, J. Li, J. Yao, and C. Chen (2012)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Challenging the long tail recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Proc. VLDB Endow.</span> <span class="ltx_text ltx_bib_volume">5</span> (<span class="ltx_text ltx_bib_number">9</span>), <span class="ltx_text ltx_bib_pages"> pp. 896–907</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text issn ltx_bib_external">ISSN 2150-8097</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.14778/2311906.2311916" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.14778/2311906.2311916" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p3" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib142">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Zhan, J. Mao, Y. Liu, J. Guo, M. Zhang, and S. Ma (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Learning discrete representations via constrained clustering for effective and efficient dense retrieval</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the Fifteenth ACM International Conference on Web Search and Data Mining</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_series">WSDM ’22</span>, <span class="ltx_text ltx_bib_place">New York, NY, USA</span>, <span class="ltx_text ltx_bib_pages"> pp. 1328–1336</span>.
+</span>
+<span class="ltx_bibblock">External Links: <span class="ltx_text ltx_bib_links"><span class="ltx_text isbn ltx_bib_external">ISBN 9781450391320</span>,
+<a class="ltx_ref ltx_bib_external" href="https://doi.org/10.1145/3488560.3498443" title="">Link</a>,
+<a class="ltx_ref doi ltx_bib_external" href="https://dx.doi.org/10.1145/3488560.3498443" title="">Document</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p5" title="2. Related Work ‣ Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+</ul>
+</section>
+</article></article></div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{"format": "arxiv_tex", "toc": [{"id": "tex-section-1", "title": "摘要", "level": 1}, {"id": "S1", "title": "1. 引言", "level": 1}, {"id": "S2", "title": "2. 相关工作", "level": 1}, {"id": "S3", "title": "3. Trinity 基础框架", "level": 1}, {"id": "S4", "title": "4. 大规模推荐系统中的兴趣建模", "level": 1}, {"id": "S4.SS1", "title": "4.1. 多兴趣", "level": 2}, {"id": "S4.SS2", "title": "4.2. 长尾兴趣", "level": 2}, {"id": "S4.SS3", "title": "4.3. 长期兴趣", "level": 2}, {"id": "S4.SS4", "title": "4.4. 实现细节", "level": 2}, {"id": "S5", "title": "5. 实验", "level": 1}, {"id": "S5.SS1", "title": "5.1. Trinity 的聚类系统", "level": 2}, {"id": "S5.SS2", "title": "5.2. 在线实验", "level": 2}, {"id": "S5.SS3", "title": "5.3. Trinity-M 的全面性与互补性", "level": 2}, {"id": "S5.SS4", "title": "5.4. 哪些内容从 Trinity-LT 中受益？", "level": 2}, {"id": "S5.SS5", "title": "5.5. Trinity-L 的种子分布", "level": 2}, {"id": "S6", "title": "6. 结论", "level": 1}, {"id": "bib", "title": "参考文献", "level": 1}], "stats": {"format": "arxiv_tex", "converter": "LaTeXML", "text_chars": 24465, "sections": 17, "figures": 6, "tables": 3, "table_cells": 101, "mathml": 121, "graphics": 6, "references": 18, "warnings": ["Warning:missing_file:fontawesome Can't find binding for package fontawesome at trinity_tex.tex; line 51 col 12", "Warning:unsupported:multirow Negative row sizes for \\multirow are not yet supported. at trinity_tex.tex; line 558 col 28", "Warning:missing_file:compat.ltxml Can't find package compat.ltxml at String; line 0 col 0", "Warning:missing_file:fontawesome Can't find package fontawesome at String; line 0 col 0", "Warning:uninitialized:$string Use of uninitialized value $string  in substitution (s///) at at /tmp/recsys-library-7jmc7stb/tools/latexml-root/usr/share/perl5/LaTeXML/Pre/BibTeX.pm line 272", "Warning:uninitialized:$string Use of uninitialized value $string  in substitution (s///) at at /tmp/recsys-library-7jmc7stb/tools/latexml-root/usr/share/perl5/LaTeXML/Pre/BibTeX.pm line 273", "Warning:uninitialized:value Use of uninitialized value value in concatenation (.) or string at at /tmp/recsys-library-7jmc7stb/tools/latexml-root/usr/share/perl5/LaTeXML/Pre/BibTeX.pm line 305"], "language": "zh-CN"}, "extra_head": "\u003cstyle>\n.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}\n.tex-paper .ltx_title_document{display:none}\n.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}\n.tex-paper .ltx_creator{display:inline-block;margin-right:1em}\n.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}\n.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}\n.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}\n.tex-paper .ltx_para{margin:0}\n.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}\n.tex-paper .ltx_title_paragraph{font-size:17px}\n.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}\n.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}\n.tex-paper .ltx_font_sansserif{font-family:sans-serif}\n.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}\n.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}\n.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}\n.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}\n.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}\n.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}\n.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}\n.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}\n.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}\n.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}\n.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}\n.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}\n.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}\n.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}\n.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}\n.tex-paper math{font-size:1em;line-height:normal;font-family:math}\n.tex-paper math[display=\"block\"]{margin:.2em 0;white-space:nowrap}\n.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}\n.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}\n.tex-paper .ltx_bibblock{display:block}\n.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}\n.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}\n.tex-paper .ltx_toc{display:none}\n.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}\n.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}\n.tex-paper .ltx_tag{margin-right:.35em}\n.tex-paper [id]{scroll-margin-top:24px}\n\u003c/style>"}</script>
+<script>
+const tocPanel=document.querySelector('.paper-toc');
+if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
+tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

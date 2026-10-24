@@ -1,0 +1,1227 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>GEAR：抖音生成式端到端广告检索</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style><style>
+.paper-reader main,.paper-reader>header{max-width:1180px}
+.paper-original-title{font-size:16px;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.paper-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.paper-actions a{padding:8px 14px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:14px}
+.paper-actions a:first-child{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paper-reading-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:36px;align-items:start;margin-top:30px}
+.paper-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;border-right:1px solid var(--line);padding-right:14px;font-size:13px}
+.paper-toc summary{font-size:14px;font-weight:600;cursor:pointer;padding:4px 0 10px}
+.paper-toc ol{list-style:none;padding:0;margin:0}
+.paper-toc li{margin:0;padding:4px 0;line-height:1.5}
+.paper-toc a{color:var(--muted);display:block;padding:2px 4px;border-radius:4px}
+.paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
+.paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
+.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
+.paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
+.paper-fulltext [id]{scroll-margin-top:24px}
+.paper-fulltext .ltx_TOC,.paper-fulltext .ltx_toc{display:none}
+.paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
+.paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
+.paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
+.paper-fulltext figure a{display:block}
+.paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
+.paper-fulltext .paper-equation{padding:8px 0}
+.paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
+.paper-fulltext .paper-inline-math{display:inline-block;vertical-align:middle;max-height:2.3em;width:auto;background:white;max-width:100%}
+.paper-fulltext .paper-reference{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.paper-fulltext .paper-source-page{display:block;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin:32px 0 18px;padding-top:8px;text-align:right}
+.paper-fulltext table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:14px}
+.paper-fulltext td,.paper-fulltext th{padding:6px 10px;border:1px solid var(--line)}
+.paper-bottom{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+.paper-library{display:grid;gap:0;margin:24px 0}
+.paper-entry{padding:26px 0;border-top:1px solid var(--line)}
+.paper-entry h2{display:block;font-size:21px;margin:6px 0}
+.paper-entry .original{display:block;margin-bottom:12px}
+.paper-entry .paper-actions{margin-bottom:0}
+.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+@media(max-width:800px){
+ .paper-reading-layout{display:block;margin-top:20px}
+ .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
+ .paper-toc[open] ol{max-height:55vh;overflow:auto}
+ .paper-fulltext{font-size:16px;line-height:1.9}
+ .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
+ .paper-reader h1{font-size:26px}
+}
+@media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
+</style><style>
+.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}
+.tex-paper .ltx_title_document{display:none}
+.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}
+.tex-paper .ltx_creator{display:inline-block;margin-right:1em}
+.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
+.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_para{margin:0}
+.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
+.tex-paper .ltx_title_paragraph{font-size:17px}
+.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}
+.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}
+.tex-paper .ltx_font_sansserif{font-family:sans-serif}
+.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}
+.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}
+.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}
+.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}
+.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}
+.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}
+.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}
+.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}
+.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}
+.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}
+.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}
+.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}
+.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}
+.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}
+.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}
+.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+.tex-paper math{font-size:1em;line-height:normal;font-family:math}
+.tex-paper math[display="block"]{margin:.2em 0;white-space:nowrap}
+.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}
+.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}
+.tex-paper .ltx_bibblock{display:block}
+.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}
+.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}
+.tex-paper .ltx_toc{display:none}
+.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}
+.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
+.tex-paper .ltx_tag{margin-right:.35em}
+.tex-paper [id]{scroll-margin-top:24px}
+</style></head><body class="paper-reader">
+<header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
+<main><div class="eyebrow">PAPER LIBRARY / GEAR</div><h1>GEAR：抖音生成式端到端广告检索</h1><p class="paper-original-title">GEAR: Generative End-to-end Ad Retrieval at Douyin</p>
+<p class="muted">ByteDance · arXiv 2609.39327 · 译文对应 v1</p>
+<div class="paper-actions"><a href="https://arxiv.org/abs/2609.39327v1" target="_blank" rel="noopener">英文 arXiv ↗</a>
+<a href="../index.html">全部论文</a></div>
+<p class="muted">中文全文 · 章节、公式和参考文献支持直接跳转</p>
+<div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
+<ol><li class="toc-level-1"><a href="#tex-section-1">摘要</a></li><li class="toc-level-1"><a href="#S1">1 引言</a></li><li class="toc-level-1"><a href="#S2">2 预备知识</a></li><li class="toc-level-1"><a href="#S3">3 GEAR</a></li><li class="toc-level-2"><a href="#S3.SS1">3.1 词元化器</a></li><li class="toc-level-2"><a href="#S3.SS2">3.2 生成器</a></li><li class="toc-level-2"><a href="#S3.SS3">3.3 重排器</a></li><li class="toc-level-2"><a href="#S3.SS4">3.4 训练与服务</a></li><li class="toc-level-1"><a href="#S4">4 相关工作</a></li><li class="toc-level-1"><a href="#S5">5 系统部署</a></li><li class="toc-level-1"><a href="#S6">6 大规模真实世界实验</a></li><li class="toc-level-2"><a href="#S6.SS1">6.1 总体性能</a></li><li class="toc-level-2"><a href="#S6.SS2">6.2 词元化器分析</a></li><li class="toc-level-1"><a href="#S7">7 结论</a></li><li class="toc-level-1"><a href="#Sx1">生成式 AI 披露声明</a></li><li class="toc-level-1"><a href="#bib">参考文献</a></li><li class="toc-level-1"><a href="#A1">Appendix A 合成数据上 BasisVQ 与 SimVQ 的对比</a></li><li class="toc-level-1"><a href="#A2">Appendix B 快速距离计算的详细推导</a></li><li class="toc-level-1"><a href="#A3">Appendix C 实现细节</a></li></ol></details><article class="paper-fulltext" aria-label="论文全文"><article class="ltx_document ltx_authors_1line tex-paper">
+<h1 class="ltx_title ltx_title_document">生成式端到端广告检索
+<br class="ltx_break"/>在抖音</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname"><span class="ltx_text ltx_font_bold">Shaowen Zeng, Yanhua Huang, Jiacheng Sun, Jiarui Liu, Qian Dai, Zhikai Yang,</span>
+<br class="ltx_break"/><span class="ltx_text ltx_font_bold">Hancheng Li, Boya Wu, Tuoyu Zhang, Yekui Chen, Xiang Sun</span>
+<br class="ltx_break"/>ByteDance
+</span></span>
+</div>
+<div class="ltx_abstract" id="tex-section-1">
+<h6 class="ltx_title ltx_title_abstract">摘要</h6>
+<p class="ltx_p">生成式检索将推荐重构为离散物品词元的生成。
+然而，将该范式扩展到真实世界的推荐系统时，暴露出两个关键瓶颈：
+1) <span class="ltx_text ltx_font_bold">表示坍缩</span>，即在<span class="ltx_text ltx_font_italic">连续分布漂移</span>下，物品词元化器收敛到退化结果，从根本上阻碍了稳定的端到端适配。
+2) <span class="ltx_text ltx_font_bold">物品冲突</span>，即<span class="ltx_text ltx_font_italic">海量候选池</span>导致不同物品共享相同的词元序列，损害了最终检索精度。
+关键在于，这两个瓶颈本质上是耦合的：扩大码本容量以缓解冲突，不可避免地会加剧坍缩。
+为同时解决这两个问题，我们提出<span class="ltx_text ltx_font_bold">GEAR</span>，这是一个联合优化词元化器、生成器和重排器的端到端框架。
+为缓解表示坍缩，我们引入<span class="ltx_text ltx_font_bold">BasisVQ</span>，它通过正交基对码本进行重参数化，以实现全局梯度共享和潜在空间的刚性空间旋转，从而在没有临时启发式方法的情况下有效稳定梯度动态。
+我们进一步将其扩展为前缀感知的 BasisRQ，在相同的渐近时间复杂度下大幅增强码本的表达能力。
+为解决物品冲突，GEAR 将上下文条件重排头集成到生成过程中，以极小的计算开销高效消解冲突物品的歧义。通过在端到端生成式框架内统一稳定词元化与联合重排，GEAR 建立了一个完全可微且可扩展的范式。
+它目前服务于抖音广告数亿日活跃用户，在广泛的在线 A/B 测试中取得了显著的实证提升。</p>
+</div>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1 </span>引言</h2>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p">生成式检索已在系列具有挑战性的场景中展现出成功<cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Recommender systems with generative retrieval">2023</a>; Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Onerec technical report">2025a</a>, <a class="ltx_ref" href="#bib.bib4" title="Onerec-v2 technical report">b</a>; Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib2" title="PIT: a dynamic personalized item tokenizer for end-to-end generative recommendation">2026a</a>; Yang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib27" title="Sparse meets dense: unified generative recommendations with cascaded sparse-dense representations">2025b</a>)</cite>。
+与过去的范式不同，生成式检索将推荐重构为离散物品词元生成任务。
+它采用物品词元化器将物品映射为词元序列，随后由词元生成器自回归地预测后续物品词元。
+然而，当将该范式扩展到真实场景时，这一形式化引入了两个关键瓶颈。</p>
+</div>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p">第一个瓶颈是<span class="ltx_text ltx_font_bold">表示坍缩</span>，这在计算机视觉中广为人知<cite class="ltx_cite ltx_citemacro_citep">(Zhu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib3" title="Addressing representation collapse in vector quantized models with one linear layer">2025</a>; Mentzer<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib22" title="Finite scalar quantization: VQ-VAE made simple">2024</a>)</cite>，但在生成式检索中被严重加剧。真实世界的推荐系统本质上是动态系统，随着新物品和用户兴趣的出现，会面临<span class="ltx_text ltx_font_italic">连续分布漂移</span>。当通过流式数据上的直接反向传播更新词元化器时，这种严重的分布漂移会加剧
+梯度不稳定，使码本陷入利用不足的次优状态。为规避这一问题，
+先前的工作主要依赖冻结的词元化器<cite class="ltx_cite ltx_citemacro_citep">(Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Onerec technical report">2025a</a>, <a class="ltx_ref" href="#bib.bib4" title="Onerec-v2 technical report">b</a>; Xue<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="Generative recommendation for large-scale advertising">2026</a>)</cite>，或启发式策略<cite class="ltx_cite ltx_citemacro_citep">(Zheng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib10" title="Pre-training generative recommender with multi-identifier item tokenization">2025</a>; Bai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib8" title="Bi-level optimization for generative recommendation: bridging tokenization and generation">2025</a>; Yan<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib9" title="MERGE: next-generation item indexing paradigm for large-scale streaming recommendation">2026</a>)</cite>，例如临时性的码重新初始化和指数移动平均（EMA）。然而，冻结的词元化器本质上无法适应连续分布漂移，而启发式方法仅能作为优化
+稳定性的弱替代。从根本上说，缺乏一种有原则的稳定直接梯度优化方案，仍然是实现完全可微端到端学习的关键障碍。</p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p">第二个瓶颈是<span class="ltx_text ltx_font_bold">物品冲突</span>，即<span class="ltx_text ltx_font_italic">海量候选池</span>由于语义相似性或有限的码本容量，本质上会导致不同物品共享
+相同的词元序列。传统的缓解策略将消歧推迟到后续的重排阶段<cite class="ltx_cite ltx_citemacro_citep">(Sun<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib32" title="GRank: towards target-aware and streamlined industrial retrieval with a generate-rank framework">2026</a>; Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib33" title="ROGER: ranking-oriented generative retrieval">2024</a>)</cite>，但会因计算开销或优化割裂而引入流水线瓶颈。近期工作提出追加唯一
+词元<cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Recommender systems with generative retrieval">2023</a>; Xue<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="Generative recommendation for large-scale advertising">2026</a>; Yang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib26" title="Unifying generative and dense retrieval for sequential recommendation">2025a</a>)</cite>
+以强制区分；然而，这会损害模型的泛化能力，因为唯一词元缺乏语义结构。
+更重要的是，这两个瓶颈表现出
+有害的耦合：扩大码本容量以缓解冲突，不可避免地会加剧表示坍缩<cite class="ltx_cite ltx_citemacro_citep">(Zhu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib3" title="Addressing representation collapse in vector quantized models with one linear layer">2025</a>, <a class="ltx_ref" href="#bib.bib35" title="Scaling the codebook size of vq-gan to 100,000 with a utilization rate of 99%">2024</a>)</cite>。这种内在权衡使得孤立解决方案次优，因此需要一个统一框架来同时解决它们。</p>
+</div>
+<div class="ltx_para" id="S1.p4">
+<p class="ltx_p">因此，我们提出<span class="ltx_text ltx_font_bold">GEAR</span>，一个采用训练-服务协同设计的<span class="ltx_text ltx_font_italic">生成式端到端广告检索</span>框架。
+为缓解表示坍缩，我们引入<span class="ltx_text ltx_font_bold">BasisVQ</span>，通过可学习的正交基对码本进行重参数化。从几何上看，优化该基会驱动整个坐标系的刚性旋转。这种拓扑保持的协同运动自然地恢复了未激活码的利用，并有效防止了词表退化。
+我们进一步将其扩展为前缀感知的 BasisRQ，在保持渐近时间复杂度的同时提供了高表达能力的词表。
+为解决物品冲突，GEAR 集成了一个轻量级重排头，直接复用生成器的自回归隐藏状态。该上下文条件头通过学习排序目标联合优化，以极小的推理开销实现冲突物品之间的细粒度消歧。</p>
+</div>
+<div class="ltx_para" id="S1.p5">
+<p class="ltx_p">通过在统一框架内系统地解决表示坍缩和物品冲突，GEAR 为完全可微的
+生成式检索提供了一种有原则的范式。我们通过大量离线评估和抖音广告平台上的大规模在线 A/B 测试验证了其鲁棒性和可扩展性。
+此外，在系统性服务优化的支持下，GEAR 在生产环境中实现了大规模高效实时服务，支持数亿日活跃用户。</p>
+</div>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2 </span>预备知识</h2>
+<div class="ltx_para" id="S2.p1">
+<p class="ltx_p">令<math alttext="\mathcal{U}" class="ltx_Math" display="inline" id="S2.p1.m1"><semantics><mi class="ltx_font_mathcaligraphic">𝒰</mi><annotation encoding="application/x-tex">\mathcal{U}</annotation></semantics></math>和<math alttext="\mathcal{I}" class="ltx_Math" display="inline" id="S2.p1.m2"><semantics><mi class="ltx_font_mathcaligraphic">ℐ</mi><annotation encoding="application/x-tex">\mathcal{I}</annotation></semantics></math>分别表示用户集和物品集。对于
+每个用户<math alttext="u\in\mathcal{U}" class="ltx_Math" display="inline" id="S2.p1.m3"><semantics><mrow><mi>u</mi><mo>∈</mo><mi class="ltx_font_mathcaligraphic">𝒰</mi></mrow><annotation encoding="application/x-tex">u\in\mathcal{U}</annotation></semantics></math>，我们利用其历史行为序列<math alttext="S_{u}=(i_{1},i_{2},\dots,i_{L})" class="ltx_Math" display="inline" id="S2.p1.m4"><semantics><mrow><msub><mi>S</mi><mi>u</mi></msub><mo>=</mo><mrow><mo stretchy="false">(</mo><msub><mi>i</mi><mn>1</mn></msub><mo>,</mo><msub><mi>i</mi><mn>2</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>i</mi><mi>L</mi></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">S_{u}=(i_{1},i_{2},\dots,i_{L})</annotation></semantics></math>，并将其余特征（例如年龄和
+设备类型）的集合记为<math alttext="X_{u}" class="ltx_Math" display="inline" id="S2.p1.m5"><semantics><msub><mi>X</mi><mi>u</mi></msub><annotation encoding="application/x-tex">X_{u}</annotation></semantics></math>。对于每个物品<math alttext="i\in\mathcal{I}" class="ltx_Math" display="inline" id="S2.p1.m6"><semantics><mrow><mi>i</mi><mo>∈</mo><mi class="ltx_font_mathcaligraphic">ℐ</mi></mrow><annotation encoding="application/x-tex">i\in\mathcal{I}</annotation></semantics></math>，我们通过一组
+全面的特征<math alttext="X_{i}" class="ltx_Math" display="inline" id="S2.p1.m7"><semantics><msub><mi>X</mi><mi>i</mi></msub><annotation encoding="application/x-tex">X_{i}</annotation></semantics></math>来刻画它。注意，一般而言，<math alttext="X_{i}" class="ltx_Math" display="inline" id="S2.p1.m8"><semantics><msub><mi>X</mi><mi>i</mi></msub><annotation encoding="application/x-tex">X_{i}</annotation></semantics></math>同时包含静态
+特征（例如多模态信息）和动态特征（例如具有可学习稀疏嵌入的类别
+标识符）。这种混合特征空间本质上
+要求在训练期间对物品表示进行动态适配。</p>
+</div>
+<div class="ltx_para" id="S2.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">生成式检索</span>利用物品词元化器将物品
+特征<math alttext="X_{i}" class="ltx_Math" display="inline" id="S2.p2.m1"><semantics><msub><mi>X</mi><mi>i</mi></msub><annotation encoding="application/x-tex">X_{i}</annotation></semantics></math>映射为<math alttext="m" class="ltx_Math" display="inline" id="S2.p2.m2"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>个有序离散词元<math alttext="T_{i}=(t_{1},\dots,t_{m})" class="ltx_Math" display="inline" id="S2.p2.m3"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>=</mo><mrow><mo stretchy="false">(</mo><msub><mi>t</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>t</mi><mi>m</mi></msub><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">T_{i}=(t_{1},\dots,t_{m})</annotation></semantics></math>的序列。
+生成式检索模型的目标是自回归地
+生成目标物品的词元序列<cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Recommender systems with generative retrieval">2023</a>; Zhou<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="Onerec technical report">2025a</a>)</cite>：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S2.E1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="P_{\mathcal{G}}(T_{i}|S_{u},X_{u})=\prod_{l=1}^{m}P_{\mathcal{G}}(t_{l}|S_{u},%
+X_{u},t_{0},\dots,t_{l-1})," class="ltx_Math" display="block" id="S2.E1.m1"><semantics><mrow><mrow><mrow><msub><mi>P</mi><mi class="ltx_font_mathcaligraphic">𝒢</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>T</mi><mi>i</mi></msub><mo fence="false">|</mo><mrow><msub><mi>S</mi><mi>u</mi></msub><mo>,</mo><msub><mi>X</mi><mi>u</mi></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false">∏</mo><mrow><mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><mrow><msub><mi>P</mi><mi class="ltx_font_mathcaligraphic">𝒢</mi></msub><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>t</mi><mi>l</mi></msub><mo fence="false">|</mo><mrow><msub><mi>S</mi><mi>u</mi></msub><mo>,</mo><msub><mi>X</mi><mi>u</mi></msub><mo>,</mo><msub><mi>t</mi><mn>0</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>t</mi><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">P_{\mathcal{G}}(T_{i}|S_{u},X_{u})=\prod_{l=1}^{m}P_{\mathcal{G}}(t_{l}|S_{u},%
+X_{u},t_{0},\dots,t_{l-1}),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(1)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="\mathcal{G}" class="ltx_Math" display="inline" id="S2.p2.m4"><semantics><mi class="ltx_font_mathcaligraphic">𝒢</mi><annotation encoding="application/x-tex">\mathcal{G}</annotation></semantics></math>表示自回归生成器，<math alttext="t_{0}" class="ltx_Math" display="inline" id="S2.p2.m5"><semantics><msub><mi>t</mi><mn>0</mn></msub><annotation encoding="application/x-tex">t_{0}</annotation></semantics></math>是序列起始（BOS）词元。</p>
+</div>
+<div class="ltx_para" id="S2.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">物品词元化</span>通常遵循向量量化（VQ）
+范式<cite class="ltx_cite ltx_citemacro_citep">(Van Den Oord<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib12" title="Neural discrete representation learning">2017</a>; Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Recommender systems with generative retrieval">2023</a>)</cite>。
+形式上，给定连续表示<math alttext="z_{i}\in\mathbb{R}^{d}" class="ltx_Math" display="inline" id="S2.p3.m1"><semantics><mrow><msub><mi>z</mi><mi>i</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">z_{i}\in\mathbb{R}^{d}</annotation></semantics></math>，它由物品特征<math alttext="X_{i}" class="ltx_Math" display="inline" id="S2.p3.m2"><semantics><msub><mi>X</mi><mi>i</mi></msub><annotation encoding="application/x-tex">X_{i}</annotation></semantics></math>导出，我们将其压缩为离散词元<math alttext="t_{1}=\arg\min_{k}||z_{i}-c_{1,k}||_{2}" class="ltx_Math" display="inline" id="S2.p3.m3"><semantics><mrow><msub><mi>t</mi><mn>1</mn></msub><mo>=</mo><mrow><mrow><mi>arg</mi><mo lspace="0.167em">⁡</mo><msub><mi>min</mi><mi>k</mi></msub></mrow><mo>⁢</mo><msub><mrow><mo stretchy="false">‖</mo><mrow><msub><mi>z</mi><mi>i</mi></msub><mo>−</mo><msub><mi>c</mi><mrow><mn>1</mn><mo>,</mo><mi>k</mi></mrow></msub></mrow><mo stretchy="false">‖</mo></mrow><mn>2</mn></msub></mrow></mrow><annotation encoding="application/x-tex">t_{1}=\arg\min_{k}||z_{i}-c_{1,k}||_{2}</annotation></semantics></math>，作为
+码本<math alttext="C_{1}=\{c_{1,k}\}_{k=1}^{N_{1}}" class="ltx_Math" display="inline" id="S2.p3.m4"><semantics><mrow><msub><mi>C</mi><mn>1</mn></msub><mo>=</mo><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>c</mi><mrow><mn>1</mn><mo>,</mo><mi>k</mi></mrow></msub><mo stretchy="false">}</mo></mrow><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>N</mi><mn>1</mn></msub></msubsup></mrow><annotation encoding="application/x-tex">C_{1}=\{c_{1,k}\}_{k=1}^{N_{1}}</annotation></semantics></math>中最近码向量的索引，
+其中<math alttext="N_{1}" class="ltx_Math" display="inline" id="S2.p3.m5"><semantics><msub><mi>N</mi><mn>1</mn></msub><annotation encoding="application/x-tex">N_{1}</annotation></semantics></math>被称为码本大小。为得到有序的词元序列，该
+过程通常被扩展到残差量化
+（RQ）<cite class="ltx_cite ltx_citemacro_citep">(Xue<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="Generative recommendation for large-scale advertising">2026</a>; Lee<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib13" title="Autoregressive image generation using residual quantization">2022</a>)</cite>，使用一系列码本
+<math alttext="\{C_{l}\}_{l=1}^{m}" class="ltx_Math" display="inline" id="S2.p3.m6"><semantics><msubsup><mrow><mo stretchy="false">{</mo><msub><mi>C</mi><mi>l</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></msubsup><annotation encoding="application/x-tex">\{C_{l}\}_{l=1}^{m}</annotation></semantics></math>，其中<math alttext="C_{l}\in\mathbb{R}^{N_{l}\times d}" class="ltx_Math" display="inline" id="S2.p3.m7"><semantics><mrow><msub><mi>C</mi><mi>l</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><msub><mi>N</mi><mi>l</mi></msub><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">C_{l}\in\mathbb{R}^{N_{l}\times d}</annotation></semantics></math>和<math alttext="N_{l}" class="ltx_Math" display="inline" id="S2.p3.m8"><semantics><msub><mi>N</mi><mi>l</mi></msub><annotation encoding="application/x-tex">N_{l}</annotation></semantics></math>表示第 l 个量化层的码本大小：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S2.E2">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="t_{l}=\arg\min_{k}\left|\left|\left(z_{i}-\sum_{j=1}^{l-1}c_{j,t_{j}}\right)-c%
+_{l,k}\right|\right|_{2}." class="ltx_Math" display="block" id="S2.E2.m1"><semantics><mrow><mrow><msub><mi>t</mi><mi>l</mi></msub><mo>=</mo><mrow><mrow><mi>arg</mi><mo lspace="0.167em">⁡</mo><munder><mi>min</mi><mi>k</mi></munder></mrow><mo>⁢</mo><msub><mrow><mo stretchy="false">‖</mo><mrow><mrow><mo>(</mo><mrow><msub><mi>z</mi><mi>i</mi></msub><mo rspace="0.055em">−</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>c</mi><mrow><mi>j</mi><mo>,</mo><msub><mi>t</mi><mi>j</mi></msub></mrow></msub></mrow></mrow><mo>)</mo></mrow><mo>−</mo><msub><mi>c</mi><mrow><mi>l</mi><mo>,</mo><mi>k</mi></mrow></msub></mrow><mo stretchy="false">‖</mo></mrow><mn>2</mn></msub></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">t_{l}=\arg\min_{k}\left|\left|\left(z_{i}-\sum_{j=1}^{l-1}c_{j,t_{j}}\right)-c%
+_{l,k}\right|\right|_{2}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(2)</span></td>
+</tr></tbody>
+</table></div>
+</div>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3 </span>GEAR</h2>
+<div class="ltx_para" id="S3.p1">
+<p class="ltx_p">本节介绍 GEAR（图<a class="ltx_ref" href="#S3.F1" title="Figure 1 ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">1</span></a>），这是一个为训练和服务协同设计的端到端生成式检索框架。以下小节描述其联合优化的词元化器、生成器和重排器，随后给出训练和服务细节。</p>
+</div>
+<figure class="ltx_figure" id="S3.F1"><a href="assets/c72d25ec21ea8597.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F1.g1" loading="lazy" src="assets/c72d25ec21ea8597.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1: </span>GEAR 框架概览。物品词元化器（左）通过残差量化将物品特征映射为离散词元序列，生成器-重排器（右）自回归地解码候选序列，并带有一个轻量级重排头，该头增加一个额外解码步骤以消解冲突物品的歧义。所有组件均以端到端方式联合优化。</figcaption>
+</figure>
+<section class="ltx_subsection" id="S3.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.1 </span>词元化器</h3>
+<div class="ltx_para" id="S3.SS1.p1">
+<p class="ltx_p">在本小节中，我们介绍物品词元化器，它将推荐语料中的物品映射为离散词元序列。我们首先介绍稠密物品表示的推导，然后详述我们提出的量化方案——前缀感知 BasisRQ，从 BasisVQ 形式及其收敛保证、几何直观和复杂度分析开始，随后是其前缀感知扩展。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">物品表示。</span>我们采用双塔架构，并从物品塔中提取中间隐藏嵌入作为稠密表示，随后由下述前缀感知 BasisRQ 模块进行量化。由于这种双塔设计是工业检索中的标准做法，且与我们的主要贡献无关，我们不再进一步讨论。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">BasisVQ。</span>
+令<math alttext="C\in\mathbb{R}^{N\times d}" class="ltx_Math" display="inline" id="S3.SS1.p3.m1"><semantics><mrow><mi>C</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>N</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">C\in\mathbb{R}^{N\times d}</annotation></semantics></math>表示原始 VQ 中的码本。
+在 BasisVQ 中，我们引入一个可学习基矩阵<math alttext="W\in\mathbb{R}^{d\times d}" class="ltx_Math" display="inline" id="S3.SS1.p3.m2"><semantics><mrow><mi>W</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>d</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">W\in\mathbb{R}^{d\times d}</annotation></semantics></math>
+来对码本进行重参数化。为确保基的正交性，我们应用 Newton-Schulz 迭代来近似导出正交矩阵<math alttext="\hat{W}=h(W)" class="ltx_Math" display="inline" id="S3.SS1.p3.m3"><semantics><mrow><mover accent="true"><mi>W</mi><mo>^</mo></mover><mo>=</mo><mrow><mi>h</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\hat{W}=h(W)</annotation></semantics></math>，其中<math alttext="h" class="ltx_Math" display="inline" id="S3.SS1.p3.m4"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
+表示完全可微的不动点迭代：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E3">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="W\leftarrow\frac{1}{2}W(3I-W^{\top}W)." class="ltx_Math" display="block" id="S3.E3.m1"><semantics><mrow><mrow><mi>W</mi><mo stretchy="false">←</mo><mrow><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>⁢</mo><mi>W</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mrow><mn>3</mn><mo>⁢</mo><mi>I</mi></mrow><mo>−</mo><mrow><msup><mi>W</mi><mo>⊤</mo></msup><mo>⁢</mo><mi>W</mi></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">W\leftarrow\frac{1}{2}W(3I-W^{\top}W).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(3)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">然后我们将码本重参数化为<math alttext="\hat{C}=C\hat{W}" class="ltx_Math" display="inline" id="S3.SS1.p3.m5"><semantics><mrow><mover accent="true"><mi>C</mi><mo>^</mo></mover><mo>=</mo><mrow><mi>C</mi><mo>⁢</mo><mover accent="true"><mi>W</mi><mo>^</mo></mover></mrow></mrow><annotation encoding="application/x-tex">\hat{C}=C\hat{W}</annotation></semantics></math>，由此无论选择哪个具体码，梯度都会影响整个码本。此外，BasisVQ 可以
+通过将其应用于所有码本层而自然地扩展到残差量化，我们称之为 BasisRQ。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">收敛保证</span>。对于非奇异矩阵，公式<a class="ltx_ref" href="#S3.E3" title="In 3.1 Tokenizer ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">3</span></a>中的 Newton-Schulz 迭代收敛到正交矩阵，当且仅当其谱范数严格小于<math alttext="\sqrt{3}" class="ltx_Math" display="inline" id="S3.SS1.p4.m1"><semantics><msqrt><mn>3</mn></msqrt><annotation encoding="application/x-tex">\sqrt{3}</annotation></semantics></math><cite class="ltx_cite ltx_citemacro_citep">(Higham, <a class="ltx_ref" href="#bib.bib29" title="Computing the polar decomposition—with applications">1986</a>)</cite>。为在前向传播过程中从理论上保证收敛和数值稳定性，我们在迭代前对<math alttext="W" class="ltx_Math" display="inline" id="S3.SS1.p4.m2"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math>进行归一化：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E4">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="W\leftarrow\frac{W}{\max\left(\|W\|_{F},\epsilon\right)}," class="ltx_Math" display="block" id="S3.E4.m1"><semantics><mrow><mrow><mi>W</mi><mo stretchy="false">←</mo><mfrac><mi>W</mi><mrow><mi>max</mi><mo>⁡</mo><mrow><mo>(</mo><msub><mrow><mo stretchy="false">‖</mo><mi>W</mi><mo stretchy="false">‖</mo></mrow><mi>F</mi></msub><mo>,</mo><mi>ϵ</mi><mo>)</mo></mrow></mrow></mfrac></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">W\leftarrow\frac{W}{\max\left(\|W\|_{F},\epsilon\right)},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(4)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="\|W\|_{F}" class="ltx_Math" display="inline" id="S3.SS1.p4.m3"><semantics><msub><mrow><mo stretchy="false">‖</mo><mi>W</mi><mo stretchy="false">‖</mo></mrow><mi>F</mi></msub><annotation encoding="application/x-tex">\|W\|_{F}</annotation></semantics></math>表示 Frobenius 范数，<math alttext="\epsilon=10^{-6}" class="ltx_Math" display="inline" id="S3.SS1.p4.m4"><semantics><mrow><mi>ϵ</mi><mo>=</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\epsilon=10^{-6}</annotation></semantics></math>防止除零。由于<math alttext="\|W\|_{2}\leq\|W\|_{F}" class="ltx_Math" display="inline" id="S3.SS1.p4.m5"><semantics><mrow><msub><mrow><mo stretchy="false">‖</mo><mi>W</mi><mo stretchy="false">‖</mo></mrow><mn>2</mn></msub><mo>≤</mo><msub><mrow><mo stretchy="false">‖</mo><mi>W</mi><mo stretchy="false">‖</mo></mrow><mi>F</mi></msub></mrow><annotation encoding="application/x-tex">\|W\|_{2}\leq\|W\|_{F}</annotation></semantics></math>，该步骤将初始谱范数严格限制在<math alttext="\|W\|_{2}\leq 1&lt;\sqrt{3}" class="ltx_Math" display="inline" id="S3.SS1.p4.m6"><semantics><mrow><msub><mrow><mo stretchy="false">‖</mo><mi>W</mi><mo stretchy="false">‖</mo></mrow><mn>2</mn></msub><mo>≤</mo><mn>1</mn><mo>&lt;</mo><msqrt><mn>3</mn></msqrt></mrow><annotation encoding="application/x-tex">\|W\|_{2}\leq 1&lt;\sqrt{3}</annotation></semantics></math>。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p5">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">几何直观。</span>虽然线性投影<math alttext="\hat{C}=CW" class="ltx_Math" display="inline" id="S3.SS1.p5.m1"><semantics><mrow><mover accent="true"><mi>C</mi><mo>^</mo></mover><mo>=</mo><mrow><mi>C</mi><mo>⁢</mo><mi>W</mi></mrow></mrow><annotation encoding="application/x-tex">\hat{C}=CW</annotation></semantics></math>允许梯度共享，但
+无约束基<math alttext="W" class="ltx_Math" display="inline" id="S3.SS1.p5.m2"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math>极易坍缩，如 SimVQ<cite class="ltx_cite ltx_citemacro_citep">(Zhu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib3" title="Addressing representation collapse in vector quantized models with one linear layer">2025</a>)</cite>。我们将此问题归因于未激活码常常被扭曲或被推到
+离数据流形无限远的位置，使其永久无法恢复。
+BasisVQ 通过引入基的正交性解决了该问题。从几何上看，通过活跃码优化基会诱导整个坐标系的刚性旋转。在此过程中，未激活码会
+随活跃码一起旋转而不发生扭曲，严格保持其向量范数和成对空间拓扑。未激活码并非保持孤立，而是
+在旋转过程中隐式地扫描潜在空间。特别是在大规模流式训练中的动态分布漂移下，这种拓扑保持的协同运动增加了未激活码与新兴数据流形相交的概率，有效稳定了整体梯度动态。图<a class="ltx_ref" href="#S3.F2" title="Figure 2 ‣ 3.1 Tokenizer ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">2</span></a>从概念上将这一机制与现有 VQ 方法进行了对比。此外，附录<a class="ltx_ref" href="#A1" title="Appendix A BasisVQ VS SimVQ on Sythetic Data ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">A</span></a>中合成数据的收敛实验
+表明，与 SimVQ 相比，BasisVQ 有效缓解了表示坍缩。</p>
+</div>
+<figure class="ltx_figure" id="S3.F2"><a href="assets/9813b5b4167e2033.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F2.g1" loading="lazy" src="assets/9813b5b4167e2033.svg"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2: </span>VQ 方法比较。原始 VQ 存在更新稀疏的问题。SimVQ 忽视正交性并冻结码本以避免坍缩，限制了容量。BasisVQ 通过正交基解决了这一问题，使整个码本能够同时进行完全动态的更新。</figcaption>
+</figure>
+<div class="ltx_para" id="S3.SS1.p6">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">复杂度分析。</span>在训练期间，每次前向传播都需要进行 Newton-Schulz 迭代以计算正交基<math alttext="\hat{W}" class="ltx_Math" display="inline" id="S3.SS1.p6.m1"><semantics><mover accent="true"><mi>W</mi><mo>^</mo></mover><annotation encoding="application/x-tex">\hat{W}</annotation></semantics></math>。我们发现五次迭代在经验上已经足够，由此得到的整体计算复杂度为<math alttext="\mathcal{O}(d^{3})" class="ltx_Math" display="inline" id="S3.SS1.p6.m2"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msup><mi>d</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(d^{3})</annotation></semantics></math>，并且由于与批次大小无关而受到严格界定。在空间复杂度方面，BasisVQ 仅引入了可忽略的<math alttext="\mathcal{O}(d^{2})" class="ltx_Math" display="inline" id="S3.SS1.p6.m3"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msup><mi>d</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(d^{2})</annotation></semantics></math>参数开销，用于基矩阵<math alttext="W" class="ltx_Math" display="inline" id="S3.SS1.p6.m4"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math>。在推理期间，重参数化后的码本<math alttext="\hat{C}" class="ltx_Math" display="inline" id="S3.SS1.p6.m5"><semantics><mover accent="true"><mi>C</mi><mo>^</mo></mover><annotation encoding="application/x-tex">\hat{C}</annotation></semantics></math>可以在线下预先计算并缓存。因此，推理时的计算复杂度与原始 VQ 严格相同，实现了<span class="ltx_text ltx_font_italic">零</span>延迟开销。</p>
+</div>
+<div class="ltx_para" id="S3.SS1.p7">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">前缀感知扩展。</span>在传统方法（例如 RQ-VAE 和 RQ-kmeans）中，量化层通常是相互独立的；例如，第二层中的量化与第一层所做的决策无关。这种前缀感知的缺失往往导致次优的码本容量。虽然近期的工作如 QINCO <cite class="ltx_cite ltx_citemacro_citep">（Huijben<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib17" title="Residual quantization with implicit neural codebooks">2024</a>）</cite>通过引入 MLP 变换以根据先前步骤动态调整码本来解决这一问题，并在重建方面取得了显著改进，但其沉重的计算开销使其在大规模场景中效率低下<cite class="ltx_cite ltx_citemacro_citep">（Vallaeys<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib16" title="Qinco2: vector compression and search with improved implicit neural codebooks">2025</a>）</cite>。</p>
+</div>
+<figure class="ltx_figure" id="S3.F3"><a href="assets/d20a8813c8384aef.png" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F3.g1" loading="lazy" src="assets/d20a8813c8384aef.png"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3: </span>前缀感知残差量化。复合缩放<math alttext="\gamma" class="ltx_Math" display="inline" id="S3.F3.m3"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>和偏置<math alttext="\beta" class="ltx_Math" display="inline" id="S3.F3.m4"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>由所有先前的量化决策聚合而成，并作为仿射变换应用于当前层的码本。</figcaption>
+</figure>
+<div class="ltx_para" id="S3.SS1.p8">
+<p class="ltx_p">我们改为根据所有先前层的量化决策对码本施加逐元素仿射变换，如图<a class="ltx_ref" href="#S3.F3" title="Figure 3 ‣ 3.1 Tokenizer ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">3</span></a>所示。在经验上，我们发现得益于一种快速距离计算算法，这能以极小的计算开销达到相当的性能。形式上，不失一般性地，考虑 BasisRQ 的第<math alttext="l" class="ltx_Math" display="inline" id="S3.SS1.p8.m1"><semantics><mi>l</mi><annotation encoding="application/x-tex">l</annotation></semantics></math>个量化层。令<math alttext="x_{l}\in\mathbb{R}^{b\times d}" class="ltx_Math" display="inline" id="S3.SS1.p8.m2"><semantics><mrow><msub><mi>x</mi><mi>l</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>b</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">x_{l}\in\mathbb{R}^{b\times d}</annotation></semantics></math>表示一个批次中的输入残差向量。我们获得样本特定的缩放权重<math alttext="\gamma_{k}\in\mathbb{R}^{b\times d}" class="ltx_Math" display="inline" id="S3.SS1.p8.m3"><semantics><mrow><msub><mi>γ</mi><mi>k</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>b</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\gamma_{k}\in\mathbb{R}^{b\times d}</annotation></semantics></math>和偏置<math alttext="\beta_{k}\in\mathbb{R}^{b\times d}" class="ltx_Math" display="inline" id="S3.SS1.p8.m4"><semantics><mrow><msub><mi>β</mi><mi>k</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>b</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\beta_{k}\in\mathbb{R}^{b\times d}</annotation></semantics></math>，具体通过在逐层参数矩阵<math alttext="\Gamma_{k},B_{k}\in\mathbb{R}^{N_{k}\times d}" class="ltx_Math" display="inline" id="S3.SS1.p8.m5"><semantics><mrow><mrow><msub><mi mathvariant="normal">Γ</mi><mi>k</mi></msub><mo>,</mo><msub><mi>B</mi><mi>k</mi></msub></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><msub><mi>N</mi><mi>k</mi></msub><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\Gamma_{k},B_{k}\in\mathbb{R}^{N_{k}\times d}</annotation></semantics></math>中离散查找实现，查找依据是各先前层<math alttext="k=1,\dots,l-1" class="ltx_Math" display="inline" id="S3.SS1.p8.m6"><semantics><mrow><mi>k</mi><mo>=</mo><mrow><mn>1</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow></mrow></mrow><annotation encoding="application/x-tex">k=1,\dots,l-1</annotation></semantics></math>的量化码。来自所有先前层的权重和偏置通过迭代计算复合缩放<math alttext="\gamma\in\mathbb{R}^{b\times d}" class="ltx_Math" display="inline" id="S3.SS1.p8.m7"><semantics><mrow><mi>γ</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>b</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\gamma\in\mathbb{R}^{b\times d}</annotation></semantics></math>和复合偏置<math alttext="\beta\in\mathbb{R}^{b\times d}" class="ltx_Math" display="inline" id="S3.SS1.p8.m8"><semantics><mrow><mi>β</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>b</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\beta\in\mathbb{R}^{b\times d}</annotation></semantics></math>进行聚合：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E5">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\gamma=\bigodot_{k=1}^{l-1}\gamma_{k},\quad\beta=\sum_{k=1}^{l-1}\left(\beta_{%
+k}\odot\bigodot_{k^{\prime}=k+1}^{l-1}\gamma_{k^{\prime}}\right)," class="ltx_Math" display="block" id="S3.E5.m1"><semantics><mrow><mrow><mrow><mi>γ</mi><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false">⨀</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>γ</mi><mi>k</mi></msub></mrow></mrow><mo rspace="1.167em">,</mo><mrow><mi>β</mi><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false" rspace="0em">∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow></munderover><mrow><mo>(</mo><mrow><msub><mi>β</mi><mi>k</mi></msub><mo lspace="0.222em" rspace="0.055em">⊙</mo><mrow><munderover><mo movablelimits="false">⨀</mo><mrow><msup><mi>k</mi><mo>′</mo></msup><mo>=</mo><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></mrow><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>γ</mi><msup><mi>k</mi><mo>′</mo></msup></msub></mrow></mrow><mo>)</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\gamma=\bigodot_{k=1}^{l-1}\gamma_{k},\quad\beta=\sum_{k=1}^{l-1}\left(\beta_{%
+k}\odot\bigodot_{k^{\prime}=k+1}^{l-1}\gamma_{k^{\prime}}\right),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(5)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="\odot" class="ltx_Math" display="inline" id="S3.SS1.p8.m9"><semantics><mo>⊙</mo><annotation encoding="application/x-tex">\odot</annotation></semantics></math>和<math alttext="\bigodot" class="ltx_Math" display="inline" id="S3.SS1.p8.m10"><semantics><mo>⨀</mo><annotation encoding="application/x-tex">\bigodot</annotation></semantics></math>分别表示逐元素乘法及其广义序列乘积。注意，上述仿射变换直接应用于码本而非输入。然而，这种样本感知码本的朴素实现会分配一个形状为<math alttext="(b,N_{l},d)" class="ltx_Math" display="inline" id="S3.SS1.p8.m11"><semantics><mrow><mo stretchy="false">(</mo><mi>b</mi><mo>,</mo><msub><mi>N</mi><mi>l</mi></msub><mo>,</mo><mi>d</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(b,N_{l},d)</annotation></semantics></math>的张量，这会导致严重的内存开销。因此，我们定义偏置平移后的残差为<math alttext="\tilde{x}_{l}=x_{l}-\beta" class="ltx_Math" display="inline" id="S3.SS1.p8.m12"><semantics><mrow><msub><mover accent="true"><mi>x</mi><mo>~</mo></mover><mi>l</mi></msub><mo>=</mo><mrow><msub><mi>x</mi><mi>l</mi></msub><mo>−</mo><mi>β</mi></mrow></mrow><annotation encoding="application/x-tex">\tilde{x}_{l}=x_{l}-\beta</annotation></semantics></math>，并通过下式在代数上重排距离矩阵<math alttext="D\in\mathbb{R}^{b\times N_{l}}" class="ltx_Math" display="inline" id="S3.SS1.p8.m13"><semantics><mrow><mi>D</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>b</mi><mo lspace="0.222em" rspace="0.222em">×</mo><msub><mi>N</mi><mi>l</mi></msub></mrow></msup></mrow><annotation encoding="application/x-tex">D\in\mathbb{R}^{b\times N_{l}}</annotation></semantics></math>的计算：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E6">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="D=\underbrace{\left(\tilde{x}_{l}\odot\tilde{x}_{l}\right)\mathbf{1}_{d}%
+\mathbf{1}_{N_{l}}^{\top}}_{\text{Input Norms}}+\underbrace{\left(\gamma\odot%
+\gamma\right)\left(\hat{C}_{l}\odot\hat{C}_{l}\right)^{\top}}_{\text{Scaled %
+Codebook Norms}}-\underbrace{2\left(\tilde{x}_{l}\odot\gamma\right)\hat{C}_{l}%
+^{\top}}_{\text{Cross Term}}," class="ltx_Math" display="block" id="S3.E6.m1"><semantics><mrow><mrow><mi>D</mi><mo>=</mo><mrow><mrow><munder><munder accentunder="true"><mrow><mrow><mo>(</mo><mrow><msub><mover accent="true"><mi>x</mi><mo>~</mo></mover><mi>l</mi></msub><mo lspace="0.222em" rspace="0.222em">⊙</mo><msub><mover accent="true"><mi>x</mi><mo>~</mo></mover><mi>l</mi></msub></mrow><mo>)</mo></mrow><mo>⁢</mo><msub><mn>𝟏</mn><mi>d</mi></msub><mo>⁢</mo><msubsup><mn>𝟏</mn><msub><mi>N</mi><mi>l</mi></msub><mo>⊤</mo></msubsup></mrow><mo>⏟</mo></munder><mtext>Input Norms</mtext></munder><mo>+</mo><munder><munder accentunder="true"><mrow><mrow><mo>(</mo><mrow><mi>γ</mi><mo lspace="0.222em" rspace="0.222em">⊙</mo><mi>γ</mi></mrow><mo>)</mo></mrow><mo>⁢</mo><msup><mrow><mo>(</mo><mrow><msub><mover accent="true"><mi>C</mi><mo>^</mo></mover><mi>l</mi></msub><mo lspace="0.222em" rspace="0.222em">⊙</mo><msub><mover accent="true"><mi>C</mi><mo>^</mo></mover><mi>l</mi></msub></mrow><mo>)</mo></mrow><mo>⊤</mo></msup></mrow><mo>⏟</mo></munder><mtext>Scaled Codebook Norms</mtext></munder></mrow><mo>−</mo><munder><munder accentunder="true"><mrow><mn>2</mn><mo>⁢</mo><mrow><mo>(</mo><mrow><msub><mover accent="true"><mi>x</mi><mo>~</mo></mover><mi>l</mi></msub><mo lspace="0.222em" rspace="0.222em">⊙</mo><mi>γ</mi></mrow><mo>)</mo></mrow><mo>⁢</mo><msubsup><mover accent="true"><mi>C</mi><mo>^</mo></mover><mi>l</mi><mo>⊤</mo></msubsup></mrow><mo>⏟</mo></munder><mtext>Cross Term</mtext></munder></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">D=\underbrace{\left(\tilde{x}_{l}\odot\tilde{x}_{l}\right)\mathbf{1}_{d}%
+\mathbf{1}_{N_{l}}^{\top}}_{\text{Input Norms}}+\underbrace{\left(\gamma\odot%
+\gamma\right)\left(\hat{C}_{l}\odot\hat{C}_{l}\right)^{\top}}_{\text{Scaled %
+Codebook Norms}}-\underbrace{2\left(\tilde{x}_{l}\odot\gamma\right)\hat{C}_{l}%
+^{\top}}_{\text{Cross Term}},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(6)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="\mathbf{1}_{N}" class="ltx_Math" display="inline" id="S3.SS1.p8.m14"><semantics><msub><mn>𝟏</mn><mi>N</mi></msub><annotation encoding="application/x-tex">\mathbf{1}_{N}</annotation></semantics></math>表示大小为<math alttext="N" class="ltx_Math" display="inline" id="S3.SS1.p8.m15"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>的全一列向量。注意，在原始 VQ 中，计算成对距离矩阵同样需要<math alttext="\mathcal{O}(bN_{l}d)" class="ltx_Math" display="inline" id="S3.SS1.p8.m16"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>b</mi><mo>⁢</mo><msub><mi>N</mi><mi>l</mi></msub><mo>⁢</mo><mi>d</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(bN_{l}d)</annotation></semantics></math>次操作，即我们的快速算法实现了完全相同的渐近时间复杂度。我们在附录<a class="ltx_ref" href="#A2" title="Appendix B Detailed Derivation of the Fast Distance Computation ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">B</span></a>中给出详细的证明过程。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS2">
+<h3 class="ltx_title ltx_title_subsection"><span class="ltx_tag ltx_tag_subsection">3.2 </span>生成器</h3>
+<div class="ltx_para" id="S3.SS2.p1">
+<p class="ltx_p">生成器采用编码器-解码器架构。轻量级编码器将原始用户特征投影为紧凑的键值表示<math alttext="H" class="ltx_Math" display="inline" id="S3.SS2.p1.m1"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>，而解码器则以<math alttext="H" class="ltx_Math" display="inline" id="S3.SS2.p1.m2"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>为条件生成词元序列，遵循公式<a class="ltx_ref" href="#S2.E1" title="In 2 Preliminaries ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">1</span></a>中的形式。</p>
+</div>
+<div class="ltx_para" id="S3.SS2.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">编码器。</span>我们提取两类用户特征：非序列特征（例如类别属性、统计信号和上下文信息）和用户行为序列（不失一般性地，我们采用点击序列和转化序列）。对于非序列特征，我们将其嵌入随机划分为<math alttext="L_{g}" class="ltx_Math" display="inline" id="S3.SS2.p2.m1"><semantics><msub><mi>L</mi><mi>g</mi></msub><annotation encoding="application/x-tex">L_{g}</annotation></semantics></math>组，并通过专用的前馈网络（FFN）对每组进行投影，得到<math alttext="H_{g}\in\mathbb{R}^{L_{g}\times d}" class="ltx_Math" display="inline" id="S3.SS2.p2.m2"><semantics><mrow><msub><mi>H</mi><mi>g</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><msub><mi>L</mi><mi>g</mi></msub><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">H_{g}\in\mathbb{R}^{L_{g}\times d}</annotation></semantics></math>。对于序列特征，点击序列（长度为<math alttext="L_{c}" class="ltx_Math" display="inline" id="S3.SS2.p2.m3"><semantics><msub><mi>L</mi><mi>c</mi></msub><annotation encoding="application/x-tex">L_{c}</annotation></semantics></math>）和转化序列（长度为<math alttext="L_{e}" class="ltx_Math" display="inline" id="S3.SS2.p2.m4"><semantics><msub><mi>L</mi><mi>e</mi></msub><annotation encoding="application/x-tex">L_{e}</annotation></semantics></math>）分别由 FFN 投影，得到<math alttext="H_{c}\in\mathbb{R}^{L_{c}\times d}" class="ltx_Math" display="inline" id="S3.SS2.p2.m5"><semantics><mrow><msub><mi>H</mi><mi>c</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><msub><mi>L</mi><mi>c</mi></msub><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">H_{c}\in\mathbb{R}^{L_{c}\times d}</annotation></semantics></math>和<math alttext="H_{e}\in\mathbb{R}^{L_{e}\times d}" class="ltx_Math" display="inline" id="S3.SS2.p2.m6"><semantics><mrow><msub><mi>H</mi><mi>e</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><msub><mi>L</mi><mi>e</mi></msub><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">H_{e}\in\mathbb{R}^{L_{e}\times d}</annotation></semantics></math>。最终的 KV 表示<math alttext="H=\mathrm{Concat}(H_{g},H_{c},H_{e})" class="ltx_Math" display="inline" id="S3.SS2.p2.m7"><semantics><mrow><mi>H</mi><mo>=</mo><mrow><mi>Concat</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><msub><mi>H</mi><mi>g</mi></msub><mo>,</mo><msub><mi>H</mi><mi>c</mi></msub><mo>,</mo><msub><mi>H</mi><mi>e</mi></msub><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">H=\mathrm{Concat}(H_{g},H_{c},H_{e})</annotation></semantics></math>同时作为交叉注意力模块中的键和值，并在所有解码器层之间共享。</p>
+</div>
+<div class="ltx_para" id="S3.SS2.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">解码器。</span>解码器是一个<math alttext="N" class="ltx_Math" display="inline" id="S3.SS2.p3.m1"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>层 Transformer，自回归地生成词元序列<math alttext="(t_{1},\dots,t_{m})" class="ltx_Math" display="inline" id="S3.SS2.p3.m2"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>t</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>t</mi><mi>m</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(t_{1},\dots,t_{m})</annotation></semantics></math>。每一层包括对<math alttext="H" class="ltx_Math" display="inline" id="S3.SS2.p3.m3"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>的交叉注意力、门控 FFN、因果自注意力，以及在每个子层之前应用的 RMSNorm。</p>
+</div>
+<div class="ltx_para" id="S3.SS2.p4">
+<p class="ltx_p">在第<math alttext="l" class="ltx_Math" display="inline" id="S3.SS2.p4.m1"><semantics><mi>l</mi><annotation encoding="application/x-tex">l</annotation></semantics></math>步，令<math alttext="x\in\mathbb{R}^{d}" class="ltx_Math" display="inline" id="S3.SS2.p4.m2"><semantics><mrow><mi>x</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">x\in\mathbb{R}^{d}</annotation></semantics></math>为第一层的输入，其初始化为 BOS 词元（<math alttext="t_{0}" class="ltx_Math" display="inline" id="S3.SS2.p4.m3"><semantics><msub><mi>t</mi><mn>0</mn></msub><annotation encoding="application/x-tex">t_{0}</annotation></semantics></math>）的嵌入，并用先前生成的词元的嵌入进行更新。在每一层内，<math alttext="x" class="ltx_Math" display="inline" id="S3.SS2.p4.m4"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>经历：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_table" id="S3.E7">
+<tbody>
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline" id="S3.E7X">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle x" class="ltx_Math" display="inline" id="S3.E7X.m2"><semantics><mi>x</mi><annotation encoding="application/x-tex">\displaystyle x</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle=x+\mathrm{CrossAttn}(\mathrm{RMSNorm}(x),H)," class="ltx_Math" display="inline" id="S3.E7X.m3"><semantics><mrow><mrow><mi></mi><mo>=</mo><mrow><mi>x</mi><mo>+</mo><mrow><mi>CrossAttn</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>RMSNorm</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mi>H</mi><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle=x+\mathrm{CrossAttn}(\mathrm{RMSNorm}(x),H),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="4"><span class="ltx_tag ltx_tag_equationgroup ltx_align_right">(7)</span></td>
+</tr>
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline" id="S3.E7Xa">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle x" class="ltx_Math" display="inline" id="S3.E7Xa.m2"><semantics><mi>x</mi><annotation encoding="application/x-tex">\displaystyle x</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle=x+\mathrm{GatedFFN}(\mathrm{RMSNorm}(x))," class="ltx_Math" display="inline" id="S3.E7Xa.m3"><semantics><mrow><mrow><mi></mi><mo>=</mo><mrow><mi>x</mi><mo>+</mo><mrow><mi>GatedFFN</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>RMSNorm</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle=x+\mathrm{GatedFFN}(\mathrm{RMSNorm}(x)),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr>
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline" id="S3.E7Xb">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle x" class="ltx_Math" display="inline" id="S3.E7Xb.m2"><semantics><mi>x</mi><annotation encoding="application/x-tex">\displaystyle x</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle=x+\mathrm{CausalSelfAttn}(\mathrm{RMSNorm}(x))," class="ltx_Math" display="inline" id="S3.E7Xb.m3"><semantics><mrow><mrow><mi></mi><mo>=</mo><mrow><mi>x</mi><mo>+</mo><mrow><mi>CausalSelfAttn</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>RMSNorm</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle=x+\mathrm{CausalSelfAttn}(\mathrm{RMSNorm}(x)),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr>
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline" id="S3.E7Xc">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle x" class="ltx_Math" display="inline" id="S3.E7Xc.m2"><semantics><mi>x</mi><annotation encoding="application/x-tex">\displaystyle x</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle=x+\mathrm{GatedFFN}(\mathrm{RMSNorm}(x))," class="ltx_Math" display="inline" id="S3.E7Xc.m3"><semantics><mrow><mrow><mi></mi><mo>=</mo><mrow><mi>x</mi><mo>+</mo><mrow><mi>GatedFFN</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>RMSNorm</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle=x+\mathrm{GatedFFN}(\mathrm{RMSNorm}(x)),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr>
+</tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="\mathrm{GatedFFN}(x)=\mathrm{SiLU}(xW_{1})\odot(xW_{3})W_{2}" class="ltx_Math" display="inline" id="S3.SS2.p4.m5"><semantics><mrow><mrow><mi>GatedFFN</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mrow><mrow><mi>SiLU</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>x</mi><mo>⁢</mo><msub><mi>W</mi><mn>1</mn></msub></mrow><mo rspace="0.055em" stretchy="false">)</mo></mrow></mrow><mo rspace="0.222em">⊙</mo><mrow><mo stretchy="false">(</mo><mrow><mi>x</mi><mo>⁢</mo><msub><mi>W</mi><mn>3</mn></msub></mrow><mo stretchy="false">)</mo></mrow></mrow><mo>⁢</mo><msub><mi>W</mi><mn>2</mn></msub></mrow></mrow><annotation encoding="application/x-tex">\mathrm{GatedFFN}(x)=\mathrm{SiLU}(xW_{1})\odot(xW_{3})W_{2}</annotation></semantics></math>。最后一层的输出<math alttext="x_{\mathrm{out}}\in\mathbb{R}^{d}" class="ltx_Math" display="inline" id="S3.SS2.p4.m6"><semantics><mrow><msub><mi>x</mi><mi>out</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">x_{\mathrm{out}}\in\mathbb{R}^{d}</annotation></semantics></math>被投影，以通过下式产生第<math alttext="l" class="ltx_Math" display="inline" id="S3.SS2.p4.m7"><semantics><mi>l</mi><annotation encoding="application/x-tex">l</annotation></semantics></math>个词表上的概率分布：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.Ex1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="P(t_{l}\mid t_{0},\dots,t_{l-1},H)=\mathrm{Softmax}(x_{\mathrm{out}}W_{\mathrm%
+{out}}^{(l)})," class="ltx_Math" display="block" id="S3.Ex1.m1"><semantics><mrow><mrow><mrow><mi>P</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>t</mi><mi>l</mi></msub><mo>∣</mo><mrow><msub><mi>t</mi><mn>0</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>t</mi><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><mi>H</mi></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mi>Softmax</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>x</mi><mi>out</mi></msub><mo>⁢</mo><msubsup><mi>W</mi><mi>out</mi><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">P(t_{l}\mid t_{0},\dots,t_{l-1},H)=\mathrm{Softmax}(x_{\mathrm{out}}W_{\mathrm%
+{out}}^{(l)}),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="W_{\mathrm{out}}^{(l)}\in\mathbb{R}^{d\times N_{l}}" class="ltx_Math" display="inline" id="S3.SS2.p4.m8"><semantics><mrow><msubsup><mi>W</mi><mi>out</mi><mrow><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>d</mi><mo lspace="0.222em" rspace="0.222em">×</mo><msub><mi>N</mi><mi>l</mi></msub></mrow></msup></mrow><annotation encoding="application/x-tex">W_{\mathrm{out}}^{(l)}\in\mathbb{R}^{d\times N_{l}}</annotation></semantics></math>是输出投影。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS3">
+<h3 class="ltx_title ltx_title_subsection"><span class="ltx_tag ltx_tag_subsection">3.3 </span>重排器</h3>
+<div class="ltx_para" id="S3.SS3.p1">
+<p class="ltx_p">尽管前缀感知的 BasisRQ 通过更具表达力的词表缓解了条目冲突，但<span class="ltx_text ltx_font_italic">海量候选池</span>本质上决定了某些条目仍会共享相同的词元序列和似然，从而使生成器无法区分它们。为了能够根据用户偏好对此类条目进行细粒度区分，我们用一个联合学习的重排头对生成式框架进行增强，以进行条目级评分，如图<a class="ltx_ref" href="#S3.F1" title="Figure 1 ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">1</span></a>所示。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.p2">
+<p class="ltx_p">具体而言，在解码器自回归地生成词元序列<math alttext="(t_{1},\dots,t_{m})" class="ltx_Math" display="inline" id="S3.SS3.p2.m1"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>t</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>t</mi><mi>m</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(t_{1},\dots,t_{m})</annotation></semantics></math>之后，我们执行一次额外的解码步骤，其输出捕获了层级条目词元与用户特征之间的交互。我们通过 MLP 将该输出变换为用户嵌入<math alttext="u_{\mathrm{rerank}}" class="ltx_Math" display="inline" id="S3.SS3.p2.m2"><semantics><msub><mi>u</mi><mi>rerank</mi></msub><annotation encoding="application/x-tex">u_{\mathrm{rerank}}</annotation></semantics></math>，并将每个条目评分为<math alttext="s_{i}^{\mathrm{rerank}}=u_{\mathrm{rerank}}^{\top}v_{i}" class="ltx_Math" display="inline" id="S3.SS3.p2.m3"><semantics><mrow><msubsup><mi>s</mi><mi>i</mi><mi>rerank</mi></msubsup><mo>=</mo><mrow><msubsup><mi>u</mi><mi>rerank</mi><mo>⊤</mo></msubsup><mo>⁢</mo><msub><mi>v</mi><mi>i</mi></msub></mrow></mrow><annotation encoding="application/x-tex">s_{i}^{\mathrm{rerank}}=u_{\mathrm{rerank}}^{\top}v_{i}</annotation></semantics></math>，其中<math alttext="v_{i}" class="ltx_Math" display="inline" id="S3.SS3.p2.m4"><semantics><msub><mi>v</mi><mi>i</mi></msub><annotation encoding="application/x-tex">v_{i}</annotation></semantics></math>是由分词器的条目塔（第<a class="ltx_ref" href="#S3.SS1" title="3.1 Tokenizer ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">3.1</span></a>节）产生的条目嵌入。</p>
+</div>
+<div class="ltx_para" id="S3.SS3.p3">
+<p class="ltx_p">该设计以极小的计算开销实现了细粒度的条目区分。它仅增加一个解码步骤和轻量级的点积评分，并复用了编码器输出<math alttext="H" class="ltx_Math" display="inline" id="S3.SS3.p3.m1"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>和条目嵌入。此外，重排器通过学习排序目标实现精确排序。由于<math alttext="u_{\mathrm{rerank}}" class="ltx_Math" display="inline" id="S3.SS3.p3.m2"><semantics><msub><mi>u</mi><mi>rerank</mi></msub><annotation encoding="application/x-tex">u_{\mathrm{rerank}}</annotation></semantics></math>以用户和生成的词元序列二者为条件，每个候选序列都会产生自己的用户表示，专门用于对该序列下的一小组冲突条目进行排序。这使得简单的点积就能实现与更重的基于 MLP 的交互模型相当的细粒度区分。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S3.SS4">
+<h3 class="ltx_title ltx_title_subsection"><span class="ltx_tag ltx_tag_subsection">3.4 </span>训练与服务</h3>
+<div class="ltx_para" id="S3.SS4.p1">
+<p class="ltx_p">我们在数据集上联合训练分词器、生成器和重排器。对于每个请求，我们采样一组带有真实标签<math alttext="y_{i}" class="ltx_Math" display="inline" id="S3.SS4.p1.m1"><semantics><msub><mi>y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">y_{i}</annotation></semantics></math>的条目，其中<math alttext="y_{i}&gt;y_{j}" class="ltx_Math" display="inline" id="S3.SS4.p1.m2"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>&gt;</mo><msub><mi>y</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">y_{i}&gt;y_{j}</annotation></semantics></math>表示条目<math alttext="i" class="ltx_Math" display="inline" id="S3.SS4.p1.m3"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>优于条目<math alttext="j" class="ltx_Math" display="inline" id="S3.SS4.p1.m4"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>。为提高训练稳定性，我们采用渐进式预热计划：先在初始若干步中用<math alttext="\mathcal{L}_{\mathrm{LTR}}" class="ltx_Math" display="inline" id="S3.SS4.p1.m5"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>LTR</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{LTR}}</annotation></semantics></math>训练分词器中的双塔模型，然后激活<math alttext="\mathcal{L}_{\mathrm{RQ}}" class="ltx_Math" display="inline" id="S3.SS4.p1.m6"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>RQ</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{RQ}}</annotation></semantics></math>进行量化，最后激活<math alttext="\mathcal{L}_{\mathrm{Gen}}" class="ltx_Math" display="inline" id="S3.SS4.p1.m7"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>Gen</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{Gen}}</annotation></semantics></math>和<math alttext="\mathcal{L}_{\mathrm{Rerank}}" class="ltx_Math" display="inline" id="S3.SS4.p1.m8"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>Rerank</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{Rerank}}</annotation></semantics></math>，从而防止生成器依赖不稳定的分词器。</p>
+</div>
+<div class="ltx_para" id="S3.SS4.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">分词器损失。</span>我们使用 LambdaLoss <cite class="ltx_cite ltx_citemacro_citep">（Wang<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib19" title="The lambdaloss framework for ranking metric optimization">2018</a>）</cite>训练双塔模型：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E8">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\mathrm{LTR}}=\sum_{i,j:y_{i}&gt;y_{j}}\log\left(1+e^{-\sigma(s_{i}-%
+s_{j})}\right)\cdot|\Delta\mathrm{NDCG}_{ij}|," class="ltx_Math" display="block" id="S3.E8.m1"><semantics><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>LTR</mi></msub><mo rspace="0.111em">=</mo><mrow><munder><mo movablelimits="false">∑</mo><mrow><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>&gt;</mo><msub><mi>y</mi><mi>j</mi></msub></mrow></mrow></munder><mrow><mrow><mi>log</mi><mo>⁡</mo><mrow><mo>(</mo><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mo>−</mo><mrow><mi>σ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>−</mo><msub><mi>s</mi><mi>j</mi></msub></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></msup></mrow><mo rspace="0.055em">)</mo></mrow></mrow><mo rspace="0.222em">⋅</mo><mrow><mo stretchy="false">|</mo><mrow><mi mathvariant="normal">Δ</mi><mo>⁢</mo><msub><mi>NDCG</mi><mrow><mi>i</mi><mo>⁢</mo><mi>j</mi></mrow></msub></mrow><mo stretchy="false">|</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{LTR}}=\sum_{i,j:y_{i}&gt;y_{j}}\log\left(1+e^{-\sigma(s_{i}-%
+s_{j})}\right)\cdot|\Delta\mathrm{NDCG}_{ij}|,</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(8)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="s_{i}" class="ltx_Math" display="inline" id="S3.SS4.p2.m1"><semantics><msub><mi>s</mi><mi>i</mi></msub><annotation encoding="application/x-tex">s_{i}</annotation></semantics></math>是两个塔输出的点积，<math alttext="\sigma" class="ltx_Math" display="inline" id="S3.SS4.p2.m2"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>是缩放因子，<math alttext="\Delta\mathrm{NDCG}_{ij}" class="ltx_Math" display="inline" id="S3.SS4.p2.m3"><semantics><mrow><mi mathvariant="normal">Δ</mi><mo>⁢</mo><msub><mi>NDCG</mi><mrow><mi>i</mi><mo>⁢</mo><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta\mathrm{NDCG}_{ij}</annotation></semantics></math>是交换条目<math alttext="i" class="ltx_Math" display="inline" id="S3.SS4.p2.m4"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>和<math alttext="j" class="ltx_Math" display="inline" id="S3.SS4.p2.m5"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>后 NDCG 的变化量。</p>
+</div>
+<div class="ltx_para" id="S3.SS4.p3">
+<p class="ltx_p">量化模块使用码本损失和承诺损失进行训练：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E9">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\mathrm{RQ}}=\sum_{l=1}^{m}\left(\left\|\mathrm{sg}[x_{l}]-c_{l}^%
+{*}\right\|_{2}^{2}+\eta\left\|x_{l}-\mathrm{sg}[c_{l}^{*}]\right\|_{2}^{2}%
+\right)," class="ltx_Math" display="block" id="S3.E9.m1"><semantics><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>RQ</mi></msub><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false" rspace="0em">∑</mo><mrow><mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><mrow><mo>(</mo><mrow><msubsup><mrow><mo>‖</mo><mrow><mrow><mi>sg</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><msub><mi>x</mi><mi>l</mi></msub><mo stretchy="false">]</mo></mrow></mrow><mo>−</mo><msubsup><mi>c</mi><mi>l</mi><mo>∗</mo></msubsup></mrow><mo>‖</mo></mrow><mn>2</mn><mn>2</mn></msubsup><mo>+</mo><mrow><mi>η</mi><mo>⁢</mo><msubsup><mrow><mo>‖</mo><mrow><msub><mi>x</mi><mi>l</mi></msub><mo>−</mo><mrow><mi>sg</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><msubsup><mi>c</mi><mi>l</mi><mo>∗</mo></msubsup><mo stretchy="false">]</mo></mrow></mrow></mrow><mo>‖</mo></mrow><mn>2</mn><mn>2</mn></msubsup></mrow></mrow><mo>)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{RQ}}=\sum_{l=1}^{m}\left(\left\|\mathrm{sg}[x_{l}]-c_{l}^%
+{*}\right\|_{2}^{2}+\eta\left\|x_{l}-\mathrm{sg}[c_{l}^{*}]\right\|_{2}^{2}%
+\right),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(9)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="x_{l}" class="ltx_Math" display="inline" id="S3.SS4.p3.m1"><semantics><msub><mi>x</mi><mi>l</mi></msub><annotation encoding="application/x-tex">x_{l}</annotation></semantics></math>和<math alttext="c_{l}^{*}" class="ltx_Math" display="inline" id="S3.SS4.p3.m2"><semantics><msubsup><mi>c</mi><mi>l</mi><mo>∗</mo></msubsup><annotation encoding="application/x-tex">c_{l}^{*}</annotation></semantics></math>分别是第<math alttext="l" class="ltx_Math" display="inline" id="S3.SS4.p3.m3"><semantics><mi>l</mi><annotation encoding="application/x-tex">l</annotation></semantics></math>层的残差和匹配码，<math alttext="m" class="ltx_Math" display="inline" id="S3.SS4.p3.m4"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>是量化层数，<math alttext="\mathrm{sg}[\cdot]" class="ltx_Math" display="inline" id="S3.SS4.p3.m5"><semantics><mrow><mi>sg</mi><mo>⁢</mo><mrow><mo stretchy="false">[</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathrm{sg}[\cdot]</annotation></semantics></math>表示停止梯度算子，<math alttext="\eta" class="ltx_Math" display="inline" id="S3.SS4.p3.m6"><semantics><mi>η</mi><annotation encoding="application/x-tex">\eta</annotation></semantics></math>平衡这两个项。</p>
+</div>
+<div class="ltx_para" id="S3.SS4.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">生成器损失。</span>生成器使用教师强制进行训练：将来自分词器的目标词元序列作为输入，并使用因果掩码防止信息泄漏。为强调高价值样本，我们采用 secpm 重加权，其中 secpm 是来自排序阶段的基于收入的指标。损失是所有步骤上词表上加权交叉熵之和：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E10">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\mathrm{Gen}}=-\sum_{l=1}^{m}w\cdot\log P(t_{l}\mid t_{0},\dots,t%
+_{l-1},H)," class="ltx_Math" display="block" id="S3.E10.m1"><semantics><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>Gen</mi></msub><mo>=</mo><mrow><mo>−</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><mrow><mrow><mi>w</mi><mo lspace="0.222em" rspace="0.222em">⋅</mo><mrow><mi>log</mi><mo lspace="0.167em">⁡</mo><mi>P</mi></mrow></mrow><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>t</mi><mi>l</mi></msub><mo>∣</mo><mrow><msub><mi>t</mi><mn>0</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>t</mi><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><mi>H</mi></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{Gen}}=-\sum_{l=1}^{m}w\cdot\log P(t_{l}\mid t_{0},\dots,t%
+_{l-1},H),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(10)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中对于曝光样本<math alttext="w=\log(1+\mathrm{secpm})" class="ltx_Math" display="inline" id="S3.SS4.p4.m1"><semantics><mrow><mi>w</mi><mo>=</mo><mrow><mi>log</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mrow><mn>1</mn><mo>+</mo><mi>secpm</mi></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">w=\log(1+\mathrm{secpm})</annotation></semantics></math>，否则<math alttext="w=0" class="ltx_Math" display="inline" id="S3.SS4.p4.m2"><semantics><mrow><mi>w</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">w=0</annotation></semantics></math>。</p>
+</div>
+<div class="ltx_para" id="S3.SS4.p5">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">重排器损失。</span>重排器使用 LambdaLoss 进行训练：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E11">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}_{\mathrm{Rerank}}=\sum_{i,j:y_{i}&gt;y_{j}}\log\left(1+e^{-\sigma(s_{%
+i}^{\mathrm{rerank}}-s_{j}^{\mathrm{rerank}})}\right)\cdot|\Delta\mathrm{NDCG}%
+_{ij}|," class="ltx_Math" display="block" id="S3.E11.m1"><semantics><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>Rerank</mi></msub><mo rspace="0.111em">=</mo><mrow><munder><mo movablelimits="false">∑</mo><mrow><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>&gt;</mo><msub><mi>y</mi><mi>j</mi></msub></mrow></mrow></munder><mrow><mrow><mi>log</mi><mo>⁡</mo><mrow><mo>(</mo><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mo>−</mo><mrow><mi>σ</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><msubsup><mi>s</mi><mi>i</mi><mi>rerank</mi></msubsup><mo>−</mo><msubsup><mi>s</mi><mi>j</mi><mi>rerank</mi></msubsup></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow></msup></mrow><mo rspace="0.055em">)</mo></mrow></mrow><mo rspace="0.222em">⋅</mo><mrow><mo stretchy="false">|</mo><mrow><mi mathvariant="normal">Δ</mi><mo>⁢</mo><msub><mi>NDCG</mi><mrow><mi>i</mi><mo>⁢</mo><mi>j</mi></mrow></msub></mrow><mo stretchy="false">|</mo></mrow></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{Rerank}}=\sum_{i,j:y_{i}&gt;y_{j}}\log\left(1+e^{-\sigma(s_{%
+i}^{\mathrm{rerank}}-s_{j}^{\mathrm{rerank}})}\right)\cdot|\Delta\mathrm{NDCG}%
+_{ij}|,</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(11)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="y_{i}" class="ltx_Math" display="inline" id="S3.SS4.p5.m1"><semantics><msub><mi>y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">y_{i}</annotation></semantics></math>和<math alttext="\Delta\mathrm{NDCG}_{ij}" class="ltx_Math" display="inline" id="S3.SS4.p5.m2"><semantics><mrow><mi mathvariant="normal">Δ</mi><mo>⁢</mo><msub><mi>NDCG</mi><mrow><mi>i</mi><mo>⁢</mo><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta\mathrm{NDCG}_{ij}</annotation></semantics></math>遵循与公式<a class="ltx_ref" href="#S3.E8" title="In 3.4 Training and Serving ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">8</span></a>中相同的定义。</p>
+</div>
+<div class="ltx_para" id="S3.SS4.p6">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">训练目标。</span>整体训练目标是四个损失的加权组合：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="S3.E12">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\mathcal{L}=\lambda_{\mathrm{LTR}}\mathcal{L}_{\mathrm{LTR}}+\lambda_{\mathrm{%
+RQ}}\mathcal{L}_{\mathrm{RQ}}+\lambda_{\mathrm{Gen}}\mathcal{L}_{\mathrm{Gen}}%
++\lambda_{\mathrm{Rerank}}\mathcal{L}_{\mathrm{Rerank}}," class="ltx_Math" display="block" id="S3.E12.m1"><semantics><mrow><mrow><mi class="ltx_font_mathcaligraphic">ℒ</mi><mo>=</mo><mrow><mrow><msub><mi>λ</mi><mi>LTR</mi></msub><mo>⁢</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>LTR</mi></msub></mrow><mo>+</mo><mrow><msub><mi>λ</mi><mi>RQ</mi></msub><mo>⁢</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>RQ</mi></msub></mrow><mo>+</mo><mrow><msub><mi>λ</mi><mi>Gen</mi></msub><mo>⁢</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>Gen</mi></msub></mrow><mo>+</mo><mrow><msub><mi>λ</mi><mi>Rerank</mi></msub><mo>⁢</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>Rerank</mi></msub></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}=\lambda_{\mathrm{LTR}}\mathcal{L}_{\mathrm{LTR}}+\lambda_{\mathrm{%
+RQ}}\mathcal{L}_{\mathrm{RQ}}+\lambda_{\mathrm{Gen}}\mathcal{L}_{\mathrm{Gen}}%
++\lambda_{\mathrm{Rerank}}\mathcal{L}_{\mathrm{Rerank}},</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(12)</span></td>
+</tr></tbody>
+</table></div>
+<p class="ltx_p">其中<math alttext="\lambda" class="ltx_Math" display="inline" id="S3.SS4.p6.m1"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>系数平衡每个损失项的贡献。</p>
+</div>
+<div class="ltx_para" id="S3.SS4.p7">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">推理。</span>在推理期间，生成器使用束搜索从 BOS 词元开始自回归解码。在每一步<math alttext="l" class="ltx_Math" display="inline" id="S3.SS4.p7.m1"><semantics><mi>l</mi><annotation encoding="application/x-tex">l</annotation></semantics></math>，我们保留前<math alttext="K_{l}" class="ltx_Math" display="inline" id="S3.SS4.p7.m2"><semantics><msub><mi>K</mi><mi>l</mi></msub><annotation encoding="application/x-tex">K_{l}</annotation></semantics></math>个词元序列，最终获得<math alttext="K_{m}" class="ltx_Math" display="inline" id="S3.SS4.p7.m3"><semantics><msub><mi>K</mi><mi>m</mi></msub><annotation encoding="application/x-tex">K_{m}</annotation></semantics></math>个候选序列。对于每个候选序列，我们检索其关联的条目并应用重排器，产生条目级分数，以在冲突条目之间进行细粒度消歧。该推理流水线的系统级实现详见第<a class="ltx_ref" href="#S5" title="5 System Deployment ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">5</span></a>节。</p>
+</div>
+</section>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section"><span class="ltx_tag ltx_tag_section">4 </span>相关工作</h2>
+<div class="ltx_para" id="S4.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">分词器。</span>条目分词器连接了连续的条目表示与生成模型的离散输出空间。VQ <cite class="ltx_cite ltx_citemacro_citep">（Van Den Oord<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib12" title="Neural discrete representation learning">2017</a>）</cite>是用于此目的的主导范式，将嵌入映射到可学习码本中最近的码。</p>
+</div>
+<div class="ltx_para" id="S4.p2">
+<p class="ltx_p">VQ 中的一个根本性挑战是表示坍缩：只有一小部分码接收到梯度更新，而大多数码保持“死亡”且未被充分利用。一类工作在静态数据上预训练后冻结分词器<cite class="ltx_cite ltx_citemacro_citep">（Zhou<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib5" title="Onerec technical report">2025a</a>，<a class="ltx_ref" href="#bib.bib4" title="Onerec-v2 technical report">b</a>；Xue<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib1" title="Generative recommendation for large-scale advertising">2026</a>）</cite>，这绕过了坍缩，但无法适应动态分布。另一类工作采用启发式更新，如 EMA 和对不活跃码的临时重新初始化<cite class="ltx_cite ltx_citemacro_citep">（Zheng<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib10" title="Pre-training generative recommender with multi-identifier item tokenization">2025</a>；Bai<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib8" title="Bi-level optimization for generative recommendation: bridging tokenization and generation">2025</a>；Yan<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib9" title="MERGE: next-generation item indexing paradigm for large-scale streaming recommendation">2026</a>）</cite>，这提高了稳定性但产生了次优结果。二者都未通过直接梯度优化实现动态适应。更近期地，SimVQ <cite class="ltx_cite ltx_citemacro_citep">（Zhu<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib3" title="Addressing representation collapse in vector quantized models with one linear layer">2025</a>）</cite>和 GRIT-VQ <cite class="ltx_cite ltx_citemacro_citep">（You<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib21" title="Generalized radius and integrated codebook transforms for differentiable vector quantization">2026</a>）</cite>都对码本施加可学习的线性变换，确保梯度能够到达所有码。SimVQ 保持基础码本冻结且变换不受约束，这可能扭曲不活跃的码并进一步阻碍其恢复。GRIT-VQ 用广义半径代理提高了梯度稳定性，代价是不可忽视的复杂度。</p>
+</div>
+<div class="ltx_para" id="S4.p3">
+<p class="ltx_p">RQ <cite class="ltx_cite ltx_citemacro_citep">（Lee<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib13" title="Autoregressive image generation using residual quantization">2022</a>）</cite>通过多层码本扩展了 VQ 以获得更细的粒度，但将每一层独立处理，限制了表达力。为使 RQ 具备前缀感知能力，QINCo <cite class="ltx_cite ltx_citemacro_citep">（Huijben<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib17" title="Residual quantization with implicit neural codebooks">2024</a>）</cite>引入了以先前量化步骤为条件的 MLP，但计算成本过高；PSRQ <cite class="ltx_cite ltx_citemacro_citep">（Wang<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib24" title="Progressive semantic residual quantization for multimodal-joint interest modeling in music recommendation">2025</a>）</cite>提供了一种更轻量的替代方案，但收益微乎其微。</p>
+</div>
+<div class="ltx_para" id="S4.p4">
+<p class="ltx_p">相比之下，我们的前缀感知 BasisRQ 在流式更新下通过正交变换缓解表示坍缩，同时通过轻量级仿射变换捕获前缀依赖关系——且不增加原始 RQ 的渐近时间复杂度。</p>
+</div>
+<div class="ltx_para" id="S4.p5">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">生成式检索。</span>生成式检索将推荐重新表述为对离散条目词元的自回归序列生成。TIGER <cite class="ltx_cite ltx_citemacro_citep">（Rajput<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib6" title="Recommender systems with generative retrieval">2023</a>）</cite>首先通过 RQ 学习的分层语义 ID 和编码器-解码器 Transformer 建立了这一范式。后续工作集中于将该范式扩展到真实世界场景。OneRec 系列<cite class="ltx_cite ltx_citemacro_citep">（Zhou<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib5" title="Onerec technical report">2025a</a>，<a class="ltx_ref" href="#bib.bib4" title="Onerec-v2 technical report">b</a>）</cite>用生成式架构取代了传统的级联流水线。NEZHA <cite class="ltx_cite ltx_citemacro_citep">（Wang<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib25" title="NEZHA: a zero-sacrifice and hyperspeed decoding architecture for generative recommendations">2026b</a>）</cite>通过轻量级预测头降低了解码延迟。GR4AD <cite class="ltx_cite ltx_citemacro_citep">（Xue<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib1" title="Generative recommendation for large-scale advertising">2026</a>）</cite>和 GPR <cite class="ltx_cite ltx_citemacro_citep">（Zhang<span class="ltx_text ltx_bib_etal"> 等</span>，<a class="ltx_ref" href="#bib.bib18" title="GPR: towards a generative pre-trained one-model paradigm for large-scale advertising recommendation">2025</a>）</cite>进一步将该范式适配到广告领域，分别采用了价值对齐优化和分层解码器。</p>
+</div>
+<div class="ltx_para" id="S4.p6">
+<p class="ltx_p">近期研究已开始重新审视物品词元化器。
+MTGRec <cite class="ltx_cite ltx_citemacro_citep">(Zheng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib10" title="Pre-training generative recommender with multi-identifier item tokenization">2025</a>)</cite> 通过多词元预训练改进语义表示，但仍将词元化视为一个独立阶段。
+PIT <cite class="ltx_cite ltx_citemacro_citep">(Wang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib2" title="PIT: a dynamic personalized item tokenizer for end-to-end generative recommendation">2026a</a>)</cite> 建立了从生成到词元化的反馈回路，但依赖启发式搜索与选择策略，而非端到端优化。
+然而，词元化与生成的稳定联合优化在很大程度上仍未被探索。</p>
+</div>
+<div class="ltx_para" id="S4.p7">
+<p class="ltx_p">另一条研究路线增强了物品级消歧能力。
+早期方法附加唯一词元以消歧发生碰撞的物品 <cite class="ltx_cite ltx_citemacro_citep">(Rajput<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib6" title="Recommender systems with generative retrieval">2023</a>; Xue<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib1" title="Generative recommendation for large-scale advertising">2026</a>)</cite>，但代价是语义泛化能力。
+Gryphon <cite class="ltx_cite ltx_citemacro_citep">(Tikhonovich<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib28" title="Gryphon: a unified architecture for semantic-id generation and item-level scoring in industrial recommendations">2026</a>)</cite> 通过联合训练的物品级打分模块解决物品碰撞，但会带来不小的计算开销。
+LIGER <cite class="ltx_cite ltx_citemacro_citep">(Yang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib26" title="Unifying generative and dense retrieval for sequential recommendation">2025a</a>)</cite> 与 COBRA <cite class="ltx_cite ltx_citemacro_citep">(Yang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib27" title="Sparse meets dense: unified generative recommendations with cascaded sparse-dense representations">2025b</a>)</cite> 虽未处理碰撞问题，但将生成式检索与稠密物品表示相结合以进行物品级打分，然而二者既未针对广告目标进行优化，也不支持轻量级部署。</p>
+</div>
+<div class="ltx_para" id="S4.p8">
+<p class="ltx_p">为解决这些问题，GEAR 联合优化词元化器、生成器和重排器，以极小的计算开销解决物品碰撞，同时支持词元化器的动态自适应。</p>
+</div>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5 </span>系统部署</h2>
+<div class="ltx_para" id="S5.p1">
+<p class="ltx_p">图 <a class="ltx_ref" href="#S5.F4" title="Figure 4 ‣ 5 System Deployment ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">4</span></a> 展示了部署架构，包括流式训练、近线索引和在线服务。GEAR 作为补充现有检索系统的额外检索通道进行部署。所有依赖物品的计算都与关键推理路径解耦，词元序列生成、序列到物品的扩展以及物品级打分被集成到统一的计算图中。
+该系统在生产环境中提供高效的实时服务，支撑数亿日活跃用户。</p>
+</div>
+<figure class="ltx_figure" id="S5.F4"><a href="assets/c9055b447404d1dd.png" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S5.F4.g1" loading="lazy" src="assets/c9055b447404d1dd.png"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4: </span>GEAR 的部署架构，包括流式训练、近线索引和在线推理。</figcaption>
+</figure>
+<div class="ltx_para" id="S5.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">流式训练与近线索引。</span>
+参数服务器（PS）为每个物品维护一个条目，包含其词元序列和物品嵌入。随着模型在流式数据上训练，这些条目被持续更新。实例监视器定期刷新已有物品，并对新激活的物品进行增量编码；这两项操作都只需对物品塔和词元化器进行一次前向传播。随后，近线索引构建器收集所有活跃条目，并将其组织为类似压缩稀疏行（CSR）的索引，其中排序后的目录将每个词元序列映射到两个对齐的列表：对应物品及其预计算嵌入。生成的索引快照以分钟级粒度刷新，并连同模型产物一起分发到在线推理系统。</p>
+</div>
+<div class="ltx_para" id="S5.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">在线推理流水线。</span>
+给定用户请求，生成器执行带键值缓存（KV-cached）的束搜索，以解码出 <math alttext="K_{m}" class="ltx_Math" display="inline" id="S5.p3.m1"><semantics><msub><mi>K</mi><mi>m</mi></msub><annotation encoding="application/x-tex">K_{m}</annotation></semantics></math> 个候选词元序列。
+对于这些序列，系统从在线索引中检索其关联物品和预计算嵌入。
+随后，重排器（第 <a class="ltx_ref" href="#S3.SS3" title="3.3 Reranker ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">3.3</span></a> 节）计算序列特定的用户嵌入，并通过低精度点积对物品打分，因为用户嵌入和物品嵌入都被量化为有符号打包 INT4 格式。
+最后，每个序列内的物品按重排分数排序，并截断至每个序列的上限，以防止任何单个词元序列主导最终结果，从而提升候选多样性。</p>
+</div>
+</section>
+<section class="ltx_section" id="S6">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">6 </span>大规模真实世界实验</h2>
+<div class="ltx_para" id="S6.p1">
+<p class="ltx_p">本节报告在抖音广告平台上的在线 A/B 测试结果，随后是消融实验以及对词元化器的专门分析。
+我们采用三层前缀感知 BasisRQ 词元化器，码本大小分别为 <math alttext="(2048,512,128)" class="ltx_Math" display="inline" id="S6.p1.m1"><semantics><mrow><mo stretchy="false">(</mo><mn>2048</mn><mo>,</mo><mn>512</mn><mo>,</mo><mn>128</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2048,512,128)</annotation></semantics></math>，生成时使用束宽 <math alttext="(256,256,512)" class="ltx_Math" display="inline" id="S6.p1.m2"><semantics><mrow><mo stretchy="false">(</mo><mn>256</mn><mo>,</mo><mn>256</mn><mo>,</mo><mn>512</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(256,256,512)</annotation></semantics></math>。完整实现细节见附录 <a class="ltx_ref" href="#A3" title="Appendix C Implementation Details ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">C</span></a>。</p>
+</div>
+<section class="ltx_subsection" id="S6.SS1">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">6.1 </span>总体性能</h3>
+<div class="ltx_para" id="S6.SS1.p1">
+<p class="ltx_p">在抖音广告平台上开展了为期 7 天的全面在线 A/B 测试，每个处理组分配总流量的 5%。我们使用两个关键的收入导向指标评估性能：ADSS（Advertiser Score）和 ADVV（Advertiser Value）<cite class="ltx_cite ltx_citemacro_citep">(Chai<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib30" title="Longer: scaling up long sequence modeling in industrial recommenders">2025</a>; Jiang<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib31" title="Tokenmixer-large: scaling up large ranking models in industrial recommenders">2026</a>)</cite>。</p>
+</div>
+<div class="ltx_para" id="S6.SS1.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">主要结果。</span> 我们提出的 GEAR 作为额外的生成式检索通路，与现有稠密检索系统并行部署。基线为不含该额外通路的生产系统；所有其他组件保持完全相同。在线测试取得了一致且显著的提升：ADSS 提升 +0.563%，ADVV 提升 +0.658%。这些增益在服务数亿日活跃用户的生产系统中被观察到，证明了我们方法的实用价值。</p>
+</div>
+<div class="ltx_para" id="S6.SS1.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">消融实验。</span> 为分离每个核心组件的贡献，我们在广告候选子集上进行了消融实验。表 <a class="ltx_ref" href="#S6.T1" title="Table 1 ‣ 6.1 Overall Performance ‣ 6 Large-scale Real-world Experiments ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">1</span></a> 报告了每个变体相对基线的相对提升。我们考虑三项消融：(i) 将我们的词元化器替换为原始 RQ（<span class="ltx_text ltx_font_bold">w/o prefix-aware BasisRQ</span>）；(ii) 移除联合重排头，碰撞物品被随机截断（<span class="ltx_text ltx_font_bold">w/o rerank</span>）；(iii) 禁用 <math alttext="\mathcal{L}_{\mathrm{Gen}}" class="ltx_Math" display="inline" id="S6.SS1.p3.m1"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>Gen</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{Gen}}</annotation></semantics></math> 中的 secpm 重加权（<span class="ltx_text ltx_font_bold">w/o secpm reweight</span>）。移除前缀感知 BasisRQ 时观察到最大降幅，突显出一个能够动态适应分布偏移同时保持高表达性的词元化器对于有效生成式检索至关重要。重排头也通过细粒度打分解决物品碰撞而提升性能，secpm 重加权则提供了额外增益。</p>
+</div>
+<figure class="ltx_table" id="S6.T1">
+<figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 1: </span>抖音广告平台上 ADSS 和 ADVV 的在线 A/B 测试结果：子集级消融实验与全局全量部署相对生产基线的相对增益。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Method</span></th>
+<td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">ADSS (%)</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">ADVV (%)</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t"><span class="ltx_text ltx_font_italic" style="font-size:90%;">Subset Evaluation</span></th>
+<td class="ltx_td ltx_border_t"></td>
+<td class="ltx_td ltx_border_t"></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:90%;">   GEAR</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="font-size:90%;">+0.446</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="font-size:90%;">+0.498</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:90%;">   w/o prefix-aware BasisRQ</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">+0.288</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">+0.219</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:90%;">   w/o rerank</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">+0.358</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">+0.341</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row"><span class="ltx_text" style="font-size:90%;">   w/o secpm reweight</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">+0.395</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">+0.354</span></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t"><span class="ltx_text ltx_font_italic" style="font-size:90%;">Global Deployment</span></th>
+<td class="ltx_td ltx_border_t"></td>
+<td class="ltx_td ltx_border_t"></td>
+</tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb"><span class="ltx_text" style="font-size:90%;">   GEAR</span></th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">+0.563</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:90%;">+0.658</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div class="ltx_para" id="S6.SS1.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">冷启动分析。</span> 除整体收入增益外，GEAR 还通过生成离散词元序列使冷启动广告受益，对于没有历史交互数据的新广告，这些序列比基于物品 ID 的嵌入具有更好的泛化能力。我们通过冷启动激活率衡量这一点，其定义为在给定时间窗口内达到预定义流量阈值的新广告主所占比例。GEAR 在该指标上取得了 +1.46% 的相对提升。</p>
+</div>
+</section>
+<section class="ltx_subsection" id="S6.SS2">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">6.2 </span>词元化器分析</h3>
+<div class="ltx_para" id="S6.SS2.p1">
+<p class="ltx_p">为评估词元化器设计选择在完整模型中的影响，我们比较以下配置：(i) 大小为 <math alttext="(2048,512,128)" class="ltx_Math" display="inline" id="S6.SS2.p1.m1"><semantics><mrow><mo stretchy="false">(</mo><mn>2048</mn><mo>,</mo><mn>512</mn><mo>,</mo><mn>128</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2048,512,128)</annotation></semantics></math> 的前缀感知 BasisRQ；(ii) 大小为 <math alttext="(512,512,512)" class="ltx_Math" display="inline" id="S6.SS2.p1.m2"><semantics><mrow><mo stretchy="false">(</mo><mn>512</mn><mo>,</mo><mn>512</mn><mo>,</mo><mn>512</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(512,512,512)</annotation></semantics></math> 的前缀感知 BasisRQ；(iii) 大小为 <math alttext="(2048,512,128)" class="ltx_Math" display="inline" id="S6.SS2.p1.m3"><semantics><mrow><mo stretchy="false">(</mo><mn>2048</mn><mo>,</mo><mn>512</mn><mo>,</mo><mn>128</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2048,512,128)</annotation></semantics></math> 的不带前缀感知的 BasisRQ；(iv) 带 EMA 更新的、大小为 <math alttext="(2048,512,128)" class="ltx_Math" display="inline" id="S6.SS2.p1.m4"><semantics><mrow><mo stretchy="false">(</mo><mn>2048</mn><mo>,</mo><mn>512</mn><mo>,</mo><mn>128</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2048,512,128)</annotation></semantics></math> 的原始 RQ。我们在留出评估集上使用三个指标评估这些变体：(i) 码本利用率（Util.），定义为所有残差码本中对至少一个物品激活的码序列所占比例；(ii) 物品碰撞率（Coll.），定义为与至少一个其他物品共享其码序列的物品所占比例，用于衡量物品可区分性；(iii) 原始稠密表示与其量化重建之间的量化误差（MSE），用于衡量信息保留程度。</p>
+</div>
+<div class="ltx_para" id="S6.SS2.p2">
+<p class="ltx_p">表 <a class="ltx_ref" href="#S6.T2" title="Table 2 ‣ 6.2 Tokenizer Analysis ‣ 6 Large-scale Real-world Experiments ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">2</span></a> 总结了结果。我们提出的词元化器实现了最高的码本利用率、最低的碰撞率和最低的量化误差。与均匀调度 <math alttext="(512,512,512)" class="ltx_Math" display="inline" id="S6.SS2.p2.m1"><semantics><mrow><mo stretchy="false">(</mo><mn>512</mn><mo>,</mo><mn>512</mn><mo>,</mo><mn>512</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(512,512,512)</annotation></semantics></math> 相比，渐进式配置在相同表示能力下取得了更优性能。
+移除前缀感知会提高碰撞率（+11.5 p.p.）并增大量化误差（+0.21<math alttext="\times 10^{-3}" class="ltx_Math" display="inline" id="S6.SS2.p2.m2"><semantics><mrow><mi></mi><mo lspace="0.222em" rspace="0.222em">×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>3</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\times 10^{-3}</annotation></semantics></math>），验证了码本表达能力的增强。
+最后，BasisRQ 相比原始 RQ 实现了显著更高的利用率（+3.23 p.p.）和更低的碰撞率（-20.4 p.p.），证实了通过正交基进行梯度共享的有效性。</p>
+</div>
+<figure class="ltx_table" id="S6.T2">
+<figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 2: </span>词元化器配置比较。</figcaption>
+<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Method</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Util. (%)</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Coll. (%)</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">MSE (<math alttext="\times 10^{-3}" class="ltx_Math" display="inline" id="S6.T2.m1"><semantics><mrow><mi></mi><mo lspace="0.222em" rspace="0.222em">×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>3</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\times 10^{-3}</annotation></semantics></math>)</span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_t">
+<span class="ltx_text" style="font-size:90%;">Prefix-aware BasisRQ (</span><math alttext="2048,512,128" class="ltx_Math" display="inline" id="S6.T2.m2"><semantics><mrow><mn mathsize="90%">2048</mn><mo mathsize="90%">,</mo><mn mathsize="90%">512</mn><mo mathsize="90%">,</mo><mn mathsize="90%">128</mn></mrow><annotation encoding="application/x-tex">2048,512,128</annotation></semantics></math><span class="ltx_text" style="font-size:90%;">)</span>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold" style="font-size:90%;">8.83</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold" style="font-size:90%;">52.3</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold" style="font-size:90%;">1.82</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">
+<span class="ltx_text" style="font-size:90%;">Prefix-aware BasisRQ (</span><math alttext="512,512,512" class="ltx_Math" display="inline" id="S6.T2.m3"><semantics><mrow><mn mathsize="90%">512</mn><mo mathsize="90%">,</mo><mn mathsize="90%">512</mn><mo mathsize="90%">,</mo><mn mathsize="90%">512</mn></mrow><annotation encoding="application/x-tex">512,512,512</annotation></semantics></math><span class="ltx_text" style="font-size:90%;">)</span>
+</td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">6.16</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">75.6</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">2.04</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">
+<span class="ltx_text" style="font-size:90%;">BasisRQ (</span><math alttext="2048,512,128" class="ltx_Math" display="inline" id="S6.T2.m4"><semantics><mrow><mn mathsize="90%">2048</mn><mo mathsize="90%">,</mo><mn mathsize="90%">512</mn><mo mathsize="90%">,</mo><mn mathsize="90%">128</mn></mrow><annotation encoding="application/x-tex">2048,512,128</annotation></semantics></math><span class="ltx_text" style="font-size:90%;">)</span>
+</td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">7.45</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">63.8</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text" style="font-size:90%;">2.03</span></td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb">
+<span class="ltx_text" style="font-size:90%;">Vanilla RQ (</span><math alttext="2048,512,128" class="ltx_Math" display="inline" id="S6.T2.m5"><semantics><mrow><mn mathsize="90%">2048</mn><mo mathsize="90%">,</mo><mn mathsize="90%">512</mn><mo mathsize="90%">,</mo><mn mathsize="90%">128</mn></mrow><annotation encoding="application/x-tex">2048,512,128</annotation></semantics></math><span class="ltx_text" style="font-size:90%;">)</span>
+</td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">4.22</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">84.2</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">2.32</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+</section>
+</section>
+<section class="ltx_section" id="S7">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">7 </span>结论</h2>
+<div class="ltx_para" id="S7.p1">
+<p class="ltx_p">我们提出了 GEAR，一个端到端生成式检索框架，它联合优化词元化器、生成器和重排器，以解决大规模工业推荐系统中的表示塌缩和物品碰撞问题。前缀感知 BasisRQ 通过正交变换缓解表示塌缩，并通过前缀感知增强表达性，而轻量级重排器进一步解决物品碰撞。在服务数亿日活跃用户的抖音广告平台上的在线 A/B 测试取得了一致的收入增益。未来工作将探索更高效的解码以进一步降低推理延迟，并拓宽部署场景。</p>
+</div>
+</section>
+<section class="ltx_section" id="Sx1">
+<h2 class="ltx_title ltx_title_section">生成式 AI 披露声明</h2>
+<div class="ltx_para" id="Sx1.p1">
+<p class="ltx_p">在本手稿的准备过程中，我们使用生成式 AI 工具进行校对、句子润色，并协助检查数学方程的一致性和错误。该工具未被用于生成原创研究内容或实验数据。作者已审阅、核实并接受所有编辑后的文本，并对最终手稿承担全部责任。</p>
+</div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">参考文献</h2>
+<ul class="ltx_biblist" id="bib.L1">
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib8">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Bai, C. Liu, Y. Zhang, D. Wang, F. Yang, A. Rabinovich, W. Rong, and F. Feng (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Bi-level optimization for generative recommendation: bridging tokenization and generation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2510.21242</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S4.p2" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib30">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Z. Chai, Q. Ren, X. Xiao, H. Yang, B. Han, S. Zhang, D. Chen, H. Lu, W. Zhao, L. Yu, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Longer: scaling up long sequence modeling in industrial recommenders</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the Nineteenth ACM Conference on Recommender Systems</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 247–256</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S6.SS1.p1" title="6.1 Overall Performance ‣ 6 Large-scale Real-world Experiments ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§6.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib29">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">N. J. Higham (1986)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Computing the polar decomposition—with applications</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">SIAM Journal on Scientific and Statistical Computing</span> <span class="ltx_text ltx_bib_volume">7</span> (<span class="ltx_text ltx_bib_number">4</span>), <span class="ltx_text ltx_bib_pages"> pp. 1160–1174</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS1.p4" title="3.1 Tokenizer ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§3.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib17">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">I. A. Huijben, M. Douze, M. Muckley, R. J. Van Sloun, and J. Verbeek (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Residual quantization with implicit neural codebooks</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2401.14732</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS1.p7" title="3.1 Tokenizer ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§3.1</span></a>,
+<a class="ltx_ref" href="#S4.p3" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib31">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Jiang, J. Zhu, X. Han, H. Lu, K. Bai, M. Yang, S. Wu, R. Zhang, W. Zhao, S. Bai, <span class="ltx_text ltx_bib_etal">et al.</span> (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Tokenmixer-large: scaling up large ranking models in industrial recommenders</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2602.06563</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S6.SS1.p1" title="6.1 Overall Performance ‣ 6 Large-scale Real-world Experiments ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§6.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib13">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">D. Lee, C. Kim, S. Kim, M. Cho, and W. Han (2022)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Autoregressive image generation using residual quantization</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF conference on computer vision and pattern recognition</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 11523–11532</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p3" title="2 Preliminaries ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.p3" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib22">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">F. Mentzer, D. Minnen, E. Agustsson, and M. Tschannen (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Finite scalar quantization: VQ-VAE made simple</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">The Twelfth International Conference on Learning Representations</span>,
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib6">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">S. Rajput, N. Mehta, A. Singh, R. Hulikal Keshavan, T. Vu, L. Heldt, L. Hong, Y. Tay, V. Tran, J. Samost, <span class="ltx_text ltx_bib_etal">et al.</span> (2023)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Recommender systems with generative retrieval</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in Neural Information Processing Systems</span> <span class="ltx_text ltx_bib_volume">36</span>, <span class="ltx_text ltx_bib_pages"> pp. 10299–10315</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p2" title="2 Preliminaries ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S2.p3" title="2 Preliminaries ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.p5" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>,
+<a class="ltx_ref" href="#S4.p7" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib32">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Sun, S. Huang, Z. Guan, Q. Luo, R. Tang, K. Gai, and G. Zhou (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">GRank: towards target-aware and streamlined industrial retrieval with a generate-rank framework</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the ACM Web Conference 2026</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 7798–7808</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib28">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">D. Tikhonovich, O. Sorokin, V. Dodonov, M. Ulianova, and I. Murzin (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Gryphon: a unified architecture for semantic-id generation and item-level scoring in industrial recommendations</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2606.08604</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.p7" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib16">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">T. Vallaeys, M. J. Muckley, J. Verbeek, and M. Douze (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Qinco2: vector compression and search with improved implicit neural codebooks</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">International Conference on Learning Representations</span>,
+</span>
+<span class="ltx_bibblock">Vol. <span class="ltx_text ltx_bib_volume">2025</span>, <span class="ltx_text ltx_bib_pages"> pp. 85467–85484</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS1.p7" title="3.1 Tokenizer ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§3.1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib12">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">A. Van Den Oord, O. Vinyals, <span class="ltx_text ltx_bib_etal">et al.</span> (2017)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Neural discrete representation learning</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in neural information processing systems</span> <span class="ltx_text ltx_bib_volume">30</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S2.p3" title="2 Preliminaries ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.p1" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib36">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">L. Van der Maaten and G. Hinton (2008)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Visualizing data using t-sne.</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Journal of machine learning research</span> <span class="ltx_text ltx_bib_volume">9</span> (<span class="ltx_text ltx_bib_number">11</span>).
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#A1.p2" title="Appendix A BasisVQ VS SimVQ on Sythetic Data ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">Appendix A</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib2">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. Wang, X. Luo, H. Bao, Z. Zixing, L. Ren, Y. Wu, H. Zhang, L. Guan, and G. Chen (2026a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">PIT: a dynamic personalized item tokenizer for end-to-end generative recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2602.08530</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S4.p6" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib24">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">S. Wang, T. Ouyang, Q. Xiao, D. Wang, Y. Ren, S. Xu, D. Guo, and C. Luo (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Progressive semantic residual quantization for multimodal-joint interest modeling in music recommendation</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 34th ACM International Conference on Information and Knowledge Management</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 6119–6127</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.p3" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib19">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">X. Wang, C. Li, N. Golbandi, M. Bendersky, and M. Najork (2018)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">The lambdaloss framework for ranking metric optimization</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the 27th ACM international conference on information and knowledge management</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1313–1322</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S3.SS4.p2" title="3.4 Training and Serving ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§3.4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib25">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Wang, S. Zhou, J. Lu, Z. Liu, L. Liu, M. Wang, W. Zhang, F. Li, W. Su, P. Wang, J. Xu, and X. Zhao (2026b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">NEZHA: a zero-sacrifice and hyperspeed decoding architecture for generative recommendations</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the ACM Web Conference 2026</span>,
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.p5" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib1">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">B. Xue, D. Liu, L. Wang, M. Sun, P. Wang, P. Zhang, S. Shi, T. Xu, Y. Sha, Z. Liu, <span class="ltx_text ltx_bib_etal">et al.</span> (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Generative recommendation for large-scale advertising</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2602.22732</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p3" title="2 Preliminaries ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.p2" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>,
+<a class="ltx_ref" href="#S4.p5" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>,
+<a class="ltx_ref" href="#S4.p7" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib9">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Yan, Y. Bai, Z. Liu, Y. Liu, J. Wang, J. Huang, H. Li, S. Ding, S. Ruan, and Y. Zhang (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">MERGE: next-generation item indexing paradigm for large-scale streaming recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2601.20199</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S4.p2" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib26">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">L. Yang, F. Paischer, K. Hassani, J. Li, S. Shao, Z. G. Li, Y. He, X. Feng, N. Noorshams, S. Park, B. Long, R. D. Nowak, X. Gao, and H. Eghbalzadeh (2025a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Unifying generative and dense retrieval for sequential recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Transactions on Machine Learning Research</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S4.p7" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib27">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Yang, Z. Ji, Z. Li, Y. Li, Z. Mo, Y. Ding, K. Chen, Z. Zhang, J. Li, S. Li, and L. Liu (2025b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Sparse meets dense: unified generative recommendations with cascaded sparse-dense representations</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2503.02453</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S4.p7" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib21">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">H. You, H. Zhang, H. He, Y. Li, and B. Liu (2026)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Generalized radius and integrated codebook transforms for differentiable vector quantization</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2602.01140</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.p2" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib18">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">J. Zhang, Y. Li, Y. Liu, C. Wang, Y. Wang, Y. Xiong, X. Liu, H. Wu, Q. Li, E. Zhang, <span class="ltx_text ltx_bib_etal">et al.</span> (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">GPR: towards a generative pre-trained one-model paradigm for large-scale advertising recommendation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2511.10138</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S4.p5" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib10">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">B. Zheng, E. Liu, Z. Chen, Z. Ma, Y. Wang, W. X. Zhao, and J. Wen (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Pre-training generative recommender with multi-identifier item tokenization</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2504.04400</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S4.p2" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>,
+<a class="ltx_ref" href="#S4.p6" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib5">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhou, J. Deng, J. Zhang, K. Cai, L. Ren, Q. Luo, Q. Wang, Q. Hu, R. Huang, S. Wang, <span class="ltx_text ltx_bib_etal">et al.</span> (2025a)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onerec technical report</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2506.13695</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S2.p2" title="2 Preliminaries ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a class="ltx_ref" href="#S4.p2" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>,
+<a class="ltx_ref" href="#S4.p5" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib4">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">G. Zhou, H. Hu, H. Cheng, H. Wang, J. Deng, J. Zhang, K. Cai, L. Ren, L. Ren, L. Yu, <span class="ltx_text ltx_bib_etal">et al.</span> (2025b)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Onerec-v2 technical report</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2508.20900</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p1" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S4.p2" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>,
+<a class="ltx_ref" href="#S4.p5" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib33">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Zhou, J. Yao, Z. Dou, Y. Tu, L. Wu, T. Chua, and J. Wen (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">ROGER: ranking-oriented generative retrieval</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">ACM Transactions on Information Systems</span> <span class="ltx_text ltx_bib_volume">42</span> (<span class="ltx_text ltx_bib_number">6</span>), <span class="ltx_text ltx_bib_pages"> pp. 1–25</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_article" id="bib.bib35">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">L. Zhu, F. Wei, Y. Lu, and D. Chen (2024)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scaling the codebook size of vq-gan to 100,000 with a utilization rate of 99%</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in Neural Information Processing Systems</span> <span class="ltx_text ltx_bib_volume">37</span>, <span class="ltx_text ltx_bib_pages"> pp. 12612–12635</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_inproceedings" id="bib.bib3">
+<span class="ltx_tag ltx_bib_author-year ltx_role_refnum ltx_tag_bibitem">Y. Zhu, B. Li, Y. Xin, Z. Xia, and L. Xu (2025)</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Addressing representation collapse in vector quantized models with one linear layer</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF International Conference on Computer Vision</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 22968–22977</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="#S1.p2" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S1.p3" title="1 Introduction ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a class="ltx_ref" href="#S3.SS1.p5" title="3.1 Tokenizer ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§3.1</span></a>,
+<a class="ltx_ref" href="#S4.p2" title="4 Related Work ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">§4</span></a>.
+</span>
+</li>
+</ul>
+</section>
+<div class="ltx_pagination ltx_role_newpage"></div>
+<section class="ltx_appendix" id="A1">
+<h2 class="ltx_title ltx_title_appendix">
+<span class="ltx_tag ltx_tag_appendix">Appendix A </span>合成数据上 BasisVQ 与 SimVQ 的对比</h2>
+<div class="ltx_para" id="A1.p1">
+<p class="ltx_p">我们提供一个玩具实验，以模拟流式训练中固有的分布偏移。具体而言，我们生成一个 8 维空间的合成数据集，由 <math alttext="K=512" class="ltx_Math" display="inline" id="A1.p1.m1"><semantics><mrow><mi>K</mi><mo>=</mo><mn>512</mn></mrow><annotation encoding="application/x-tex">K=512</annotation></semantics></math> 个广泛分散的高斯簇组成，共产生 128,000 个数据点。在真实世界的流式场景中，随着新物品和用户兴趣不断涌现，数据分布会动态偏离历史数据。对于这些新出现的分布而言，历史码本通常位于很远的位置，这在数学上等同于一个高度次优的初始化。为显式模拟这一流式挑战，我们将所有码向量初始化在原点附近的一个小超立方体内，服从均匀分布 <math alttext="[-0.1,0.1]" class="ltx_Math" display="inline" id="A1.p1.m2"><semantics><mrow><mo stretchy="false">[</mo><mrow><mo>−</mo><mn>0.1</mn></mrow><mo>,</mo><mn>0.1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[-0.1,0.1]</annotation></semantics></math>。因此，初始码本位于距离真实数据流形极远的位置。在此设置下，绝大多数码在初始前向传播过程中得到零个点分配，瞬间变为“死码”。注意，所有被评估的方法严格共享相同的初始化方法、优化器和损失函数，以确保公平性。</p>
+</div>
+<figure class="ltx_figure" id="A1.F5"><a href="assets/9bd4a4810f05d2c4.webp" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="A1.F5.g1" loading="lazy" src="assets/9bd4a4810f05d2c4.webp"/></a>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 5: </span>SimVQ 与 BasisVQ 在一个具有挑战性的玩具数据集上的可视化比较。初始码本位于远离真实数据流形的位置，显式模拟了无法预先获知近似数据分布的真实世界场景。</figcaption>
+</figure>
+<div class="ltx_para" id="A1.p2">
+<p class="ltx_p">为可视化码本的空间演化，我们使用 t-SNE <cite class="ltx_cite ltx_citemacro_citep">(Van der Maaten and Hinton, <a class="ltx_ref" href="#bib.bib36" title="Visualizing data using t-sne.">2008</a>)</cite> 将数据和码投影到二维平面上。为防止投影偏差并确保视觉一致性，我们在整个真实数据流形上拟合一个全局 t-SNE 模型，且所有子图严格共享完全相同的坐标轴。</p>
+</div>
+<div class="ltx_para" id="A1.p3">
+<p class="ltx_p">训练过程的可视化如图 <a class="ltx_ref" href="#A1.F5" title="Figure 5 ‣ Appendix A BasisVQ VS SimVQ on Sythetic Data ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">5</span></a> 所示。通过使用共享基矩阵，SimVQ 激活了更多码，但由于其码本参数被冻结，最终未能探索完整的数据流形。相比之下，所提出的 BasisVQ 取得了最佳性能。刚性旋转机制成功复活了初始的死码，使它们能够以更高的收敛速度均匀地探索并覆盖整个数据流形。</p>
+</div>
+</section>
+<section class="ltx_appendix" id="A2">
+<h2 class="ltx_title ltx_title_appendix">
+<span class="ltx_tag ltx_tag_appendix">Appendix B </span>快速距离计算的详细推导</h2>
+<div class="ltx_para" id="A2.p1">
+<p class="ltx_p">本节逐步推导 L2 距离矩阵 <math alttext="D" class="ltx_Math" display="inline" id="A2.p1.m1"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>，该矩阵在公式 <a class="ltx_ref" href="#S3.E6" title="In 3.1 Tokenizer ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">6</span></a> 中引入。令 <math alttext="x\in\mathbb{R}^{b\times d}" class="ltx_Math" display="inline" id="A2.p1.m2"><semantics><mrow><mi>x</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>b</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">x\in\mathbb{R}^{b\times d}</annotation></semantics></math> 为输入残差向量，<math alttext="\hat{C}\in\mathbb{R}^{N_{m}\times d}" class="ltx_Math" display="inline" id="A2.p1.m3"><semantics><mrow><mover accent="true"><mi>C</mi><mo>^</mo></mover><mo>∈</mo><msup><mi>ℝ</mi><mrow><msub><mi>N</mi><mi>m</mi></msub><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\hat{C}\in\mathbb{R}^{N_{m}\times d}</annotation></semantics></math> 为基础码本，<math alttext="\gamma\in\mathbb{R}^{b\times d}" class="ltx_Math" display="inline" id="A2.p1.m4"><semantics><mrow><mi>γ</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>b</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\gamma\in\mathbb{R}^{b\times d}</annotation></semantics></math> 和 <math alttext="\beta\in\mathbb{R}^{b\times d}" class="ltx_Math" display="inline" id="A2.p1.m5"><semantics><mrow><mi>β</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>b</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\beta\in\mathbb{R}^{b\times d}</annotation></semantics></math> 分别为前缀特定参数（复合缩放和复合偏置）。</p>
+</div>
+<div class="ltx_para" id="A2.p2">
+<p class="ltx_p">从概念上讲，一个批次中第 <math alttext="n" class="ltx_Math" display="inline" id="A2.p2.m1"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> 个样本的变换后码本由 <math alttext="\tilde{C}_{(n)}=\gamma_{(n)}\odot\hat{C}+\beta_{(n)}" class="ltx_Math" display="inline" id="A2.p2.m2"><semantics><mrow><msub><mover accent="true"><mi>C</mi><mo>~</mo></mover><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub><mo>=</mo><mrow><mrow><msub><mi>γ</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub><mo lspace="0.222em" rspace="0.222em">⊙</mo><mover accent="true"><mi>C</mi><mo>^</mo></mover></mrow><mo>+</mo><msub><mi>β</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub></mrow></mrow><annotation encoding="application/x-tex">\tilde{C}_{(n)}=\gamma_{(n)}\odot\hat{C}+\beta_{(n)}</annotation></semantics></math> 给出。第 <math alttext="n" class="ltx_Math" display="inline" id="A2.p2.m3"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> 个输入 <math alttext="x_{(n)}" class="ltx_Math" display="inline" id="A2.p2.m4"><semantics><msub><mi>x</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub><annotation encoding="application/x-tex">x_{(n)}</annotation></semantics></math> 与第 <math alttext="k" class="ltx_Math" display="inline" id="A2.p2.m5"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> 个变换后码字之间的 L2 距离为：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="A2.E13">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="D_{(n,k)}=\left\|x_{(n)}-(\gamma_{(n)}\odot\hat{C}_{(k)}+\beta_{(n)})\right\|_%
+{2}^{2}" class="ltx_Math" display="block" id="A2.E13.m1"><semantics><mrow><msub><mi>D</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo>,</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msub><mo>=</mo><msubsup><mrow><mo>‖</mo><mrow><msub><mi>x</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub><mo>−</mo><mrow><mo stretchy="false">(</mo><mrow><mrow><msub><mi>γ</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub><mo lspace="0.222em" rspace="0.222em">⊙</mo><msub><mover accent="true"><mi>C</mi><mo>^</mo></mover><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msub></mrow><mo>+</mo><msub><mi>β</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub></mrow><mo stretchy="false">)</mo></mrow></mrow><mo>‖</mo></mrow><mn>2</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">D_{(n,k)}=\left\|x_{(n)}-(\gamma_{(n)}\odot\hat{C}_{(k)}+\beta_{(n)})\right\|_%
+{2}^{2}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(13)</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="ltx_para" id="A2.p3">
+<p class="ltx_p">为避免将动态变换后的码本具化为形状为 <math alttext="(b,N_{m},d)" class="ltx_Math" display="inline" id="A2.p3.m1"><semantics><mrow><mo stretchy="false">(</mo><mi>b</mi><mo>,</mo><msub><mi>N</mi><mi>m</mi></msub><mo>,</mo><mi>d</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(b,N_{m},d)</annotation></semantics></math> 的稠密三维张量，我们定义偏置平移后的残差向量为 <math alttext="\tilde{x}_{(n)}=x_{(n)}-\beta_{(n)}" class="ltx_Math" display="inline" id="A2.p3.m2"><semantics><mrow><msub><mover accent="true"><mi>x</mi><mo>~</mo></mover><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub><mo>=</mo><mrow><msub><mi>x</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub><mo>−</mo><msub><mi>β</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub></mrow></mrow><annotation encoding="application/x-tex">\tilde{x}_{(n)}=x_{(n)}-\beta_{(n)}</annotation></semantics></math>。重新整理各项，我们得到：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="A2.E14">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="D_{(n,k)}=\left\|\tilde{x}_{(n)}-\gamma_{(n)}\odot\hat{C}_{(k)}\right\|_{2}^{2}" class="ltx_Math" display="block" id="A2.E14.m1"><semantics><mrow><msub><mi>D</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo>,</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msub><mo>=</mo><msubsup><mrow><mo>‖</mo><mrow><msub><mover accent="true"><mi>x</mi><mo>~</mo></mover><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub><mo>−</mo><mrow><msub><mi>γ</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub><mo lspace="0.222em" rspace="0.222em">⊙</mo><msub><mover accent="true"><mi>C</mi><mo>^</mo></mover><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msub></mrow></mrow><mo>‖</mo></mrow><mn>2</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">D_{(n,k)}=\left\|\tilde{x}_{(n)}-\gamma_{(n)}\odot\hat{C}_{(k)}\right\|_{2}^{2}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(14)</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="ltx_para" id="A2.p4">
+<p class="ltx_p">沿特征维度 <math alttext="d" class="ltx_Math" display="inline" id="A2.p4.m1"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math> 展开平方 L2 范数：</p>
+<div class="tex-equation-scroll"><table class="ltx_equationgroup ltx_eqn_table" id="A2.E15">
+<tbody>
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline" id="A2.E15X">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math alttext="\displaystyle D_{(n,k)}" class="ltx_Math" display="inline" id="A2.E15X.m2"><semantics><msub><mi>D</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo>,</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msub><annotation encoding="application/x-tex">\displaystyle D_{(n,k)}</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle=\sum_{j=1}^{d}\left(\tilde{x}_{(n,j)}-\gamma_{(n,j)}\hat{C}_{(k,%
+j)}\right)^{2}" class="ltx_Math" display="inline" id="A2.E15X.m3"><semantics><mrow><mi></mi><mo>=</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover></mstyle><msup><mrow><mo>(</mo><mrow><msub><mover accent="true"><mi>x</mi><mo>~</mo></mover><mrow><mo stretchy="false">(</mo><mi>n</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow></msub><mo>−</mo><mrow><msub><mi>γ</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow></msub><mo>⁢</mo><msub><mover accent="true"><mi>C</mi><mo>^</mo></mover><mrow><mo stretchy="false">(</mo><mi>k</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow></msub></mrow></mrow><mo>)</mo></mrow><mn>2</mn></msup></mrow></mrow><annotation encoding="application/x-tex">\displaystyle=\sum_{j=1}^{d}\left(\tilde{x}_{(n,j)}-\gamma_{(n,j)}\hat{C}_{(k,%
+j)}\right)^{2}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="2"><span class="ltx_tag ltx_tag_equationgroup ltx_align_right">(15)</span></td>
+</tr>
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline" id="A2.E15Xa">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_eqn_cell"></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math alttext="\displaystyle=\underbrace{\sum_{j=1}^{d}\tilde{x}_{(n,j)}^{2}}_{\text{Term 1}}%
++\underbrace{\sum_{j=1}^{d}\left(\gamma_{(n,j)}^{2}\hat{C}_{(k,j)}^{2}\right)}%
+_{\text{Term 2}}-\underbrace{2\sum_{j=1}^{d}\left(\tilde{x}_{(n,j)}\gamma_{(n,%
+j)}\right)\hat{C}_{(k,j)}}_{\text{Term 3}}" class="ltx_Math" display="inline" id="A2.E15Xa.m2"><semantics><mrow><mi></mi><mo>=</mo><mrow><mrow><munder><munder accentunder="true"><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover></mstyle><msubsup><mover accent="true"><mi>x</mi><mo>~</mo></mover><mrow><mo stretchy="false">(</mo><mi>n</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow><mn>2</mn></msubsup></mrow><mo>⏟</mo></munder><mtext>Term 1</mtext></munder><mo>+</mo><munder><munder accentunder="true"><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover></mstyle><mrow><mo>(</mo><mrow><msubsup><mi>γ</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow><mn>2</mn></msubsup><mo>⁢</mo><msubsup><mover accent="true"><mi>C</mi><mo>^</mo></mover><mrow><mo stretchy="false">(</mo><mi>k</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></mrow><mo>⏟</mo></munder><mtext>Term 2</mtext></munder></mrow><mo>−</mo><munder><munder accentunder="true"><mrow><mn>2</mn><mo>⁢</mo><mrow><mstyle displaystyle="true"><munderover><mo movablelimits="false">∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover></mstyle><mrow><mrow><mo>(</mo><mrow><msub><mover accent="true"><mi>x</mi><mo>~</mo></mover><mrow><mo stretchy="false">(</mo><mi>n</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow></msub><mo>⁢</mo><msub><mi>γ</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow></msub></mrow><mo>)</mo></mrow><mo>⁢</mo><msub><mover accent="true"><mi>C</mi><mo>^</mo></mover><mrow><mo stretchy="false">(</mo><mi>k</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow></msub></mrow></mrow></mrow><mo>⏟</mo></munder><mtext>Term 3</mtext></munder></mrow></mrow><annotation encoding="application/x-tex">\displaystyle=\underbrace{\sum_{j=1}^{d}\tilde{x}_{(n,j)}^{2}}_{\text{Term 1}}%
++\underbrace{\sum_{j=1}^{d}\left(\gamma_{(n,j)}^{2}\hat{C}_{(k,j)}^{2}\right)}%
+_{\text{Term 2}}-\underbrace{2\sum_{j=1}^{d}\left(\tilde{x}_{(n,j)}\gamma_{(n,%
+j)}\right)\hat{C}_{(k,j)}}_{\text{Term 3}}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="ltx_para" id="A2.p5">
+<p class="ltx_p">我们可以对整个批次和码本的计算进行向量化，从而得到距离矩阵 <math alttext="D\in\mathbb{R}^{b\times N_{m}}" class="ltx_Math" display="inline" id="A2.p5.m1"><semantics><mrow><mi>D</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>b</mi><mo lspace="0.222em" rspace="0.222em">×</mo><msub><mi>N</mi><mi>m</mi></msub></mrow></msup></mrow><annotation encoding="application/x-tex">D\in\mathbb{R}^{b\times N_{m}}</annotation></semantics></math>：</p>
+<ul class="ltx_itemize" id="A2.I1">
+<li class="ltx_item" id="A2.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i1.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">项 1（输入范数）：</span> <math alttext="\tilde{x}" class="ltx_Math" display="inline" id="A2.I1.i1.p1.m1"><semantics><mover accent="true"><mi>x</mi><mo>~</mo></mover><annotation encoding="application/x-tex">\tilde{x}</annotation></semantics></math> 的平方和可计算为 <math alttext="(\tilde{x}\odot\tilde{x})\mathbf{1}_{d}" class="ltx_Math" display="inline" id="A2.I1.i1.p1.m2"><semantics><mrow><mrow><mo stretchy="false">(</mo><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo lspace="0.222em" rspace="0.222em">⊙</mo><mover accent="true"><mi>x</mi><mo>~</mo></mover></mrow><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mn>𝟏</mn><mi>d</mi></msub></mrow><annotation encoding="application/x-tex">(\tilde{x}\odot\tilde{x})\mathbf{1}_{d}</annotation></semantics></math>。为将其广播到所有 <math alttext="N_{m}" class="ltx_Math" display="inline" id="A2.I1.i1.p1.m3"><semantics><msub><mi>N</mi><mi>m</mi></msub><annotation encoding="application/x-tex">N_{m}</annotation></semantics></math> 个码字，我们乘以 <math alttext="\mathbf{1}_{N_{m}}^{\top}" class="ltx_Math" display="inline" id="A2.I1.i1.p1.m4"><semantics><msubsup><mn>𝟏</mn><msub><mi>N</mi><mi>m</mi></msub><mo>⊤</mo></msubsup><annotation encoding="application/x-tex">\mathbf{1}_{N_{m}}^{\top}</annotation></semantics></math>，得到
+<math alttext="(\tilde{x}\odot\tilde{x})\mathbf{1}_{d}\mathbf{1}_{N_{m}}^{\top}" class="ltx_Math" display="inline" id="A2.I1.i1.p1.m5"><semantics><mrow><mrow><mo stretchy="false">(</mo><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo lspace="0.222em" rspace="0.222em">⊙</mo><mover accent="true"><mi>x</mi><mo>~</mo></mover></mrow><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msub><mn>𝟏</mn><mi>d</mi></msub><mo>⁢</mo><msubsup><mn>𝟏</mn><msub><mi>N</mi><mi>m</mi></msub><mo>⊤</mo></msubsup></mrow><annotation encoding="application/x-tex">(\tilde{x}\odot\tilde{x})\mathbf{1}_{d}\mathbf{1}_{N_{m}}^{\top}</annotation></semantics></math>。</p>
+</div>
+</li>
+<li class="ltx_item" id="A2.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i2.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">项 2（缩放码本范数）：</span> <math alttext="\gamma" class="ltx_Math" display="inline" id="A2.I1.i2.p1.m1"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math> 的平方与 <math alttext="\hat{C}" class="ltx_Math" display="inline" id="A2.I1.i2.p1.m2"><semantics><mover accent="true"><mi>C</mi><mo>^</mo></mover><annotation encoding="application/x-tex">\hat{C}</annotation></semantics></math> 的平方的点积自然地表示为矩阵乘法 <math alttext="(\gamma\odot\gamma)(\hat{C}\odot\hat{C})^{\top}" class="ltx_Math" display="inline" id="A2.I1.i2.p1.m3"><semantics><mrow><mrow><mo stretchy="false">(</mo><mrow><mi>γ</mi><mo lspace="0.222em" rspace="0.222em">⊙</mo><mi>γ</mi></mrow><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msup><mrow><mo stretchy="false">(</mo><mrow><mover accent="true"><mi>C</mi><mo>^</mo></mover><mo lspace="0.222em" rspace="0.222em">⊙</mo><mover accent="true"><mi>C</mi><mo>^</mo></mover></mrow><mo stretchy="false">)</mo></mrow><mo>⊤</mo></msup></mrow><annotation encoding="application/x-tex">(\gamma\odot\gamma)(\hat{C}\odot\hat{C})^{\top}</annotation></semantics></math>。</p>
+</div>
+</li>
+<li class="ltx_item" id="A2.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="A2.I1.i3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">项 3（交叉项）：</span> 互相关项通过矩阵乘法 <math alttext="-2(\tilde{x}\odot\gamma)\hat{C}^{\top}" class="ltx_Math" display="inline" id="A2.I1.i3.p1.m1"><semantics><mrow><mo>−</mo><mrow><mn>2</mn><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo lspace="0.222em" rspace="0.222em">⊙</mo><mi>γ</mi></mrow><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msup><mover accent="true"><mi>C</mi><mo>^</mo></mover><mo>⊤</mo></msup></mrow></mrow><annotation encoding="application/x-tex">-2(\tilde{x}\odot\gamma)\hat{C}^{\top}</annotation></semantics></math> 计算。</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="A2.p6">
+<p class="ltx_p">将这些向量化项求和，即可得到正文中给出的精确高效公式：</p>
+<div class="tex-equation-scroll"><table class="ltx_equation ltx_eqn_table" id="A2.E16">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="D=\underbrace{\left(\tilde{x}\odot\tilde{x}\right)\mathbf{1}_{d}\mathbf{1}_{N_%
+{m}}^{\top}}_{\text{Input Norms}}+\underbrace{\left(\gamma\odot\gamma\right)%
+\left(\hat{C}\odot\hat{C}\right)^{\top}}_{\text{Scaled Codebook Norms}}-%
+\underbrace{2\left(\tilde{x}\odot\gamma\right)\hat{C}^{\top}}_{\text{Cross %
+Term}}" class="ltx_Math" display="block" id="A2.E16.m1"><semantics><mrow><mi>D</mi><mo>=</mo><mrow><mrow><munder><munder accentunder="true"><mrow><mrow><mo>(</mo><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo lspace="0.222em" rspace="0.222em">⊙</mo><mover accent="true"><mi>x</mi><mo>~</mo></mover></mrow><mo>)</mo></mrow><mo>⁢</mo><msub><mn>𝟏</mn><mi>d</mi></msub><mo>⁢</mo><msubsup><mn>𝟏</mn><msub><mi>N</mi><mi>m</mi></msub><mo>⊤</mo></msubsup></mrow><mo>⏟</mo></munder><mtext>Input Norms</mtext></munder><mo>+</mo><munder><munder accentunder="true"><mrow><mrow><mo>(</mo><mrow><mi>γ</mi><mo lspace="0.222em" rspace="0.222em">⊙</mo><mi>γ</mi></mrow><mo>)</mo></mrow><mo>⁢</mo><msup><mrow><mo>(</mo><mrow><mover accent="true"><mi>C</mi><mo>^</mo></mover><mo lspace="0.222em" rspace="0.222em">⊙</mo><mover accent="true"><mi>C</mi><mo>^</mo></mover></mrow><mo>)</mo></mrow><mo>⊤</mo></msup></mrow><mo>⏟</mo></munder><mtext>Scaled Codebook Norms</mtext></munder></mrow><mo>−</mo><munder><munder accentunder="true"><mrow><mn>2</mn><mo>⁢</mo><mrow><mo>(</mo><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo lspace="0.222em" rspace="0.222em">⊙</mo><mi>γ</mi></mrow><mo>)</mo></mrow><mo>⁢</mo><msup><mover accent="true"><mi>C</mi><mo>^</mo></mover><mo>⊤</mo></msup></mrow><mo>⏟</mo></munder><mtext>Cross Term</mtext></munder></mrow></mrow><annotation encoding="application/x-tex">D=\underbrace{\left(\tilde{x}\odot\tilde{x}\right)\mathbf{1}_{d}\mathbf{1}_{N_%
+{m}}^{\top}}_{\text{Input Norms}}+\underbrace{\left(\gamma\odot\gamma\right)%
+\left(\hat{C}\odot\hat{C}\right)^{\top}}_{\text{Scaled Codebook Norms}}-%
+\underbrace{2\left(\tilde{x}\odot\gamma\right)\hat{C}^{\top}}_{\text{Cross %
+Term}}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right" rowspan="1"><span class="ltx_tag ltx_tag_equation ltx_align_right">(16)</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="ltx_para" id="A2.p7">
+<p class="ltx_p">这一代数重排确保瓶颈运算均为标准矩阵乘法——<math alttext="(\gamma\odot\gamma)(\hat{C}\odot\hat{C})^{\top}" class="ltx_Math" display="inline" id="A2.p7.m1"><semantics><mrow><mrow><mo stretchy="false">(</mo><mrow><mi>γ</mi><mo lspace="0.222em" rspace="0.222em">⊙</mo><mi>γ</mi></mrow><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msup><mrow><mo stretchy="false">(</mo><mrow><mover accent="true"><mi>C</mi><mo>^</mo></mover><mo lspace="0.222em" rspace="0.222em">⊙</mo><mover accent="true"><mi>C</mi><mo>^</mo></mover></mrow><mo stretchy="false">)</mo></mrow><mo>⊤</mo></msup></mrow><annotation encoding="application/x-tex">(\gamma\odot\gamma)(\hat{C}\odot\hat{C})^{\top}</annotation></semantics></math> 与 <math alttext="(\tilde{x}\odot\gamma)\hat{C}^{\top}" class="ltx_Math" display="inline" id="A2.p7.m2"><semantics><mrow><mrow><mo stretchy="false">(</mo><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo lspace="0.222em" rspace="0.222em">⊙</mo><mi>γ</mi></mrow><mo stretchy="false">)</mo></mrow><mo>⁢</mo><msup><mover accent="true"><mi>C</mi><mo>^</mo></mover><mo>⊤</mo></msup></mrow><annotation encoding="application/x-tex">(\tilde{x}\odot\gamma)\hat{C}^{\top}</annotation></semantics></math>——二者均在 <math alttext="\mathcal{O}(bN_{m}d)" class="ltx_Math" display="inline" id="A2.p7.m3"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒪</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mrow><mi>b</mi><mo>⁢</mo><msub><mi>N</mi><mi>m</mi></msub><mo>⁢</mo><mi>d</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{O}(bN_{m}d)</annotation></semantics></math> 时间内执行。因此，它严格匹配原版 VQ 的渐近时间复杂度，且不会产生三维张量带来的高昂内存开销。</p>
+</div>
+</section>
+<section class="ltx_appendix" id="A3">
+<h2 class="ltx_title ltx_title_appendix">
+<span class="ltx_tag ltx_tag_appendix">Appendix C </span>实现细节</h2>
+<div class="ltx_para" id="A3.p1">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">词元化器。</span> 双塔模型的输出嵌入维度设为 96。量化模块为三层 Prefix-aware BasisRQ，码本大小分别为 <math alttext="(2048,512,128)" class="ltx_Math" display="inline" id="A3.p1.m1"><semantics><mrow><mo stretchy="false">(</mo><mn>2048</mn><mo>,</mo><mn>512</mn><mo>,</mo><mn>128</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2048,512,128)</annotation></semantics></math>，码向量维度为 128。这种容量的逐层递减与各量化层中残差能量的递减相一致，从而在相同总码本容量下取得更优性能。</p>
+</div>
+<div class="ltx_para" id="A3.p2">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">生成器。</span> 对于编码器，非序列用户特征被分组为 <math alttext="L_{g}=28" class="ltx_Math" display="inline" id="A3.p2.m1"><semantics><mrow><msub><mi>L</mi><mi>g</mi></msub><mo>=</mo><mn>28</mn></mrow><annotation encoding="application/x-tex">L_{g}=28</annotation></semantics></math> 个词元；点击序列长度 <math alttext="L_{c}=200" class="ltx_Math" display="inline" id="A3.p2.m2"><semantics><mrow><msub><mi>L</mi><mi>c</mi></msub><mo>=</mo><mn>200</mn></mrow><annotation encoding="application/x-tex">L_{c}=200</annotation></semantics></math>；转化序列长度 <math alttext="L_{e}=100" class="ltx_Math" display="inline" id="A3.p2.m3"><semantics><mrow><msub><mi>L</mi><mi>e</mi></msub><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">L_{e}=100</annotation></semantics></math>。解码器由 2 层组成，每层采用 6 个注意力头，头维度为 64，门控 FFN 的中间维度为 384。</p>
+</div>
+<div class="ltx_para" id="A3.p3">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">重排序器。</span> 用于重排序的用户表示 <math alttext="u_{\mathrm{rerank}}" class="ltx_Math" display="inline" id="A3.p3.m1"><semantics><msub><mi>u</mi><mi>rerank</mi></msub><annotation encoding="application/x-tex">u_{\mathrm{rerank}}</annotation></semantics></math> 的维度设为 96。</p>
+</div>
+<div class="ltx_para" id="A3.p4">
+<p class="ltx_p"><span class="ltx_text ltx_font_bold">损失与训练。</span> 缩放因子 <math alttext="\sigma" class="ltx_Math" display="inline" id="A3.p4.m1"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math> 均设为 1，适用于两个 LambdaLoss 项（公式 <a class="ltx_ref" href="#S3.E8" title="In 3.4 Training and Serving ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">8</span></a> 和公式 <a class="ltx_ref" href="#S3.E11" title="In 3.4 Training and Serving ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">11</span></a>），RQ 损失超参数 <math alttext="\eta" class="ltx_Math" display="inline" id="A3.p4.m2"><semantics><mi>η</mi><annotation encoding="application/x-tex">\eta</annotation></semantics></math>（公式 <a class="ltx_ref" href="#S3.E9" title="In 3.4 Training and Serving ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">9</span></a>）为 0.1。损失权重 <math alttext="\lambda_{\mathrm{LTR}},\lambda_{\mathrm{RQ}},\lambda_{\mathrm{Gen}},\lambda_{%
+\mathrm{Rerank}}" class="ltx_Math" display="inline" id="A3.p4.m3"><semantics><mrow><msub><mi>λ</mi><mi>LTR</mi></msub><mo>,</mo><msub><mi>λ</mi><mi>RQ</mi></msub><mo>,</mo><msub><mi>λ</mi><mi>Gen</mi></msub><mo>,</mo><msub><mi>λ</mi><mi>Rerank</mi></msub></mrow><annotation encoding="application/x-tex">\lambda_{\mathrm{LTR}},\lambda_{\mathrm{RQ}},\lambda_{\mathrm{Gen}},\lambda_{%
+\mathrm{Rerank}}</annotation></semantics></math> 分别为 <math alttext="1,1,10,1" class="ltx_Math" display="inline" id="A3.p4.m4"><semantics><mrow><mn>1</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>10</mn><mo>,</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1,1,10,1</annotation></semantics></math>（公式 <a class="ltx_ref" href="#S3.E12" title="In 3.4 Training and Serving ‣ 3 GEAR ‣ Generative End-to-end Ad Retrieval at Douyin"><span class="ltx_text ltx_ref_tag">12</span></a>）。在推理过程中，三个生成步骤分别使用 256、256 和 512 的束宽。</p>
+</div>
+</section>
+</article></article></div>
+<div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a></div>
+<script id="paper-document-metadata" type="application/json">{"format": "arxiv_tex", "toc": [{"id": "tex-section-1", "title": "摘要", "level": 1}, {"id": "S1", "title": "1 引言", "level": 1}, {"id": "S2", "title": "2 预备知识", "level": 1}, {"id": "S3", "title": "3 GEAR", "level": 1}, {"id": "S3.SS1", "title": "3.1 词元化器", "level": 2}, {"id": "S3.SS2", "title": "3.2 生成器", "level": 2}, {"id": "S3.SS3", "title": "3.3 重排器", "level": 2}, {"id": "S3.SS4", "title": "3.4 训练与服务", "level": 2}, {"id": "S4", "title": "4 相关工作", "level": 1}, {"id": "S5", "title": "5 系统部署", "level": 1}, {"id": "S6", "title": "6 大规模真实世界实验", "level": 1}, {"id": "S6.SS1", "title": "6.1 总体性能", "level": 2}, {"id": "S6.SS2", "title": "6.2 词元化器分析", "level": 2}, {"id": "S7", "title": "7 结论", "level": 1}, {"id": "Sx1", "title": "生成式 AI 披露声明", "level": 1}, {"id": "bib", "title": "参考文献", "level": 1}, {"id": "A1", "title": "Appendix A 合成数据上 BasisVQ 与 SimVQ 的对比", "level": 1}, {"id": "A2", "title": "Appendix B 快速距离计算的详细推导", "level": 1}, {"id": "A3", "title": "Appendix C 实现细节", "level": 1}], "stats": {"format": "arxiv_tex", "converter": "LaTeXML", "text_chars": 26657, "sections": 19, "figures": 5, "tables": 2, "table_cells": 44, "mathml": 188, "graphics": 5, "references": 29, "warnings": ["Warning:missing_file:iclr2027_conference Can't find binding for package iclr2027_conference at main.tex; line 3 col 11", "Warning:missing_file:compat.ltxml Can't find package compat.ltxml at String; line 0 col 0", "Warning:unexpected:citesep Unexpected Citation Style keyword 'citesep' at iclr2027_conference.sty; line 23 col 0"], "language": "zh-CN"}, "extra_head": "\u003cstyle>\n.tex-paper{min-width:0;line-height:1.85;overflow-wrap:anywhere}\n.tex-paper .ltx_title_document{display:none}\n.tex-paper .ltx_authors{font-size:14px;color:var(--muted);margin-bottom:24px}\n.tex-paper .ltx_creator{display:inline-block;margin-right:1em}\n.tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}\n.tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}\n.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}\n.tex-paper .ltx_para{margin:0}\n.tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}\n.tex-paper .ltx_title_paragraph{font-size:17px}\n.tex-paper .ltx_font_bold{font-weight:bold}.tex-paper .ltx_font_italic{font-style:italic}\n.tex-paper .ltx_font_smallcaps{font-variant:small-caps}.tex-paper .ltx_font_typewriter{font-family:monospace}\n.tex-paper .ltx_font_sansserif{font-family:sans-serif}\n.tex-paper .ltx_align_left{text-align:left}.tex-paper .ltx_align_right{text-align:right}\n.tex-paper .ltx_align_center{text-align:center}.tex-paper .ltx_align_top{vertical-align:top}\n.tex-paper .ltx_align_middle{vertical-align:middle}.tex-paper .ltx_align_bottom{vertical-align:bottom}\n.tex-paper .ltx_graphics{max-width:100%;height:auto;background:white}\n.tex-paper figure{margin:24px 0;overflow-x:auto;text-align:center}\n.tex-paper .ltx_caption{display:block;text-align:left;font-size:14px;line-height:1.7;margin:10px 0}\n.tex-paper .ltx_figure_panel{display:inline-block;max-width:100%;vertical-align:top}\n.tex-paper .ltx_tabular{display:table;width:auto;max-width:none;border-collapse:collapse;margin:12px auto;font-size:14px}\n.tex-paper .ltx_tabular td,.tex-paper .ltx_tabular th{padding:5px 9px;border:0;line-height:1.55}\n.tex-paper .ltx_tabular .ltx_border_t{border-top:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_b{border-bottom:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_tt{border-top:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_bb{border-bottom:2px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_l{border-left:1px solid currentColor}\n.tex-paper .ltx_tabular .ltx_border_r{border-right:1px solid currentColor}\n.tex-paper .ltx_equation,.tex-paper .ltx_eqn_table{display:table;width:100%;max-width:none;border-collapse:collapse;margin:18px 0}\n.tex-paper .ltx_eqn_cell{border:0;padding:3px 6px;font-size:1em}\n.tex-paper .ltx_eqn_eqno{white-space:nowrap;width:1%;padding-left:20px}\n.tex-paper .ltx_eqn_center_padleft,.tex-paper .ltx_eqn_center_padright{width:50%;padding:0}\n.tex-paper .tex-equation-scroll{overflow-x:auto;max-width:100%;margin:12px 0}\n.tex-paper math{font-size:1em;line-height:normal;font-family:math}\n.tex-paper math[display=\"block\"]{margin:.2em 0;white-space:nowrap}\n.tex-paper .ltx_biblist{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.7}\n.tex-paper .ltx_bibitem{margin:12px 0;scroll-margin-top:24px}\n.tex-paper .ltx_bibblock{display:block}\n.tex-paper .ltx_note_content{display:block;font-size:13px;color:var(--muted)}\n.tex-paper .ltx_note_mark{font-size:75%;vertical-align:super}\n.tex-paper .ltx_toc{display:none}\n.tex-paper .ltx_framed,.tex-paper .ltx_listing{padding:14px;border:1px solid var(--line);border-radius:6px;overflow:auto}\n.tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}\n.tex-paper .ltx_tag{margin-right:.35em}\n.tex-paper [id]{scroll-margin-top:24px}\n\u003c/style>"}</script>
+<script>
+const tocPanel=document.querySelector('.paper-toc');
+if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
+tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
