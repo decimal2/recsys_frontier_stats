@@ -91,6 +91,28 @@ python -m http.server 8080 --bind 127.0.0.1 -d reports/site
 # 然后打开 http://127.0.0.1:8080/
 ```
 
+## GitHub Pages 在线阅读
+
+启用后访问：**https://decimal2.github.io/recsys_frontier_stats/**。
+
+仓库的 `docs/` 保存可公开阅读的日报 HTML 快照。在 GitHub 仓库的 **Settings → Pages** 中，
+将 Source 设为 **Deploy from a branch**，选择 **main** 分支和 **/docs** 目录，点击 Save。
+GitHub Pages 会发布归档首页及各期日报。
+
+本地生成新日报后，将页面同步到发布目录并提交到 GitHub：
+
+```bash
+mkdir -p docs
+cp reports/site/*.html docs/
+touch docs/.nojekyll
+git add docs
+git commit -m "Update published daily reports"
+git push origin main
+```
+
+GitHub Pages 展示已生成的日报；采集和模型调用仍由 `pipeline.py daily` 执行。
+发布目录只包含 HTML 页面和 `.nojekyll`，不需要上传 `.env`、数据库或全文缓存。
+
 ## 目录
 
 ```
@@ -100,6 +122,7 @@ data/fulltext/<id>v<n>/        全文缓存(source + document.json)
 data/insights/<sha>.json       单篇解读缓存(daily- 前缀为综合缓存)
 reports/daily/<日期>.md/.json  日报
 reports/site/                  日报网页与归档首页(浏览器打开 index.html)
+docs/                          GitHub Pages 发布快照
 logs/<日期>/<时间>.log         每次运行的独立日志
 ```
 
