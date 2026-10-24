@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目定位
 
-推荐系统研究阅读站，包括**中文日报**与**中文论文全文**两个专栏。`daily` 完成"模型自主检索 arXiv 论文 → 全文解读 → 日报综合 → 发布 Markdown/JSON/HTML"；`papers` 从中文 TeX 工程或已有中文 PDF 离线构建论文页面。Python 3.10+，依赖见 requirements.txt；TeX 转换另需 LaTeXML。
+推荐系统研究阅读站，包括**中文日报**与**论文阅读**两个专栏。`daily` 完成"模型自主检索 arXiv 论文 → 全文解读 → 日报综合 → 发布 Markdown/JSON/HTML"；`papers` 从中文 TeX 工程或已有中文 PDF 离线构建论文页面。Python 3.10+，依赖见 requirements.txt；TeX 转换另需 LaTeXML。
 
 ## 常用命令
 

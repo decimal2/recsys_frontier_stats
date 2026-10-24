@@ -82,7 +82,7 @@ def render_paper(paper, document):
 {pdf_link}<a href="../index.html">全部论文</a></div>
 <p class="muted">{reading_note}</p>
 <div class="paper-reading-layout"><details class="paper-toc" open><summary>章节目录</summary>
-<ol>{toc}</ol></details><article class="paper-fulltext" aria-label="中文论文全文">{document['body_html']}</article></div>
+<ol>{toc}</ol></details><article class="paper-fulltext" aria-label="论文全文">{document['body_html']}</article></div>
 <div class="paper-bottom"><a href="../index.html">← 返回论文列表</a><a href="#">回到页首 ↑</a>{pdf_link}</div>
 <script>
 const tocPanel=document.querySelector('.paper-toc');
@@ -110,7 +110,7 @@ def render_library(papers):
     topics = sorted({tag for paper in papers for tag in paper.get("topics", [])})
     options = ''.join(f'<option value="{escape(tag)}">{escape(tag)}</option>' for tag in topics)
     body = f'''<p class="lede">深入阅读推荐系统论文，保留中文全文、公式、图表与参考文献。</p>
-<div class="paper-library-filters"><input id="paper-search" type="search" placeholder="搜索论文标题、简称、公司或 arXiv 编号…" aria-label="搜索中文论文">
+<div class="paper-library-filters"><input id="paper-search" type="search" placeholder="搜索论文标题、简称、公司或 arXiv 编号…" aria-label="搜索论文">
 <select id="paper-topic" aria-label="按主题筛选"><option value="">全部主题</option>{options}</select></div>
 <p id="paper-count" class="muted" aria-live="polite">共 {len(papers)} 篇中文全文</p>
 <div class="paper-library">{''.join(entries)}</div><p id="paper-empty" class="muted" hidden>没有匹配的论文。</p>
@@ -124,7 +124,7 @@ function filterPapers(){{let count=0;const query=paperSearch.value.toLowerCase()
 }}
 paperSearch.addEventListener('input',filterPapers);paperTopic.addEventListener('change',filterPapers);
 </script>'''
-    return page("中文论文", body, "PAPER LIBRARY / 全文阅读", root_prefix="../", section="papers",
+    return page("论文阅读", body, "PAPER LIBRARY / 全文阅读", root_prefix="../", section="papers",
                 extra_head=f"<style>{READING_STYLES}</style>")
 
 

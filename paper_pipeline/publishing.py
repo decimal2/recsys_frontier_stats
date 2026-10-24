@@ -140,7 +140,7 @@ def page(title, body, subtitle="推荐系统 · 相关检索 · LLM", *, root_pr
         + (' aria-current="page"' if section == name else '')
         + f'>{label}</a>'
         for name, path, label in (("daily", "daily/index.html", "日报"),
-                                  ("papers", "papers/index.html", "论文"))
+                                  ("papers", "papers/index.html", "论文阅读"))
     )
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)}</title>
@@ -312,17 +312,17 @@ def publish_index(connection, directory):
     paper_index = directory / "papers" / "index.html"
     if not paper_index.is_file():
         paper_index.parent.mkdir(exist_ok=True)
-        atomic_write(paper_index, page("中文论文", '<p class="lede">中文论文全文正在整理中。</p>',
+        atomic_write(paper_index, page("论文阅读", '<p class="lede">论文全文正在整理中。</p>',
                                      "PAPER LIBRARY / 中文全文", root_prefix="../", section="papers"))
     paper_cards = []
     for paper in papers[:3]:
         tags = " · ".join(paper.get("topics", []))
         paper_cards.append(f'<a class="edition" href="{escape(paper["url"])}"><span class="eyebrow">{escape(paper["short_name"])}</span><h3>{escape(paper["title_zh"])}</h3><span class="original">{escape(paper["title_en"])}</span><p>{escape(tags)}</p><span class="reading-link">阅读中文全文 →</span></a>')
-    paper_empty = '<p class="muted">中文论文全文正在整理中。</p>'
+    paper_empty = '<p class="muted">论文全文正在整理中。</p>'
     home = '<p class="lede">追踪推荐与检索的研究进展，阅读方法背后的完整论证。</p>'
     home += '<section><div class="section-heading"><h2>最新日报</h2><a href="daily/index.html">全部日报 →</a></div>'
     home += (''.join(edition_cards(editions[:1])) if editions else empty) + '</section>'
-    home += '<section><div class="section-heading"><h2>中文论文</h2><a href="papers/index.html">全部论文 →</a></div><div class="library-preview">'
+    home += '<section><div class="section-heading"><h2>论文阅读</h2><a href="papers/index.html">全部论文 →</a></div><div class="library-preview">'
     home += (''.join(paper_cards) if paper_cards else paper_empty) + '</div></section>'
     atomic_write(directory / "index.html", page("推荐系统研究阅读", home, "RECSYS RESEARCH / 日报与论文", section="home"))
     return str(directory / "index.html")

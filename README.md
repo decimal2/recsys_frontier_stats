@@ -93,7 +93,7 @@ python -m http.server 8080 --bind 127.0.0.1 -d reports/site
 # 然后打开 http://127.0.0.1:8080/
 ```
 
-## 中文论文专栏
+## 论文阅读专栏
 
 首批收录 **OneTrans、HSTU、OneReason**，目录记录在 `paper_catalog.json`。
 三篇使用对应版本的 arXiv TeX 源码翻译并构建 HTML，保留正文、附录、公式、图表和参考文献。
@@ -142,7 +142,7 @@ arXiv ID/版本、公司和主题。配置了 TeX 但工程缺失时会明确报
 
 仓库的 `docs/` 保存可公开阅读的日报和论文静态快照。在 GitHub 仓库的 **Settings → Pages** 中，
 将 Source 设为 **Deploy from a branch**，选择 **main** 分支和 **/docs** 目录，点击 Save。
-GitHub Pages 会发布首页、日报和中文论文。
+GitHub Pages 会发布首页、日报和论文阅读专栏。
 
 本地生成新日报后，将页面同步到发布目录并提交到 GitHub：
 
