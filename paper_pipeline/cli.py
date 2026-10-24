@@ -127,6 +127,11 @@ def parser():
     commands.add_parser("doctor", help="检查配置和依赖，不联网、不显示密钥")
     commands.add_parser("pending", help="查看全文解读待处理队列")
     commands.add_parser("preview", help="用已有解读重新生成日报及归档，不联网、不调用模型")
+    papers = commands.add_parser("papers", help="将中文 TeX 工程或已有中文 PDF 构建为论文专栏，不联网、不调用模型")
+    papers.add_argument("--source-dir", type=Path, default=ROOT.parent / "LLM4Rec" / "source")
+    papers.add_argument("--catalog", type=Path, default=ROOT / "paper_catalog.json")
+    papers.add_argument("--paper", action="append", help="只构建指定简称或 arXiv ID，可重复；默认构建目录中全部论文")
+    papers.add_argument("--force", action="store_true", help="重新转换中文正文、公式与图表，不复用转换缓存")
     tasks = commands.add_parser("tasks", help="查看 LangGraph 任务状态，可在任务运行时使用")
     tasks.add_argument("--task-id", help="只查看指定任务")
     resume = commands.add_parser("resume", help="按已保存配置恢复中断的任务")
@@ -141,6 +146,12 @@ def _main(argv=None):
         args.output_dir = ROOT / "reports" if args.db == ROOT / "data" / "papers.sqlite3" else args.db.parent / "reports"
     LOG.info("命令=%s 数据库=%s 配置=%s 输出目录=%s", args.command, args.db, args.config, args.output_dir)
     try:
+        if args.command == "papers":
+            from .paper_pages import build_papers
+            output = build_papers(args.source_dir, args.output_dir, args.catalog, args.paper, args.force)
+            LOG.info("运行结果：%s", json.dumps(output, ensure_ascii=False))
+            print(json.dumps(output, ensure_ascii=False, indent=2))
+            return 0 if output["status"] == "completed" else 1
         if args.command == "tasks":
             from .runtime import get_task, list_tasks
             tasks = [get_task(args.db.parent, args.task_id)] if args.task_id else list_tasks(args.db.parent)

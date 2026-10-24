@@ -1,0 +1,61 @@
+{
+  "papers": [
+    {
+      "short_name": "OneTrans",
+      "arxiv_id": "2510.26104",
+      "version": "v3",
+      "title_zh": "OneTrans：在工业推荐中使用一个 Transformer 统一特征交互与序列建模",
+      "title_en": "OneTrans: Unified Feature Interaction and Sequence Modeling with One Transformer in Industrial Recommender",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "统一建模",
+        "序列推荐",
+        "特征交互"
+      ],
+      "zh_pdf": "zh/OneTrans_zh.pdf",
+      "tex_project": "/tmp/recsys-tex-html-bdqa9f70/OneTrans/translated",
+      "tex_entry": "main.tex",
+      "latexml_root": "/tmp/recsys-tex-html-bdqa9f70/tools/latexml-root"
+    },
+    {
+      "short_name": "HSTU",
+      "arxiv_id": "2402.17152",
+      "version": "v3",
+      "title_zh": "行动胜于语言：面向生成式推荐的万亿参数序列转导器",
+      "title_en": "Actions Speak Louder than Words: Trillion-Parameter Sequential Transducers for Generative Recommendations",
+      "companies": [
+        "Meta"
+      ],
+      "topics": [
+        "生成式推荐",
+        "序列推荐",
+        "规模扩展"
+      ],
+      "zh_pdf": "zh/HSTU_Actions_Speak_Louder_than_Words_zh.pdf",
+      "tex_project": "/tmp/recsys-tex-html-bdqa9f70/HSTU/translated",
+      "tex_entry": "main.tex",
+      "latexml_root": "/tmp/recsys-tex-html-bdqa9f70/tools/latexml-root"
+    },
+    {
+      "short_name": "OneReason",
+      "arxiv_id": "2606.06260",
+      "version": "v1",
+      "title_zh": "OneReason 技术报告",
+      "title_en": "OneReason Technical Report",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式推荐",
+        "推理",
+        "强化学习"
+      ],
+      "zh_pdf": "zh/OneReason_Technical_Report_zh.pdf",
+      "tex_project": "/tmp/recsys-tex-html-bdqa9f70/OneReason/translated",
+      "tex_entry": "main.tex",
+      "latexml_root": "/tmp/recsys-tex-html-bdqa9f70/tools/latexml-root"
+    }
+  ]
+}

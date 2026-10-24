@@ -1,6 +1,7 @@
-"""Local Markdown/JSON/HTML editions and a searchable daily archive."""
+"""Local daily editions, archive, and shared navigation for Chinese papers."""
 import html
 import json
+import logging
 import re
 from pathlib import Path
 
@@ -31,6 +32,9 @@ header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justif
   align-items:baseline;gap:16px}
 .brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
 header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
 main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
 .eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
 h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
@@ -80,12 +84,19 @@ li{margin:5px 0}
 .insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
 .topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
 .topic a{color:var(--topic-link)}
-.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:20px}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
 .edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
   border-radius:12px;color:var(--ink)}
 .edition:hover{border-color:var(--accent);text-decoration:none}
 .edition h2{margin:4px 0 6px;font-size:18px}
 .edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
 .empty{margin-top:20px;padding:36px 30px;background:var(--surface);
   border:1px dashed var(--line);border-radius:12px}
 .steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
@@ -122,11 +133,19 @@ def anchor(identifier):
     return "paper-" + re.sub(r"[^a-zA-Z0-9.-]", "-", identifier)
 
 
-def page(title, body, subtitle="推荐系统 · 相关检索 · LLM"):
+def page(title, body, subtitle="推荐系统 · 相关检索 · LLM", *, root_prefix="",
+         section="daily", extra_head="", body_class=""):
+    navigation = "".join(
+        f'<a href="{escape(root_prefix + path)}"'
+        + (' aria-current="page"' if section == name else '')
+        + f'>{label}</a>'
+        for name, path, label in (("daily", "daily/index.html", "日报"),
+                                  ("papers", "papers/index.html", "论文"))
+    )
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)}</title>
-<style>{STYLES}</style></head><body>
-<header><a class="brand" href="index.html">REC / PAPER LAB</a><span>研究阅读工作台</span></header>
+<style>{STYLES}</style>{extra_head}</head><body class="{escape(body_class)}">
+<header><a class="brand" href="{escape(root_prefix)}index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航">{navigation}</nav></header>
 <main><div class="eyebrow">{escape(subtitle)}</div><h1>{escape(title)}</h1>{body}</main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{{el.hidden=!el.dataset.search.toLowerCase().includes(q)}});
@@ -138,7 +157,7 @@ def source_links(ids, by_id):
                       if i in by_id else escape(i) for i in ids)
 
 
-def render_daily(payload):
+def render_daily(payload, paper_links=None):
     items = payload["items"]
     by_id = {i["paper"]["arxiv_id"]: i for i in items}
     day = payload["date"]
@@ -212,9 +231,13 @@ def render_daily(payload):
         lines += ["", "提取范围：" + item["insight"]["extraction"]["note"], ""]
         search_text = " ".join([paper["title"], analysis["title_zh"], organization_text,
                                 *item["companies"], *item["selection"]["tags"]])
+        reading_link = ""
+        if paper["arxiv_id"] in (paper_links or {}):
+            reading_link = f'<a class="reading-link" href="{escape(paper_links[paper["arxiv_id"]])}">阅读中文全文 →</a>'
         cards.append(f'''<article class="paper" id="{anchor(paper["arxiv_id"])}" data-search="{escape(search_text)}">
 <div class="paper-meta">{badges}<span>阅读优先级 {'★' * analysis['rating']}{'☆' * (5 - analysis['rating'])}</span></div>
 <h3>{escape(analysis['title_zh'])}</h3><a class="original" href="{escape(paper['url'])}" target="_blank" rel="noopener noreferrer">{escape(paper['title'])} ↗</a>
+{reading_link}
 <p class="muted">{escape(source['organization_basis'])} · 论文更新于 {escape(paper_date)}（UTC）</p><p class="reason">{escape(analysis['recommendation_reason'])}</p>
 <h4>研究问题</h4><p>{escape(analysis['problem'])}</p><h4>核心方法</h4><p>{escape(analysis['method'])}</p>
 <h4>实验结果</h4><ul>{''.join(results) or '<li>未提取到可引用的实验结果。</li>'}</ul>
@@ -236,10 +259,29 @@ def render_daily(payload):
     return "\n".join(lines), page("推荐研究日报 · " + day, body)
 
 
-def publish_index(connection, directory):
+def read_paper_catalog(directory):
+    """Return only built local paper pages; a draft must not get a reading link."""
     directory = Path(directory)
-    directory.mkdir(parents=True, exist_ok=True)
-    editions = [json.loads(row[0]) for row in connection.execute("SELECT payload_json FROM editions ORDER BY day DESC")]
+    catalog = directory / "papers" / "catalog.json"
+    if not catalog.is_file():
+        return []
+    try:
+        records = json.loads(catalog.read_text(encoding="utf-8"))["papers"]
+    except (OSError, ValueError, KeyError, TypeError):
+        logging.getLogger(__name__).warning("无法读取论文目录：%s", catalog, exc_info=True)
+        return []
+    papers = []
+    for record in records:
+        url = record.get("url", "")
+        path = Path(url)
+        if (not url.startswith("papers/") or ".." in path.parts or path.suffix != ".html"
+                or not (directory / path).is_file()):
+            continue
+        papers.append(record)
+    return papers
+
+
+def edition_cards(editions, prefix=""):
     cards = []
     for edition in editions:
         titles = " / ".join(item["insight"]["analysis"]["title_zh"] for item in edition["items"][:3])
@@ -247,11 +289,42 @@ def publish_index(connection, directory):
         search_text = " ".join([item["paper"]["title"] + " " + item["insight"]["analysis"]["title_zh"]
                                 + " " + " ".join(item["companies"]) for item in edition["items"]] + teams)
         team_summary = " · ".join(teams[:4]) + (f" 等 {len(teams)} 家机构" if len(teams) > 4 else "")
-        cards.append(f'<a class="edition" href="{escape(edition["date"])}.html" data-search="{escape(search_text)}"><span class="eyebrow">{escape(edition["date"])}</span><h2>{len(edition["items"])} 篇全文解读</h2><p>{escape(titles)}</p><span class="muted">{escape(team_summary)} · {escape(edition["status"])}</span></a>')
+        cards.append(f'<a class="edition" href="{escape(prefix + edition["date"])}.html" data-search="{escape(search_text)}"><span class="eyebrow">{escape(edition["date"])}</span><h2>{len(edition["items"])} 篇全文解读</h2><p>{escape(titles)}</p><span class="muted">{escape(team_summary)} · {escape(edition["status"])}</span></a>')
+    return cards
+
+
+def publish_index(connection, directory):
+    directory = Path(directory)
+    directory.mkdir(parents=True, exist_ok=True)
+    if connection is None:
+        editions = [json.loads(path.read_text(encoding="utf-8"))
+                    for path in sorted((directory.parent / "daily").glob("????-??-??.json"), reverse=True)]
+    else:
+        editions = [json.loads(row[0]) for row in connection.execute("SELECT payload_json FROM editions ORDER BY day DESC")]
+    archive_dir = directory / "daily"
+    archive_dir.mkdir(exist_ok=True)
     empty = '<div class="empty"><h2>从论文原文，到值得读的日报。</h2><p>配置 DeepSeek、Kimi 或 GLM 官方 API 后运行 daily。</p><p>系统会优先关注推荐与检索的大团队工作，读取全文并生成结构化中文解读。</p><div class="steps">发现论文 → 全文提取 → Insight → 样本观察 → 日报归档</div><p class="muted">当前没有已生成的日报；这里没有填充虚构论文或模型结论。</p></div>'
     body = '<p class="lede">追踪推荐与检索的研究进展，理解方法背后的取舍。</p><input id="search" type="search" placeholder="按论文标题、机构查找日报…" aria-label="搜索历史日报">'
-    body += '<div class="archive">' + (''.join(cards) if cards else empty) + '</div>'
-    atomic_write(directory / "index.html", page("研究日报", body, "DAILY RESEARCH / 历史归档"))
+    body += '<div class="archive">' + (''.join(edition_cards(editions, "../")) if editions else empty) + '</div>'
+    atomic_write(archive_dir / "index.html", page("研究日报", body, "DAILY RESEARCH / 历史归档", root_prefix="../"))
+
+    papers = read_paper_catalog(directory)
+    paper_index = directory / "papers" / "index.html"
+    if not paper_index.is_file():
+        paper_index.parent.mkdir(exist_ok=True)
+        atomic_write(paper_index, page("中文论文", '<p class="lede">中文论文全文正在整理中。</p>',
+                                     "PAPER LIBRARY / 中文全文", root_prefix="../", section="papers"))
+    paper_cards = []
+    for paper in papers[:3]:
+        tags = " · ".join(paper.get("topics", []))
+        paper_cards.append(f'<a class="edition" href="{escape(paper["url"])}"><span class="eyebrow">{escape(paper["short_name"])}</span><h3>{escape(paper["title_zh"])}</h3><span class="original">{escape(paper["title_en"])}</span><p>{escape(tags)}</p><span class="reading-link">阅读中文全文 →</span></a>')
+    paper_empty = '<p class="muted">中文论文全文正在整理中。</p>'
+    home = '<p class="lede">追踪推荐与检索的研究进展，阅读方法背后的完整论证。</p>'
+    home += '<section><div class="section-heading"><h2>最新日报</h2><a href="daily/index.html">全部日报 →</a></div>'
+    home += (''.join(edition_cards(editions[:1])) if editions else empty) + '</section>'
+    home += '<section><div class="section-heading"><h2>中文论文</h2><a href="papers/index.html">全部论文 →</a></div><div class="library-preview">'
+    home += (''.join(paper_cards) if paper_cards else paper_empty) + '</div></section>'
+    atomic_write(directory / "index.html", page("推荐系统研究阅读", home, "RECSYS RESEARCH / 日报与论文", section="home"))
     return str(directory / "index.html")
 
 
@@ -260,7 +333,8 @@ def publish_daily(payload, output_dir, connection, update_index=True):
     daily_dir, site_dir = output_dir / "daily", output_dir / "site"
     daily_dir.mkdir(parents=True, exist_ok=True)
     site_dir.mkdir(parents=True, exist_ok=True)
-    markdown, webpage = render_daily(payload)
+    paper_links = {paper["arxiv_id"]: paper["url"] for paper in read_paper_catalog(site_dir)}
+    markdown, webpage = render_daily(payload, paper_links=paper_links)
     stem = daily_dir / payload["date"]
     atomic_write(stem.with_suffix(".json"), json.dumps(payload, ensure_ascii=False, indent=2))
     atomic_write(stem.with_suffix(".md"), markdown)

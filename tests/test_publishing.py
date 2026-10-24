@@ -10,7 +10,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from test_insights import analysis
-from paper_pipeline.publishing import anchor, publish_index, rebuild_reports, render_daily
+from paper_pipeline.publishing import anchor, page, publish_daily, publish_index, rebuild_reports, render_daily
 from paper_pipeline.storage import connect, dumps
 
 CONFIG = {"companies": ["Kuaishou", "Meta", "Alibaba"], "preferred_companies": ["Kuaishou", "Meta"],
@@ -74,9 +74,60 @@ class PublishingTests(unittest.TestCase):
         self.assertEqual(result["editions_rebuilt"], 3)
         self.assertEqual(index.call_count, 1)
         self.assertTrue(Path(result["archive"]).is_file())
+        archive = self.directory / "site" / "daily" / "index.html"
+        self.assertTrue(archive.is_file())
         for day in ("2026-10-21", "2026-10-22", "2026-10-23"):
-            self.assertIn(day, Path(result["archive"]).read_text())
+            self.assertIn(f'href="../{day}.html"', archive.read_text())
             self.assertTrue((self.directory / "site" / (day + ".html")).is_file())
+
+    def test_nested_page_navigation_stays_inside_the_project_site(self):
+        webpage = page("中文全文", "正文", root_prefix="../../", section="papers",
+                       extra_head='<meta name="description" content="中文论文">', body_class="paper-reader")
+        self.assertIn('href="../../index.html"', webpage)
+        self.assertIn('href="../../daily/index.html"', webpage)
+        self.assertIn('href="../../papers/index.html" aria-current="page"', webpage)
+        self.assertIn('<body class="paper-reader">', webpage)
+        self.assertIn('<meta name="description"', webpage)
+        self.assertNotIn('href="/', webpage)
+
+    def test_daily_publish_keeps_paper_assets_and_links_only_built_papers(self):
+        connection = connect(self.directory / "papers.sqlite3")
+        self.addCleanup(connection.close)
+        site = self.directory / "site"
+        paper_dir = site / "papers" / "2601.00001"
+        paper_dir.mkdir(parents=True)
+        (paper_dir / "index.html").write_text("中文全文", encoding="utf-8")
+        (paper_dir / "figure.svg").write_text("<svg/>", encoding="utf-8")
+        (site / "papers" / "index.html").write_text("论文目录", encoding="utf-8")
+        record = {"arxiv_id": "2601.00001", "title_zh": "中文全文标题", "title_en": "Full paper",
+                  "short_name": "Sample", "version": 2, "url": "papers/2601.00001/index.html", "topics": ["生成式推荐"]}
+        (site / "papers" / "catalog.json").write_text(json.dumps({"papers": [record,
+            dict(record, arxiv_id="2601.00002", title_zh="尚未构建", url="papers/2601.00002/index.html")]}))
+        report = payload(paper("2601.00001"), paper("2601.00002"))
+        with connection:
+            connection.execute("INSERT INTO editions VALUES (?,?)", (report["date"], dumps(report)))
+        result = publish_daily(report, self.directory, connection)
+        webpage = Path(result["html"]).read_text()
+        self.assertIn('href="papers/2601.00001/index.html">阅读中文全文', webpage)
+        self.assertNotIn('href="papers/2601.00002/index.html"', webpage)
+        homepage = (site / "index.html").read_text()
+        self.assertIn("中文全文标题", homepage)
+        self.assertNotIn("尚未构建", homepage)
+        self.assertEqual((site / "papers" / "index.html").read_text(), "论文目录")
+        self.assertEqual((paper_dir / "index.html").read_text(), "中文全文")
+        self.assertEqual((paper_dir / "figure.svg").read_text(), "<svg/>")
+
+    def test_index_can_rebuild_from_saved_reports_without_database(self):
+        daily = self.directory / "daily"
+        daily.mkdir()
+        for day in ("2026-10-22", "2026-10-24"):
+            (daily / (day + ".json")).write_text(dumps(payload(paper(), day=day)))
+        index_path = Path(publish_index(None, self.directory / "site"))
+        self.assertIn('href="2026-10-24.html"', index_path.read_text())
+        archive = self.directory / "site" / "daily" / "index.html"
+        for day in ("2026-10-22", "2026-10-24"):
+            self.assertIn(f'href="../{day}.html"', archive.read_text())
+        self.assertTrue((self.directory / "site" / "papers" / "index.html").is_file())
 
 
 if __name__ == "__main__":

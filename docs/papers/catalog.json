@@ -1,0 +1,128 @@
+{
+  "papers": [
+    {
+      "short_name": "OneTrans",
+      "arxiv_id": "2510.26104",
+      "version": "v3",
+      "title_zh": "OneTrans：在工业推荐中使用一个 Transformer 统一特征交互与序列建模",
+      "title_en": "OneTrans: Unified Feature Interaction and Sequence Modeling with One Transformer in Industrial Recommender",
+      "companies": [
+        "ByteDance"
+      ],
+      "topics": [
+        "统一建模",
+        "序列推荐",
+        "特征交互"
+      ],
+      "arxiv_url": "https://arxiv.org/abs/2510.26104v3",
+      "url": "papers/2510.26104/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 32085,
+        "sections": 28,
+        "figures": 3,
+        "tables": 6,
+        "table_cells": 213,
+        "mathml": 168,
+        "graphics": 4,
+        "references": 37,
+        "warnings": [
+          "Warning:not_parsed:POSTSUBSCRIPT.RELOP.UNKNOWN>OPEN MathParser failed to match rule 'Anything'",
+          "Warning:not_parsed:RELOP.UNKNOWN>OPEN MathParser failed to match rule 'Anything' at String; line 0 col 0",
+          "Warning:not_parsed:ADDOP.NUMBER.POSTFIX>MULOP MathParser failed to match rule 'Anything' at main.tex; line 806 col 53",
+          "Warning:not_parsed:ADDOP.NUMBER.POSTFIX>MULOP MathParser failed to match rule 'Anything' at main.tex; line 806 col 88",
+          "Warning:not_parsed:ADDOP.NUMBER.POSTFIX>MULOP MathParser failed to match rule 'Anything' at main.tex; line 810 col 53",
+          "Warning:not_parsed:ADDOP.NUMBER.POSTFIX>MULOP MathParser failed to match rule 'Anything' at main.tex; line 810 col 102",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 912 col 123"
+        ]
+      },
+      "source_sha256": "46de2340f06a14f88bd56e15fcd4621df99d943f25df630ea32e41ba1a72d90c"
+    },
+    {
+      "short_name": "HSTU",
+      "arxiv_id": "2402.17152",
+      "version": "v3",
+      "title_zh": "行动胜于语言：面向生成式推荐的万亿参数序列转导器",
+      "title_en": "Actions Speak Louder than Words: Trillion-Parameter Sequential Transducers for Generative Recommendations",
+      "companies": [
+        "Meta"
+      ],
+      "topics": [
+        "生成式推荐",
+        "序列推荐",
+        "规模扩展"
+      ],
+      "arxiv_url": "https://arxiv.org/abs/2402.17152v3",
+      "url": "papers/2402.17152/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 72058,
+        "sections": 39,
+        "figures": 13,
+        "tables": 16,
+        "table_cells": 581,
+        "mathml": 409,
+        "graphics": 23,
+        "references": 70,
+        "warnings": [
+          "Info:unexpected:textsize=tiny Unexpected option 'textsize=tiny' passed to todonotes.sty at todonotes.sty.ltxml; line 46",
+          "Info:unexpected:rowspan Rowspan 6 in cell(4,0) covers non-empty cells; truncating.to 5 at sec_appendix.tex; line 283 col 0",
+          "Info:unexpected:rowspan Rowspan 6 in cell(10,0) covers non-empty cells; truncating.to 5 at sec_appendix.tex; line 283 col 0",
+          "Warning:not_parsed:UNKNOWN.POSTSUBSCRIPT>CLOSE MathParser failed to match rule 'Anything' at sec_appendix.tex; line 19 col 8",
+          "Warning:not_parsed:>OPEN MathParser failed to match rule 'Anything' at sec_appendix.tex; line 41 col 145",
+          "Warning:not_parsed:UNKNOWN.CLOSE.CLOSE>CLOSE MathParser failed to match rule 'Anything' at sec_appendix.tex; line 81 col 479",
+          "Warning:not_parsed:ADDOP.NUMBER.CLOSE>MULOP MathParser failed to match rule 'Anything' at sec_appendix.tex; line 552 col 13"
+        ]
+      },
+      "source_sha256": "521e586768193556c18652fff682759f49f679204e225165edd356848f67cacd"
+    },
+    {
+      "short_name": "OneReason",
+      "arxiv_id": "2606.06260",
+      "version": "v1",
+      "title_zh": "OneReason 技术报告",
+      "title_en": "OneReason Technical Report",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式推荐",
+        "推理",
+        "强化学习"
+      ],
+      "arxiv_url": "https://arxiv.org/abs/2606.06260v1",
+      "url": "papers/2606.06260/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 161187,
+        "sections": 84,
+        "figures": 27,
+        "tables": 28,
+        "table_cells": 1411,
+        "mathml": 377,
+        "graphics": 28,
+        "references": 83,
+        "warnings": [
+          "Warning:missing_file:gdm-colors Can't find binding for package gdm-colors at main.tex; line 17 col 11",
+          "Warning:missing_file:arydshln Can't find binding for package arydshln at main.tex; line 25 col 11",
+          "Warning:missing_file:bbding Can't find package bbding at bbding.sty.ltxml; line 18",
+          "Warning:missing_file:capt-of Can't find binding for package capt-of at main.tex; line 159 col 11",
+          "Info:unexpected:rowspan Rowspan 4 in cell(4,0) covers non-empty cells; truncating.to 1 at benchmark_construction_and_comparison.tex; line 124 col 0",
+          "Info:unexpected:rowspan Rowspan 3 in cell(9,0) covers non-empty cells; truncating.to 1 at benchmark_construction_and_comparison.tex; line 124 col 0",
+          "Info:unexpected:rowspan Rowspan 3 in cell(13,0) covers non-empty cells; truncating.to 1 at benchmark_construction_and_comparison.tex; line 124 col 0",
+          "Info:unexpected:rowspan Rowspan 2 in cell(17,0) covers non-empty cells; truncating.to 1 at benchmark_construction_and_comparison.tex; line 124 col 0",
+          "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Anything' at RL_Pipeline.tex; line 311 col 112",
+          "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Subscript' at RL_Pipeline.tex; line 336 col 0",
+          "Warning:not_parsed:NUMBER.ATOM.NUMBER>MULOP MathParser failed to match rule 'Anything' at pretrain_embedding_comparison.tex; line 44 col 141",
+          "Warning:not_parsed:NUMBER.ATOM.NUMBER>MULOP MathParser failed to match rule 'Anything' at pretrain_embedding_comparison.tex; line 44 col 255",
+          "Warning:missing_file:compat.ltxml Can't find package compat.ltxml at String; line 0 col 0",
+          "Warning:missing_file:bbding Can't find package bbding at bbding.sty.ltxml; line 18"
+        ]
+      },
+      "source_sha256": "07692981bb01f44a966b24be96678617c74eb5438c531080be57f5c3dd10312f"
+    }
+  ]
+}

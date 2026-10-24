@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目定位
 
-推荐系统前沿论文的每日收集 agent，唯一产品是**中文日报**:`daily` 一条命令完成"模型自主检索 arXiv 论文 → 全文解读 → 日报综合 → 发布 Markdown/JSON/HTML"。无框架(除 langgraph 外全部标准库),Python 3.10+。
+推荐系统研究阅读站，包括**中文日报**与**中文论文全文**两个专栏。`daily` 完成"模型自主检索 arXiv 论文 → 全文解读 → 日报综合 → 发布 Markdown/JSON/HTML"；`papers` 从中文 TeX 工程或已有中文 PDF 离线构建论文页面。Python 3.10+，依赖见 requirements.txt；TeX 转换另需 LaTeXML。
 
 ## 常用命令
 
@@ -19,6 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 .venv/bin/python pipeline.py daily            # 主流程
 .venv/bin/python pipeline.py doctor           # 离线检查配置/密钥/依赖
 .venv/bin/python pipeline.py preview          # 离线重建日报 HTML
+.venv/bin/python pipeline.py papers           # 离线构建中文论文全文（缺中文则跳过）
 .venv/bin/python pipeline.py tasks / resume <task_id>
 
 # 本地浏览日报
@@ -40,7 +41,9 @@ python -m http.server 8080 --bind 127.0.0.1 -d reports/site
 - `insights.py` 只做 JSON **结构**校验(失败带纠错反馈重试一次),不做内容审计——insight 是总结不是校验,不要往回加内容检查。
 - insight/synthesis 按 prompt+输入+provider 的 sha256 缓存到 `data/insights/`,重跑不重复调用 LLM。
 - 公司归属只能来自作者署名机构(`selection.py` 只做公司匹配,关键词打分体系已删除,不要恢复);规则文本只写在 `prompts/company_rule.txt`,其他 prompt 用 `{company_rule}` 占位符注入。
-- 报告只有一种:`publishing.py` 渲染的日报(CSS 内联在 `STYLES` 常量,无 assets 目录);`atomic_write`/`md` 也在这里。run 级报告已删除。
+- `publishing.py` 渲染日报、公共导航和双专栏首页；`paper_pages.py` 管理论文目录、页面与离线构建；`tex_html.py` 使用 LaTeXML 将翻译的源码转换为原生 MathML、HTML 表格和逐条文献引用；`paper_html.py` 保留旧中文 PDF 转换能力。日报不得覆盖 `site/papers/`。
+- `paper_catalog.json` 登记中文论文和英文 arXiv 版本，`papers` 不运行检索、不调用 LLM、不修改日报数据库。首批三篇使用 `tex_project` + `tex_entry`，源码和中文工程保留在 `/tmp/recsys-tex-html-bdqa9f70/`；配置的 TeX 缺失应报错，不能静默回退。旧 PDF 模式缺中文时跳过。必须保留全文、公式、图表、参考文献与附录，不能用 insight 替代。
+- CSS 内联，单篇图表和中文 PDF 位于 `site/papers/<id>/`。发布时递归复制 `reports/site/.` 到 `docs/`，不要只复制根目录 HTML；正文转换缓存 `reports/paper_cache/` 不发布。run 级报告仍已删除。
 - CLI 进库前抢 fcntl 文件锁(`cli.py database_lock`),进锁后把残留 `status='running'` 的 run 标记为 failed。
 - `daily`/`digest` 的 partial/empty/insufficient/budget_exhausted 状态映射为退出码 1。
 
