@@ -84,7 +84,9 @@ export function collectMathEvidence() {
       // labels that geometric overflow assertions alone cannot detect.
       if(ratio<2.5)result.lowContrast.push({text:node.textContent.trim().slice(0,80),math:el.closest('math')?.id,color:foreground.slice(0,3),background:actualBackground.slice(0,3),ratio});
       if(el.closest('foreignObject')&&!el.closest('math')){
-        for(const match of node.textContent.matchAll(/[A-Za-z][A-Za-z0-9_-]{2,}/g)){
+        // An authored hyphen permits a line break; only splitting a lexical
+        // component (e.g. Decisi/on) is a diagram-word layout defect.
+        for(const match of node.textContent.matchAll(/[A-Za-z][A-Za-z0-9_]{2,}/g)){
           range.setStart(node,match.index);range.setEnd(node,match.index+match[0].length);
           const boxes=[...range.getClientRects()].filter(r=>r.width>0&&r.height>0);
           if(boxes.some(r=>Math.abs(r.y-boxes[0].y)>2))result.wrappedWords.push({word:match[0],lines:boxes.length});

@@ -37,7 +37,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "bffadc01a2565f71597ac12fc2707198d2fe7900a47bcc83d219bcae8353fcd8"
+      "source_sha256": "dbd52d80573f2841bc45bedb0a6cf6947fbe31f5d89cae21322d3e1553048a2b"
     },
     {
       "short_name": "GEAR",
@@ -78,7 +78,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "6a63c1fc811f9ea4eee8c8fcb6a01653f71100cb0c95ebd31b9c7814d8994288"
+      "source_sha256": "11bdcbd3b5628237e720b882fe50381a58d052c33685ee0d6d9970305ac131bb"
     },
     {
       "short_name": "HELIX",
@@ -117,7 +117,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "42289a26f88c3be1101a1486f24a2bff6d1bcc6eb964cd7bd851ec6a66ab27ba"
+      "source_sha256": "8818a68a71bafa85bb51cace5ef8760d183d6c6fdd1ba8fceb635978a4c7203d"
     },
     {
       "short_name": "KuaFu",
@@ -143,13 +143,13 @@
       "stats": {
         "format": "arxiv_tex",
         "converter": "LaTeXML",
-        "text_chars": 32120,
+        "text_chars": 31145,
         "sections": 31,
         "figures": 6,
         "tables": 7,
         "table_cells": 333,
-        "mathml": 226,
-        "graphics": 7,
+        "mathml": 203,
+        "graphics": 8,
         "references": 36,
         "warnings": [
           "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 280 col 66",
@@ -188,9 +188,32 @@
           "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 1310 col 61",
           "Warning:missing_file:compat.ltxml Can't find package compat.ltxml at String; line 0 col 0"
         ],
-        "language": "zh-CN"
+        "language": "zh-CN",
+        "render_repairs": [
+          {
+            "kind": "restore_original_pdf_figure",
+            "source_pdf": "https://arxiv.org/pdf/2609.31045v1",
+            "source_version": "v1",
+            "source_page": 5,
+            "crop_box_pt": [
+              52,
+              84,
+              554,
+              280
+            ],
+            "replaced_svg_id": "S3.F2.pic1",
+            "asset": "assets/d12c636c523c459f.svg",
+            "asset_sha256": "d12c636c523c459fd384fe89608d4b50b11f79bc6dcdf6c8e3b34ef41925cb15",
+            "removed_inline_mathml": 23,
+            "reason": "LaTeXML TikZ matrix conversion changed original figure coordinates and overlapped labels; restored exact original vector figure with glyphs as paths.",
+            "source_version_basis": "paper_catalog (local PDF has no version marker)",
+            "source_version_verified": false,
+            "source_artifact": "LLM4Rec/source/en/KuaFu_en.pdf",
+            "source_pdf_sha256": "24b4c9bbb4b7d7e9aaaeb8358f2b84f1dde909d53b916a8f004c17b125947e1f"
+          }
+        ]
       },
-      "source_sha256": "0c56fa51267d8f115935f8c6415e6782b6254cca40d9d67519e31ae2db1e58ef"
+      "source_sha256": "f2464bb8ae0a12aac9a746f892170297a1c021231e853128a0a50fbd9b4e36cd"
     },
     {
       "short_name": "X-Rec",
@@ -252,7 +275,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "a82b39b8a5943a60f7eca45a12806c0d9a15933198375cccc1825dd1f0abd9e4"
+      "source_sha256": "8cc0ab4f606474b4bdfd6f87e5785067141d759c43ef8279ac98dc463486eaf1"
     },
     {
       "short_name": "OneTrans-V2",
@@ -277,13 +300,13 @@
       "stats": {
         "format": "arxiv_tex",
         "converter": "LaTeXML",
-        "text_chars": 59471,
+        "text_chars": 58945,
         "sections": 36,
         "figures": 13,
         "tables": 8,
         "table_cells": 258,
-        "mathml": 583,
-        "graphics": 13,
+        "mathml": 554,
+        "graphics": 14,
         "references": 57,
         "warnings": [
           "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 41 col 0",
@@ -326,9 +349,32 @@
           "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at 7_analysis.tex; line 298 col 957",
           "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at 8_conclusion.tex; line 3 col 1279"
         ],
-        "language": "zh-CN"
+        "language": "zh-CN",
+        "render_repairs": [
+          {
+            "kind": "restore_original_pdf_figure",
+            "source_pdf": "https://arxiv.org/pdf/2609.28589v1",
+            "source_version": "v1",
+            "source_page": 8,
+            "crop_box_pt": [
+              114,
+              76,
+              498,
+              277
+            ],
+            "replaced_svg_id": "S4.F3.pic1",
+            "asset": "assets/2e711b739e05e84c.svg",
+            "asset_sha256": "2e711b739e05e84c3c0eaef6a8608342b65bddd75dd3ad1ed548579693553abd",
+            "removed_inline_mathml": 29,
+            "reason": "LaTeXML TikZ matrix conversion changed original figure coordinates and overlapped labels; restored exact original vector figure with glyphs as paths.",
+            "source_version_basis": "paper_catalog (local PDF has no version marker)",
+            "source_version_verified": false,
+            "source_artifact": "LLM4Rec/source/en/OneTrans_V2_en.pdf",
+            "source_pdf_sha256": "8261c135c08287f6188287b58a6768132c71697c54be5872973ad6f8129bbaf6"
+          }
+        ]
       },
-      "source_sha256": "8111c6848631de456ecaca5b704b7fd155421301a6dc0a6ff8bed0ec637ef383"
+      "source_sha256": "c167c35863a1e99240e004adea7421793517d5ebe14af45be26e9d0785136257"
     },
     {
       "short_name": "Score Centering",
@@ -369,7 +415,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "997450fe917502400a88239c70e773fe4ec09b0b21ca105b751c4c428fcc410c"
+      "source_sha256": "c8e97da8597ab2d9afe9e96c71dab68f86bf887043374b8580d73afd05212277"
     },
     {
       "short_name": "SequenceO1",
@@ -416,7 +462,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "7a6d42918d1e01ac5720f38e4d1e93887478ad0b7c9c1c0f42260afdf2a02ca4"
+      "source_sha256": "95c082eb105627c530aaf68d775bf27521e46a69c569523a673dbcba6daa8952"
     },
     {
       "short_name": "Multi-Decoder OneRec",
@@ -457,7 +503,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "2a45e1f43b42e262e2479dbf6da3f4ba73a4e271cf91a535a16a1c58176e1f66"
+      "source_sha256": "6596e523e211f773a2f17185aed3302e33919a8a96028bf2169439739375a7ac"
     },
     {
       "short_name": "UniR2",
@@ -500,7 +546,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "d602ec9ca4b158c37f34766ecd9a8c672c4987194b2d5dd2a8a7d3cc51f0d785"
+      "source_sha256": "2135141937a824ad9470848ee4fa5f484be722fd0f5836e13671056253065aef"
     },
     {
       "short_name": "RecGPT-V3",
@@ -552,7 +598,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "08ba9ea0cac5a700b171e6b452bbbdf84c62a575b23cfbe290bb086afe60cf57"
+      "source_sha256": "7b1a821a861f57ce016f001fd7d8409111d1ed62efbe289d24c3e072175a8c89"
     },
     {
       "short_name": "UniSGR",
@@ -589,7 +635,7 @@
         "warnings": [],
         "language": "zh-CN"
       },
-      "source_sha256": "769933b076420e96126407338830e659bcdd527c924390052c765acb10f5823c"
+      "source_sha256": "c79d4446fb302abb0eb501bde92fe312aa6cd9609ef1cd61238f14bba1264b14"
     },
     {
       "short_name": "OneReason",
@@ -638,7 +684,7 @@
           "Warning:missing_file:bbding Can't find package bbding at bbding.sty.ltxml; line 18"
         ]
       },
-      "source_sha256": "74cee27ac8703c4d5905ecf992447b11d19cb7a8aa1dad70f80d1c682a2c8f09"
+      "source_sha256": "27b93bdfd0c1715cfcaf90988b97aa5145ff833bc60614f79c5a9e069856570b"
     },
     {
       "short_name": "UniPinRec",
@@ -695,7 +741,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "b7fa1fec48ae8d19238fc7e4564a656083eaecdc64aac8dad59264bf2d1a9d91"
+      "source_sha256": "956651da6662e317b67da7bf2f5af5e8c88410b57179d2aa9c44f7c1b6e0593d"
     },
     {
       "short_name": "Quantized Inference for OneRec-V2",
@@ -734,7 +780,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "3c57c99b7f6f4f6c393591778b1c3dfe5144fe0ff426a104cbefbee4b01cd8e9"
+      "source_sha256": "14d6a7b4326d99f408cd57e628d19e8ad2f32f92d6f92ca230aaa8bfbf9023db"
     },
     {
       "short_name": "TokenMixer-Large",
@@ -771,7 +817,7 @@
         "warnings": [],
         "language": "zh-CN"
       },
-      "source_sha256": "30e22b81f8b7ecb3478cd4b78bdf5d4408b57457912225fd1c6e96e1352c7449"
+      "source_sha256": "25eb3cbb6d3e3ae447d232830295b820c09685c6318b00e1a347b446fd8a51c7"
     },
     {
       "short_name": "OPSD",
@@ -855,7 +901,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "ebd83d0d5b061c56cc0558b402a9e8a2b69a68d588a184d3d2461669501c84d6"
+      "source_sha256": "3786eb6ffa411dddf0079efca7c341fe7bd68732a258328432cf5c889e034dcc"
     },
     {
       "short_name": "HyFormer",
@@ -1175,7 +1221,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "e8271721947ce5c271d4ef24c41d489e52fc1d1cd72a4da3dedddcb011b3a83b"
+      "source_sha256": "762233b5bc4d17b8dba4357731aeb4b40cd8e5e6932ac5abad5fbfd79757304c"
     },
     {
       "short_name": "OpenOneRec",
@@ -1225,7 +1271,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "cece987d5b00c3cb6ab42972fff6837264f60dc03ab48878676ad4ce0f917a8c"
+      "source_sha256": "874c85e11458786ff7b999d5789ba61c31f37d908cdfce5c0f52fd4fb91bb07a"
     },
     {
       "short_name": "OneTrans",
@@ -1267,7 +1313,7 @@
           "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 912 col 123"
         ]
       },
-      "source_sha256": "0b40c74bd5dffe37eb2dc1b0edddba580fdfdf5b39f6a1ced03882906d0aaf97"
+      "source_sha256": "a25cab481e298615ef8953127d52745ac665e7449083172e998fcc9380e322f7"
     },
     {
       "short_name": "OneRec-Think",
@@ -1324,7 +1370,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "1468188c4a7008d740b589ebe57b6b1b42053dd45bb5f7ae016f18222bbfad56"
+      "source_sha256": "8d07ab071004d3b3a1a3e7118540eaa9d12fe2184da3db481239ea0428e7a683"
     },
     {
       "short_name": "OneSearch",
@@ -1367,7 +1413,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "a0ea15b3aad73c9de41602b8d68cf56fb9aa5af47315349364ba141650ce0ad3"
+      "source_sha256": "984fc721cb431ed4297cd0e3e0027b4520586fab32a302c756df425da12b6142"
     },
     {
       "short_name": "OneRec-V2",
@@ -1411,7 +1457,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "820c6a6f6f51af98dba66f4c205ef17cfdaf82cbb630886fb4f7af3d2f4f7581"
+      "source_sha256": "0036919d7205de8a9262db098ae0252bb90dcb2ae86fa7bfec579bdb6250cd3e"
     },
     {
       "short_name": "GSPO",
@@ -1476,7 +1522,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "c0e47e4f35d8ab39b0a820d185da8b7830f0a8c48f8ffda294c12813e3549563"
+      "source_sha256": "34e624e899d253c0781fa196539dc8411a973f3aeece79a5d17777e605bf75a0"
     },
     {
       "short_name": "RankMixer",
@@ -1515,7 +1561,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "24bc6c00d92c595d1287f913360885fe406ce4b058b94bcbf68354cc61e704c9"
+      "source_sha256": "e74f38299ff9080f387e7b6dcf9300267d7a77528bf4e71b68a38ac5c523771c"
     },
     {
       "short_name": "OneRec Technical Report",
@@ -1564,7 +1610,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "66029b678c1857343215ae4dd8a59c59162f1c7605def0c7df6244dd4e1a157b"
+      "source_sha256": "0fb445a13d38d65b4a9fc3b3a2d9e0be9fa48fab0d028ef5b09c3815b75bd100"
     },
     {
       "short_name": "LONGER",
@@ -1884,7 +1930,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "1dd39f95cf42a39ac80e23447b564266567b27e62c5114d75300192d1160bd57"
+      "source_sha256": "b8ae6ea91cd05c153a076b54b00057f333a443753d478a1b810e360b7673ea01"
     },
     {
       "short_name": "DAPO",
@@ -1937,7 +1983,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "46acbce586baeb8adabf563a10ded0f3ff2d862a703953415bd63100707e1805"
+      "source_sha256": "d495d28553ed1c942c957c9dc3f8c5d0aef9ac118852bb1fd870ba47b623fe6a"
     },
     {
       "short_name": "OneRec",
@@ -2268,7 +2314,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "5dcc60d9adde90c60bf07d3eaee619a70b6981c757f6731e6296427755613b59"
+      "source_sha256": "d8d78189822d6184a965957990fcbd8e00f4c585129f4bd8b0ddc70336e1eb3e"
     },
     {
       "short_name": "HLLM",
@@ -2309,7 +2355,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "ccb5ee7c6801936d31c0111e65fd5be971182f7bea3892106949b6f2f94a1054"
+      "source_sha256": "32ee3c7b6d276731791c5ed08a0af12332fe28434e5faaaa5524b985383cd447"
     },
     {
       "short_name": "LETTER",
@@ -2362,7 +2408,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "0d798dd5d1b0d74540773b65a03ea4a1a679396bc4333aae67e2a673639a02b5"
+      "source_sha256": "8058879928ce0275dbe45edb9bf2574b7f92858c4e9712583be8ba1d7388abe2"
     },
     {
       "short_name": "NoteLLM",
@@ -2399,7 +2445,7 @@
         "warnings": [],
         "language": "zh-CN"
       },
-      "source_sha256": "79573e13d9d82a438c020f0e54e179595f8f9bb000552399dc4d6db39687d585"
+      "source_sha256": "8a456e791401431d6ed8c4df95cf121f2f21f0e468c5036c9050cc4e843e86de"
     },
     {
       "short_name": "HSTU",
@@ -2441,7 +2487,7 @@
           "Warning:not_parsed:ADDOP.NUMBER.CLOSE>MULOP MathParser failed to match rule 'Anything' at sec_appendix.tex; line 552 col 13"
         ]
       },
-      "source_sha256": "5eb21357f16dddfbbb913b6ca4933bd0b9b0c39d01a9b96e834f27eda1e40902"
+      "source_sha256": "aa4fa442f8059815ce3b24c1f4e29e1d013ab962bc769d9d8bc4d7a650c6c786"
     },
     {
       "short_name": "Trinity",
@@ -2486,7 +2532,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "8960092168c41ea6f10c0b9f630fc8eda528566217cd1706f061b5249eab2b24"
+      "source_sha256": "3983ddc90329ea4b6fbd10cb29870a5d26d276a320365990cca9d60ae72cc611"
     },
     {
       "short_name": "GRPO / DeepSeekMath",
@@ -2541,7 +2587,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "e413bb5164d71f2b4ef30869e2d063835f8cab5e27a47a71b1d7148be992d833"
+      "source_sha256": "f726fb6816741765c86d96442ce9f6f28ffbc3f4ad09afd0549681ef31341556"
     },
     {
       "short_name": "OPD / GKD",
@@ -2608,7 +2654,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "dc94d51d558052dbb572118821ffd8708a39a8c3bfcf0c276e577e16ade28c9a"
+      "source_sha256": "b6cce16241b28b16ad2ae8d386b457e8bd37c72580e255b3f7d26d4d2601ed89"
     },
     {
       "short_name": "TIGER",
@@ -2649,7 +2695,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "f2992d182cd90ac69e47e3dc5370f33a39b35bb2cb07c5659b9108ce1d7fdfca"
+      "source_sha256": "015650681e06196c3af84265f4c9564b153f73b37e2180ce0cb689942f225cba"
     },
     {
       "short_name": "PPO",
@@ -2694,7 +2740,7 @@
         "language": "zh-CN",
         "table_cells": 0
       },
-      "source_sha256": "bc79e57158782db219095544e92b4222e2a30d0a24cfe0d1f33ab69453361f62"
+      "source_sha256": "2946b7daa0b5e093a48c31244d6e95d9396e534989e30b01fef6eba78935875a"
     }
   ]
 }

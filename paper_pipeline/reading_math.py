@@ -7,8 +7,10 @@ MathML, equation identifiers, or surrounding prose are rewritten.
 
 MATH_LAYOUT_STYLES = """
 .paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
+.paper-fulltext .ltx_listing{text-align:start;overflow-wrap:normal;word-break:normal}
+.paper-fulltext .ltx_listing .ltx_lst_space{white-space:pre}
 .paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
-.paper-fulltext svg.ltx_picture{background:#fff;color:#111;line-height:normal;overflow-wrap:normal;word-break:normal}
+.paper-fulltext svg.ltx_picture{background:#fff;color:#111;font:10pt "Times New Roman",serif;line-height:normal;overflow-wrap:normal;word-break:normal}
 .paper-fulltext svg.ltx_picture foreignObject{white-space:nowrap;line-height:normal;text-align:start}
 .paper-fulltext svg.ltx_picture foreignObject .ltx_minipage{white-space:normal}
 .paper-fulltext svg.ltx_picture foreignObject .ltx_p{margin:0;line-height:normal}
