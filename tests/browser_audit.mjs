@@ -29,9 +29,25 @@ const json = (path, value) => writeFileSync(path, JSON.stringify(value, null, 2)
 const save = () => json(join(output, 'report.json'), report);
 const digest = value => createHash('sha256').update(JSON.stringify(value ?? null)).digest('hex');
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const inlineEvidenceEnabled = process.env.PAPER_RENDER_INLINE_EVIDENCE === '1';
+const inlineImages = [];
 function logResult(name, result) {
   console.log(`${result.status.toUpperCase()} ${name}: ${result.issues.length} issue(s)`);
   for (const issue of result.issues.slice(0, 5)) console.log(JSON.stringify({audit:name, ...issue}));
+}
+function snapshotDifferences(before, after) {
+  const differences=[];
+  for(let index=0;index<Math.max(before?.length||0,after?.length||0);index++) {
+    const old=before?.[index],current=after?.[index];
+    if(same(old,current))continue;
+    const original=old?.html||'',updated=current?.html||'';
+    let offset=0;
+    while(offset<Math.min(original.length,updated.length)&&original[offset]===updated[offset])offset++;
+    differences.push({index,id:current?.id||old?.id,offset,
+      beforeExcerpt:original.slice(Math.max(0,offset-80),offset+160),
+      afterExcerpt:updated.slice(Math.max(0,offset-80),offset+160),before:old,after:current});
+  }
+  return differences;
 }
 const cases = [
   {id:'2402.03300', target:'S2.T1', name:'deepseekmath-table-1'},
@@ -52,10 +68,31 @@ const cases = [
 ];
 let browser, server;
 
-async function capture(page, name, selector) {
+async function capture(page, name, selector, inlinePriority = null) {
   const path = join(output, 'screenshots', name + '.png');
   const result = await page.screenshot(path, selector);
   report.screenshots.push({...result, file:relative(output, path)});
+  if(inlineEvidenceEnabled && inlinePriority !== null) {
+    const jpeg = await page.call('Page.captureScreenshot', {format:'jpeg',quality:85,captureBeyondViewport:true,clip:result.clip});
+    inlineImages.push({name:name+'.jpg',priority:inlinePriority,data:jpeg.data});
+  }
+}
+
+function emitInlineEvidence() {
+  const maxBytes=2_000_000;
+  report.inlineEvidence={enabled:inlineEvidenceEnabled,maxBytes,emitted:[],skipped:[],imageLogBytes:0};
+  if(!inlineEvidenceEnabled)return;
+  // Reserve the final report and space for this small index. Image payloads
+  // contain only screenshots of our public static reading pages.
+  const budget=Math.max(0,maxBytes-Buffer.byteLength(JSON.stringify(report),'utf8')-20000);
+  for(const image of inlineImages.sort((a,b)=>a.priority-b.priority||a.name.localeCompare(b.name))) {
+    const line=`PAPER_RENDER_IMAGE ${JSON.stringify({file:image.name,mime:'image/jpeg',base64:image.data})}`;
+    const bytes=Buffer.byteLength(line+'\n','utf8');
+    if(report.inlineEvidence.imageLogBytes+bytes>budget) {report.inlineEvidence.skipped.push(image.name);continue;}
+    console.log(line);
+    report.inlineEvidence.imageLogBytes+=bytes;
+    report.inlineEvidence.emitted.push(image.name);
+  }
 }
 
 async function paperAudit(paper, width) {
@@ -78,25 +115,33 @@ async function paperAudit(paper, width) {
     if (page.imageErrors.length) result.issues.push({kind:'images-failed-to-load', images:page.imageErrors});
     if (!Array.isArray(before) || !same(before, after)) result.issues.push({kind:'math-content-changed', beforeCount:before?.length, afterCount:after.length});
     if (after.length !== sourceMathCount) result.issues.push({kind:'math-node-count-mismatch', htmlSource:sourceMathCount, browser:after.length});
-    if (!Array.isArray(diagramsBefore) || !same(diagramsBefore, diagramsAfter)) result.issues.push({kind:'svg-content-changed', beforeCount:diagramsBefore?.length, afterCount:diagramsAfter.length});
+    if (!Array.isArray(diagramsBefore) || !same(diagramsBefore, diagramsAfter)) {
+      const differences=snapshotDifferences(diagramsBefore,diagramsAfter);
+      const artifact=`geometry/${name}-svg-diff.json`;
+      json(join(output,artifact),{beforeCount:diagramsBefore?.length,afterCount:diagramsAfter.length,differences});
+      result.issues.push({kind:'svg-content-changed',beforeCount:diagramsBefore?.length,afterCount:diagramsAfter.length,artifact,
+        differences:differences.slice(0,5).map(({before,after,...summary})=>summary)});
+    }
     const runtimeErrors = page.runtimeErrors();
     if (runtimeErrors.length) result.issues.push({kind:'browser-script-errors', exceptions:runtimeErrors});
     const document = await page.eval(`({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth})`);
     if (document.scrollWidth > width + 2 || document.bodyWidth > width + 2) result.issues.push({kind:'page-horizontal-overflow', ...document});
     const evidence = {paper:paper.arxiv_id, width, theme:'dark', document, tables, math,
       mathSource:{htmlCount:sourceMathCount, beforeCount:before?.length, afterCount:after.length, beforeHash:digest(before), afterHash:digest(after)},
-      diagramSource:{beforeCount:diagramsBefore?.length, afterCount:diagramsAfter.length, beforeHash:digest(diagramsBefore), afterHash:digest(diagramsAfter)}, runtimeErrors, imageErrors:page.imageErrors};
+      diagramSource:{beforeCount:diagramsBefore?.length, afterCount:diagramsAfter.length, beforeHash:digest(diagramsBefore), afterHash:digest(diagramsAfter)},
+      runtimeErrors, imageErrors:page.imageErrors, imagePreparation:page.imagePreparation};
     json(join(output, 'geometry', name + '.json'), evidence);
     result.geometry = `geometry/${name}.json`; result.tables = tables.metrics; result.mathCount = math.mathCount;
     for (const example of cases.filter(c => c.id === paper.arxiv_id && (!c.widths || c.widths.includes(width)))) {
       const selector = example.selector || `[id=${JSON.stringify(example.target)}]`;
-      await capture(page, `${example.name}-${width}-dark`, selector);
+      const priority=example.widths?0:width===390?1:2;
+      await capture(page, `${example.name}-${width}-dark`, selector, priority);
       const scrolls = await page.eval(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),candidates=new Set([e,...e.querySelectorAll('*')]);
         for(let p=e.parentElement;p&&p.matches('article.paper-fulltext')===false;p=p.parentElement)candidates.add(p);
         return [...candidates].filter(s=>s.scrollWidth>s.clientWidth+2&&['auto','scroll'].includes(getComputedStyle(s).overflowX)).map(s=>{s.scrollLeft=s.scrollWidth;return {id:s.id,client:s.clientWidth,scroll:s.scrollWidth,scrollLeft:s.scrollLeft};});})()`);
       if (scrolls.length) {
         await page.settle();
-        await capture(page, `${example.name}-${width}-dark-scroll-end`, selector);
+        await capture(page, `${example.name}-${width}-dark-scroll-end`, selector, priority+3);
         await page.eval(`document.querySelectorAll('article.paper-fulltext *').forEach(e=>{if(e.scrollLeft)e.scrollLeft=0})`);
       }
       (result.focused || (result.focused=[])).push({name:example.name, selector, scrolls});
@@ -274,8 +319,10 @@ finally {
   if (server) await server.close().catch(error => report.errors.push({kind:'server-close', message:String(error)}));
   report.finishedAt = new Date().toISOString();
   report.status = report.errors.length || [...report.pages, ...report.library, ...report.fixtures].some(r => r.status !== 'passed') ? 'failed' : 'passed';
+  emitInlineEvidence();
   save();
 }
+console.log('PAPER_RENDER_REPORT '+JSON.stringify(report));
 console.log(JSON.stringify({status:report.status, papers:report.catalog?.papers, pageRuns:report.pages.length,
   failedPageRuns:report.pages.filter(p=>p.status !== 'passed').length, screenshots:report.screenshots.length, report:join(output,'report.json')}));
 for (const error of report.errors) console.error(JSON.stringify(error));

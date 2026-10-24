@@ -116,7 +116,16 @@ export class Browser {
       await page.call('Emulation.setEmulatedMedia', {features:[
         {name:'prefers-color-scheme', value:dark ? 'dark' : 'light'},
         {name:'prefers-reduced-motion', value:'reduce'}]});
-      if (beforeLoad) await page.call('Page.addScriptToEvaluateOnNewDocument', {source:beforeLoad});
+      // Prepare lazy images before any audit snapshots or application DCL
+      // listeners run. HTML img elements can live inside SVG foreignObjects;
+      // changing their loading attribute after a snapshot changes svg.outerHTML.
+      const prepareImages = `document.addEventListener('DOMContentLoaded',()=>{
+        window.__auditImagePreparation=[...document.images].map(image=>{
+          const previous=image.getAttribute('loading');image.loading='eager';
+          return {id:image.id,src:image.currentSrc||image.src,previous,loading:image.getAttribute('loading'),insideSvg:!!image.closest('svg')};
+        });
+      },{once:true});`;
+      await page.call('Page.addScriptToEvaluateOnNewDocument', {source:prepareImages+'\n'+beforeLoad});
       if (url) await page.navigate(url);
       return page;
     } catch (error) { await page.close().catch(() => {}); throw error; }
@@ -158,9 +167,9 @@ export class Page {
       await delay(100);
     }
     if (!loaded) throw new Error(`Page load timed out: ${url}`);
+    this.imagePreparation = await this.eval('window.__auditImagePreparation || []');
     this.imageErrors = await this.eval(`(async()=>{
       const images=[...document.images],errors=[];
-      images.forEach(image=>image.loading='eager');
       await Promise.all(images.map(async image=>{
         let timer;
         try {

@@ -53,6 +53,8 @@ jobs:
           node --check tests/browser_math_assertions.mjs
       - name: Audit all published reading pages
         shell: bash
+        env:
+          PAPER_RENDER_INLINE_EVIDENCE: '1'
         run: |
           set -o pipefail
           node tests/browser_audit.mjs --site-dir docs --output-dir artifacts/paper-render 2>&1 | tee artifacts/paper-render/audit.log
