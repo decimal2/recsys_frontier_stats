@@ -1,0 +1,56 @@
+name: Verify published reading pages
+on:
+  push:
+    branches: [paper-render-repair-20261024]
+    paths: ['.github/workflows/verify-published-reading.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Compare public HTML and repaired graphics with tested release
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync,readdirSync} from 'node:fs';
+          import {join,relative,dirname} from 'node:path';
+          import {createHash} from 'node:crypto';
+          const root='docs',base='https://decimal2.github.io/recsys_frontier_stats/';
+          const expectedCommit='784be79b8a2214052f9da2137218b57dfcad16a1';
+          const walk=dir=>readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(join(dir,e.name)):[join(dir,e.name)]);
+          const files=walk(root).filter(p=>p.endsWith('.html'));
+          files.push('docs/papers/catalog.json');
+          const catalog=JSON.parse(readFileSync('docs/papers/catalog.json','utf8')).papers;
+          for(const paper of catalog)for(const repair of paper.stats?.render_repairs||[])files.push(join(root,dirname(paper.url),repair.asset));
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          const rows=[];
+          for(const path of [...new Set(files)]){
+            const expected=hash(readFileSync(path)),name=relative(root,path);
+            const url=new URL(name,base);url.searchParams.set('release',expectedCommit);
+            let result;
+            for(let attempt=1;attempt<=6;attempt++){
+              try{
+                const response=await fetch(url,{signal:AbortSignal.timeout(20000),headers:{'Cache-Control':'no-cache'}});
+                const body=Buffer.from(await response.arrayBuffer()),actual=hash(body);
+                result={path:name,status:response.status,bytes:body.length,expected,actual,passed:response.ok&&actual===expected,attempt};
+                if(result.passed)break;
+              }catch(error){result={path:name,passed:false,error:String(error),attempt};}
+              if(attempt<6)await new Promise(resolve=>setTimeout(resolve,5000));
+            }
+            rows.push(result);
+            console.log(JSON.stringify(result));
+            if(!result.passed)break;
+          }
+          const passed=rows.length===[...new Set(files)].length&&rows.every(r=>r.passed);
+          console.log('PAGES_VERIFICATION '+JSON.stringify({passed,release:expectedCommit,base,checked:rows.length,expected:[...new Set(files)].length,html:rows.filter(r=>r.path.endsWith('.html')).length,rows}));
+          if(!passed)process.exitCode=1;
+          NODE
