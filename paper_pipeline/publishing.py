@@ -89,8 +89,6 @@ li{margin:5px 0}
 .empty{margin-top:20px;padding:36px 30px;background:var(--surface);
   border:1px dashed var(--line);border-radius:12px}
 .steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
-footer{max-width:1000px;margin:0 auto;padding:18px 24px 40px;border-top:1px solid var(--line);
-  font-size:12.5px;color:var(--muted)}
 [hidden]{display:none!important}
 @media (max-width:640px){
   header{padding:22px 18px 14px}
@@ -99,7 +97,6 @@ footer{max-width:1000px;margin:0 auto;padding:18px 24px 40px;border-top:1px soli
   .metrics{gap:24px}
   .paper{padding:20px 18px}
   .topic{padding:20px}
-  footer{padding:16px 18px 32px}
 }
 """
 
@@ -131,7 +128,6 @@ def page(title, body, subtitle="推荐系统 · 相关检索 · LLM"):
 <style>{STYLES}</style></head><body>
 <header><a class="brand" href="index.html">REC / PAPER LAB</a><span>研究阅读工作台</span></header>
 <main><div class="eyebrow">{escape(subtitle)}</div><h1>{escape(title)}</h1>{body}</main>
-<footer>基于原始论文的独立解读 · 模型推断需结合原文判断 · 本地归档</footer>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{{el.hidden=!el.dataset.search.toLowerCase().includes(q)}});
 }});</script></body></html>'''
@@ -237,7 +233,6 @@ def render_daily(payload):
     body += '<section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs">' + ''.join(overview) + '</ol></section>'
     body += '<section id="digest"><h2><span class="no">03</span>重点论文 · 全文 insight</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文">' + ''.join(cards) + '</section>'
     body += '<section id="topic"><h2><span class="no">04</span>今日专题</h2>' + topic_html + '</section>'
-    body += f'<p class="muted">生成于 {escape(payload["generated_at"])} · {escape(payload["provider"])} / {escape(payload["model"])}</p>'
     return "\n".join(lines), page("推荐研究日报 · " + day, body)
 
 

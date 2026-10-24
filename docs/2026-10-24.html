@@ -82,8 +82,6 @@ li{margin:5px 0}
 .empty{margin-top:20px;padding:36px 30px;background:var(--surface);
   border:1px dashed var(--line);border-radius:12px}
 .steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
-footer{max-width:1000px;margin:0 auto;padding:18px 24px 40px;border-top:1px solid var(--line);
-  font-size:12.5px;color:var(--muted)}
 [hidden]{display:none!important}
 @media (max-width:640px){
   header{padding:22px 18px 14px}
@@ -92,7 +90,6 @@ footer{max-width:1000px;margin:0 auto;padding:18px 24px 40px;border-top:1px soli
   .metrics{gap:24px}
   .paper{padding:20px 18px}
   .topic{padding:20px}
-  footer{padding:16px 18px 32px}
 }
 </style></head><body>
 <header><a class="brand" href="index.html">REC / PAPER LAB</a><span>研究阅读工作台</span></header>
@@ -166,8 +163,7 @@ footer{max-width:1000px;margin:0 auto;padding:18px 24px 40px;border-top:1px soli
 <h4>研究问题</h4><p>生成式检索（GR）用分层语义ID自回归召回，但工业系统依赖用户画像、行为、时效等异质特征。现有方法要么把所有特征静态拼进输入，要么按预设位置注入，导致服务成本上升、无关/冲突证据进入，且无法根据请求和已解码SID前缀决定“何时需要特征、选哪个特征、在哪个SID层级注入”。</p><h4>核心方法</h4><p>AGR把每类异质特征封装成带工具token的外部工具，调用结果编码为observation token；词表扩展为SID、工具、观测三类token，使工具调用与SID生成在同一自回归过程中交替。模型基于请求和已解码SID前缀决定是否调用、调用哪个工具，观测注入解码输入，工具token只作触发不回灌；推理在trie约束的beam search中为每条beam维护调用配额。训练先SID-only预训练，再用按特征适用性和层级判别度构造的工具增强轨迹微调，并缩放工具token损失。</p>
 <h4>实验结果</h4><ul><li>在Industry、Qilin、JDSearch、KuaiSAR四个数据集上，AGR均优于TIGER；论文报告Recall相对提升6.4%–14.0%，MRR相对提升5.2%–19.7%。</li><li>在Industry上，AGR（仅GSU工具）Recall@50=0.3237，接近直接编码长GSU序列；训练时间和服务成本分别降低81.8%和42.9%。</li><li>Industry消融中，AGR的Recall@50=0.3264，高于静态注入0.3159、query-guided gating 0.3161和固定位置工具注入0.3174。</li><li>Kuaishou Search在线A/B中，Relevance（top-4强相关PV占比）提升+0.205%。</li></ul>
 <div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>把特征注入从“前置拼接”改为“解码中按需取用”，可把算力与上下文预算集中到当前前缀真正需要的特征；适用于已有分层SID和可在线调用的特征服务，但需要控制每beam工具配额与调用延迟。</li><li>工具预算可优先投向模型不确定/基线易错的请求：论文中Recovery案例的工具调用率44.8%，远高于整体20.6%，提示按不确定性路由工具有望提升恢复率，但需在自有流量验证。</li><li>工具返回必须编码为可区分的观测token，而不是只增加推理步；否则增益接近普通额外解码，工业实现应重视特征值编码与位置编码设计。</li></ul></div>
-<h4>局限与阅读提醒</h4><ul><li>训练轨迹由特征适用性和信息增益规则构造，不是学习到的策略；未来需用强化学习优化稀疏奖励下的工具使用。</li><li>轨迹沿golden SID前缀构造，与自由运行推理存在差距；当前工具生态有限，且在线验证只在Kuaishou Search单系统完成，跨域泛化未知（后句为分析者判断）。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>语义ID与特征接口：冻结、细粒度还是按需调用的取舍</h3><p>围绕生成式推荐的语义ID与特征/推理接口，四篇样本给出不同取舍。2610.26105把更新稳定性放首位：冻结旧SID、只插入新品并warm-start，适合商品频繁新增且旧解码路径不能重写的场景，代价是新内容只能通过插入而非重映射表达。2610.29138追求内容表达力：多尺度视觉与分字段文本SID保留细粒度信息，并与类别ID共用lookup，适合冷启动和后链路排序，但特征变宽、依赖相关性教师。2610.26831追求调用效率：把异质特征工具化，在SID解码中按需注入，适合特征多且调用贵，但需beam配额和观测token设计。2610.30675追求推理固定开销：用latent token替代显式CoT并作为独立召回通道，适合有高质量教师和缓存服务的场景。以下为推断：更新频繁的系统应优先冻结旧SID并按线上beam评估；细粒度SID更适合后链路排序而非百万级召回；工具/推理token必须设预算与降级；上线前用线上候选预算复算离线指标。</p><div class="sources"><a href="#paper-2610.26105">不要重写SID映射：动态电商搜索中生成式检索的拓扑保持</a> · <a href="#paper-2610.29138">FineSID：从内容到相关性到个性化的渐进式 CTR 预测</a> · <a href="#paper-2610.26831">AGR：工具增强搜索的智能体生成式检索</a> · <a href="#paper-2610.30675">OneLatent：面向高效基础推荐模型的潜在推理</a></div></div></section><p class="muted">生成于 2026-10-23T17:55:40+00:00 · deepseek / deepseek-flash</p></main>
-<footer>基于原始论文的独立解读 · 模型推断需结合原文判断 · 本地归档</footer>
+<h4>局限与阅读提醒</h4><ul><li>训练轨迹由特征适用性和信息增益规则构造，不是学习到的策略；未来需用强化学习优化稀疏奖励下的工具使用。</li><li>轨迹沿golden SID前缀构造，与自由运行推理存在差距；当前工具生态有限，且在线验证只在Kuaishou Search单系统完成，跨域泛化未知（后句为分析者判断）。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>语义ID与特征接口：冻结、细粒度还是按需调用的取舍</h3><p>围绕生成式推荐的语义ID与特征/推理接口，四篇样本给出不同取舍。2610.26105把更新稳定性放首位：冻结旧SID、只插入新品并warm-start，适合商品频繁新增且旧解码路径不能重写的场景，代价是新内容只能通过插入而非重映射表达。2610.29138追求内容表达力：多尺度视觉与分字段文本SID保留细粒度信息，并与类别ID共用lookup，适合冷启动和后链路排序，但特征变宽、依赖相关性教师。2610.26831追求调用效率：把异质特征工具化，在SID解码中按需注入，适合特征多且调用贵，但需beam配额和观测token设计。2610.30675追求推理固定开销：用latent token替代显式CoT并作为独立召回通道，适合有高质量教师和缓存服务的场景。以下为推断：更新频繁的系统应优先冻结旧SID并按线上beam评估；细粒度SID更适合后链路排序而非百万级召回；工具/推理token必须设预算与降级；上线前用线上候选预算复算离线指标。</p><div class="sources"><a href="#paper-2610.26105">不要重写SID映射：动态电商搜索中生成式检索的拓扑保持</a> · <a href="#paper-2610.29138">FineSID：从内容到相关性到个性化的渐进式 CTR 预测</a> · <a href="#paper-2610.26831">AGR：工具增强搜索的智能体生成式检索</a> · <a href="#paper-2610.30675">OneLatent：面向高效基础推荐模型的潜在推理</a></div></div></section></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
 });</script></body></html>
