@@ -138,7 +138,7 @@ arXiv ID/版本、公司和主题。配置了 TeX 但工程缺失时会明确报
 
 ## GitHub Pages 在线阅读
 
-启用后访问：https://decimal2.github.io/recsys_frontier_stats/。
+启用后访问：https://decimal2.github.io/recsys_frontier_stats/
 
 仓库的 `docs/` 保存可公开阅读的日报和论文静态快照。在 GitHub 仓库的 **Settings → Pages** 中，
 将 Source 设为 **Deploy from a branch**，选择 **main** 分支和 **/docs** 目录，点击 Save。
