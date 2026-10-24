@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SYNTHETIC TEST DATA. IDs, people, and claims below are test fixtures, not real papers. -->
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
+  <opensearch:totalResults>4</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2601.00001v2</id>
+    <title>Fixture: Generative Sequential Recommendation Using Semantic IDs</title>
+    <summary>We study a recommender for long sequences of user interactions. A large language model supports item recommendation and is evaluated on an Amazon dataset.</summary>
+    <published>2026-01-01T09:00:00Z</published><updated>2026-10-22T10:00:00Z</updated>
+    <author><name>Test Author</name><arxiv:affiliation>Kuaishou Technology</arxiv:affiliation></author>
+    <category term="cs.IR"/><category term="cs.LG"/>
+    <arxiv:doi>10.0000/test-fixture</arxiv:doi>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.00002v1</id>
+    <title>Fixture: Dense Retrieval with LLMs</title>
+    <summary>A large language model improves document retrieval through query rewriting.</summary>
+    <published>2026-10-21T10:00:00Z</published><updated>2026-10-21T10:00:00Z</updated>
+    <author><name>Second Test Author</name></author><category term="cs.CL"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.00003v1</id>
+    <title>Fixture: Optimizing LLM Reasoning on Math Benchmarks</title>
+    <summary>We use reinforcement learning to improve large language models on algebra.</summary>
+    <published>2026-10-20T10:00:00Z</published><updated>2026-10-20T10:00:00Z</updated>
+    <author><name>Third Test Author</name></author><category term="cs.CL"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/cs/9901002v1</id>
+    <title>Fixture: Sparse Retrieval for Product Search</title>
+    <summary>We evaluate a document retrieval approach.</summary>
+    <published>1999-01-02T10:00:00Z</published><updated>1999-01-02T10:00:00Z</updated>
+    <author><name>Fourth Test Author</name></author><category term="cs.IR"/>
+  </entry>
+</feed>

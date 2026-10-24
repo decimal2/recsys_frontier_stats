@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+data/
+reports/
+.env
+.env.local
+site/
+logs/
+.venv/
+nohup.out
