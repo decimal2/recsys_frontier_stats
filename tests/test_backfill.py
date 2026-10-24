@@ -88,15 +88,15 @@ class BackfillTests(unittest.TestCase):
             result["affiliations"] = [{"organization": "Anhui University", "evidence_id": "E2"}]
         return {"analysis": result, "extraction": {"note": "Synthetic fixture"}}
 
-    def test_backfill_counts_only_fulltext_confirmed_companies_and_stops_at_eight(self):
+    def test_backfill_counts_only_fulltext_confirmed_companies_and_stops_at_five(self):
         recent = [self.paper(i) for i in range(4)]
         school = self.paper(4, company=False)
-        older = [self.paper(i, "2026-10-10") for i in range(5, 9)]
+        older = [self.paper(5, "2026-10-10")]
         future = self.paper(9, "2026-10-23")
         self.batches = [recent + [school], older + [recent[0], future]]
         result = digest(self.args, self.config, self.connection)
         self.assertTrue(result["webpage_ready"])
-        self.assertEqual(result["coverage"], {"minimum": 8, "target": 10, "actual": 8, "shortfall": 0})
+        self.assertEqual(result["coverage"], {"minimum": 5, "target": 10, "actual": 5, "shortfall": 0})
         self.assertEqual([s["since"].date().isoformat() for s in self.searches], ["2026-10-15", "2026-10-08"])
         self.assertTrue(all(s["until"] == timestamp("2026-10-22T16:00:00Z") for s in self.searches))  # UTC+8 日界
         self.assertTrue(set(recent + [school]) <= self.searches[1]["excluded"])
@@ -110,7 +110,7 @@ class BackfillTests(unittest.TestCase):
         retried = digest(self.args, self.config, self.connection)
         self.assertTrue(retried["webpage_ready"])
         self.assertEqual(len(self.searches), 2)
-        self.assertEqual(len(self.analyzed), 9)
+        self.assertEqual(len(self.analyzed), 6)
         self.assertEqual(len(FakeClient.calls), 1)
 
     def test_limit_caps_total_edition_and_does_not_grow_on_rerun(self):
@@ -125,7 +125,7 @@ class BackfillTests(unittest.TestCase):
         self.assertEqual(len(self.analyzed), 10)
 
     def test_shortfall_is_visible_and_resume_keeps_old_insights_and_expanded_window(self):
-        original = [self.paper(i) for i in range(6)]
+        original = [self.paper(i) for i in range(3)]
         self.batches = [original, [], []]
         result = digest(self.args, self.config, self.connection)
         self.assertEqual(result["status"], "insufficient")
@@ -134,11 +134,11 @@ class BackfillTests(unittest.TestCase):
         self.assertEqual([s["since"].date().isoformat() for s in self.searches],
                          ["2026-10-15", "2026-10-08", "2026-09-22"])
         self.assertIn("还差 2 篇", Path(result["html"]).read_text())
-        self.batches = [[self.paper(6, "2026-09-28"), self.paper(7, "2026-09-28")]]
+        self.batches = [[self.paper(3, "2026-09-28"), self.paper(4, "2026-09-28")]]
         again = digest(self.args, self.config, self.connection)
         self.assertTrue(again["webpage_ready"])
-        self.assertEqual(again["fulltext_insights"], 8)
-        self.assertEqual(len(self.analyzed), 8)
+        self.assertEqual(again["fulltext_insights"], 5)
+        self.assertEqual(len(self.analyzed), 5)
         self.assertEqual(len(self.searches), 4)
         self.assertEqual(self.searches[-1]["since"], timestamp("2026-09-22T16:00:00Z"))
         self.assertTrue(set(original) <= self.searches[-1]["excluded"])
@@ -163,7 +163,7 @@ class BackfillTests(unittest.TestCase):
             result = digest(self.args, self.config, self.connection)
         self.assertEqual(result["status"], "partial")
         self.assertEqual(result["fulltext_insights"], 3)
-        self.assertEqual(result["coverage"]["shortfall"], 5)
+        self.assertEqual(result["coverage"]["shortfall"], 2)
         self.assertEqual(result["errors"][0]["arxiv_id"], "discovery")
         self.assertTrue(Path(result["html"]).exists())
 
@@ -177,8 +177,8 @@ class BackfillTests(unittest.TestCase):
         self.assertEqual(result["date"], "2026-10-22")
         self.assertEqual(result["status"], "insufficient")
         self.assertNotIn("日报网页已生成", stderr.getvalue())
-        self.assertIn("缺口 5 篇", stderr.getvalue())
-        self.args.limit = 7
+        self.assertIn("缺口 2 篇", stderr.getvalue())
+        self.args.limit = 4
         with patch.object(FakeClient, "require_key") as key, self.assertRaisesRegex(ValueError, "min_papers"):
             digest(self.args, self.config, self.connection)
         key.assert_not_called()

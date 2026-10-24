@@ -57,7 +57,7 @@ cp .env.example .env   # 填入使用的 provider 密钥
 - `arxiv`:arXiv API 限速（请求间隔 ≥3 秒）、超时、重试、User-Agent。
 - `companies` / `preferred_companies`：公司准入名单与优先团队（按作者署名机构判定，不从数据集/模型名猜测）。
 - `llm`：默认 provider、超时、重试、`max_tokens`（所有模型调用共用的输出预算），以及各家模型与生成参数。
-- `digest`：每期篇数下限/上限、补齐窗口 `lookback_windows_days`、单篇全文长度上限。
+- `digest`：每期篇数下限/上限（默认 5/10 篇）、补齐窗口 `lookback_windows_days`、单篇全文长度上限。
 - `search`:DeepSeek Search 每次返回条数。
 - `discovery`：检索 agent 的轮次/工具调用/候选数/单页字符预算。
 

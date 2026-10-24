@@ -95,7 +95,7 @@
     }
   },
   "digest": {
-    "min_papers": 8,
+    "min_papers": 5,
     "max_papers": 10,
     "lookback_windows_days": [7, 14, 30],
     "max_fulltext_chars": 240000

@@ -110,7 +110,7 @@ def parser():
         digest = commands.add_parser(name, help=help_text)
         digest.add_argument("--provider", choices=list(OFFICIAL))
         digest.add_argument("--date", help="日报归档日期；daily 未指定 --until 时也作为截止日期")
-        digest.add_argument("--limit", type=int, help="本期论文总数上限，默认 10，不得低于 digest.min_papers（默认 8）")
+        digest.add_argument("--limit", type=int, help="本期论文总数上限，默认 10，不得低于 digest.min_papers（默认 5）")
         digest.add_argument("--run-id", type=int, help="将指定运行的候选加入待解读队列")
         digest.add_argument("--since", help="起始日期（UTC）；daily 作为初始线索，至少搜索近 7 天并按需前扩；digest 严格限定")
         digest.add_argument("--until", help="论文更新时间终点（UTC）；日期包含当天，ISO 时间为右开边界")
