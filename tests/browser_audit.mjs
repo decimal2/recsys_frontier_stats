@@ -6,7 +6,8 @@ import {dirname, join, relative, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {Browser, serveSite} from './browser_support.mjs';
 import {collectTableGeometry} from './browser_table_assertions.mjs';
-import {captureMathSource, collectMathEvidence, assertMathEvidence, regressionFixture} from './browser_math_assertions.mjs';
+import {captureMathSource, captureDiagramSource, collectMathEvidence, assertMathEvidence,
+  regressionFixture, diagramRegressionFixture} from './browser_math_assertions.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -37,6 +38,17 @@ const cases = [
   {id:'2609.28589', target:'S6.T2', name:'onetrans-v2-table-2'},
   {id:'2405.07314', target:'S4.T3', name:'letter-table-3'},
   {id:'2405.07314', target:'S7.p7', name:'letter-inline-formulas'},
+  {id:'2601.12681', target:'S3.F2.fig1', name:'hyformer-figure-2', widths:[390]},
+  {id:'2609.20807', selector:'.ltx_listing.ltx_minipage', name:'score-centering-listing', widths:[390]},
+  {id:'2510.11639', target:'p1.pic1', name:'onerec-think-diagram', widths:[390]},
+  {id:'2609.31045', target:'S3.F2.pic1', name:'kuafu-diagram', widths:[390]},
+  {id:'2402.17152', target:'alg1', name:'hstu-algorithm-1', widths:[390]},
+  {id:'2306.13649', target:'alg1', name:'gkd-algorithm-1', widths:[390]},
+  {id:'2609.29180', target:'S4.F9.pic1', name:'x-rec-diagram-9', widths:[390]},
+  {id:'2609.28589', target:'S4.F3.pic1', name:'onetrans-v2-diagram-3', widths:[390]},
+  {id:'2606.06260', target:'S6.T9', name:'onereason-table-9'},
+  {id:'2607.26500', target:'S5.T2', name:'multidecoder-table-2'},
+  {id:'2512.24762', target:'S6.T4', name:'openonerec-table-4'},
 ];
 let browser, server;
 
@@ -54,33 +66,40 @@ async function paperAudit(paper, width) {
   try {
     const source = readFileSync(join(siteDir, 'papers', paper.arxiv_id, 'index.html'), 'utf8');
     const sourceMathCount = (source.match(/<math\b/gi) || []).length;
-    const beforeLoad = `document.addEventListener('DOMContentLoaded',()=>{window.__paperMathBefore=(${captureMathSource.toString()})();},{once:true});`;
+    const beforeLoad = `document.addEventListener('DOMContentLoaded',()=>{window.__paperMathBefore=(${captureMathSource.toString()})();window.__paperDiagramsBefore=(${captureDiagramSource.toString()})();},{once:true});`;
     page = await browser.page(`${server.url}/papers/${paper.arxiv_id}/index.html`, {width, beforeLoad});
     const tables = await page.eval(`(${collectTableGeometry.toString()})()`);
     const math = await page.eval(`(${collectMathEvidence.toString()})()`);
     const before = await page.eval('window.__paperMathBefore');
     const after = await page.eval(`(${captureMathSource.toString()})()`);
+    const diagramsBefore = await page.eval('window.__paperDiagramsBefore');
+    const diagramsAfter = await page.eval(`(${captureDiagramSource.toString()})()`);
     result.issues.push(...tables.issues, ...assertMathEvidence(math));
     if (page.imageErrors.length) result.issues.push({kind:'images-failed-to-load', images:page.imageErrors});
     if (!Array.isArray(before) || !same(before, after)) result.issues.push({kind:'math-content-changed', beforeCount:before?.length, afterCount:after.length});
     if (after.length !== sourceMathCount) result.issues.push({kind:'math-node-count-mismatch', htmlSource:sourceMathCount, browser:after.length});
+    if (!Array.isArray(diagramsBefore) || !same(diagramsBefore, diagramsAfter)) result.issues.push({kind:'svg-content-changed', beforeCount:diagramsBefore?.length, afterCount:diagramsAfter.length});
     const runtimeErrors = page.runtimeErrors();
     if (runtimeErrors.length) result.issues.push({kind:'browser-script-errors', exceptions:runtimeErrors});
     const document = await page.eval(`({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth})`);
     if (document.scrollWidth > width + 2 || document.bodyWidth > width + 2) result.issues.push({kind:'page-horizontal-overflow', ...document});
     const evidence = {paper:paper.arxiv_id, width, theme:'dark', document, tables, math,
-      mathSource:{htmlCount:sourceMathCount, beforeCount:before?.length, afterCount:after.length, beforeHash:digest(before), afterHash:digest(after)}, runtimeErrors, imageErrors:page.imageErrors};
+      mathSource:{htmlCount:sourceMathCount, beforeCount:before?.length, afterCount:after.length, beforeHash:digest(before), afterHash:digest(after)},
+      diagramSource:{beforeCount:diagramsBefore?.length, afterCount:diagramsAfter.length, beforeHash:digest(diagramsBefore), afterHash:digest(diagramsAfter)}, runtimeErrors, imageErrors:page.imageErrors};
     json(join(output, 'geometry', name + '.json'), evidence);
     result.geometry = `geometry/${name}.json`; result.tables = tables.metrics; result.mathCount = math.mathCount;
-    for (const example of cases.filter(c => c.id === paper.arxiv_id)) {
-      const selector = `[id=${JSON.stringify(example.target)}]`;
+    for (const example of cases.filter(c => c.id === paper.arxiv_id && (!c.widths || c.widths.includes(width)))) {
+      const selector = example.selector || `[id=${JSON.stringify(example.target)}]`;
       await capture(page, `${example.name}-${width}-dark`, selector);
-      const scrolls = await page.eval(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});return [...e.querySelectorAll('.paper-table-scroll,[data-reading-math-scroll]')].filter(s=>s.scrollWidth>s.clientWidth+2).map(s=>{s.scrollLeft=s.scrollWidth;return {id:s.id,client:s.clientWidth,scroll:s.scrollWidth};});})()`);
+      const scrolls = await page.eval(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),candidates=new Set([e,...e.querySelectorAll('*')]);
+        for(let p=e.parentElement;p&&p.matches('article.paper-fulltext')===false;p=p.parentElement)candidates.add(p);
+        return [...candidates].filter(s=>s.scrollWidth>s.clientWidth+2&&['auto','scroll'].includes(getComputedStyle(s).overflowX)).map(s=>{s.scrollLeft=s.scrollWidth;return {id:s.id,client:s.clientWidth,scroll:s.scrollWidth,scrollLeft:s.scrollLeft};});})()`);
       if (scrolls.length) {
         await page.settle();
         await capture(page, `${example.name}-${width}-dark-scroll-end`, selector);
-        await page.eval(`document.querySelectorAll('.paper-table-scroll,[data-reading-math-scroll]').forEach(e=>e.scrollLeft=0)`);
+        await page.eval(`document.querySelectorAll('article.paper-fulltext *').forEach(e=>{if(e.scrollLeft)e.scrollLeft=0})`);
       }
+      (result.focused || (result.focused=[])).push({name:example.name, selector, scrolls});
     }
     if (result.issues.length) {
       const first = result.issues.find(i => i.selector || i.id);
@@ -126,6 +145,52 @@ async function mathFixtureAudit() {
   } catch (error) { result.status = 'failed'; result.issues.push({kind:'fixture-exception', message:error.stack || String(error)}); }
   finally { if (page) await page.close().catch(() => {}); json(join(output, 'geometry/math-fixture.json'), result); save(); }
   logResult('math-fixture', result);
+}
+
+async function diagramFixtureAudit() {
+  const script = execFileSync('python3', ['-c', 'from paper_pipeline.reading_math import MATH_LAYOUT_SCRIPT; print(MATH_LAYOUT_SCRIPT)'],
+    {cwd:root, encoding:'utf8', env:{...process.env, PYTHONDONTWRITEBYTECODE:'1'}});
+  const result = {name:'whole-diagram-scroll-and-native-icon', status:'running', issues:[], states:[]};
+  report.fixtures.push(result);
+  let page;
+  try {
+    page = await browser.page(null, {width:390}); await page.setContent(diagramRegressionFixture);
+    await page.eval(`document.body.style.backgroundColor='#141c25';document.body.style.color='#eef3f8'`);
+    const original = await page.eval(`(${captureDiagramSource.toString()})()`);
+    const originalMath = await page.eval(`(${captureMathSource.toString()})()`);
+    const rectangle = `(()=>{const r=document.querySelector('#short-diagram').getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};})()`;
+    const baseline = await page.eval(rectangle);
+    await page.eval(script); await page.settle();
+    for (const [width, expectedWrappers, label] of [[390,1,'initial-mobile'],[1440,0,'desktop'],[390,1,'mobile-again']]) {
+      await page.resize(width); await page.settle();
+      const evidence = await page.eval(`(${collectMathEvidence.toString()})()`);
+      const current = await page.eval(`(${captureDiagramSource.toString()})()`);
+      const currentMath = await page.eval(`(${captureMathSource.toString()})()`);
+      const short = await page.eval(rectangle);
+      const state = await page.eval(`(()=>{const wide=document.querySelector('#wide-diagram'),short=document.querySelector('#short-diagram');return {
+        wrappers:document.querySelectorAll('[data-reading-diagram-scroll]').length,
+        nested:document.querySelectorAll('[data-reading-diagram-scroll] [data-reading-diagram-scroll]').length,
+        wideWrapped:!!wide.closest('[data-reading-diagram-scroll]'),shortWrapped:!!short.closest('[data-reading-diagram-scroll]'),
+        diagramMathWrapped:!!document.querySelector('#diagram-math').closest('[data-reading-math-scroll]'),scrollWidth:document.documentElement.scrollWidth};})()`);
+      result.issues.push(...assertMathEvidence(evidence));
+      if (!same(original,current) || !same(originalMath,currentMath)) result.issues.push({kind:'fixture-diagram-content-changed',label});
+      if (state.wrappers!==expectedWrappers || state.nested || state.wideWrapped!==!!expectedWrappers || state.shortWrapped || state.diagramMathWrapped) result.issues.push({kind:'fixture-diagram-wrapper-count',label,expectedWrappers,...state});
+      if (Object.keys(baseline).some(k=>Math.abs(short[k]-baseline[k])>0.5)) result.issues.push({kind:'native-short-diagram-baseline-changed',label,baseline,short});
+      if (state.scrollWidth>width+2) result.issues.push({kind:'fixture-diagram-page-overflow',label,...state});
+      await capture(page, `diagram-fixture-${label}-dark`, 'article');
+      let scrollEnd = null;
+      if (expectedWrappers) {
+        scrollEnd = await page.eval(`(()=>{const e=document.querySelector('[data-reading-diagram-scroll]');e.scrollLeft=e.scrollWidth;return {scrollLeft:e.scrollLeft,max:e.scrollWidth-e.clientWidth};})()`);
+        if (scrollEnd.scrollLeft<1 || Math.abs(scrollEnd.scrollLeft-scrollEnd.max)>2) result.issues.push({kind:'fixture-diagram-scroll-end-unreachable',label,...scrollEnd});
+        await page.settle(); await capture(page, `diagram-fixture-${label}-dark-scroll-end`, 'article');
+        await page.eval(`document.querySelector('[data-reading-diagram-scroll]').scrollLeft=0`);
+      }
+      result.states.push({label,width,short,state,evidence,scrollEnd,svgHash:digest(current),mathHash:digest(currentMath)});
+    }
+    result.status=result.issues.length?'failed':'passed';
+  } catch(error) {result.status='failed';result.issues.push({kind:'diagram-fixture-exception',message:error.stack||String(error)});}
+  finally {if(page)await page.close().catch(()=>{});json(join(output,'geometry/diagram-fixture.json'),result);save();}
+  logResult('diagram-fixture',result);
 }
 
 async function libraryAudit(catalog, width) {
@@ -194,11 +259,12 @@ try {
   server = await serveSite(siteDir); browser = new Browser({outputDir:output});
   report.browser = await browser.call('Browser.getVersion'); save();
   await mathFixtureAudit();
+  await diagramFixtureAudit();
   for (const width of report.widths) {
     await libraryAudit(catalog, width);
     for (const paper of catalog) await paperAudit(paper, width);
   }
-  const requiredScreenshots = cases.flatMap(c => report.widths.map(w => `${c.name}-${w}-dark.png`));
+  const requiredScreenshots = cases.flatMap(c => (c.widths || report.widths).map(w => `${c.name}-${w}-dark.png`));
   const missingScreenshots = requiredScreenshots.filter(name => !report.screenshots.some(s => s.file === `screenshots/${name}`));
   if (missingScreenshots.length) report.errors.push({kind:'required-screenshots-missing', files:missingScreenshots});
   if (report.pages.length !== catalog.length * report.widths.length) report.errors.push({kind:'incomplete-page-coverage'});

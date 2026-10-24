@@ -183,7 +183,7 @@ export class Page {
     let clip;
     if (selector) {
       clip = await this.eval(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});if(!e)throw Error('Screenshot target missing');
-        e.scrollIntoView({block:'start',behavior:'instant'});const r=e.getBoundingClientRect(),y=Math.max(0,r.top+scrollY-160);
+        const r=e.getBoundingClientRect(),y=Math.max(0,r.top+scrollY-160);window.scrollTo({left:0,top:y,behavior:'instant'});
         return {x:0,y,width:innerWidth,height:Math.max(1,Math.min(${maxHeight},r.height+320,document.documentElement.scrollHeight-y)),scale:1};})()`);
     }
     const result = await this.call('Page.captureScreenshot', {format:'png', captureBeyondViewport:true, ...(clip ? {clip} : {})});

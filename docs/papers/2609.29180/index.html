@@ -210,6 +210,12 @@ li{margin:5px 0}
 .paper-fulltext figure.ltx_table{overflow:visible}
 .paper-fulltext figure.ltx_table a{display:inline}
 .paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
+.paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
+.paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
+.paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
+
+.paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
+.paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / X-Rec</div><h1>X-Rec 技术报告</h1><p class="paper-original-title">X-Rec Technical Report</p>
@@ -1932,7 +1938,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold">Data Partition</span></th>
-<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#EFF5F5;">X-Rec</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#EFF5F5;">X-Rec</span></th>
 <th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold">X-Rec-U2I</span></th>
 <th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold">X-Rec-AR</span></th>
 <th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold">TIGER</span></th>
@@ -1947,7 +1953,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding:0.1pt 2.7pt;">1</td>
-<td class="ltx_td ltx_align_right ltx_border_t" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">9.7700</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">9.7700</span></td>
 <td class="ltx_td ltx_align_right ltx_border_t" style="padding:0.1pt 2.7pt;">6.0645</td>
 <td class="ltx_td ltx_align_right ltx_border_t" style="padding:0.1pt 2.7pt;">9.8633</td>
 <td class="ltx_td ltx_align_right ltx_border_t" style="padding:0.1pt 2.7pt;">2.6562</td>
@@ -1960,7 +1966,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">2</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.9100</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.9100</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.7285</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.7422</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.9609</td>
@@ -1973,7 +1979,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">3</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.1100</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.1100</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.6309</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.9375</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.2891</td>
@@ -1986,7 +1992,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">4</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">9.2800</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">9.2800</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.1914</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.1797</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.5703</td>
@@ -1999,7 +2005,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">5</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">9.9600</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">9.9600</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.5625</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.6680</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.8730</td>
@@ -2012,7 +2018,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">6</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.8200</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.8200</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9043</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.9141</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.5332</td>
@@ -2025,7 +2031,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">7</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.0400</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.0400</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.3184</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.9375</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.2695</td>
@@ -2038,7 +2044,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">8</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">8.7900</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">8.7900</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.5918</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.1055</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.3516</td>
@@ -2051,7 +2057,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">9</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.9400</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.9400</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9727</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.6445</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.5273</td>
@@ -2064,7 +2070,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">10</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.6200</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.6200</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.2754</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.2812</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9043</td>
@@ -2077,7 +2083,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">11</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.2800</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.2800</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.7090</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.6953</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.5293</td>
@@ -2090,7 +2096,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">12</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.4300</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.4300</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9336</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.7188</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.7910</td>
@@ -2103,7 +2109,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">13</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.7200</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.7200</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.9844</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.9375</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9922</td>
@@ -2116,7 +2122,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">14</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.4500</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.4500</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.2754</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.7656</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.0156</td>
@@ -2129,7 +2135,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">15</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.3300</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.3300</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.4902</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.3281</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.7969</td>
@@ -2142,7 +2148,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">16</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.8400</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.8400</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.1387</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.3516</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.6348</td>
@@ -2155,7 +2161,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">17</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">8.7900</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">8.7900</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.4941</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.3984</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.3320</td>
@@ -2168,7 +2174,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">18</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.8900</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.8900</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.5918</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.0352</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.4688</td>
@@ -2181,7 +2187,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">19</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">7.5200</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">7.5200</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.1328</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.2266</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.0781</td>
@@ -2194,7 +2200,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">20</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">9.7700</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">9.7700</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.7969</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.5703</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.0488</td>
@@ -2207,7 +2213,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">21</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.6200</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.6200</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.6699</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.1562</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.2305</td>
@@ -2220,7 +2226,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">22</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.3500</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.3500</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.3047</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.8867</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.1230</td>
@@ -2233,7 +2239,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">23</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">9.3800</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">9.3800</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.8008</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.1797</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.6973</td>
@@ -2246,7 +2252,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">24</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">8.5900</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">8.5900</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.1094</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.7891</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.5762</td>
@@ -2259,7 +2265,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">25</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.3500</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.3500</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.5488</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.4258</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.2930</td>
@@ -2272,7 +2278,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">26</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.0600</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.0600</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.2012</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.2539</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.4727</td>
@@ -2285,7 +2291,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">27</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.4300</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.4300</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.8457</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.9609</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.4336</td>
@@ -2298,7 +2304,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">28</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">8.5000</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">8.5000</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.4062</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.3750</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">3.9844</td>
@@ -2311,7 +2317,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">29</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">9.0800</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">9.0800</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.8359</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.9102</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.1504</td>
@@ -2324,7 +2330,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">30</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.7400</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.7400</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.2617</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.8633</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.8340</td>
@@ -2337,7 +2343,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">31</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.9400</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.9400</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.6211</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.0586</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.5605</td>
@@ -2350,7 +2356,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">32</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">9.2800</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">9.2800</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9238</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.0078</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">3.7500</td>
@@ -2363,7 +2369,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">33</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.8400</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.8400</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.4219</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.6445</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.0293</td>
@@ -2376,7 +2382,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">34</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.0100</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.0100</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.1973</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.3516</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.1172</td>
@@ -2389,7 +2395,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">35</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.7900</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.7900</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.3633</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.0117</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.9609</td>
@@ -2402,7 +2408,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">36</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.3500</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.3500</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.8652</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.5938</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.1797</td>
@@ -2415,7 +2421,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">37</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.3500</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.3500</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9238</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.1797</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.4727</td>
@@ -2428,7 +2434,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">38</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">9.5700</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">9.5700</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.3242</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.2773</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.1855</td>
@@ -2441,7 +2447,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">39</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.3300</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.3300</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.7773</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.5469</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.1602</td>
@@ -2454,7 +2460,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">40</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.1100</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.1100</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.4707</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.5469</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.5469</td>
@@ -2467,7 +2473,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">41</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.5000</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.5000</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.1543</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.4023</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.6250</td>
@@ -2480,7 +2486,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">42</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.4500</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.4500</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.5332</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.2539</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.1406</td>
@@ -2493,7 +2499,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">43</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.5200</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.5200</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.7773</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.5469</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.5898</td>
@@ -2506,7 +2512,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">44</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.9400</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.9400</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.3145</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.6680</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.9316</td>
@@ -2519,7 +2525,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">45</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.2100</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.2100</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.0312</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.1094</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.3418</td>
@@ -2532,7 +2538,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">46</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.2500</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.2500</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.1484</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.0586</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">4.5801</td>
@@ -2545,7 +2551,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.1pt 2.7pt;">47</td>
-<td class="ltx_td ltx_align_right ltx_border_bb" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.0900</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.0900</span></td>
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding:0.1pt 2.7pt;">8.6328</td>
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding:0.1pt 2.7pt;">12.5977</td>
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding:0.1pt 2.7pt;">5.2246</td>
@@ -2566,7 +2572,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold">Data Partition</span></th>
-<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#EFF5F5;">X-Rec</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#EFF5F5;">X-Rec</span></th>
 <th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold">X-Rec-U2I</span></th>
 <th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold">X-Rec-AR</span></th>
 <th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_tt" style="padding:0.1pt 2.7pt;"><span class="ltx_text ltx_font_bold">TIGER</span></th>
@@ -2581,7 +2587,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding:0.1pt 2.7pt;">1</td>
-<td class="ltx_td ltx_align_right ltx_border_t" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.0020</span></td>
+<td class="ltx_td ltx_align_right ltx_border_t paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.0020</span></td>
 <td class="ltx_td ltx_align_right ltx_border_t" style="padding:0.1pt 2.7pt;">8.4277</td>
 <td class="ltx_td ltx_align_right ltx_border_t" style="padding:0.1pt 2.7pt;">12.2070</td>
 <td class="ltx_td ltx_align_right ltx_border_t" style="padding:0.1pt 2.7pt;">3.4863</td>
@@ -2594,7 +2600,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">2</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.7344</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.7344</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.1309</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.7695</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.4746</td>
@@ -2607,7 +2613,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">3</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.6523</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.6523</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.3750</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">14.3555</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.9687</td>
@@ -2620,7 +2626,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">4</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.7578</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.7578</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.7500</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.5742</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.5527</td>
@@ -2633,7 +2639,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">5</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.8164</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.8164</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.0723</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.3789</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9238</td>
@@ -2646,7 +2652,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">6</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">14.4629</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">14.4629</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.4043</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">15.2344</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.3887</td>
@@ -2659,7 +2665,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">7</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.3242</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.3242</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.8965</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">14.0625</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.2812</td>
@@ -2672,7 +2678,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">8</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.3535</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.3535</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.1797</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.9141</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.1680</td>
@@ -2685,7 +2691,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">9</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.2461</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.2461</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.3848</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.6719</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.3242</td>
@@ -2698,7 +2704,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">10</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.8672</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.8672</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.8730</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">16.0156</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.0723</td>
@@ -2711,7 +2717,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">11</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">14.4043</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">14.4043</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.3750</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">16.6992</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.9121</td>
@@ -2724,7 +2730,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">12</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.2812</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.2812</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.6582</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">14.9414</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.3398</td>
@@ -2737,7 +2743,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">13</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">15.0195</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">15.0195</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.4746</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.2812</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.1797</td>
@@ -2750,7 +2756,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">14</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.8281</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.8281</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.3809</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.8672</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.8809</td>
@@ -2763,7 +2769,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">15</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">14.4727</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">14.4727</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.1758</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">14.0625</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.8867</td>
@@ -2776,7 +2782,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">16</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.0762</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.0762</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.9805</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.6719</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.7539</td>
@@ -2789,7 +2795,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">17</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.2988</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.2988</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.1504</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.4258</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9434</td>
@@ -2802,7 +2808,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">18</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.6719</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.6719</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.2480</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">14.3555</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.5000</td>
@@ -2815,7 +2821,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">19</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.9180</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.9180</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.4766</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.2773</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.7285</td>
@@ -2828,7 +2834,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">20</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.8066</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.8066</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.0332</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.8164</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9531</td>
@@ -2841,7 +2847,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">21</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.1250</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.1250</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.7754</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.1836</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.2129</td>
@@ -2854,7 +2860,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">22</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.0078</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.0078</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.7949</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.2305</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.1738</td>
@@ -2867,7 +2873,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">23</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.9668</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.9668</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.6523</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.5000</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.4258</td>
@@ -2880,7 +2886,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">24</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.9043</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.9043</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.4727</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.9375</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.3438</td>
@@ -2893,7 +2899,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">25</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.1348</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.1348</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.6445</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">14.9414</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.2363</td>
@@ -2906,7 +2912,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">26</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.8301</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.8301</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.7402</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">14.0625</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.9766</td>
@@ -2919,7 +2925,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">27</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.8652</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.8652</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.7266</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.6953</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.2012</td>
@@ -2932,7 +2938,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">28</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">10.9863</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">10.9863</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">8.9062</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.0859</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.3906</td>
@@ -2945,7 +2951,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">29</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.5137</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.5137</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.5410</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.3516</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.6836</td>
@@ -2958,7 +2964,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">30</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.9199</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.9199</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.1914</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.7930</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.6113</td>
@@ -2971,7 +2977,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">31</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.0898</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.0898</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.2383</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.0859</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.1133</td>
@@ -2984,7 +2990,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">32</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.9531</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.9531</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.7168</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.4258</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.2637</td>
@@ -2997,7 +3003,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">33</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.4805</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.4805</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.3320</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.9648</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.5137</td>
@@ -3010,7 +3016,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">34</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.8223</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.8223</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.5078</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.6719</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.0020</td>
@@ -3023,7 +3029,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">35</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.3301</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.3301</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.4102</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">15.1367</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.2559</td>
@@ -3036,7 +3042,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">36</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">11.7969</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">11.7969</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.6484</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">11.3281</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.7910</td>
@@ -3049,7 +3055,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">37</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.5488</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.5488</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.7949</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.3047</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.1328</td>
@@ -3062,7 +3068,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">38</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.9492</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.9492</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.6094</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.5000</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.7871</td>
@@ -3075,7 +3081,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">39</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.4805</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.4805</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.8535</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.9648</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.7031</td>
@@ -3088,7 +3094,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">40</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.7695</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.7695</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.6543</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.2812</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.9824</td>
@@ -3101,7 +3107,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">41</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.9453</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.9453</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.6641</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">14.7461</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.5879</td>
@@ -3114,7 +3120,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">42</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.2461</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.2461</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.1895</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.6953</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.7910</td>
@@ -3127,7 +3133,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">43</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.6172</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.6172</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.4824</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">13.5742</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.2988</td>
@@ -3140,7 +3146,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">44</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.1348</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.1348</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">10.0977</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.5977</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">6.6309</td>
@@ -3153,7 +3159,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">45</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">13.4863</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">13.4863</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.9707</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">15.3320</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">7.1777</td>
@@ -3166,7 +3172,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding:0.1pt 2.7pt;">46</td>
-<td class="ltx_td ltx_align_right" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">12.1289</span></td>
+<td class="ltx_td ltx_align_right paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">12.1289</span></td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">9.4824</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">12.3047</td>
 <td class="ltx_td ltx_align_right" style="padding:0.1pt 2.7pt;">5.9766</td>
@@ -3179,7 +3185,7 @@ c,x)\in\mathcal{D}}\mathbb{I}\left[x\in\bigcup_{k=1}^{K}\operatorname{ANN}_{R}%
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.1pt 2.7pt;">47</td>
-<td class="ltx_td ltx_align_right ltx_border_bb" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text" style="background-color:#EFF5F5;">14.0039</span></td>
+<td class="ltx_td ltx_align_right ltx_border_bb paper-table-ink-dark" style="background-color:#EFF5F5;padding:0.1pt 2.7pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EFF5F5;">14.0039</span></td>
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding:0.1pt 2.7pt;">11.2207</td>
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding:0.1pt 2.7pt;">15.5273</td>
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding:0.1pt 2.7pt;">6.7969</td>
@@ -3359,6 +3365,10 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
     article.dataset.readingMathInitialized = 'true';
     const formulas = [...article.querySelectorAll('math:not([display="block"])')]
       .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    // SVGs without a viewBox cannot safely be resized by CSS. Scroll the whole
+    // drawing instead, preserving its coordinates, foreignObjects and MathML.
+    const diagrams = [...article.querySelectorAll('svg.ltx_picture')]
+      .filter(svg => !svg.parentElement?.closest('svg'));
     let queued = false;
 
     function update() {
@@ -3381,6 +3391,37 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
           scroller.setAttribute('aria-label', '公式可横向滚动');
           math.before(scroller);
           scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+      for (const svg of diagrams) {
+        const wrapper = svg.parentElement?.matches('[data-reading-diagram-scroll]')
+          ? svg.parentElement : null;
+        let protectedByScroller = false;
+        for (let p = wrapper?.parentElement || svg.parentElement;
+             p && p !== article.parentElement; p = p.parentElement) {
+          if (['auto', 'scroll'].includes(getComputedStyle(p).overflowX)) {
+            protectedByScroller = true;
+            break;
+          }
+        }
+        if (protectedByScroller) continue;
+        const paragraph = svg.closest('.ltx_para, .ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const tooWide = svg.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-diagram-scroll';
+          scroller.dataset.readingDiagramScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '图示可横向滚动');
+          svg.before(scroller);
+          scroller.append(svg);
         } else if (!tooWide && wrapper) {
           wrapper.replaceWith(...wrapper.childNodes);
         }

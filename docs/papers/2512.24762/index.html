@@ -210,6 +210,12 @@ li{margin:5px 0}
 .paper-fulltext figure.ltx_table{overflow:visible}
 .paper-fulltext figure.ltx_table a{display:inline}
 .paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
+.paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
+.paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
+.paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
+
+.paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
+.paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OpenOneRec</div><h1>OpenOneRec 技术报告</h1><p class="paper-original-title">OpenOneRec Technical Report</p>
@@ -1419,7 +1425,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.0456</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.0548</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.0548</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text" style="font-size:80%;">Pass@32</span></td>
@@ -1473,7 +1479,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.1706</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.2122</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.2122</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text" style="font-size:80%;">Recall@32</span></td>
@@ -1527,7 +1533,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.0274</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.0369</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.0369</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_t" rowspan="3" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Ad Rec</span></td>
@@ -1582,7 +1588,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.0190</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.0259</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.0259</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text" style="font-size:80%;">Pass@32</span></td>
@@ -1636,7 +1642,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.2126</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.2700</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.2700</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text" style="font-size:80%;">Recall@32</span></td>
@@ -1690,7 +1696,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.0735</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.0964</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.0964</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_t" rowspan="3" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Product Rec</span></td>
@@ -1745,7 +1751,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.0158</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.0223</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.0223</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text" style="font-size:80%;">Pass@32</span></td>
@@ -1799,7 +1805,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.1761</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.2290</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.2290</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text" style="font-size:80%;">Recall@32</span></td>
@@ -1853,7 +1859,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.0405</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.0538</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.0538</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_t" rowspan="3" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Label-Cond. Rec</span></td>
@@ -1908,7 +1914,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.0067</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.0099</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.0099</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text" style="font-size:80%;">Pass@32</span></td>
@@ -1962,7 +1968,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.0420</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.0549</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.0549</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text" style="font-size:80%;">Recall@32</span></td>
@@ -2016,7 +2022,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.0182</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.0235</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.0235</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Label Pred.</span></td>
@@ -2071,7 +2077,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.6071</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.6912</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.6912</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_t" rowspan="3" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Interactive Rec</span></td>
@@ -2126,7 +2132,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.0800</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.1250</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.1250</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text" style="font-size:80%;">Pass@32</span></td>
@@ -2180,7 +2186,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.3370</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.5080</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.5080</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text" style="font-size:80%;">Recall@32</span></td>
@@ -2234,7 +2240,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.2024</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.3458</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.3458</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Item Understand.</span></td>
@@ -2289,7 +2295,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">0.3133</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">0.3209</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">0.3209</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Rec. Explanation</span></td>
@@ -2344,7 +2350,7 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_p" style="width:22.8pt;"><span class="ltx_text" style="font-size:80%;">3.5060</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">4.0381</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="font-size:80%;background-color:#FFF5EB;">4.0381</span></td>
 </tr>
 </table></div>
 </div></div>
@@ -2971,55 +2977,55 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_t" rowspan="4" style="padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold">Ours</span></td>
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_t" style="padding-left:8.5pt;padding-right:8.5pt;">R@5</td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0352</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0646</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0717</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0688</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0534</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0279</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0563</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0365</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0412</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0693</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0352</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0646</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0717</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0688</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0534</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0279</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0563</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0365</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0412</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0693</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_r" style="padding-left:8.5pt;padding-right:8.5pt;">R@10</td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0513</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0924</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.1036</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.1029</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0768</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0390</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0834</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0547</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0593</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0953</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0513</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0924</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.1036</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.1029</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0768</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0390</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0834</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0547</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0593</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0953</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_r" style="padding-left:8.5pt;padding-right:8.5pt;">N@5</td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0238</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0456</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0490</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0460</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0376</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0202</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0389</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0252</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0295</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0496</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0238</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0456</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0490</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0460</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0376</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0202</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0389</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0252</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0295</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0496</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_r" style="padding-left:8.5pt;padding-right:8.5pt;">N@10</td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0289</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0545</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0593</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0570</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0452</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0237</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0476</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0310</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0354</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFF5EB;">0.0579</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0289</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0545</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0593</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0570</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0452</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0237</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0476</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0310</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0354</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFF5EB;padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFF5EB;">0.0579</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_r ltx_border_tt" colspan="2" style="padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold">Improve (%) R@10</span></td>
@@ -4845,6 +4851,10 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
     article.dataset.readingMathInitialized = 'true';
     const formulas = [...article.querySelectorAll('math:not([display="block"])')]
       .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    // SVGs without a viewBox cannot safely be resized by CSS. Scroll the whole
+    // drawing instead, preserving its coordinates, foreignObjects and MathML.
+    const diagrams = [...article.querySelectorAll('svg.ltx_picture')]
+      .filter(svg => !svg.parentElement?.closest('svg'));
     let queued = false;
 
     function update() {
@@ -4867,6 +4877,37 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
           scroller.setAttribute('aria-label', '公式可横向滚动');
           math.before(scroller);
           scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+      for (const svg of diagrams) {
+        const wrapper = svg.parentElement?.matches('[data-reading-diagram-scroll]')
+          ? svg.parentElement : null;
+        let protectedByScroller = false;
+        for (let p = wrapper?.parentElement || svg.parentElement;
+             p && p !== article.parentElement; p = p.parentElement) {
+          if (['auto', 'scroll'].includes(getComputedStyle(p).overflowX)) {
+            protectedByScroller = true;
+            break;
+          }
+        }
+        if (protectedByScroller) continue;
+        const paragraph = svg.closest('.ltx_para, .ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const tooWide = svg.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-diagram-scroll';
+          scroller.dataset.readingDiagramScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '图示可横向滚动');
+          svg.before(scroller);
+          scroller.append(svg);
         } else if (!tooWide && wrapper) {
           wrapper.replaceWith(...wrapper.childNodes);
         }

@@ -5,6 +5,12 @@ MathML, equation identifiers, or surrounding prose are rewritten.
 """
 
 
+MATH_LAYOUT_STYLES = """
+.paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
+.paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
+"""
+
+
 MATH_LAYOUT_SCRIPT = r"""
 (() => {
   function initializeReadingMath() {
@@ -13,6 +19,10 @@ MATH_LAYOUT_SCRIPT = r"""
     article.dataset.readingMathInitialized = 'true';
     const formulas = [...article.querySelectorAll('math:not([display="block"])')]
       .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    // SVGs without a viewBox cannot safely be resized by CSS. Scroll the whole
+    // drawing instead, preserving its coordinates, foreignObjects and MathML.
+    const diagrams = [...article.querySelectorAll('svg.ltx_picture')]
+      .filter(svg => !svg.parentElement?.closest('svg'));
     let queued = false;
 
     function update() {
@@ -35,6 +45,37 @@ MATH_LAYOUT_SCRIPT = r"""
           scroller.setAttribute('aria-label', '公式可横向滚动');
           math.before(scroller);
           scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+      for (const svg of diagrams) {
+        const wrapper = svg.parentElement?.matches('[data-reading-diagram-scroll]')
+          ? svg.parentElement : null;
+        let protectedByScroller = false;
+        for (let p = wrapper?.parentElement || svg.parentElement;
+             p && p !== article.parentElement; p = p.parentElement) {
+          if (['auto', 'scroll'].includes(getComputedStyle(p).overflowX)) {
+            protectedByScroller = true;
+            break;
+          }
+        }
+        if (protectedByScroller) continue;
+        const paragraph = svg.closest('.ltx_para, .ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const tooWide = svg.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-diagram-scroll';
+          scroller.dataset.readingDiagramScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '图示可横向滚动');
+          svg.before(scroller);
+          scroller.append(svg);
         } else if (!tooWide && wrapper) {
           wrapper.replaceWith(...wrapper.childNodes);
         }

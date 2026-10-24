@@ -210,6 +210,12 @@ li{margin:5px 0}
 .paper-fulltext figure.ltx_table{overflow:visible}
 .paper-fulltext figure.ltx_table a{display:inline}
 .paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
+.paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
+.paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
+.paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
+
+.paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
+.paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OneRec-Think</div><h1>OneRec-Think：面向生成式推荐的文本内推理</h1><p class="paper-original-title">OneRec-Think: In-Text Reasoning for Generative Recommendation</p>
@@ -560,7 +566,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold">TIGER</span></th>
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold">HSTU</span></th>
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold">ReaRec</span></th>
-<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">OneRec-Think</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">OneRec-Think</span></th>
 </tr>
 </thead>
 <tbody class="ltx_tbody">
@@ -574,7 +580,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:5.7pt;padding-right:5.7pt;">0.0405</td>
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:5.7pt;padding-right:5.7pt;">0.0424</td>
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0450</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0563</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0563</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">R@10</td>
@@ -585,7 +591,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0623</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0652</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0704</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0791</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0791</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">N@5</td>
@@ -596,7 +602,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0267</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0280</span></td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0262</td>
-<td class="ltx_td ltx_align_center" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0398</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0398</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">N@10</td>
@@ -607,7 +613,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0337</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0353</span></td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0344</td>
-<td class="ltx_td ltx_align_center" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0471</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0471</span></td>
 </tr>
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_r ltx_border_t" rowspan="4" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold">Sports</span></th>
@@ -619,7 +625,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:5.7pt;padding-right:5.7pt;">0.0215</td>
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0268</span></td>
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:5.7pt;padding-right:5.7pt;">0.0214</td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0288</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0288</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">R@10</td>
@@ -630,7 +636,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0347</span></td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0343</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0332</td>
-<td class="ltx_td ltx_align_center" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0412</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0412</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">N@5</td>
@@ -641,7 +647,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0137</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0173</span></td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0116</td>
-<td class="ltx_td ltx_align_center" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0199</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0199</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">N@10</td>
@@ -652,7 +658,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0179</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0226</span></td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0154</td>
-<td class="ltx_td ltx_align_center" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0239</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0239</span></td>
 </tr>
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_bb ltx_border_r ltx_border_t" rowspan="4" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold">Toys</span></th>
@@ -664,7 +670,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:5.7pt;padding-right:5.7pt;">0.0337</td>
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:5.7pt;padding-right:5.7pt;">0.0366</td>
 <td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0523</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0579</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0579</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">R@10</td>
@@ -675,7 +681,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0547</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0566</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0764</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0797</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0797</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">N@5</td>
@@ -686,7 +692,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0209</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0245</td>
 <td class="ltx_td ltx_align_center" style="padding-left:5.7pt;padding-right:5.7pt;">0.0298</td>
-<td class="ltx_td ltx_align_center" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0412</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0412</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:5.7pt;padding-right:5.7pt;">N@10</td>
@@ -697,7 +703,7 @@ l=1}^{L}\mathbb{I}(\hat{s}_{v_{n+1}}^{l}=s_{v_{n+1}}^{l}),</annotation></semanti
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:5.7pt;padding-right:5.7pt;">0.0276</td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:5.7pt;padding-right:5.7pt;">0.0309</td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0376</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold" style="background-color:#F0F0FF;">0.0482</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#F0F0FF;padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F0F0FF;">0.0482</span></td>
 </tr>
 </tbody>
 </table></div>
@@ -2080,6 +2086,10 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
     article.dataset.readingMathInitialized = 'true';
     const formulas = [...article.querySelectorAll('math:not([display="block"])')]
       .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    // SVGs without a viewBox cannot safely be resized by CSS. Scroll the whole
+    // drawing instead, preserving its coordinates, foreignObjects and MathML.
+    const diagrams = [...article.querySelectorAll('svg.ltx_picture')]
+      .filter(svg => !svg.parentElement?.closest('svg'));
     let queued = false;
 
     function update() {
@@ -2102,6 +2112,37 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
           scroller.setAttribute('aria-label', '公式可横向滚动');
           math.before(scroller);
           scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+      for (const svg of diagrams) {
+        const wrapper = svg.parentElement?.matches('[data-reading-diagram-scroll]')
+          ? svg.parentElement : null;
+        let protectedByScroller = false;
+        for (let p = wrapper?.parentElement || svg.parentElement;
+             p && p !== article.parentElement; p = p.parentElement) {
+          if (['auto', 'scroll'].includes(getComputedStyle(p).overflowX)) {
+            protectedByScroller = true;
+            break;
+          }
+        }
+        if (protectedByScroller) continue;
+        const paragraph = svg.closest('.ltx_para, .ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const tooWide = svg.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-diagram-scroll';
+          scroller.dataset.readingDiagramScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '图示可横向滚动');
+          svg.before(scroller);
+          scroller.append(svg);
         } else if (!tooWide && wrapper) {
           wrapper.replaceWith(...wrapper.childNodes);
         }

@@ -210,6 +210,12 @@ li{margin:5px 0}
 .paper-fulltext figure.ltx_table{overflow:visible}
 .paper-fulltext figure.ltx_table a{display:inline}
 .paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
+.paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
+.paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
+.paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
+
+.paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
+.paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OneReason</div><h1>OneReason 技术报告</h1><p class="paper-original-title">OneReason Technical Report</p>
@@ -3543,14 +3549,14 @@ OneReason 预训练检查点初始化。遵循 LC-Rec 的原始设置，其 SFT 
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_bb" style="padding-top:1pt;padding-bottom:1pt;">OneReason RFT thinking</td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFD9B3;">2.41</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFD9B3;">0.24</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFD9B3;">5.47</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFD9B3;">4.19</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFD9B3;">17.78</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFD9B3;">7.50</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFD9B3;">21.10</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFD9B3;">18.35</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFD9B3;">2.41</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFD9B3;">0.24</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFD9B3;">5.47</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFD9B3;">4.19</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFD9B3;">17.78</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFD9B3;">7.50</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFD9B3;">21.10</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#FFD9B3;">18.35</span></td>
 </tr>
 </table></div>
 <ul class="ltx_itemize" id="S8.I2">
@@ -5557,38 +5563,38 @@ Ziyi Zhao.
 </span></div>
 </td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#2A6FB5;">GSM8K / MATH</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_rule" style="width:0.0pt;background:black;display:inline-block;"></span></td>
 <td class="ltx_td ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#2A6FB5;">MMLU-Pro / GPQA</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_rule" style="width:0.0pt;background:black;display:inline-block;"></span></td>
 <td class="ltx_td ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#2A6FB5;">CorrectBench</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_rule" style="width:0.0pt;background:black;display:inline-block;"></span></td>
 <td class="ltx_td ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#2A6FB5;">CriticBench</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left ltx_border_t" style="padding:4.5pt 5.0pt;">
@@ -5598,29 +5604,29 @@ Ziyi Zhao.
 </span></div>
 </td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#6E3FA3;">Yelp / MovieLens / PixelRec</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_rule" style="width:0.0pt;background:black;display:inline-block;"></span></td>
 <td class="ltx_td ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#6E3FA3;">Amazon / NineRec</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_rule" style="width:0.0pt;background:black;display:inline-block;"></span></td>
 <td class="ltx_td ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#6E3FA3;">KuaiSAR</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left ltx_border_t" style="padding:4.5pt 5.0pt;">
@@ -5630,29 +5636,29 @@ Ziyi Zhao.
 </span></div>
 </td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#1F6F6B;">RecBench+</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_rule" style="width:0.0pt;background:black;display:inline-block;"></span></td>
 <td class="ltx_td ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#1F6F6B;">AgentRecBench</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_rule" style="width:0.0pt;background:black;display:inline-block;"></span></td>
 <td class="ltx_td ltx_align_left" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#1F6F6B;">HORIZON</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left ltx_border_t" style="padding:4.5pt 5.0pt;">
@@ -5662,20 +5668,20 @@ Ziyi Zhao.
 </span></div>
 </td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#C0392B;">RecIF-Bench</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#ECECEC;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#A6A6A6;background-color:#ECECEC;">✗</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left ltx_border_bb" style="padding:4.5pt 5.0pt;"><span class="ltx_rule" style="width:0.0pt;background:black;display:inline-block;"></span></td>
 <td class="ltx_td ltx_align_left ltx_border_bb" style="padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#C0392B;">★ <span class="ltx_text ltx_font_bold">OneReason-Bench (Ours)</span></span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text paper-table-ink-dark" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
 </tr>
 </table></div>
 </div></div>
@@ -7954,6 +7960,10 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
     article.dataset.readingMathInitialized = 'true';
     const formulas = [...article.querySelectorAll('math:not([display="block"])')]
       .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    // SVGs without a viewBox cannot safely be resized by CSS. Scroll the whole
+    // drawing instead, preserving its coordinates, foreignObjects and MathML.
+    const diagrams = [...article.querySelectorAll('svg.ltx_picture')]
+      .filter(svg => !svg.parentElement?.closest('svg'));
     let queued = false;
 
     function update() {
@@ -7976,6 +7986,37 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
           scroller.setAttribute('aria-label', '公式可横向滚动');
           math.before(scroller);
           scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+      for (const svg of diagrams) {
+        const wrapper = svg.parentElement?.matches('[data-reading-diagram-scroll]')
+          ? svg.parentElement : null;
+        let protectedByScroller = false;
+        for (let p = wrapper?.parentElement || svg.parentElement;
+             p && p !== article.parentElement; p = p.parentElement) {
+          if (['auto', 'scroll'].includes(getComputedStyle(p).overflowX)) {
+            protectedByScroller = true;
+            break;
+          }
+        }
+        if (protectedByScroller) continue;
+        const paragraph = svg.closest('.ltx_para, .ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const tooWide = svg.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-diagram-scroll';
+          scroller.dataset.readingDiagramScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '图示可横向滚动');
+          svg.before(scroller);
+          scroller.append(svg);
         } else if (!tooWide && wrapper) {
           wrapper.replaceWith(...wrapper.childNodes);
         }

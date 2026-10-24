@@ -9,7 +9,7 @@ from pathlib import Path
 
 from .publishing import atomic_write, escape, page, publish_index, read_paper_catalog, render_daily
 from .paper_dates import parse_published_date, sort_papers_by_date
-from .reading_math import MATH_LAYOUT_SCRIPT
+from .reading_math import MATH_LAYOUT_SCRIPT, MATH_LAYOUT_STYLES
 from .reading_tables import TABLE_STYLES, normalize_reading_tables
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -72,7 +72,7 @@ READING_LAYOUT_STYLES = """
 .paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
 .paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
 .paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
-""" + TABLE_STYLES
+""" + TABLE_STYLES + MATH_LAYOUT_STYLES
 
 
 def render_paper(paper, document):

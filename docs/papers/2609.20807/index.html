@@ -210,6 +210,12 @@ li{margin:5px 0}
 .paper-fulltext figure.ltx_table{overflow:visible}
 .paper-fulltext figure.ltx_table a{display:inline}
 .paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
+.paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
+.paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
+.paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
+
+.paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
+.paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / Score Centering</div><h1>得分中心化稳定离策略强化学习</h1><p class="paper-original-title">Score Centering Stabilizes Off-policy Reinforcement Learning</p>
@@ -1353,44 +1359,44 @@ group}},\qquad R_{i}\in\{-1,+1\}.</annotation></semantics></math></td>
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 1: </span>以网格形式表示的基于 IS 的校正方法，最后一列为实现说明。<span class="ltx_text ltx_font_typewriter">Level</span>决定统计量是按词元还是按序列计算。<span class="ltx_text ltx_font_typewriter">Outside</span>指定在<span class="ltx_text ltx_font_typewriter">Low...High</span>区域之外会发生什么。<span class="ltx_text ltx_font_typewriter">Sign</span>指定校正哪些优势符号：<span class="ltx_text ltx_font_typewriter">both</span>将权重应用于每个词元；<span class="ltx_text ltx_font_typewriter">neg</span>仅应用于优势为负的词元（优势为正的词元保持权重1）；<span class="ltx_text ltx_font_typewriter">ppo</span>应用 PPO 的悲观裁剪，即取加权目标与裁剪目标的最小值，因此裁剪只在会使目标增大的方向上起作用。双重裁剪遵循<span class="ltx_text ltx_font_typewriter">verl</span>的 PPO 实现：比率高于<math alttext="3" class="ltx_Math" display="inline" id="A2.T1.m4"><semantics><mn>3</mn><annotation encoding="application/x-tex">3</annotation></semantics></math>的负优势贡献被丢弃（对于 GSPO 则丢弃整个响应）。<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P</span></sup>表示论文默认值，<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">V</span></sup>表示<span class="ltx_text ltx_font_typewriter">verl</span>默认值<cite class="ltx_cite ltx_citemacro_citep">(Sheng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib4" title="HybridFlow: a flexible and efficient RLHF framework">2024</a>)</cite>。</figcaption>
 <div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
-<tr class="ltx_tr" style="background-color:#F3F3F3;">
+<tr class="ltx_tr paper-table-ink-dark" style="background-color:#F3F3F3;">
 <th class="ltx_td ltx_align_justify ltx_align_middle ltx_th ltx_th_column ltx_border_t" style="width:70.0pt;padding:1.35pt 3.0pt;">
-<span class="ltx_inline-block ltx_align_top" style="background-color:#F3F3F3;">
+<span class="ltx_inline-block ltx_align_top paper-table-ink-dark" style="background-color:#F3F3F3;">
 <span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Method</span></span>
 </span>
 </th>
 <th class="ltx_td ltx_align_justify ltx_align_middle ltx_th ltx_th_column ltx_border_t" style="width:25.0pt;padding:1.35pt 3.0pt;">
-<span class="ltx_inline-block ltx_align_top" style="background-color:#F3F3F3;">
+<span class="ltx_inline-block ltx_align_top paper-table-ink-dark" style="background-color:#F3F3F3;">
 <span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Level</span></span>
 </span>
 </th>
 <th class="ltx_td ltx_align_justify ltx_align_middle ltx_th ltx_th_column ltx_border_t" style="width:24.0pt;padding:1.35pt 3.0pt;">
-<span class="ltx_inline-block ltx_align_top" style="background-color:#F3F3F3;">
+<span class="ltx_inline-block ltx_align_top paper-table-ink-dark" style="background-color:#F3F3F3;">
 <span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Stat</span></span>
 </span>
 </th>
 <th class="ltx_td ltx_align_justify ltx_align_middle ltx_th ltx_th_column ltx_border_t" style="width:30.0pt;padding:1.35pt 3.0pt;">
-<span class="ltx_inline-block ltx_align_top" style="background-color:#F3F3F3;">
+<span class="ltx_inline-block ltx_align_top paper-table-ink-dark" style="background-color:#F3F3F3;">
 <span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Low</span></span>
 </span>
 </th>
 <th class="ltx_td ltx_align_justify ltx_align_middle ltx_th ltx_th_column ltx_border_t" style="width:30.0pt;padding:1.35pt 3.0pt;">
-<span class="ltx_inline-block ltx_align_top" style="background-color:#F3F3F3;">
+<span class="ltx_inline-block ltx_align_top paper-table-ink-dark" style="background-color:#F3F3F3;">
 <span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">High</span></span>
 </span>
 </th>
 <th class="ltx_td ltx_align_justify ltx_align_middle ltx_th ltx_th_column ltx_border_t" style="width:32.0pt;padding:1.35pt 3.0pt;">
-<span class="ltx_inline-block ltx_align_top" style="background-color:#F3F3F3;">
+<span class="ltx_inline-block ltx_align_top paper-table-ink-dark" style="background-color:#F3F3F3;">
 <span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Outside</span></span>
 </span>
 </th>
 <th class="ltx_td ltx_align_justify ltx_align_middle ltx_th ltx_th_column ltx_border_t" style="width:22.0pt;padding:1.35pt 3.0pt;">
-<span class="ltx_inline-block ltx_align_top" style="background-color:#F3F3F3;">
+<span class="ltx_inline-block ltx_align_top paper-table-ink-dark" style="background-color:#F3F3F3;">
 <span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Sign</span></span>
 </span>
 </th>
 <th class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_middle ltx_th ltx_th_column ltx_border_t" style="width:158.6pt;padding:1.35pt 3.0pt;">
-<span class="ltx_inline-block ltx_align_top" style="background-color:#F3F3F3;">
+<span class="ltx_inline-block ltx_align_top paper-table-ink-dark" style="background-color:#F3F3F3;">
 <span class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Implementation notes</span></span>
 </span>
 </th>
@@ -1398,39 +1404,39 @@ group}},\qquad R_{i}\in\{-1,+1\}.</annotation></semantics></math></td>
 </thead>
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F3F3F3;">Naive IS <cite class="ltx_cite ltx_citemacro_citep">(Williams, <a class="ltx_ref" href="#bib.bib7" title="Simple statistical gradient-following algorithms for connectionist reinforcement learning">1992</a>)</cite></span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F3F3F3;">Naive IS <cite class="ltx_cite ltx_citemacro_citep">(Williams, <a class="ltx_ref" href="#bib.bib7" title="Simple statistical gradient-following algorithms for connectionist reinforcement learning">1992</a>)</cite></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#EEC2A8;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#EEC2A8;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#EEC2A8;">0</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#EEC2A8;">0</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#EEC2A8;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#EEC2A8;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><math alttext="\infty" class="ltx_Math" display="inline" id="A2.T1.m7" style="background-color:#EEC2A8;"><semantics><mi mathbackground="#EEC2A8" mathsize="90%" mathvariant="normal">∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math></span>
+<span class="ltx_p"><span class="paper-table-math-ink paper-table-ink-dark"><math alttext="\infty" class="ltx_Math" display="inline" id="A2.T1.m7" style="background-color:#EEC2A8;"><semantics><mi mathbackground="#EEC2A8" mathsize="90%" mathvariant="normal">∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:32.0pt;background-color:#F8F5FB;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:32.0pt;background-color:#F8F5FB;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#F8F5FB;">-</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#F8F5FB;">-</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:22.0pt;background-color:#CCE5D2;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:22.0pt;background-color:#CCE5D2;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#CCE5D2;">both</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#CCE5D2;">both</span></span>
 </span>
 </td>
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_middle ltx_border_t" style="width:158.6pt;padding:1.35pt 3.0pt;">
@@ -1440,40 +1446,40 @@ group}},\qquad R_{i}\in\{-1,+1\}.</annotation></semantics></math></td>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F3F3F3;">TIS<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">V</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Yao<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib8" title="On the rollout-training mismatch in modern RL systems">2025</a>)</cite></span></span>
-<span class="ltx_p ltx_align_left"><span class="ltx_text" style="font-size:90%;background-color:#F3F3F3;">CISPO <cite class="ltx_cite ltx_citemacro_citep">(MiniMax, <a class="ltx_ref" href="#bib.bib9" title="MiniMax-M1: scaling test-time compute efficiently with lightning attention">2025</a>)</cite></span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F3F3F3;">TIS<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">V</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Yao<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib8" title="On the rollout-training mismatch in modern RL systems">2025</a>)</cite></span></span>
+<span class="ltx_p ltx_align_left"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F3F3F3;">CISPO <cite class="ltx_cite ltx_citemacro_citep">(MiniMax, <a class="ltx_ref" href="#bib.bib9" title="MiniMax-M1: scaling test-time compute efficiently with lightning attention">2025</a>)</cite></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#EEC2A8;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#EEC2A8;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#EEC2A8;">0</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#EEC2A8;">0</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#F5DACB;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#F5DACB;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F5DACB;">2.0</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F5DACB;">2.0</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:32.0pt;background-color:#D4C1E7;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:32.0pt;background-color:#D4C1E7;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#D4C1E7;">clip</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#D4C1E7;">clip</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:22.0pt;background-color:#CCE5D2;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:22.0pt;background-color:#CCE5D2;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#CCE5D2;">both</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#CCE5D2;">both</span></span>
 </span>
 </td>
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_middle ltx_border_t" style="width:158.6pt;padding:1.35pt 3.0pt;">
@@ -1483,39 +1489,39 @@ group}},\qquad R_{i}\in\{-1,+1\}.</annotation></semantics></math></td>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F3F3F3;">MIS (IcePop)<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Ling Team, <a class="ltx_ref" href="#bib.bib11" title="Every step evolves: scaling reinforcement learning for trillion-scale thinking model">2025</a>)</cite></span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F3F3F3;">MIS (IcePop)<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Ling Team, <a class="ltx_ref" href="#bib.bib11" title="Every step evolves: scaling reinforcement learning for trillion-scale thinking model">2025</a>)</cite></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#F5DACB;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#F5DACB;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F5DACB;">0.5</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F5DACB;">0.5</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#F5DACB;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#F5DACB;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F5DACB;">5.0</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F5DACB;">5.0</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:32.0pt;background-color:#F1EAF7;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:32.0pt;background-color:#F1EAF7;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#F1EAF7;">drop</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#F1EAF7;">drop</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:22.0pt;background-color:#CCE5D2;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:22.0pt;background-color:#CCE5D2;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#CCE5D2;">both</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#CCE5D2;">both</span></span>
 </span>
 </td>
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_middle ltx_border_t" style="width:158.6pt;padding:1.35pt 3.0pt;">
@@ -1525,39 +1531,39 @@ group}},\qquad R_{i}\in\{-1,+1\}.</annotation></semantics></math></td>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F3F3F3;">PPO<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P,V</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Schulman<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib12" title="Proximal policy optimization algorithms">2017</a>)</cite></span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F3F3F3;">PPO<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P,V</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Schulman<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib12" title="Proximal policy optimization algorithms">2017</a>)</cite></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#FAEBE3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#FAEBE3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#FAEBE3;">0.8</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#FAEBE3;">0.8</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#FAEBE3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#FAEBE3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#FAEBE3;">1.2</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#FAEBE3;">1.2</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:32.0pt;background-color:#F1EAF7;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:32.0pt;background-color:#F1EAF7;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#F1EAF7;">drop</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#F1EAF7;">drop</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:22.0pt;background-color:#EBF5ED;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:22.0pt;background-color:#EBF5ED;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#EBF5ED;">ppo</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#EBF5ED;">ppo</span></span>
 </span>
 </td>
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_middle ltx_border_t" style="width:158.6pt;padding:1.35pt 3.0pt;">
@@ -1567,39 +1573,39 @@ group}},\qquad R_{i}\in\{-1,+1\}.</annotation></semantics></math></td>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F3F3F3;">DAPO<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P,V</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Yu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib13" title="DAPO: an open-source LLM reinforcement learning system at scale">2025</a>)</cite></span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F3F3F3;">DAPO<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P,V</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Yu<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib13" title="DAPO: an open-source LLM reinforcement learning system at scale">2025</a>)</cite></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#FAEBE3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#FAEBE3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#FAEBE3;">0.8</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#FAEBE3;">0.8</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#FAEBE3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#FAEBE3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#FAEBE3;">1.28</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#FAEBE3;">1.28</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:32.0pt;background-color:#F1EAF7;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:32.0pt;background-color:#F1EAF7;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#F1EAF7;">drop</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#F1EAF7;">drop</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:22.0pt;background-color:#EBF5ED;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:22.0pt;background-color:#EBF5ED;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#EBF5ED;">ppo</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#EBF5ED;">ppo</span></span>
 </span>
 </td>
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_middle ltx_border_t" style="width:158.6pt;padding:1.35pt 3.0pt;">
@@ -1609,39 +1615,39 @@ group}},\qquad R_{i}\in\{-1,+1\}.</annotation></semantics></math></td>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F3F3F3;">GSPO<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P,V</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Zheng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib14" title="Group sequence policy optimization">2025</a>)</cite></span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F3F3F3;">GSPO<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P,V</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Zheng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib14" title="Group sequence policy optimization">2025</a>)</cite></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:25.0pt;background-color:#BBC9E1;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:25.0pt;background-color:#BBC9E1;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#BBC9E1;">seq</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#BBC9E1;">seq</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#FDF8F5;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#FDF8F5;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#FDF8F5;">0.9997</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#FDF8F5;">0.9997</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#FDF8F5;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#FDF8F5;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#FDF8F5;">1.0004</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#FDF8F5;">1.0004</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:32.0pt;background-color:#F1EAF7;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:32.0pt;background-color:#F1EAF7;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#F1EAF7;">drop</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#F1EAF7;">drop</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:22.0pt;background-color:#EBF5ED;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:22.0pt;background-color:#EBF5ED;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#EBF5ED;">ppo</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#EBF5ED;">ppo</span></span>
 </span>
 </td>
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_middle ltx_border_t" style="width:158.6pt;padding:1.35pt 3.0pt;">
@@ -1651,39 +1657,39 @@ group}},\qquad R_{i}\in\{-1,+1\}.</annotation></semantics></math></td>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F3F3F3;">TOPR<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Le Roux<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib15" title="Tapered off-policy REINFORCE: stable and efficient reinforcement learning for LLMs">2025</a>)</cite></span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F3F3F3;">TOPR<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Le Roux<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib15" title="Tapered off-policy REINFORCE: stable and efficient reinforcement learning for LLMs">2025</a>)</cite></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:25.0pt;background-color:#BBC9E1;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:25.0pt;background-color:#BBC9E1;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#BBC9E1;">seq</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#BBC9E1;">seq</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:24.0pt;background-color:#E5F3F2;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E5F3F2;">ratio</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#EEC2A8;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#EEC2A8;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#EEC2A8;">0</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#EEC2A8;">0</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:30.0pt;background-color:#FDF8F5;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#FDF8F5;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#FDF8F5;">1.0</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#FDF8F5;">1.0</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:32.0pt;background-color:#D4C1E7;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:32.0pt;background-color:#D4C1E7;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#D4C1E7;">clip</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#D4C1E7;">clip</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t" style="width:22.0pt;background-color:#AAD4B3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_t paper-table-ink-dark" style="width:22.0pt;background-color:#AAD4B3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#AAD4B3;">neg</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#AAD4B3;">neg</span></span>
 </span>
 </td>
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_middle ltx_border_t" style="width:158.6pt;padding:1.35pt 3.0pt;">
@@ -1693,39 +1699,39 @@ group}},\qquad R_{i}\in\{-1,+1\}.</annotation></semantics></math></td>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t paper-table-ink-dark" style="width:70.0pt;background-color:#F3F3F3;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F3F3F3;">DPPO<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Qi<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib16" title="Rethinking the trust region in LLM reinforcement learning">2026</a>)</cite></span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F3F3F3;">DPPO<sup class="ltx_sup"><span class="ltx_text ltx_font_italic">P</span></sup> <cite class="ltx_cite ltx_citemacro_citep">(Qi<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib16" title="Rethinking the trust region in LLM reinforcement learning">2026</a>)</cite></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t paper-table-ink-dark" style="width:25.0pt;background-color:#E9EEF6;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#E9EEF6;">token</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t" style="width:24.0pt;background-color:#AEDAD5;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t paper-table-ink-dark" style="width:24.0pt;background-color:#AEDAD5;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#AEDAD5;">tv</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#AEDAD5;">tv</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t" style="width:30.0pt;background-color:#EEC2A8;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#EEC2A8;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#EEC2A8;">0</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#EEC2A8;">0</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t" style="width:30.0pt;background-color:#F5DACB;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t paper-table-ink-dark" style="width:30.0pt;background-color:#F5DACB;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text" style="font-size:90%;background-color:#F5DACB;">0.2</span></span>
+<span class="ltx_p"><span class="ltx_text paper-table-ink-dark" style="font-size:90%;background-color:#F5DACB;">0.2</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t" style="width:32.0pt;background-color:#F1EAF7;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t paper-table-ink-dark" style="width:32.0pt;background-color:#F1EAF7;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#F1EAF7;">drop</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#F1EAF7;">drop</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t" style="width:22.0pt;background-color:#EBF5ED;padding:1.35pt 3.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t paper-table-ink-dark" style="width:22.0pt;background-color:#EBF5ED;padding:1.35pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;background-color:#EBF5ED;">ppo</span></span>
+<span class="ltx_p"><span class="ltx_text ltx_font_typewriter paper-table-ink-dark" style="font-size:90%;background-color:#EBF5ED;">ppo</span></span>
 </span>
 </td>
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_middle ltx_border_b ltx_border_t" style="width:158.6pt;padding:1.35pt 3.0pt;">
@@ -1752,52 +1758,52 @@ group}},\qquad R_{i}\in\{-1,+1\}.</annotation></semantics></math></td>
 <div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
-<tr class="ltx_tr" style="background-color:#F3F3F3;">
-<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_t"><span class="ltx_text ltx_font_bold" style="background-color:#F3F3F3;">Experiment</span></th>
-<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_t"><span class="ltx_text ltx_font_bold" style="background-color:#F3F3F3;">Figure</span></th>
-<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_t"><span class="ltx_text ltx_font_bold" style="background-color:#F3F3F3;">Seeds</span></th>
-<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text ltx_font_bold" style="background-color:#F3F3F3;">Unique runs</span></th>
-<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text ltx_font_bold" style="background-color:#F3F3F3;">Approx. H100-hours</span></th>
+<tr class="ltx_tr paper-table-ink-dark" style="background-color:#F3F3F3;">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_t"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F3F3F3;">Experiment</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_t"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F3F3F3;">Figure</span></th>
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_t"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F3F3F3;">Seeds</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F3F3F3;">Unique runs</span></th>
+<th class="ltx_td ltx_align_right ltx_th ltx_th_column ltx_border_t"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F3F3F3;">Approx. H100-hours</span></th>
 </tr>
 </thead>
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_t" style="background-color:#F3F3F3;"><span class="ltx_text" style="background-color:#F3F3F3;">Online vs. offline</span></td>
+<td class="ltx_td ltx_align_left ltx_border_t paper-table-ink-dark" style="background-color:#F3F3F3;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F3F3F3;">Online vs. offline</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t"><a class="ltx_ref" href="#S3.F2" title="In 3 Why RL Is Sensitive to Mismatch ‣ Score Centering Stabilizes Off-policy Reinforcement Learning"><span class="ltx_text ltx_ref_tag">Figure</span> <span class="ltx_text ltx_ref_tag">2</span></a></td>
 <td class="ltx_td ltx_align_left ltx_border_t">3</td>
 <td class="ltx_td ltx_align_right ltx_border_t">18</td>
 <td class="ltx_td ltx_align_right ltx_border_t">190</td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_t" style="background-color:#F3F3F3;"><span class="ltx_text" style="background-color:#F3F3F3;">Synthetic weight noise</span></td>
+<td class="ltx_td ltx_align_left ltx_border_t paper-table-ink-dark" style="background-color:#F3F3F3;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F3F3F3;">Synthetic weight noise</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t"><a class="ltx_ref" href="#S5.F3" title="In 5.2 Synthetic Weight Noise ‣ 5 Experiments ‣ Score Centering Stabilizes Off-policy Reinforcement Learning"><span class="ltx_text ltx_ref_tag">Figure</span> <span class="ltx_text ltx_ref_tag">3</span></a></td>
 <td class="ltx_td ltx_align_left ltx_border_t">3</td>
 <td class="ltx_td ltx_align_right ltx_border_t">108</td>
 <td class="ltx_td ltx_align_right ltx_border_t">280</td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_t" style="background-color:#F3F3F3;"><span class="ltx_text" style="background-color:#F3F3F3;">Quantization and staleness</span></td>
+<td class="ltx_td ltx_align_left ltx_border_t paper-table-ink-dark" style="background-color:#F3F3F3;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F3F3F3;">Quantization and staleness</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t"><a class="ltx_ref" href="#S5.F4" title="In 5.3 Quantization and Staleness ‣ 5 Experiments ‣ Score Centering Stabilizes Off-policy Reinforcement Learning"><span class="ltx_text ltx_ref_tag">Figure</span> <span class="ltx_text ltx_ref_tag">4</span></a></td>
 <td class="ltx_td ltx_align_left ltx_border_t">3</td>
 <td class="ltx_td ltx_align_right ltx_border_t">72</td>
 <td class="ltx_td ltx_align_right ltx_border_t">1,120</td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_t" style="background-color:#F3F3F3;"><span class="ltx_text" style="background-color:#F3F3F3;">30B math</span></td>
+<td class="ltx_td ltx_align_left ltx_border_t paper-table-ink-dark" style="background-color:#F3F3F3;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F3F3F3;">30B math</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t"><a class="ltx_ref" href="#S0.F1" title="In Score Centering Stabilizes Off-policy Reinforcement Learning"><span class="ltx_text ltx_ref_tag">Figure</span> <span class="ltx_text ltx_ref_tag">1</span></a></td>
 <td class="ltx_td ltx_align_left ltx_border_t">1–5</td>
 <td class="ltx_td ltx_align_right ltx_border_t">47</td>
 <td class="ltx_td ltx_align_right ltx_border_t">3,750</td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_t" style="background-color:#F3F3F3;"><span class="ltx_text" style="background-color:#F3F3F3;">Top-<math alttext="k" class="ltx_Math" display="inline" id="A2.T2.m3"><semantics><mi mathbackground="#F3F3F3">k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> ablation</span></td>
+<td class="ltx_td ltx_align_left ltx_border_t paper-table-ink-dark" style="background-color:#F3F3F3;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F3F3F3;">Top-<math alttext="k" class="ltx_Math" display="inline" id="A2.T2.m3"><semantics><mi mathbackground="#F3F3F3">k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> ablation</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t"><a class="ltx_ref" href="#A1.F5" title="In A.4 Top-𝑘 Ablation ‣ Appendix A Implementing Score Centering ‣ Score Centering Stabilizes Off-policy Reinforcement Learning"><span class="ltx_text ltx_ref_tag">Figure</span> <span class="ltx_text ltx_ref_tag">5</span></a></td>
 <td class="ltx_td ltx_align_left ltx_border_t">see legend</td>
 <td class="ltx_td ltx_align_right ltx_border_t">51</td>
 <td class="ltx_td ltx_align_right ltx_border_t">840</td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_b ltx_border_t" style="background-color:#F3F3F3;"><span class="ltx_text ltx_font_bold" style="background-color:#F3F3F3;">Total</span></td>
+<td class="ltx_td ltx_align_left ltx_border_b ltx_border_t paper-table-ink-dark" style="background-color:#F3F3F3;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#F3F3F3;">Total</span></td>
 <td class="ltx_td ltx_border_b ltx_border_t"></td>
 <td class="ltx_td ltx_border_b ltx_border_t"></td>
 <td class="ltx_td ltx_align_right ltx_border_b ltx_border_t"><span class="ltx_text ltx_font_bold">296</span></td>
@@ -1824,6 +1830,10 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
     article.dataset.readingMathInitialized = 'true';
     const formulas = [...article.querySelectorAll('math:not([display="block"])')]
       .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    // SVGs without a viewBox cannot safely be resized by CSS. Scroll the whole
+    // drawing instead, preserving its coordinates, foreignObjects and MathML.
+    const diagrams = [...article.querySelectorAll('svg.ltx_picture')]
+      .filter(svg => !svg.parentElement?.closest('svg'));
     let queued = false;
 
     function update() {
@@ -1846,6 +1856,37 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
           scroller.setAttribute('aria-label', '公式可横向滚动');
           math.before(scroller);
           scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+      for (const svg of diagrams) {
+        const wrapper = svg.parentElement?.matches('[data-reading-diagram-scroll]')
+          ? svg.parentElement : null;
+        let protectedByScroller = false;
+        for (let p = wrapper?.parentElement || svg.parentElement;
+             p && p !== article.parentElement; p = p.parentElement) {
+          if (['auto', 'scroll'].includes(getComputedStyle(p).overflowX)) {
+            protectedByScroller = true;
+            break;
+          }
+        }
+        if (protectedByScroller) continue;
+        const paragraph = svg.closest('.ltx_para, .ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const tooWide = svg.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-diagram-scroll';
+          scroller.dataset.readingDiagramScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '图示可横向滚动');
+          svg.before(scroller);
+          scroller.append(svg);
         } else if (!tooWide && wrapper) {
           wrapper.replaceWith(...wrapper.childNodes);
         }

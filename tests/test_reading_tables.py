@@ -75,6 +75,50 @@ class ReadingTablesTests(unittest.TestCase):
         self.assertEqual(article.td["colspan"], "3")
         self.assertEqual(article.figcaption.get_text(), "Panel caption")
 
+    def test_underlined_results_and_named_models_keep_their_exact_content(self):
+        article = self.parse('<figure><figcaption>Second-best results are '
+            '<span class="ltx_text ltx_framed ltx_framed_underline">underlined</span>.</figcaption>'
+            '<table class="ltx_tabular"><tr><td class="ltx_td">OneRec-1.7B</td>'
+            '<td class="ltx_td"><span class="ltx_text ltx_framed ltx_framed_underline">0.2031</span></td>'
+            '<td class="ltx_td">-1.7B</td></tr></table></figure>')
+        original_text = article.get_text()
+        underlines = [str(node) for node in article.select('.ltx_framed_underline')]
+        normalize_reading_tables(article)
+        self.assertEqual(article.get_text(), original_text)
+        self.assertEqual([str(node) for node in article.select('.ltx_framed_underline')], underlines)
+        self.assertEqual([cell.get_text() for cell in article.select('td')], ['OneRec-1.7B', '0.2031', '-1.7B'])
+
+    def test_highlight_ink_respects_background_and_preserves_readable_source_color(self):
+        article = self.parse('<table class="ltx_tabular"><tr>'
+            '<td class="ltx_td" id="light" style="background-color:#FFF5EB;">0.0548</td>'
+            '<td class="ltx_td" id="dark" style="background-color:black;">0.42</td>'
+            '<td class="ltx_td" id="low" style="background-color:#6CC180;color:#FFFFFF;">0.8</td>'
+            '<td class="ltx_td" id="good" style="background-color:#FFFFFF;color:#700000;">0.9</td>'
+            '</tr></table>')
+        original_styles = {node['id']: node['style'] for node in article.select('[id]')}
+        normalize_reading_tables(article)
+        self.assertIn('paper-table-ink-dark', article.find(id='light')['class'])
+        self.assertIn('paper-table-ink-light', article.find(id='dark')['class'])
+        self.assertIn('paper-table-ink-dark', article.find(id='low')['class'])
+        self.assertEqual(article.find(id='good')['class'], ['ltx_td'])
+        self.assertEqual({node['id']: node['style'] for node in article.select('[id]')}, original_styles)
+        first_pass = str(article)
+        normalize_reading_tables(article)
+        self.assertEqual(str(article), first_pass)
+
+    def test_highlighted_math_keeps_exact_dom_and_uses_an_outer_ink_wrapper(self):
+        article = self.parse('<table class="ltx_tabular"><tr><td class="ltx_td">'
+            '<math id="formula" style="background-color:#D8CFC0;"><mi>x</mi><mo>+</mo><mn>1</mn></math>'
+            '</td></tr></table>')
+        original_math = str(article.math)
+        normalize_reading_tables(article)
+        self.assertEqual(str(article.math), original_math)
+        self.assertIn('paper-table-math-ink', article.math.parent['class'])
+        self.assertIn('paper-table-ink-dark', article.math.parent['class'])
+        first_pass = str(article)
+        normalize_reading_tables(article)
+        self.assertEqual(str(article), first_pass)
+
 
 if __name__ == "__main__":
     unittest.main()

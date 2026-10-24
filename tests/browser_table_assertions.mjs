@@ -3,7 +3,8 @@ export function collectTableGeometry() {
   const article = document.querySelector('.paper-fulltext');
   const issues = [];
   const metrics = {tables: 0, outerTables: 0, nestedTables: 0, cells: 0, mergedCells: 0,
-    numericCellsChecked: 0, numericTokensChecked: 0, horizontalScrollTables: 0, captionsChecked: 0};
+    numericCellsChecked: 0, numericTokensChecked: 0, horizontalScrollTables: 0, captionsChecked: 0,
+    highlightColorsChecked: 0};
   if (!article) return {issues: [{kind: 'paper_body_missing'}], metrics};
   const rect = element => {
     const r = element.getBoundingClientRect();
@@ -102,20 +103,56 @@ export function collectTableGeometry() {
         let node;
         while ((node = walker.nextNode())) {
           if (node.parentElement.closest('td,th') !== cell || node.parentElement.closest('math,annotation,script,style')) continue;
-          const pattern = /[+\-−]?\d+(?:[.,]\d+)*(?:[eE][+\-]?\d+)?(?:%|[KMB])?/g;
+          const pattern = /[+\-−]?\d+(?:[.,]\d+)*(?:[eE][+\-]?\d+)?(?:%|[kKmMbB])?/g;
           let match;
           while ((match = pattern.exec(node.textContent))) {
             if (match[0].length < 2) continue;
-            const range = document.createRange(); range.setStart(node, match.index);
+            let start = match.index;
+            // A model/dataset separator may wrap: "OneRec-" / "1.7B".
+            // Still check every digit and unit; retain genuine negative signs
+            // at the start of a value, after whitespace or after punctuation.
+            if (match[0].startsWith('-')) {
+              const prefix = document.createRange(); prefix.setStart(cell, 0); prefix.setEnd(node, start);
+              if (/[\p{L}\p{N}_]$/u.test(prefix.toString())) start++;
+            }
+            const range = document.createRange(); range.setStart(node, start);
             range.setEnd(node, match.index + match[0].length);
             const rectangles = [...range.getClientRects()];
             if (!rectangles.some(r => r.width && r.height)) continue;
             metrics.numericTokensChecked++;
-            if (lineCount(rectangles) > 1) add('numeric_token_wrapped', table, {text: match[0], cellBox: rect(cell)});
+            if (lineCount(rectangles) > 1) add('numeric_token_wrapped', table,
+              {text: node.textContent.slice(start, match.index + match[0].length), cellText: text, cellBox: rect(cell)});
           }
         }
       }
     }
+  }
+  for (const underline of article.querySelectorAll('.ltx_framed_underline')) {
+    const style = getComputedStyle(underline);
+    const padding = [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].map(parseFloat);
+    const borders = [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth].map(parseFloat);
+    if (padding.some(value => value > 0) || borders.some(value => value > 0) || !style.textDecorationLine.includes('underline')) {
+      issues.push({kind: 'underline_rendered_as_frame', text: underline.textContent,
+        selector: '.ltx_framed_underline', padding, borders, textDecoration: style.textDecorationLine});
+    }
+  }
+  const rgb = value => {
+    if (!value.startsWith('rgb')) return null;
+    const channels = (value.match(/[\d.]+/g) || []).map(Number);
+    if (channels.length < 3 || (channels.length > 3 && channels[3] < 1)) return null;
+    return channels.slice(0, 3).map(value => value / 255);
+  };
+  const luminance = color => color.map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4)
+    .reduce((sum, value, index) => sum + value * [.2126, .7152, .0722][index], 0);
+  for (const node of article.querySelectorAll('.ltx_tabular[style],.ltx_tabular [style]')) {
+    if (!node.style.backgroundColor || !node.textContent.trim() || !node.getClientRects().length) continue;
+    const style = getComputedStyle(node), background = rgb(style.backgroundColor), foreground = rgb(style.color);
+    if (!background || !foreground) continue;
+    const bg = luminance(background), fg = luminance(foreground);
+    const contrast = (Math.max(bg, fg) + .05) / (Math.min(bg, fg) + .05);
+    metrics.highlightColorsChecked++;
+    if (contrast < 4.48) add('table_highlight_low_contrast', node.closest('.ltx_tabular'),
+      {text: node.textContent.trim().slice(0, 100), foreground: style.color, background: style.backgroundColor, contrast});
   }
   for (const caption of article.querySelectorAll('figcaption')) {
     const figure = caption.closest('figure');

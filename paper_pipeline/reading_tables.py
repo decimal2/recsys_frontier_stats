@@ -12,6 +12,9 @@ TABLE_STYLES = """
 .paper-fulltext figure.ltx_table{overflow:visible}
 .paper-fulltext figure.ltx_table a{display:inline}
 .paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
+.paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
+.paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
+.paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
 """
 
 _TABLE_TAGS = (("ltx_tabular", "table"), ("ltx_thead", "thead"),
@@ -20,6 +23,51 @@ _TABLE_TAGS = (("ltx_tabular", "table"), ("ltx_thead", "thead"),
 _LAYOUT_CLASSES = {"ltx_transformed_outer", "ltx_transformed_inner", "ltx_parbox", "ltx_minipage"}
 _LAYOUT_PROPERTIES = {"width", "height", "min-width", "max-width", "min-height", "max-height",
                       "transform", "transform-origin", "vertical-align"}
+
+
+def _style_values(node):
+    return {key.strip().lower(): value.strip() for part in node.get("style", "").split(";")
+            if ":" in part for key, value in [part.split(":", 1)]}
+
+
+def _rgb(value):
+    """Opaque colors emitted by LaTeXML; leave unsupported CSS values alone."""
+    value = {"black": "#000000", "white": "#ffffff"}.get(value.lower(), value)
+    if re.fullmatch(r"#[0-9a-fA-F]{3}", value):
+        value = "#" + "".join(character * 2 for character in value[1:])
+    if not re.fullmatch(r"#[0-9a-fA-F]{6}", value):
+        return None
+    return tuple(int(value[index:index + 2], 16) / 255 for index in (1, 3, 5))
+
+
+def _luminance(rgb):
+    channels = [value / 12.92 if value <= .04045 else ((value + .055) / 1.055) ** 2.4 for value in rgb]
+    return sum(weight * channel for weight, channel in zip((.2126, .7152, .0722), channels))
+
+
+def _normalize_highlight_ink(article, factory):
+    for node in article.select(".ltx_tabular[style],.ltx_tabular [style]"):
+        style = _style_values(node)
+        background = _rgb(style.get("background-color", ""))
+        if background is None or node.find_parent("math") is not None:
+            continue
+        luminance = _luminance(background)
+        foreground = _rgb(style.get("color", ""))
+        if foreground is not None:
+            foreground_luminance = _luminance(foreground)
+            contrast = (max(luminance, foreground_luminance) + .05) / (min(luminance, foreground_luminance) + .05)
+            if contrast >= 4.5:
+                continue  # Keep readable source emphasis, including colored text.
+        black_contrast, white_contrast = (luminance + .05) / .05, 1.05 / (luminance + .05)
+        ink_class = "paper-table-ink-dark" if black_contrast >= white_contrast else "paper-table-ink-light"
+        # Do not touch even presentation attributes on a math subtree: its
+        # exact DOM is protected. An HTML wrapper supplies the foreground.
+        if node.name == "math":
+            if "paper-table-math-ink" not in node.parent.get("class", []):
+                node.wrap(factory.new_tag("span", attrs={"class": "paper-table-math-ink"}))
+            node = node.parent
+        classes = [name for name in node.get("class", []) if name not in {"paper-table-ink-dark", "paper-table-ink-light"}]
+        node["class"] = [*classes, ink_class]
 
 
 def _span_value(cell, attribute):
@@ -42,6 +90,8 @@ def _protected_content(article):
         "links": tuple((node.get("href"), tuple(sorted((key, str(value)) for key, value in node.attrs.items())))
                        for node in article.find_all("a")),
         "images": tuple(str(node) for node in article.find_all("img")),
+        "backgrounds": tuple(_style_values(node)["background-color"] for node in article.select("[style]")
+                             if "background-color" in _style_values(node)),
         "cells": tuple((node.get_text(), _span_value(node, "rowspan"), _span_value(node, "colspan"))
                        for node in cells),
     }
@@ -100,6 +150,7 @@ def normalize_reading_tables(article):
             counts["layout_wrappers"] += 1
 
     factory = BeautifulSoup("", "html.parser")
+    _normalize_highlight_ink(article, factory)
     for table in tables:
         if table.find_parent(class_="ltx_tabular") is not None:
             continue

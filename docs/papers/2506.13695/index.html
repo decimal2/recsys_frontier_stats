@@ -210,6 +210,12 @@ li{margin:5px 0}
 .paper-fulltext figure.ltx_table{overflow:visible}
 .paper-fulltext figure.ltx_table a{display:inline}
 .paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
+.paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
+.paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
+.paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
+
+.paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
+.paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OneRec Technical Report</div><h1>OneRec 技术报告</h1><p class="paper-original-title">OneRec Technical Report</p>
@@ -1573,35 +1579,35 @@ _{2},...,r_{G}\})},</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_tt">vtr</td>
 <td class="ltx_td ltx_align_center ltx_border_tt">Watch time</td>
 <td class="ltx_td ltx_align_center ltx_border_tt">App Stay Time</td>
-<td class="ltx_td ltx_align_center ltx_border_tt" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">Video View<sup class="ltx_sup">1</sup></span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">Video View<sup class="ltx_sup">1</sup></span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_t">0(w/o RL)</td>
 <td class="ltx_td ltx_align_center ltx_border_t">0.2198</td>
 <td class="ltx_td ltx_align_center ltx_border_t">+4.61%</td>
 <td class="ltx_td ltx_align_center ltx_border_t">+1.11%</td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">-12.75%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">-12.75%</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left">128</td>
 <td class="ltx_td ltx_align_center">0.2303</td>
 <td class="ltx_td ltx_align_center">+5.22%</td>
 <td class="ltx_td ltx_align_center">+1.49%</td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">-15.06%</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">-15.06%</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left">512</td>
 <td class="ltx_td ltx_align_center">0.2350</td>
 <td class="ltx_td ltx_align_center">+5.73%</td>
 <td class="ltx_td ltx_align_center">+1.82%</td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">-15.49%</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">-15.49%</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_bb">2048</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">0.2352</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+5.84%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+1.78%</td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">-15.49%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">-15.49%</span></td>
 </tr>
 </table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 7</span>: </span><span class="ltx_text" style="font-size:90%;">在Pass@128上计算ECPO损失时不同组大小的性能。</span></figcaption>
@@ -1619,7 +1625,7 @@ _{2},...,r_{G}\})},</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_tt">vtr</td>
 <td class="ltx_td ltx_align_center ltx_border_tt">Watch time</td>
 <td class="ltx_td ltx_align_center ltx_border_tt">App Stay Time</td>
-<td class="ltx_td ltx_align_center ltx_border_tt" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">Video View<sup class="ltx_sup">1</sup></span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">Video View<sup class="ltx_sup">1</sup></span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_t">Top-<math alttext="k" class="ltx_Math" display="inline" id="S4.T8.m2"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>+Top-<math alttext="p" class="ltx_Math" display="inline" id="S4.T8.m3"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
@@ -1627,21 +1633,21 @@ _{2},...,r_{G}\})},</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_t">0.2131</td>
 <td class="ltx_td ltx_align_center ltx_border_t">+4.45%</td>
 <td class="ltx_td ltx_align_center ltx_border_t">+1.16%</td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">-13.61%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">-13.61%</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left">Beam Search</td>
 <td class="ltx_td ltx_align_center">0.2162</td>
 <td class="ltx_td ltx_align_center">+5.35%</td>
 <td class="ltx_td ltx_align_center">+1.76%</td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">-13.30%</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">-13.30%</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_bb">Relative Impr.</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+1.45%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+0.87%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+0.60%</td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">+0.36%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">+0.36%</span></td>
 </tr>
 </table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 8</span>: </span><span class="ltx_text" style="font-size:90%;">不同搜索策略下强化学习的性能。</span></figcaption>
@@ -1659,28 +1665,28 @@ _{2},...,r_{G}\})},</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_tt">vtr</td>
 <td class="ltx_td ltx_align_center ltx_border_tt">Watch time</td>
 <td class="ltx_td ltx_align_center ltx_border_tt">App Stay Time</td>
-<td class="ltx_td ltx_align_center ltx_border_tt" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">Video View<sup class="ltx_sup">1</sup></span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">Video View<sup class="ltx_sup">1</sup></span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_t">Pre-trained Model</td>
 <td class="ltx_td ltx_align_center ltx_border_t">0.2262</td>
 <td class="ltx_td ltx_align_center ltx_border_t">+5.35%</td>
 <td class="ltx_td ltx_align_center ltx_border_t">+1.51%</td>
-<td class="ltx_td ltx_align_center ltx_border_t" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">-13.51%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">-13.51%</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left">Current Policy Model</td>
 <td class="ltx_td ltx_align_center">0.2389</td>
 <td class="ltx_td ltx_align_center">+6.19%</td>
 <td class="ltx_td ltx_align_center">+1.56%</td>
-<td class="ltx_td ltx_align_center" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">-13.89%</span></td>
+<td class="ltx_td ltx_align_center paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">-13.89%</span></td>
 </tr>
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_bb">Relative Impr.</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+5.61%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+0.79%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+0.04%</td>
-<td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFFFFF;"><span class="ltx_text" style="color:#808080;background-color:#FFFFFF;">-13.89%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb paper-table-ink-dark" style="background-color:#FFFFFF;"><span class="ltx_text paper-table-ink-dark" style="color:#808080;background-color:#FFFFFF;">-13.89%</span></td>
 </tr>
 </table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 9</span>: </span><span class="ltx_text" style="font-size:90%;">不同参考模型下强化学习的性能。</span></figcaption>
@@ -3673,6 +3679,10 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
     article.dataset.readingMathInitialized = 'true';
     const formulas = [...article.querySelectorAll('math:not([display="block"])')]
       .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    // SVGs without a viewBox cannot safely be resized by CSS. Scroll the whole
+    // drawing instead, preserving its coordinates, foreignObjects and MathML.
+    const diagrams = [...article.querySelectorAll('svg.ltx_picture')]
+      .filter(svg => !svg.parentElement?.closest('svg'));
     let queued = false;
 
     function update() {
@@ -3695,6 +3705,37 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
           scroller.setAttribute('aria-label', '公式可横向滚动');
           math.before(scroller);
           scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+      for (const svg of diagrams) {
+        const wrapper = svg.parentElement?.matches('[data-reading-diagram-scroll]')
+          ? svg.parentElement : null;
+        let protectedByScroller = false;
+        for (let p = wrapper?.parentElement || svg.parentElement;
+             p && p !== article.parentElement; p = p.parentElement) {
+          if (['auto', 'scroll'].includes(getComputedStyle(p).overflowX)) {
+            protectedByScroller = true;
+            break;
+          }
+        }
+        if (protectedByScroller) continue;
+        const paragraph = svg.closest('.ltx_para, .ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const tooWide = svg.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-diagram-scroll';
+          scroller.dataset.readingDiagramScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '图示可横向滚动');
+          svg.before(scroller);
+          scroller.append(svg);
         } else if (!tooWide && wrapper) {
           wrapper.replaceWith(...wrapper.childNodes);
         }

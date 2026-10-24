@@ -210,6 +210,12 @@ li{margin:5px 0}
 .paper-fulltext figure.ltx_table{overflow:visible}
 .paper-fulltext figure.ltx_table a{display:inline}
 .paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
+.paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
+.paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
+.paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
+
+.paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
+.paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OneRec</div><h1>OneRec：通过生成式推荐与迭代偏好对齐统一召回和排序</h1><p class="paper-original-title">OneRec: Unifying Retrieve and Rank with Generative Recommender and Iterative Preference Alignment</p>
@@ -958,143 +964,143 @@ S}_{u}^{l}|\mathcal{H}_{u})}{M_{t}(\mathcal{S}_{u}^{l}|\mathcal{H}_{u})}\right%
 <td class="ltx_td ltx_align_center ltx_align_top ltx_border_t" colspan="9" style="padding:-0.5pt 2.0pt;"><span class="ltx_text ltx_font_italic">Pointwise Discriminative Method</span></td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text ltx_align_left" style="background-color:#F5ECE2;">SASRec</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text ltx_align_left paper-table-ink-dark" style="background-color:#F5ECE2;">SASRec</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0375<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m9"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0375<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m9"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0803<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m10"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.005</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0803<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m10"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.005</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.4313<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m11"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.013</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.4313<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m11"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.013</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.5801<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m12"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.013</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.5801<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m12"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.013</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.00294<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m13"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.00294<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m13"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#F5ECE2;"><span class="ltx_text ltx_framed ltx_framed_underline">0.00978<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m14"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;"><span class="ltx_text ltx_framed ltx_framed_underline">0.00978<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m14"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0314<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m15"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0314<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m15"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.0604<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m16"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
-</span>
-</td>
-</tr>
-<tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#F5ECE2;">BERT4Rec</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0336<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m17"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0706<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m18"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.4192<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m19"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.014</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.5633<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m20"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.013</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.00281<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m21"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.00932<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m22"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0316<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m23"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.0606<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m24"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.0604<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m16"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
 </span>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#F5ECE2;">FDSA</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">BERT4Rec</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0325<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m25"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0336<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m17"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0683<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m26"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.005</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0706<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m18"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.4145<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m27"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.4192<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m19"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.014</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.5588<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m28"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.014</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.5633<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m20"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.013</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.00271<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m29"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.00281<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m21"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.00921<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m30"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.00932<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m22"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;">0.0313<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m31"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0316<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m23"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.0604<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m32"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.003</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.0606<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m24"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">FDSA</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0325<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m25"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0683<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m26"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.005</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.4145<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m27"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.5588<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m28"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.014</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.00271<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m29"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.00921<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m30"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;">0.0313<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m31"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.0604<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m32"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.003</span></span>
 </span>
 </td>
 </tr>
@@ -1102,96 +1108,96 @@ S}_{u}^{l}|\mathcal{H}_{u})}{M_{t}(\mathcal{S}_{u}^{l}|\mathcal{H}_{u})}\right%
 <td class="ltx_td ltx_align_center ltx_align_top ltx_border_t" colspan="9" style="padding:-0.5pt 2.0pt;"><span class="ltx_text ltx_font_italic">Pointwise Generative Method</span></td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#F5ECE2;">TIGER-0.1B</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">TIGER-0.1B</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0879<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m33"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.007</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0879<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m33"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.007</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.1286<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m34"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.010</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.1286<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m34"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.010</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.5826<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m35"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.016</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.5826<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m35"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.016</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.6625<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m36"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.017</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.6625<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m36"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.017</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.00277<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m37"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.00277<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m37"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.00671<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m38"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.00671<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m38"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0316<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m39"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0316<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m39"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0541<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m40"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.007</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0541<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m40"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.007</span></span>
 </span>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#F5ECE2;">TIGER-1B</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">TIGER-1B</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0873<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m41"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.006</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0873<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m41"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.006</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.1368<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m42"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.010</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.1368<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m42"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.010</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.5827<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m43"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.5827<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m43"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.6776<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m44"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.6776<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m44"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.00292<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m45"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.00292<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m45"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.00758<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m46"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.00758<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m46"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#F5ECE2;"> 0.0323<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m47"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#F5ECE2;"> 0.0323<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m47"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#F5ECE2;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#F5ECE2;">0.0579<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m48"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#F5ECE2;">0.0579<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m48"><semantics><mo mathbackground="#F5ECE2">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
 </span>
 </td>
 </tr>
@@ -1199,96 +1205,96 @@ S}_{u}^{l}|\mathcal{H}_{u})}{M_{t}(\mathcal{S}_{u}^{l}|\mathcal{H}_{u})}\right%
 <td class="ltx_td ltx_align_center ltx_align_top ltx_border_t" colspan="9" style="padding:-0.5pt 2.0pt;"><span class="ltx_text ltx_font_italic">Listwise Generative Method</span></td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#ECF3FE;">OneRec-0.1B</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;">OneRec-0.1B</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#ECF3FE;">0.0973<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m49"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.010</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#ECF3FE;">0.0973<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m49"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.010</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#ECF3FE;">0.1501<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m50"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#ECF3FE;">0.1501<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m50"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#ECF3FE;">0.6001<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m51"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.021</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;">0.6001<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m51"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.021</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#ECF3FE;">0.6981<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m52"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.021</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;">0.6981<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m52"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.021</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#ECF3FE;">0.00326<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m53"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;">0.00326<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m53"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#ECF3FE;">0.00870<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m54"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;">0.00870<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m54"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#ECF3FE;">0.0349<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m55"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.009</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#ECF3FE;">0.0349<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m55"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.009</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#ECF3FE;">0.0642<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m56"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;">0.0642<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m56"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
 </span>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#ECF3FE;">OneRec-1B</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;">OneRec-1B</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#ECF3FE;">0.0991<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m57"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#ECF3FE;">0.0991<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m57"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#ECF3FE;">0.1529<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m58"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.012</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#ECF3FE;">0.1529<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m58"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.012</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#ECF3FE;"> 0.6039<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m59"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.020</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#ECF3FE;"> 0.6039<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m59"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.020</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#ECF3FE;">0.7013<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m60"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.020</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;">0.7013<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m60"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.020</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#ECF3FE;"><span class="ltx_text ltx_framed ltx_framed_underline">0.00349<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m61"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;"><span class="ltx_text ltx_framed ltx_framed_underline">0.00349<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m61"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#ECF3FE;">0.00919<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m62"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;">0.00919<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m62"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#ECF3FE;"> 0.0360<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m63"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.005</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#ECF3FE;"> 0.0360<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m63"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.005</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#ECF3FE;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#ECF3FE;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0660<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m64"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#ECF3FE;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0660<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m64"><semantics><mo mathbackground="#ECF3FE">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span></span>
 </span>
 </td>
 </tr>
@@ -1296,378 +1302,378 @@ S}_{u}^{l}|\mathcal{H}_{u})}{M_{t}(\mathcal{S}_{u}^{l}|\mathcal{H}_{u})}\right%
 <td class="ltx_td ltx_align_center ltx_align_top ltx_border_t" colspan="9" style="padding:-0.5pt 2.0pt;"><span class="ltx_text ltx_font_italic">Listwise Generative Method with Preference Alignment</span></td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m65"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>DPO</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m65"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>DPO</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.1014<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m66"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.010</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.1014<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m66"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.010</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> <span class="ltx_text ltx_framed ltx_framed_underline">0.1595<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m67"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> <span class="ltx_text ltx_framed ltx_framed_underline">0.1595<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m67"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;"><span class="ltx_text ltx_framed ltx_framed_underline">0.6127<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m68"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.017</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;"><span class="ltx_text ltx_framed ltx_framed_underline">0.6127<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m68"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.017</span></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;"><span class="ltx_text ltx_framed ltx_framed_underline">0.7116<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m69"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.016</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;"><span class="ltx_text ltx_framed ltx_framed_underline">0.7116<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m69"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.016</span></span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00339<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m70"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00339<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m70"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00896<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m71"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00896<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m71"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.0351<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m72"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.0351<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m72"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_t paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.0644<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m73"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
-</span>
-</td>
-</tr>
-<tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m74"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>IPO</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.0979<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m75"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.003</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.1528<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m76"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.005</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.6000<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m77"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.007</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.7012<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m78"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.007</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00335<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m79"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00905<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m80"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.0350<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m81"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.003</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.0654<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m82"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.0644<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m73"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
 </span>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m83"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>cDPO</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m74"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>IPO</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.0993<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m84"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.006</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.0979<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m75"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.003</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.1547<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m85"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.1528<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m76"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.005</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.6030<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m86"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.011</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.6000<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m77"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.007</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.7030<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m87"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.009</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.7012<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m78"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.007</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00339<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m88"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00335<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m79"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00901<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m89"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00905<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m80"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.0355<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m90"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.006</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.0350<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m81"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.003</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.0652<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m91"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.009</span></span>
-</span>
-</td>
-</tr>
-<tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m92"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>rDPO</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.1005<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m93"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.006</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.1555<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m94"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.6071<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m95"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.014</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.7059<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m96"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.011</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00339<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m97"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00899<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m98"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.0357<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m99"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.0657<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m100"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.006</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.0654<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m82"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
 </span>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m101"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>CPO</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m83"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>cDPO</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.0993<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m102"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.0993<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m84"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.006</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.1538<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m103"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.012</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.1547<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m85"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.6045<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m104"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.021</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.6030<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m86"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.011</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.7029<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m105"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.018</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.7030<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m87"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.009</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00343<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m106"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00339<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m88"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00911<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m107"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00901<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m89"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.0357<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m108"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.0355<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m90"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.006</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.0659<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m109"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.014</span></span>
-</span>
-</td>
-</tr>
-<tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m110"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>simPO</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.0995<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m111"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.1536<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m112"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.013</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.6047<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m113"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.016</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.7022<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m114"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;"><span class="ltx_text ltx_framed ltx_framed_underline">0.00349<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m115"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00918<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m116"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.0360<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m117"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.005</span></span>
-</span>
-</td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
-<span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.0659<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m118"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.0652<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m91"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.009</span></span>
 </span>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m119"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>S-DPO</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m92"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>rDPO</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> <span class="ltx_text ltx_framed ltx_framed_underline">0.1021<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m120"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.1005<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m93"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.006</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> 0.1575<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m121"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.013</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.1555<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m94"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.6096<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m122"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.016</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.6071<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m95"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.014</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.7070<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m123"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.7059<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m96"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.011</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00345<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m124"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00339<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m97"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.00909<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m125"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00899<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m98"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#FFFFEB;"> <span class="ltx_text ltx_framed ltx_framed_underline">0.0361<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m126"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.0357<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m99"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#FFFFEB;">0.0659<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m127"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.0657<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m100"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.006</span></span>
 </span>
 </td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text" style="background-color:#EBFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m128"><semantics><mo mathbackground="#EBFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>IPA</span></span>
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m101"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>CPO</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#EBFFEB;"> <span class="ltx_text ltx_font_bold">0.1025<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m129"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.009</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.0993<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m102"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#EBFFEB;"> <span class="ltx_text ltx_font_bold">0.1933<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m130"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.017</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.1538<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m103"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.012</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#EBFFEB;"><span class="ltx_text ltx_font_bold">0.6141<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m131"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.020</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.6045<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m104"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.021</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#EBFFEB;"><span class="ltx_text ltx_font_bold">0.7646<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m132"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.021</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.7029<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m105"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.018</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text ltx_font_bold" style="background-color:#EBFFEB;">0.00354<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m133"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00343<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m106"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text ltx_font_bold" style="background-color:#EBFFEB;">0.00992<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m134"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00911<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m107"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.002</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center" style="background-color:#EBFFEB;"> <span class="ltx_text ltx_font_bold">0.0397<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m135"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.0357<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m108"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
 </span>
 </td>
-<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
 <span class="ltx_inline-block ltx_align_top">
-<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text" style="background-color:#EBFFEB;"><span class="ltx_text ltx_font_bold">0.1203<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m136"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.010</span></span></span>
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.0659<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m109"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.014</span></span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m110"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>simPO</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.0995<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m111"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.1536<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m112"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.013</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.6047<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m113"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.016</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.7022<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m114"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;"><span class="ltx_text ltx_framed ltx_framed_underline">0.00349<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m115"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00918<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m116"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.0360<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m117"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.005</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.0659<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m118"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m119"><semantics><mo mathbackground="#FFFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>S-DPO</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> <span class="ltx_text ltx_framed ltx_framed_underline">0.1021<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m120"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> 0.1575<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m121"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.013</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.6096<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m122"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.016</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.7070<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m123"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.015</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00345<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m124"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.00909<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m125"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#FFFFEB;"> <span class="ltx_text ltx_framed ltx_framed_underline">0.0361<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m126"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top paper-table-ink-dark" style="background-color:#FFFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#FFFFEB;">0.0659<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m127"><semantics><mo mathbackground="#FFFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.008</span></span>
+</span>
+</td>
+</tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t paper-table-ink-dark" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:74.0pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EBFFEB;">OneRec-1B<math alttext="+" class="ltx_Math" display="inline" id="S3.T1.m128"><semantics><mo mathbackground="#EBFFEB">+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math>IPA</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t paper-table-ink-dark" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#EBFFEB;"> <span class="ltx_text ltx_font_bold">0.1025<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m129"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.009</span></span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t paper-table-ink-dark" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#EBFFEB;"> <span class="ltx_text ltx_font_bold">0.1933<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m130"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.017</span></span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t paper-table-ink-dark" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EBFFEB;"><span class="ltx_text ltx_font_bold">0.6141<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m131"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.020</span></span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t paper-table-ink-dark" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EBFFEB;"><span class="ltx_text ltx_font_bold">0.7646<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m132"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.021</span></span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t paper-table-ink-dark" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#EBFFEB;">0.00354<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m133"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t paper-table-ink-dark" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:56.9pt;"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#EBFFEB;">0.00992<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m134"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.001</span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t paper-table-ink-dark" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text ltx_align_center paper-table-ink-dark" style="background-color:#EBFFEB;"> <span class="ltx_text ltx_font_bold">0.0397<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m135"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.004</span></span></span>
+</span>
+</td>
+<td class="ltx_td ltx_align_justify ltx_align_top ltx_border_bb ltx_border_t paper-table-ink-dark" style="background-color:#EBFFEB;padding:-0.5pt 2.0pt;">
+<span class="ltx_inline-block ltx_align_top">
+<span class="ltx_p" style="width:51.2pt;"><span class="ltx_text paper-table-ink-dark" style="background-color:#EBFFEB;"><span class="ltx_text ltx_font_bold">0.1203<math alttext="\pm" class="ltx_Math" display="inline" id="S3.T1.m136"><semantics><mo mathbackground="#EBFFEB">±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>0.010</span></span></span>
 </span>
 </td>
 </tr>
@@ -2522,6 +2528,10 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
     article.dataset.readingMathInitialized = 'true';
     const formulas = [...article.querySelectorAll('math:not([display="block"])')]
       .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    // SVGs without a viewBox cannot safely be resized by CSS. Scroll the whole
+    // drawing instead, preserving its coordinates, foreignObjects and MathML.
+    const diagrams = [...article.querySelectorAll('svg.ltx_picture')]
+      .filter(svg => !svg.parentElement?.closest('svg'));
     let queued = false;
 
     function update() {
@@ -2544,6 +2554,37 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
           scroller.setAttribute('aria-label', '公式可横向滚动');
           math.before(scroller);
           scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+      for (const svg of diagrams) {
+        const wrapper = svg.parentElement?.matches('[data-reading-diagram-scroll]')
+          ? svg.parentElement : null;
+        let protectedByScroller = false;
+        for (let p = wrapper?.parentElement || svg.parentElement;
+             p && p !== article.parentElement; p = p.parentElement) {
+          if (['auto', 'scroll'].includes(getComputedStyle(p).overflowX)) {
+            protectedByScroller = true;
+            break;
+          }
+        }
+        if (protectedByScroller) continue;
+        const paragraph = svg.closest('.ltx_para, .ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const tooWide = svg.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-diagram-scroll';
+          scroller.dataset.readingDiagramScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '图示可横向滚动');
+          svg.before(scroller);
+          scroller.append(svg);
         } else if (!tooWide && wrapper) {
           wrapper.replaceWith(...wrapper.childNodes);
         }

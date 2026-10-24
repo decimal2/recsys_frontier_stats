@@ -210,6 +210,12 @@ li{margin:5px 0}
 .paper-fulltext figure.ltx_table{overflow:visible}
 .paper-fulltext figure.ltx_table a{display:inline}
 .paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
+.paper-fulltext .ltx_framed.ltx_framed_underline{padding:0;border:0;border-radius:0;overflow:visible;text-decoration:underline;text-underline-offset:.12em}
+.paper-fulltext .paper-table-ink-dark,.paper-fulltext .paper-table-math-ink.paper-table-ink-dark>math{color:#000!important}
+.paper-fulltext .paper-table-ink-light,.paper-fulltext .paper-table-math-ink.paper-table-ink-light>math{color:#fff!important}
+
+.paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
+.paper-fulltext .tex-diagram-scroll{display:block;max-width:100%;overflow:auto;text-align:start;padding:2px 0}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OPSD</div><h1>自蒸馏推理器：大语言模型的同策略自蒸馏</h1><p class="paper-original-title">Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models</p>
@@ -755,12 +761,12 @@ and update <math alttext="\theta" class="ltx_Math" display="inline" id="algx1.l8
 <td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold">46.7</span></td>
 <td class="ltx_td ltx_align_center">64.0</td>
 </tr>
-<tr class="ltx_tr" style="background-color:#E6E6E6;">
-<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r"><span class="ltx_text" style="background-color:#E6E6E6;">   + OPSD</span></th>
-<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">77.8</span></td>
-<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">70.8</span></td>
-<td class="ltx_td ltx_align_center"><span class="ltx_text" style="background-color:#E6E6E6;">45.8</span></td>
-<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">64.8</span></td>
+<tr class="ltx_tr paper-table-ink-dark" style="background-color:#E6E6E6;">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r"><span class="ltx_text paper-table-ink-dark" style="background-color:#E6E6E6;">   + OPSD</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">77.8</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">70.8</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text paper-table-ink-dark" style="background-color:#E6E6E6;">45.8</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">64.8</span></td>
 </tr>
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" colspan="5"><span class="ltx_text ltx_font_italic">Qwen3-4B</span></th>
@@ -786,12 +792,12 @@ and update <math alttext="\theta" class="ltx_Math" display="inline" id="algx1.l8
 <td class="ltx_td ltx_align_center">44.4</td>
 <td class="ltx_td ltx_align_center">62.7</td>
 </tr>
-<tr class="ltx_tr" style="background-color:#E6E6E6;">
-<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r"><span class="ltx_text" style="background-color:#E6E6E6;">   + OPSD</span></th>
-<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">76.4</span></td>
-<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">68.3</span></td>
-<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">46.1</span></td>
-<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">63.6</span></td>
+<tr class="ltx_tr paper-table-ink-dark" style="background-color:#E6E6E6;">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r"><span class="ltx_text paper-table-ink-dark" style="background-color:#E6E6E6;">   + OPSD</span></th>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">76.4</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">68.3</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">46.1</span></td>
+<td class="ltx_td ltx_align_center"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">63.6</span></td>
 </tr>
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" colspan="5"><span class="ltx_text ltx_font_italic">Qwen3-1.7B</span></th>
@@ -817,12 +823,12 @@ and update <math alttext="\theta" class="ltx_Math" display="inline" id="algx1.l8
 <td class="ltx_td ltx_align_center">23.7</td>
 <td class="ltx_td ltx_align_center">37.7</td>
 </tr>
-<tr class="ltx_tr" style="background-color:#E6E6E6;">
-<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb ltx_border_r"><span class="ltx_text" style="background-color:#E6E6E6;">   + OPSD</span></th>
-<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">57.2</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">43.9</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">29.2</span></td>
-<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="background-color:#E6E6E6;">43.4</span></td>
+<tr class="ltx_tr paper-table-ink-dark" style="background-color:#E6E6E6;">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb ltx_border_r"><span class="ltx_text paper-table-ink-dark" style="background-color:#E6E6E6;">   + OPSD</span></th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">57.2</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">43.9</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">29.2</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold paper-table-ink-dark" style="background-color:#E6E6E6;">43.4</span></td>
 </tr>
 </tbody>
 </table></div>
@@ -2012,6 +2018,10 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
     article.dataset.readingMathInitialized = 'true';
     const formulas = [...article.querySelectorAll('math:not([display="block"])')]
       .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    // SVGs without a viewBox cannot safely be resized by CSS. Scroll the whole
+    // drawing instead, preserving its coordinates, foreignObjects and MathML.
+    const diagrams = [...article.querySelectorAll('svg.ltx_picture')]
+      .filter(svg => !svg.parentElement?.closest('svg'));
     let queued = false;
 
     function update() {
@@ -2034,6 +2044,37 @@ tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedi
           scroller.setAttribute('aria-label', '公式可横向滚动');
           math.before(scroller);
           scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+      for (const svg of diagrams) {
+        const wrapper = svg.parentElement?.matches('[data-reading-diagram-scroll]')
+          ? svg.parentElement : null;
+        let protectedByScroller = false;
+        for (let p = wrapper?.parentElement || svg.parentElement;
+             p && p !== article.parentElement; p = p.parentElement) {
+          if (['auto', 'scroll'].includes(getComputedStyle(p).overflowX)) {
+            protectedByScroller = true;
+            break;
+          }
+        }
+        if (protectedByScroller) continue;
+        const paragraph = svg.closest('.ltx_para, .ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const tooWide = svg.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-diagram-scroll';
+          scroller.dataset.readingDiagramScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '图示可横向滚动');
+          svg.before(scroller);
+          scroller.append(svg);
         } else if (!tooWide && wrapper) {
           wrapper.replaceWith(...wrapper.childNodes);
         }
