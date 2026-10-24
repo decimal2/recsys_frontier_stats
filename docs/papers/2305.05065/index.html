@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / TIGER</div><h1>TIGER：使用生成式检索的推荐系统</h1><p class="paper-original-title">Recommender Systems with Generative Retrieval</p>
@@ -458,219 +471,219 @@ e}}_{c_{i}}\|^{2}}+\beta\|{\bm{r}}_{i}-\mbox{sg}[{\bm{e}}_{c_{i}}]\|^{2}</annota
 </div>
 <figure class="ltx_table" id="S4.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>: </span><span class="ltx_text" style="font-size:90%;">序列推荐上的性能比较。最后一行展示了 TIGER 相对于最佳基线的百分比提升。粗体（下划线）用于表示最佳（次佳）指标。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:682.5pt;height:221.3pt;vertical-align:-1.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
-<p class="ltx_p">
-<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
-<span class="ltx_tbody">
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt ltx_rowspan ltx_rowspan_2" style="padding-left:2.0pt;padding-right:2.0pt;">Methods</span>
-<span class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_4" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">Sports and Outdoors</span></span>
-<span class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_4" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">Beauty</span></span>
-<span class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_4" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">Toys and Games</span></span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div class="ltx_p">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2" style="padding-left:2.0pt;padding-right:2.0pt;">Methods</th>
+<td class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_4" colspan="4" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">Sports and Outdoors</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_4" colspan="4" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">Beauty</span></td>
+<td class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_4" colspan="4" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">Toys and Games</span></td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
 <span class="ltx_inline-block">
 <span class="ltx_p">Recall</span>
 <span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
 <span class="ltx_inline-block">
 <span class="ltx_p">NDCG</span>
 <span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
 <span class="ltx_inline-block">
 <span class="ltx_p">Recall</span>
 <span class="ltx_p">@10</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
 <span class="ltx_inline-block">
 <span class="ltx_p">NDCG</span>
 <span class="ltx_p">@10</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
-<span class="ltx_inline-block">
-<span class="ltx_p">Recall</span>
-<span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
-<span class="ltx_inline-block">
-<span class="ltx_p">NDCG</span>
-<span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
-<span class="ltx_inline-block">
-<span class="ltx_p">Recall</span>
-<span class="ltx_p">@10</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
-<span class="ltx_inline-block">
-<span class="ltx_p">NDCG</span>
-<span class="ltx_p">@10</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
 <span class="ltx_inline-block">
 <span class="ltx_p">Recall</span>
 <span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
 <span class="ltx_inline-block">
 <span class="ltx_p">NDCG</span>
 <span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
 <span class="ltx_inline-block">
 <span class="ltx_p">Recall</span>
 <span class="ltx_p">@10</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
 <span class="ltx_inline-block">
 <span class="ltx_p">NDCG</span>
 <span class="ltx_p">@10</span>
-</span></span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">P5 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0061</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0041</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0095</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0052</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0163</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0107</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0254</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0136</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0070</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0050</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0121</span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0066</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">Caser <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib33" title="">33</a>]</cite></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0116</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0072</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0194</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0097</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0205</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0131</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0347</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0176</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0166</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0107</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0270</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0141</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">HGN <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib25" title="">25</a>]</cite></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0189</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0120</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0313</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0159</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0325</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0206</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0512</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0266</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0321</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0221</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0497</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0277</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">GRU4Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib11" title="">11</a>]</cite></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0129</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0086</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0204</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0110</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0164</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0099</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0283</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0137</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0097</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0059</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0176</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0084</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">BERT4Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib32" title="">32</a>]</cite></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0115</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0075</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0191</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0099</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0203</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0124</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0347</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0170</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0116</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0071</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0203</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0099</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">FDSA <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib42" title="">42</a>]</cite></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0182</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0122</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0288</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0156</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0267</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0163</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0407</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0208</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0228</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0140</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0381</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0189</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">SASRec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib17" title="">17</a>]</cite></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0233</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0154</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0350</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0192</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0387</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0249</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0605</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0318</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0463</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0306</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0675</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0374</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">S<sup class="ltx_sup">3</sup>-Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib44" title="">44</a>]</cite></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0251</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0161</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0385</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0204</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0387</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0244</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0647</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0327</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0443</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0294</span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0700</span></span>
-<span class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0376</span></span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">TIGER [Ours]</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0264</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0181</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0400</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0225</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0454</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0321</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0648</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0384</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0521</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0371</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0712</span></span>
-<span class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0432</span></span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_th ltx_th_row ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+5.22%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+12.55%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+3.90%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+10.29%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+17.31%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+29.04%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+0.15%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+17.43%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+12.53%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+21.24%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+1.71%</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+14.97%</span></span></span>
-</span>
-</span></p>
-</span></div>
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@5</span>
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@5</span>
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@10</span>
+</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@10</span>
+</span></td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">P5 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite></th>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0061</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0041</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0095</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0052</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0163</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0107</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0254</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0136</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0070</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0050</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0121</td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;">0.0066</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">Caser <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib33" title="">33</a>]</cite></th>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0116</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0072</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0194</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0097</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0205</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0131</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0347</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0176</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0166</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0107</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0270</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0141</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">HGN <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib25" title="">25</a>]</cite></th>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0189</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0120</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0313</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0159</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0325</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0206</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0512</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0266</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0321</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0221</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0497</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0277</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">GRU4Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib11" title="">11</a>]</cite></th>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0129</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0086</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0204</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0110</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0164</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0099</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0283</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0137</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0097</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0059</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0176</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0084</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">BERT4Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib32" title="">32</a>]</cite></th>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0115</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0075</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0191</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0099</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0203</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0124</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0347</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0170</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0116</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0071</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0203</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0099</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">FDSA <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib42" title="">42</a>]</cite></th>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0182</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0122</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0288</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0156</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0267</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0163</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0407</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0208</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0228</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0140</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0381</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0189</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">SASRec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib17" title="">17</a>]</cite></th>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0233</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0154</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0350</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0192</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0387</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0249</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0605</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0318</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0463</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0306</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0675</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0374</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-left:2.0pt;padding-right:2.0pt;">S<sup class="ltx_sup">3</sup>-Rec <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib44" title="">44</a>]</cite></th>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0251</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0161</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0385</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0204</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0387</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0244</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0647</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0327</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0443</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;">0.0294</td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0700</span></td>
+<td class="ltx_td ltx_align_center" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.0376</span></td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">TIGER [Ours]</span></th>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0264</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0181</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0400</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0225</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0454</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0321</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0648</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0384</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0521</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0371</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0712</span></td>
+<td class="ltx_td ltx_align_center ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold">0.0432</span></td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_th ltx_th_row ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"></th>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+5.22%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+12.55%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+3.90%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+10.29%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+17.31%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+29.04%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+0.15%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+17.43%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+12.53%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+21.24%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+1.71%</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="color:#006600;">+14.97%</span></td></tr>
+</tbody>
+</table></div></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S4.SS1.p2">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">推荐性能。</span>我们在序列推荐任务上对所提出的 TIGER 进行了广泛分析，并与上述基线进行比较。除 P5 外，所有基线的结果均取自公开可访问的结果<span class="ltx_note ltx_role_footnote" id="footnote1"><sup class="ltx_note_mark">1</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">1</sup>
@@ -720,123 +733,123 @@ e}}_{c_{i}}\|^{2}}+\beta\|{\bm{r}}_{i}-\mbox{sg}[{\bm{e}}_{c_{i}}]\|^{2}</annota
 </div>
 <figure class="ltx_table" id="S4.T2">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 2</span>: </span><span class="ltx_text" style="font-size:90%;">用于生成式检索的不同 ID 生成技术的消融实验。我们表明 RQ-VAE 语义 ID（SID）的性能显著优于哈希 SID 和随机 ID。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:562.9pt;height:95.3pt;vertical-align:-1.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
-<p class="ltx_p">
-<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
-<span class="ltx_thead">
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt ltx_rowspan ltx_rowspan_2">Methods</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Sports and Outdoors</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Beauty</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Toys and Games</span></span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div class="ltx_p">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2">Methods</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4" colspan="4"><span class="ltx_text ltx_font_bold">Sports and Outdoors</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4" colspan="4"><span class="ltx_text ltx_font_bold">Beauty</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4" colspan="4"><span class="ltx_text ltx_font_bold">Toys and Games</span></th></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
 <span class="ltx_inline-block">
 <span class="ltx_p">Recall</span>
 <span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
 <span class="ltx_inline-block">
 <span class="ltx_p">NDCG</span>
 <span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
 <span class="ltx_inline-block">
 <span class="ltx_p">Recall</span>
 <span class="ltx_p">@10</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
 <span class="ltx_inline-block">
 <span class="ltx_p">NDCG</span>
 <span class="ltx_p">@10</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
-<span class="ltx_inline-block">
-<span class="ltx_p">Recall</span>
-<span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
-<span class="ltx_inline-block">
-<span class="ltx_p">NDCG</span>
-<span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
-<span class="ltx_inline-block">
-<span class="ltx_p">Recall</span>
-<span class="ltx_p">@10</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
-<span class="ltx_inline-block">
-<span class="ltx_p">NDCG</span>
-<span class="ltx_p">@10</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
 <span class="ltx_inline-block">
 <span class="ltx_p">Recall</span>
 <span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
 <span class="ltx_inline-block">
 <span class="ltx_p">NDCG</span>
 <span class="ltx_p">@5</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
 <span class="ltx_inline-block">
 <span class="ltx_p">Recall</span>
 <span class="ltx_p">@10</span>
-</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
 <span class="ltx_inline-block">
 <span class="ltx_p">NDCG</span>
 <span class="ltx_p">@10</span>
-</span></span></span>
-</span>
-<span class="ltx_tbody">
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">Random ID</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.007</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.005</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0116</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0063</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0296</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0205</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0434</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0250</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0362</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0270</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0448</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0298</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row">LSH SID</span>
-<span class="ltx_td ltx_align_center">0.0215</span>
-<span class="ltx_td ltx_align_center">0.0146</span>
-<span class="ltx_td ltx_align_center">0.0321</span>
-<span class="ltx_td ltx_align_center">0.0180</span>
-<span class="ltx_td ltx_align_center">0.0379</span>
-<span class="ltx_td ltx_align_center">0.0259</span>
-<span class="ltx_td ltx_align_center">0.0533</span>
-<span class="ltx_td ltx_align_center">0.0309</span>
-<span class="ltx_td ltx_align_center">0.0412</span>
-<span class="ltx_td ltx_align_center">0.0299</span>
-<span class="ltx_td ltx_align_center">0.0566</span>
-<span class="ltx_td ltx_align_center">0.0349</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">RQ-VAE SID</span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0264</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0181</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0400</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0225</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0454</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0321</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0648</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0384</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0521</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0371</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0712</span></span>
-<span class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0432</span></span></span>
-</span>
-</span></p>
-</span></div>
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@5</span>
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@5</span>
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">Recall</span>
+<span class="ltx_p">@10</span>
+</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">
+<span class="ltx_inline-block">
+<span class="ltx_p">NDCG</span>
+<span class="ltx_p">@10</span>
+</span></th></tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">Random ID</th>
+<td class="ltx_td ltx_align_center ltx_border_t">0.007</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.005</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0116</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0063</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0296</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0205</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0434</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0250</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0362</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0270</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0448</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0298</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row">LSH SID</th>
+<td class="ltx_td ltx_align_center">0.0215</td>
+<td class="ltx_td ltx_align_center">0.0146</td>
+<td class="ltx_td ltx_align_center">0.0321</td>
+<td class="ltx_td ltx_align_center">0.0180</td>
+<td class="ltx_td ltx_align_center">0.0379</td>
+<td class="ltx_td ltx_align_center">0.0259</td>
+<td class="ltx_td ltx_align_center">0.0533</td>
+<td class="ltx_td ltx_align_center">0.0309</td>
+<td class="ltx_td ltx_align_center">0.0412</td>
+<td class="ltx_td ltx_align_center">0.0299</td>
+<td class="ltx_td ltx_align_center">0.0566</td>
+<td class="ltx_td ltx_align_center">0.0349</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">RQ-VAE SID</th>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0264</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0181</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0400</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0225</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0454</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0321</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0648</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0384</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0521</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0371</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0712</span></td>
+<td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.0432</span></td></tr>
+</tbody>
+</table></div></div>
+</div></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S4.SS3">
@@ -875,106 +888,106 @@ e}}_{c_{i}}\|^{2}}+\beta\|{\bm{r}}_{i}-\mbox{sg}[{\bm{e}}_{c_{i}}]\|^{2}</annota
 </div>
 <figure class="ltx_table ltx_align_floatright" id="S4.T3">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 3</span>: </span><span class="ltx_text" style="font-size:90%;">模型为 Beauty 数据集预测的类别分布的熵。熵越高，表示模型预测的物品越多样。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:267.2pt;height:72pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
-<p class="ltx_p">
-<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
-<span class="ltx_thead">
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Temperature</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Entropy@10</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Entropy@20</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Entropy@50</span></span>
-</span>
-<span class="ltx_tbody">
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_center ltx_border_t">T = 1.0</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.76</span>
-<span class="ltx_td ltx_align_center ltx_border_t">1.14</span>
-<span class="ltx_td ltx_align_center ltx_border_t">1.70</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_center">T = 1.5</span>
-<span class="ltx_td ltx_align_center">1.14</span>
-<span class="ltx_td ltx_align_center">1.52</span>
-<span class="ltx_td ltx_align_center">2.06</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_center ltx_border_bb">T = 2.0</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">1.38</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">1.76</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">2.28</span></span>
-</span>
-</span></p>
-</span></div>
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div class="ltx_p">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Temperature</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Entropy@10</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Entropy@20</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Entropy@50</th></tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_t">T = 1.0</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.76</td>
+<td class="ltx_td ltx_align_center ltx_border_t">1.14</td>
+<td class="ltx_td ltx_align_center ltx_border_t">1.70</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center">T = 1.5</td>
+<td class="ltx_td ltx_align_center">1.14</td>
+<td class="ltx_td ltx_align_center">1.52</td>
+<td class="ltx_td ltx_align_center">2.06</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_center ltx_border_bb">T = 2.0</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">1.38</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">1.76</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">2.28</td></tr>
+</tbody>
+</table></div></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S4.SS3.p6">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">推荐多样性。</span>虽然 Recall 和 NDCG 是用于评估推荐系统的主要指标，但预测的多样性是另一个关键关注目标。多样性差的推荐系统可能有损用户的长期参与度。在这里，我们讨论我们的生成式检索框架如何用于预测多样的物品。我们表明，解码过程中基于温度的采样可以有效地用于控制模型预测的多样性。虽然基于温度的采样可以应用于任何现有推荐模型，但得益于 RQ-VAE 语义 ID 的特性，TIGER 允许在不同层次级别上进行采样。例如，对语义 ID 的第一个词元进行采样允许从粗粒度类别中检索物品，而对第二个/第三个词元进行采样则允许在某一类别内采样物品。</p>
 </div>
 <figure class="ltx_table" id="S4.T4">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 4</span>: </span><span class="ltx_text" style="font-size:90%;">基于温度解码的推荐多样性。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:722.1pt;height:145pt;vertical-align:-1.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
-<p class="ltx_p">
-<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
-<span class="ltx_tbody">
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r ltx_border_tt">Target Category</span>
-<span class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_2">Most-common Categories for top-10 predicted items</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_th ltx_th_row ltx_border_r"></span>
-<span class="ltx_td ltx_align_center ltx_border_t">T = 1.0</span>
-<span class="ltx_td ltx_align_center ltx_border_t">T = 2.0</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r ltx_border_t">Hair Styling Products</span>
-<span class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Hair Styling Products</span>
-<span class="ltx_td ltx_align_left ltx_border_t">Hair Styling Products, Hair Styling Tools, Skin Face</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">Tools Nail</span>
-<span class="ltx_td ltx_align_left ltx_border_r">Tools Nail</span>
-<span class="ltx_td ltx_align_left">Tools Nail, Makeup Nails</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">Makeup Nails</span>
-<span class="ltx_td ltx_align_left ltx_border_r">Makeup Nails</span>
-<span class="ltx_td ltx_align_left">Makeup Nails, Skin Hands &amp; Nails, Tools Nail</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div class="ltx_p">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r ltx_border_tt">Target Category</th>
+<td class="ltx_td ltx_align_center ltx_border_tt ltx_colspan ltx_colspan_2" colspan="2">Most-common Categories for top-10 predicted items</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_th ltx_th_row ltx_border_r"></th>
+<td class="ltx_td ltx_align_center ltx_border_t">T = 1.0</td>
+<td class="ltx_td ltx_align_center ltx_border_t">T = 2.0</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r ltx_border_t">Hair Styling Products</th>
+<td class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Hair Styling Products</td>
+<td class="ltx_td ltx_align_left ltx_border_t">Hair Styling Products, Hair Styling Tools, Skin Face</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">Tools Nail</th>
+<td class="ltx_td ltx_align_left ltx_border_r">Tools Nail</td>
+<td class="ltx_td ltx_align_left">Tools Nail, Makeup Nails</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">Makeup Nails</th>
+<td class="ltx_td ltx_align_left ltx_border_r">Makeup Nails</td>
+<td class="ltx_td ltx_align_left">Makeup Nails, Skin Hands &amp; Nails, Tools Nail</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">
 <span class="ltx_inline-block ltx_align_left">
 <span class="ltx_p">Skin Eyes</span>
-</span></span>
-<span class="ltx_td ltx_align_left ltx_border_r">
+</span></th>
+<td class="ltx_td ltx_align_left ltx_border_r">
 <span class="ltx_inline-block ltx_align_left">
 <span class="ltx_p">Skin Eyes</span>
-</span></span>
-<span class="ltx_td ltx_align_left">
+</span></td>
+<td class="ltx_td ltx_align_left">
 <span class="ltx_inline-block ltx_align_left">
 <span class="ltx_p">Hair Relaxers, Skin Face, Hair Styling Products, Skin Eyes</span>
-</span></span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">
+</span></td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_r">
 <span class="ltx_inline-block ltx_align_left">
 <span class="ltx_p">Makeup Face</span>
-</span></span>
-<span class="ltx_td ltx_align_left ltx_border_r">
+</span></th>
+<td class="ltx_td ltx_align_left ltx_border_r">
 <span class="ltx_inline-block ltx_align_left">
 <span class="ltx_p">Tools Makeup Brushes,Makeup Face</span>
-</span></span>
-<span class="ltx_td ltx_align_left">
+</span></td>
+<td class="ltx_td ltx_align_left">
 <span class="ltx_inline-block ltx_align_left">
 <span class="ltx_p">Tools Makeup Brushes, Makeup Face,Skin Face, Makeup Sets, Hair Styling Tools</span>
-</span></span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb ltx_border_r">
+</span></td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb ltx_border_r">
 <span class="ltx_inline-block ltx_align_left">
 <span class="ltx_p">Hair Loss Products</span>
-</span></span>
-<span class="ltx_td ltx_align_left ltx_border_bb ltx_border_r">
+</span></th>
+<td class="ltx_td ltx_align_left ltx_border_bb ltx_border_r">
 <span class="ltx_inline-block ltx_align_left">
 <span class="ltx_p">Hair Loss Products,Skin Face, Skin Body</span>
-</span></span>
-<span class="ltx_td ltx_align_left ltx_border_bb">
+</span></td>
+<td class="ltx_td ltx_align_left ltx_border_bb">
 <span class="ltx_inline-block ltx_align_left">
 <span class="ltx_p">Skin Face, Hair Loss Products, Hair Shampoos,Hair &amp; Scalp Treatments, Hair Conditioners</span>
-</span></span></span>
-</span>
-</span></p>
-</span></div>
+</span></td></tr>
+</tbody>
+</table></div></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S4.SS3.p7">
 <p class="ltx_p">我们使用 Entropy@K 指标定量衡量预测的多样性，其中熵是针对模型预测的 top-K 物品的真实类别分布计算的。我们在表<a class="ltx_ref" href="#S4.T3" title="Table 3 ‣ 4.3 New Capabilities ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">3</span></a>中报告了不同温度值下的 Entropy@K。我们观察到，解码阶段的温度采样可以有效地用于增加物品真实类别的多样性。我们还在表<a class="ltx_ref" href="#S4.T4" title="Table 4 ‣ 4.3 New Capabilities ‣ 4 Experiments ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">4</span></a>中进行了定性分析。</p>
@@ -988,7 +1001,7 @@ e}}_{c_{i}}\|^{2}}+\beta\|{\bm{r}}_{i}-\mbox{sg}[{\bm{e}}_{c_{i}}]\|^{2}</annota
 </div>
 <figure class="ltx_table" id="S4.T5">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 5</span>: </span><span class="ltx_text" style="font-size:90%;">不同层数下的 Recall 和 NDCG 指标。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Number of Layers</th>
@@ -1021,7 +1034,7 @@ e}}_{c_{i}}\|^{2}}+\beta\|{\bm{r}}_{i}-\mbox{sg}[{\bm{e}}_{c_{i}}]\|^{2}</annota
 <td class="ltx_td ltx_align_left ltx_border_bb">0.03834</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S4.SS5">
@@ -1781,44 +1794,44 @@ Wang 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="
 <span class="ltx_tag ltx_tag_appendix">Appendix C </span>数据集统计</h2>
 <figure class="ltx_table" id="A3.T6">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 6</span>: </span><span class="ltx_text" style="font-size:90%;">三个真实世界基准的数据集统计。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:283.1pt;height:90pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
-<p class="ltx_p">
-<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
-<span class="ltx_thead">
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Dataset</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"># Users</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"># Items</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_2">Sequence Length</span></span>
-</span>
-<span class="ltx_tbody">
-<span class="ltx_tr">
-<span class="ltx_td ltx_border_t"></span>
-<span class="ltx_td ltx_th ltx_th_column ltx_border_t"></span>
-<span class="ltx_td ltx_th ltx_th_column ltx_border_t"></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Mean</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Median</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left">Beauty</span>
-<span class="ltx_td ltx_align_center">22,363</span>
-<span class="ltx_td ltx_align_center">12,101</span>
-<span class="ltx_td ltx_align_center ltx_border_t">8.87</span>
-<span class="ltx_td ltx_align_center ltx_border_t">6</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left">Sports and Outdoors</span>
-<span class="ltx_td ltx_align_center">35,598</span>
-<span class="ltx_td ltx_align_center">18,357</span>
-<span class="ltx_td ltx_align_center">8.32</span>
-<span class="ltx_td ltx_align_center">6</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_border_bb">Toys and Games</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">19,412</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">11,924</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">8.63</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">6</span></span>
-</span>
-</span></p>
-</span></div>
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div class="ltx_p">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Dataset</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"># Users</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"># Items</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_2" colspan="2">Sequence Length</th></tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_border_t"></td>
+<th class="ltx_td ltx_th ltx_th_column ltx_border_t"></th>
+<th class="ltx_td ltx_th ltx_th_column ltx_border_t"></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Mean</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Median</th></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">Beauty</td>
+<td class="ltx_td ltx_align_center">22,363</td>
+<td class="ltx_td ltx_align_center">12,101</td>
+<td class="ltx_td ltx_align_center ltx_border_t">8.87</td>
+<td class="ltx_td ltx_align_center ltx_border_t">6</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left">Sports and Outdoors</td>
+<td class="ltx_td ltx_align_center">35,598</td>
+<td class="ltx_td ltx_align_center">18,357</td>
+<td class="ltx_td ltx_align_center">8.32</td>
+<td class="ltx_td ltx_align_center">6</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_align_left ltx_border_bb">Toys and Games</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">19,412</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">11,924</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">8.63</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">6</td></tr>
+</tbody>
+</table></div></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="A3.p1">
 <p class="ltx_p">我们使用 Amazon Product Reviews 数据集 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib10" title="">10</a>]</cite> 中的三个公开基准，该数据集包含 1996 年 5 月至 2014 年 7 月的用户评论和物品元数据。我们使用 Amazon Product Reviews 数据集的三个类别来完成序列推荐任务：“Beauty”、“Sports and Outdoors”和“Toys and Games”。表 <a class="ltx_ref" href="#A3.T6" title="Table 6 ‣ Appendix C Dataset Statistics ‣ Recommender Systems with Generative Retrieval"><span class="ltx_text ltx_ref_tag">6</span></a> 总结了这些数据集的统计信息。我们使用用户的评论历史来创建按时间戳排序的物品序列，并过滤掉评论数少于 5 条的用户。遵循标准评估协议 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib17" title="">17</a>, <a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite>，我们使用留一法策略进行评估。对于每个物品序列，最后一项用于测试，倒数第二项用于验证，其余用于训练。在训练期间，我们将用户历史中的物品数量限制为 20。</p>
@@ -1829,61 +1842,61 @@ Wang 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="
 <span class="ltx_tag ltx_tag_appendix">Appendix D </span>对 P5 数据预处理的修改</h2>
 <figure class="ltx_table" id="A4.T7">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 7</span>: </span><span class="ltx_text" style="font-size:90%;">使用标准预处理时 P5<cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="#bib.bib8" title="">8</a>]</cite> 的结果。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:719.3pt;height:73pt;vertical-align:-1.0pt;"><span class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
-<p class="ltx_p">
-<span class="ltx_tabular ltx_guessed_headers ltx_align_middle">
-<span class="ltx_thead">
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt ltx_rowspan ltx_rowspan_2">Methods</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Sports and Outdoors</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Beauty</span></span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4"><span class="ltx_text ltx_font_bold">Toys and Games</span></span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@5</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@5</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@10</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@10</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@5</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@5</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@10</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@10</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@5</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@5</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@10</span>
-<span class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@10</span></span>
-</span>
-<span class="ltx_tbody">
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">P5</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0061</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0041</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0095</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0052</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0163</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0107</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0254</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0136</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0070</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0050</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0121</span>
-<span class="ltx_td ltx_align_center ltx_border_t">0.0066</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">P5-ours</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.0107</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.0076</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.01458</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.0088</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.035</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.025</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.048</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.0298</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.018</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.013</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.0235</span>
-<span class="ltx_td ltx_align_center ltx_border_bb">0.015</span></span>
-</span>
-</span></p>
-</span></div>
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div class="ltx_p">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2">Methods</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4" colspan="4"><span class="ltx_text ltx_font_bold">Sports and Outdoors</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4" colspan="4"><span class="ltx_text ltx_font_bold">Beauty</span></th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt ltx_colspan ltx_colspan_4" colspan="4"><span class="ltx_text ltx_font_bold">Toys and Games</span></th></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@5</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@5</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@10</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@10</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@5</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@5</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@10</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@10</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@5</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@5</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">Recall@10</th>
+<th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">NDCG@10</th></tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">P5</th>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0061</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0041</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0095</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0052</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0163</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0107</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0254</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0136</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0070</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0050</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0121</td>
+<td class="ltx_td ltx_align_center ltx_border_t">0.0066</td></tr>
+<tr class="ltx_tr">
+<th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">P5-ours</th>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.0107</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.0076</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.01458</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.0088</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.035</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.025</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.048</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.0298</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.018</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.013</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.0235</td>
+<td class="ltx_td ltx_align_center ltx_border_bb">0.015</td></tr>
+</tbody>
+</table></div></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="A4.p1">
 <p class="ltx_p">P5 源代码 <span class="ltx_note ltx_role_footnote" id="footnote3"><sup class="ltx_note_mark">3</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">3</sup>
@@ -1917,7 +1930,7 @@ Wang 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="
 <span class="ltx_tag ltx_tag_appendix">Appendix E </span>讨论</h2>
 <figure class="ltx_table" id="A5.T8">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 8</span>: </span><span class="ltx_text" style="font-size:90%;">向推荐系统提供用户信息的影响</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Recall@5</th>
@@ -1941,11 +1954,11 @@ Wang 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="
 <td class="ltx_td ltx_align_left ltx_border_bb">0.0384</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_table" id="A5.T9">
 <figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 9: </span>不同数据集的指标均值和标准误（使用不同随机种子的 3 次运行计算）</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text" style="font-size:90%;">Datasets</span></th>
@@ -2002,7 +2015,7 @@ Wang 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="
 </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para ltx_noindent" id="A5.p1">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">语义 ID 长度和码本大小的影响。</span> 我们尝试改变语义 ID 长度和码本大小，例如使用由 <math alttext="6" class="ltx_Math" display="inline" id="A5.p1.m1"><semantics><mn>6</mn><annotation encoding="application/x-tex">6</annotation></semantics></math> 个码字组成的 ID，每个码字来自大小为 <math alttext="64" class="ltx_Math" display="inline" id="A5.p1.m2"><semantics><mn>64</mn><annotation encoding="application/x-tex">64</annotation></semantics></math> 的码本。我们注意到 TIGER 的推荐指标对这些变化具有鲁棒性。然而，请注意，输入序列长度会随着 ID 变长（即每个物品 ID 的码字更多）而增加，这会使我们基于 transformer 的序列到序列模型的计算代价更高。
@@ -2034,7 +2047,7 @@ Wang 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="
 </div>
 <figure class="ltx_table" id="A5.T10">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 10</span>: </span><span class="ltx_text" style="font-size:90%;">通过在合并数据集上生成语义 ID 与仅在 Beauty 数据集上生成语义 ID 来测试可扩展性。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_border_tt"></td>
@@ -2058,7 +2071,7 @@ Wang 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="
 <td class="ltx_td ltx_align_left ltx_border_bb">0.0384</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para ltx_noindent" id="A5.p3">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">推理成本。</span>
@@ -2084,6 +2097,72 @@ Wang 等人 <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

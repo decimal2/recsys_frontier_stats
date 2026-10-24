@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / TokenMixer-Large</div><h1>TokenMixer-Large：扩展工业推荐中的大型排序模型</h1><p class="paper-original-title">TokenMixer-Large: Scaling Up Large Ranking Models in Industrial Recommenders</p>
@@ -671,8 +684,8 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 </div>
 <figure class="ltx_table" id="S3.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>. </span><span class="ltx_text" style="font-size:90%;">TokenMixer-Large块中主要算子的耗时、占比与瓶颈。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:390.2pt;height:72.8pt;vertical-align:-0.8pt;"><span class="ltx_transformed_inner" style="transform:translate(-48.8pt,9.0pt) scale(0.8,0.8) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_t" rowspan="2">Operator</td>
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_t" colspan="3">Training</td>
@@ -713,8 +726,8 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_center ltx_border_b">0.90%</td>
 <td class="ltx_td ltx_align_center ltx_border_b">Memory Bound</td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 </section>
 <section class="ltx_subsubsection" id="S3.SS4.SSS4">
@@ -845,7 +858,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <p class="ltx_p">Token Parallel策略在训练和推理中均带来显著的性能提升。在生产服务中，具有4路词元并行的TokenMixer-Large模型（全局批量大小为320）相较于非并行基线实现了<span class="ltx_text ltx_font_bold">29.2%</span>的吞吐量提升。通过将通信与计算重叠，采用细粒度微批调度或内核内计算-通信重叠等技术，这一提升进一步增至令人瞩目的<span class="ltx_text ltx_font_bold">96.6%</span>。</p>
 </div>
 <figure class="ltx_figure" id="S3.F4">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center"><a href="assets/1eab3b6182d5e644.png" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics" id="S3.F4.g1" loading="lazy" src="assets/1eab3b6182d5e644.png"/></a></td>
 <td class="ltx_td ltx_align_center"><a href="assets/a53046b06f0316d6.png" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics" id="S3.F4.g2" loading="lazy" src="assets/a53046b06f0316d6.png"/></a></td>
@@ -856,7 +869,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_center">(b) E-Commerce 7B</td>
 <td class="ltx_td ltx_align_center">(c) Live Streaming 4B</td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 4</span>. </span><span class="ltx_text" style="font-size:90%;">不同场景下的缩放定律</span></figcaption>
 </figure>
 </section>
@@ -902,8 +915,8 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 </div>
 <figure class="ltx_table" id="S4.T2">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 2</span>. </span><span class="ltx_text" style="font-size:90%;">电商场景下<math alttext="\sim" class="ltx_Math" display="inline" id="S4.T2.m2"><semantics><mo>∼</mo><annotation encoding="application/x-tex">\sim</annotation></semantics></math>500M参数模型的性能与效率比较（最优值以<span class="ltx_text ltx_font_bold">粗体</span>表示）。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:220.4pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-48.8pt,24.8pt) scale(0.81618691111425,0.81618691111425) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" rowspan="2" style="padding-top:0.25pt;padding-bottom:0.25pt;">Model</td>
 <td class="ltx_td ltx_align_center ltx_border_tt" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">CTCVR</span></td>
@@ -1002,8 +1015,8 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">2.3 B in 4.6 B</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.25pt;padding-bottom:0.25pt;"><span class="ltx_text ltx_font_bold">15.1 T</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 </section>
 </section>
@@ -1015,8 +1028,8 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 </div>
 <figure class="ltx_table" id="S4.T3">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 3</span>. </span><span class="ltx_text" style="font-size:90%;">与Rankmixer（TokenMixer）的详细比较</span></figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:433.6pt;height:1236.1pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(60.4pt,-172.2pt) scale(1.38634967285474,1.38634967285474) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Model Version</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">SR</span></td>
@@ -1119,8 +1132,8 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 </span>
 </td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S4.SS3">
@@ -1190,7 +1203,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <figure class="ltx_table" id="S4.T4">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 4</span>. </span><span class="ltx_text" style="font-size:90%;">抖音直播场景下的模型收敛比较</span></figcaption><div class="ltx_flex_figure">
 <div class="ltx_flex_cell ltx_flex_size_1">
-<table class="ltx_tabular ltx_centering ltx_figure_panel ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_figure_panel ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Param<sup class="ltx_sup"><span class="ltx_text ltx_font_medium">*</span></sup></span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold">Convergence Day</span></td>
@@ -1223,7 +1236,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_center ltx_border_bb">60d</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+0.70%</td>
 </tr>
-</table>
+</table></div>
 </div>
 <div class="ltx_flex_break"></div>
 <div class="ltx_flex_cell ltx_flex_size_1">
@@ -1268,7 +1281,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 </div>
 <figure class="ltx_table" id="S4.T5">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 5</span>. </span><span class="ltx_text" style="font-size:90%;">TokenMixer-Large 4B各组件消融实验</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt">
 <span class="ltx_text" style="font-size:90%;">   </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">Setting</span>
@@ -1305,11 +1318,11 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 </td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><math alttext="-0.10\%" class="ltx_Math" display="inline" id="S4.T5.m9"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.10</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.10\%</annotation></semantics></math></td>
 </tr>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_table" id="S4.T6">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 6</span>. </span><span class="ltx_text" style="font-size:90%;">Sparse-Pertoken MoE各组件消融实验</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt">
 <span class="ltx_text" style="font-size:90%;">   </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">Setting</span>
@@ -1356,7 +1369,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.0%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">0.0%</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 </section>
@@ -1382,7 +1395,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 </div>
 <figure class="ltx_table" id="S4.T7">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 7</span>. </span><span class="ltx_text" style="font-size:90%;">TokenMixer-Large的线上性能</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_border_r ltx_border_tt" rowspan="2"></td>
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_tt" colspan="2"><span class="ltx_text" style="font-size:90%;">Feed Ads</span></td>
@@ -1414,7 +1427,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t"><span class="ltx_text" style="font-size:90%;">0.7%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t"><span class="ltx_text" style="font-size:90%;">1.4%</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 </section>
@@ -1447,8 +1460,8 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 </div>
 <figure class="ltx_table" id="S4.T8">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 8</span>. </span><span class="ltx_text" style="font-size:90%;">抖音和抖音极速版Feed推荐场景的线上AB测试结果，提升均具有统计显著性。根据长期反向A/B测试以及对长期反向实验的持续观察，RankMixer-1B带来的收益尚未收敛，此处呈现的结果仍在持续提升。</span></figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:433.6pt;height:70.9pt;vertical-align:-0.7pt;"><span class="ltx_transformed_inner" style="transform:translate(-116.6pt,18.9pt) scale(0.650320302724818,0.650320302724818) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"></td>
 <td class="ltx_td ltx_align_center ltx_border_t" colspan="5" style="padding-top:0.4pt;padding-bottom:0.4pt;"><span class="ltx_text ltx_font_bold">Douyin app</span></td>
@@ -1520,8 +1533,8 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_center ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+1.7683%</td>
 <td class="ltx_td ltx_align_left ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">+2.3683%</td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S4.SS6.p2">
 <p class="ltx_p">对于广告、电商和直播场景，线上基线分别为RankMixer-1B、RankMixer-150M和RankMixer-500M。我们将TokenMixer-Large相应地扩展到7B、4B和2B参数。从表<a class="ltx_ref" href="#S4.T7" title="Table 7 ‣ Down Matrix Small Initialization: ‣ 4.5.2. Ablation Study for Sparse-Pertoken MoE ‣ 4.5. Ablation Study ‣ 4. Experiments ‣ TokenMixer-Large: Scaling Up Large Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">7</span></a>可以看出，结果表明TokenMixer-Large在电商场景中带来订单量+1.66%和人均预览支付GMV+2.98%的提升；在广告场景中将ADSS提升了+2.0%；在直播场景中实现+1.4%的收入增长。</p>
@@ -2029,7 +2042,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <span class="ltx_tag ltx_tag_subsection">A.3. </span>纯模型设计</h3>
 <figure class="ltx_table" id="A1.T9">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 9</span>. </span><span class="ltx_text" style="font-size:90%;">DCN 在不同参数规模下对 tokenmixer-large 带来的效果增益。DCN 增益等于带 DCN 的 tokenmixer-large 的效果减去不带 DCN 的 tokenmixer-large 的效果。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Params</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">DCN Gain</span></td>
@@ -2046,7 +2059,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_left ltx_border_bb">700M</td>
 <td class="ltx_td ltx_align_left ltx_border_bb">+0.00%</td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="A1.SS3.p1">
 <p class="ltx_p">在我们的基线模型中，我们手动筛选序列的池化结果，并将其输入 DCN 模块进行特征交叉。该模块的输出作为额外词元，用于补充主干网络 TokenMixer 的输入。然而，这一设计存在一个主要问题。随着主干网络 TokenMixer 复杂度的持续增加，前端 DCN 带来的效果增益逐渐减弱。表 <a class="ltx_ref" href="#A1.T9" title="Table 9 ‣ A.3. Pure Model Design ‣ Appendix A Appendix ‣ TokenMixer-Large: Scaling Up Large Ranking Models in Industrial Recommenders"><span class="ltx_text ltx_ref_tag">9</span></a> 中的实验数据表明，在 150M 参数的模型上，DCN 能带来 +0.09% 的增益；然而，当模型参数扩展到 700M 时，移除 DCN 结构不再造成任何效果损失。</p>
@@ -2056,7 +2069,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 </div>
 <figure class="ltx_table" id="A1.T10">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 10</span>. </span><span class="ltx_text" style="font-size:90%;">归一化变体的消融实验</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt">
 <span class="ltx_text" style="font-size:90%;">   </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">Setting</span>
@@ -2079,7 +2092,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text" style="font-size:90%;">   Sandwich-Norm</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><math alttext="-0.03\%" class="ltx_Math" display="inline" id="A1.T10.m4"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.03</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.03\%</annotation></semantics></math></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="A1.SS4">
@@ -2113,7 +2126,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 </div>
 <figure class="ltx_table" id="A1.T11">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 11</span>. </span><span class="ltx_text" style="font-size:90%;">混合策略的消融实验</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt">
 <span class="ltx_text" style="font-size:90%;">   </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">Setting</span>
@@ -2138,7 +2151,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text" style="font-size:90%;">   Vertical division (half of raw tokens)</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><math alttext="-0.08\%" class="ltx_Math" display="inline" id="A1.T11.m4"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.08</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.08\%</annotation></semantics></math></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="A1.SS5">
@@ -2153,7 +2166,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <span class="ltx_tag ltx_tag_subsection">A.6. </span>门控值缩放分析</h3>
 <figure class="ltx_table" id="A1.T12">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 12</span>. </span><span class="ltx_text" style="font-size:90%;">模型稀疏度与 <math alttext="\alpha" class="ltx_Math" display="inline" id="A1.T12.m2"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math> 设置对 AUC 性能的影响</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Version</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Sparsity</span></td>
@@ -2218,7 +2231,7 @@ gate},~{}j}\left(\cdot\right)\right)\odot FC_{\text{up,}~{}j}\left(\cdot\right%
 <td class="ltx_td ltx_align_center ltx_border_bb">8</td>
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb">-0.05%</td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="A1.SS6.p1">
 <p class="ltx_p">在将稠密模型转换为 MoE 架构的过程中，我们发现引入一个常数缩放因子 <math alttext="\alpha" class="ltx_Math" display="inline" id="A1.SS6.p1.m1"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>，并将其置于路由函数 <math alttext="g(x)" class="ltx_Math" display="inline" id="A1.SS6.p1.m2"><semantics><mrow><mi>g</mi><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">g(x)</annotation></semantics></math> 之前——通过放大路由器的输出来增强被选中（路由）专家的梯度更新——可以显著提升模型性能。引入共享专家后，MoE 的公式可表示为：</p>
@@ -2268,7 +2281,7 @@ SharedExpert}(x)</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="A1.T13">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 13</span>. </span><span class="ltx_text" style="font-size:90%;">门控值缩放与增大方差对比</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt">
 <span class="ltx_text" style="font-size:90%;">   </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">Setting</span>
@@ -2285,7 +2298,7 @@ SharedExpert}(x)</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text" style="font-size:90%;">   Increase Variance</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><math alttext="-0.07\%" class="ltx_Math" display="inline" id="A1.T13.m2"><semantics><mrow><mo mathsize="90%">−</mo><mrow><mn mathsize="90%">0.07</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">-0.07\%</annotation></semantics></math></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="A1.SS7">
@@ -2319,7 +2332,7 @@ SharedExpert}(x)</annotation></semantics></math></td>
 <figure class="ltx_table" id="A1.T14">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 14</span>. </span><span class="ltx_text" style="font-size:90%;">小初始化分析</span></figcaption><div class="ltx_flex_figure">
 <div class="ltx_flex_cell ltx_flex_size_1">
-<table class="ltx_tabular ltx_centering ltx_figure_panel ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_figure_panel ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Version</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Stddev Init Value<sup class="ltx_sup"><span class="ltx_text ltx_font_medium">*</span></sup></span></td>
@@ -2352,7 +2365,7 @@ SharedExpert}(x)</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_bb">[0.01, 0.01, 1]</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">-0.01%</td>
 </tr>
-</table>
+</table></div>
 </div>
 <div class="ltx_flex_break"></div>
 <div class="ltx_flex_cell ltx_flex_size_1">
@@ -2376,6 +2389,72 @@ SharedExpert}(x)</annotation></semantics></math></td>
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

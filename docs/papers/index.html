@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,207 +149,211 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style></head><body class="">
 <header><a class="brand" href="../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../daily/index.html">日报</a><a href="../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / 全文阅读</div><h1>论文阅读</h1><p class="lede">深入阅读推荐系统论文，保留中文全文、公式、图表与参考文献。</p>
 <div class="paper-library-filters"><input id="paper-search" type="search" placeholder="搜索论文标题、简称、公司或 arXiv 编号…" aria-label="搜索论文">
-<select id="paper-topic" aria-label="按主题筛选"><option value="">全部主题</option><option value="GRPO">GRPO</option><option value="MoE">MoE</option><option value="PPO">PPO</option><option value="低秩压缩">低秩压缩</option><option value="偏好优化">偏好优化</option><option value="偏好对齐">偏好对齐</option><option value="分层建模">分层建模</option><option value="压缩">压缩</option><option value="同策略学习">同策略学习</option><option value="增量更新">增量更新</option><option value="多兴趣">多兴趣</option><option value="多模态">多模态</option><option value="多目标对齐">多目标对齐</option><option value="多目标排序">多目标排序</option><option value="多目标推荐">多目标推荐</option><option value="多解码器">多解码器</option><option value="大语言模型">大语言模型</option><option value="对比学习">对比学习</option><option value="工业推荐">工业推荐</option><option value="工业部署">工业部署</option><option value="广告推荐">广告推荐</option><option value="序列建模">序列建模</option><option value="序列推荐">序列推荐</option><option value="开源模型">开源模型</option><option value="强化学习">强化学习</option><option value="指令遵循">指令遵循</option><option value="排序模型">排序模型</option><option value="推理">推理</option><option value="推荐系统">推荐系统</option><option value="数学推理">数学推理</option><option value="模型部署">模型部署</option><option value="混合专家">混合专家</option><option value="潜在推理">潜在推理</option><option value="点击率预测">点击率预测</option><option value="物品词元化">物品词元化</option><option value="特征交互">特征交互</option><option value="生成式召回">生成式召回</option><option value="生成式推荐">生成式推荐</option><option value="生成式检索">生成式检索</option><option value="用户理解">用户理解</option><option value="用户记忆">用户记忆</option><option value="电商搜索">电商搜索</option><option value="知识蒸馏">知识蒸馏</option><option value="离策略学习">离策略学习</option><option value="笔记推荐">笔记推荐</option><option value="策略优化">策略优化</option><option value="统一建模">统一建模</option><option value="缓存">缓存</option><option value="自蒸馏">自蒸馏</option><option value="规模扩展">规模扩展</option><option value="训练稳定性">训练稳定性</option><option value="训练系统">训练系统</option><option value="语义 ID">语义 ID</option><option value="语义编码">语义编码</option><option value="语言模型">语言模型</option><option value="超长序列">超长序列</option><option value="量化推理">量化推理</option><option value="长尾推荐">长尾推荐</option><option value="长序列">长序列</option><option value="长期兴趣">长期兴趣</option><option value="预训练">预训练</option></select></div>
+<select id="paper-topic" aria-label="按主题筛选"><option value="">全部主题</option><option value="GRPO">GRPO</option><option value="MoE">MoE</option><option value="PPO">PPO</option><option value="低秩压缩">低秩压缩</option><option value="偏好优化">偏好优化</option><option value="偏好对齐">偏好对齐</option><option value="分层建模">分层建模</option><option value="压缩">压缩</option><option value="同策略学习">同策略学习</option><option value="增量更新">增量更新</option><option value="多兴趣">多兴趣</option><option value="多模态">多模态</option><option value="多目标对齐">多目标对齐</option><option value="多目标排序">多目标排序</option><option value="多目标推荐">多目标推荐</option><option value="多解码器">多解码器</option><option value="大语言模型">大语言模型</option><option value="对比学习">对比学习</option><option value="工业推荐">工业推荐</option><option value="工业部署">工业部署</option><option value="广告推荐">广告推荐</option><option value="序列建模">序列建模</option><option value="序列推荐">序列推荐</option><option value="开源模型">开源模型</option><option value="强化学习">强化学习</option><option value="指令遵循">指令遵循</option><option value="排序模型">排序模型</option><option value="推理">推理</option><option value="推荐系统">推荐系统</option><option value="数学推理">数学推理</option><option value="模型部署">模型部署</option><option value="混合专家">混合专家</option><option value="潜在推理">潜在推理</option><option value="点击率预测">点击率预测</option><option value="物品词元化">物品词元化</option><option value="特征交互">特征交互</option><option value="生成式召回">生成式召回</option><option value="生成式推荐">生成式推荐</option><option value="生成式检索">生成式检索</option><option value="用户理解">用户理解</option><option value="用户记忆">用户记忆</option><option value="电商搜索">电商搜索</option><option value="知识蒸馏">知识蒸馏</option><option value="离策略学习">离策略学习</option><option value="笔记推荐">笔记推荐</option><option value="策略优化">策略优化</option><option value="统一建模">统一建模</option><option value="缓存">缓存</option><option value="自蒸馏">自蒸馏</option><option value="规模扩展">规模扩展</option><option value="训练稳定性">训练稳定性</option><option value="训练系统">训练系统</option><option value="语义 ID">语义 ID</option><option value="语义编码">语义编码</option><option value="语言模型">语言模型</option><option value="超长序列">超长序列</option><option value="量化推理">量化推理</option><option value="长尾推荐">长尾推荐</option><option value="长序列">长序列</option><option value="长期兴趣">长期兴趣</option><option value="预训练">预训练</option></select>
+<select id="paper-sort" aria-label="按首次提交日期排序"><option value="newest">发表时间：最新在前</option><option value="oldest">发表时间：最早在前</option></select></div>
 <p id="paper-count" class="muted" aria-live="polite">共 38 篇中文全文</p>
-<div class="paper-library"><article class="paper-entry" data-keywords="OneTrans OneTrans：在工业推荐中使用一个 Transformer 统一特征交互与序列建模 OneTrans: Unified Feature Interaction and Sequence Modeling with One Transformer in Industrial Recommender 2510.26104 ByteDance 统一建模 序列推荐 特征交互" data-topics="[&quot;统一建模&quot;, &quot;序列推荐&quot;, &quot;特征交互&quot;]">
-<span class="eyebrow">OneTrans</span><h2><a href="2510.26104/index.html">OneTrans：在工业推荐中使用一个 Transformer 统一特征交互与序列建模</a></h2>
-<span class="original">OneTrans: Unified Feature Interaction and Sequence Modeling with One Transformer in Industrial Recommender</span><p><span class="pill">统一建模</span> <span class="pill">序列推荐</span> <span class="pill">特征交互</span></p>
-<p class="muted">ByteDance · 2510.26104v3</p>
-<div class="paper-actions"><a href="2510.26104/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2510.26104v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="HSTU 行动胜于语言：面向生成式推荐的万亿参数序列转导器 Actions Speak Louder than Words: Trillion-Parameter Sequential Transducers for Generative Recommendations 2402.17152 Meta 生成式推荐 序列推荐 规模扩展" data-topics="[&quot;生成式推荐&quot;, &quot;序列推荐&quot;, &quot;规模扩展&quot;]">
-<span class="eyebrow">HSTU</span><h2><a href="2402.17152/index.html">行动胜于语言：面向生成式推荐的万亿参数序列转导器</a></h2>
-<span class="original">Actions Speak Louder than Words: Trillion-Parameter Sequential Transducers for Generative Recommendations</span><p><span class="pill">生成式推荐</span> <span class="pill">序列推荐</span> <span class="pill">规模扩展</span></p>
-<p class="muted">Meta · 2402.17152v3</p>
-<div class="paper-actions"><a href="2402.17152/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2402.17152v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneReason OneReason 技术报告 OneReason Technical Report 2606.06260 Kuaishou 生成式推荐 推理 强化学习" data-topics="[&quot;生成式推荐&quot;, &quot;推理&quot;, &quot;强化学习&quot;]">
-<span class="eyebrow">OneReason</span><h2><a href="2606.06260/index.html">OneReason 技术报告</a></h2>
-<span class="original">OneReason Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">推理</span> <span class="pill">强化学习</span></p>
-<p class="muted">Kuaishou · 2606.06260v1</p>
-<div class="paper-actions"><a href="2606.06260/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2606.06260v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneRec OneRec：通过生成式推荐与迭代偏好对齐统一召回和排序 OneRec: Unifying Retrieve and Rank with Generative Recommender and Iterative Preference Alignment 2502.18965 Kuaishou 生成式推荐 偏好对齐 统一建模" data-topics="[&quot;生成式推荐&quot;, &quot;偏好对齐&quot;, &quot;统一建模&quot;]">
-<span class="eyebrow">OneRec</span><h2><a href="2502.18965/index.html">OneRec：通过生成式推荐与迭代偏好对齐统一召回和排序</a></h2>
-<span class="original">OneRec: Unifying Retrieve and Rank with Generative Recommender and Iterative Preference Alignment</span><p><span class="pill">生成式推荐</span> <span class="pill">偏好对齐</span> <span class="pill">统一建模</span></p>
-<p class="muted">Kuaishou · 2502.18965v1</p>
-<div class="paper-actions"><a href="2502.18965/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2502.18965v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="Quantized Inference for OneRec-V2 OneRec-V2 的量化推理 Quantized Inference for OneRec-V2 2603.11486 Kuaishou 量化推理 生成式推荐 模型部署" data-topics="[&quot;量化推理&quot;, &quot;生成式推荐&quot;, &quot;模型部署&quot;]">
-<span class="eyebrow">Quantized Inference for OneRec-V2</span><h2><a href="2603.11486/index.html">OneRec-V2 的量化推理</a></h2>
-<span class="original">Quantized Inference for OneRec-V2</span><p><span class="pill">量化推理</span> <span class="pill">生成式推荐</span> <span class="pill">模型部署</span></p>
-<p class="muted">Kuaishou · 2603.11486v1</p>
-<div class="paper-actions"><a href="2603.11486/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2603.11486v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="UniPinRec UniPinRec：在 Pinterest 规模下统一生成式检索与排序 UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale 2606.00422 Pinterest 生成式推荐 统一建模 工业部署" data-topics="[&quot;生成式推荐&quot;, &quot;统一建模&quot;, &quot;工业部署&quot;]">
-<span class="eyebrow">UniPinRec</span><h2><a href="2606.00422/index.html">UniPinRec：在 Pinterest 规模下统一生成式检索与排序</a></h2>
-<span class="original">UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale</span><p><span class="pill">生成式推荐</span> <span class="pill">统一建模</span> <span class="pill">工业部署</span></p>
-<p class="muted">Pinterest · 2606.00422v1</p>
-<div class="paper-actions"><a href="2606.00422/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2606.00422v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="GEAR GEAR：抖音生成式端到端广告检索 GEAR: Generative End-to-end Ad Retrieval at Douyin 2609.39327 ByteDance 生成式检索 广告推荐 语义编码" data-topics="[&quot;生成式检索&quot;, &quot;广告推荐&quot;, &quot;语义编码&quot;]">
-<span class="eyebrow">GEAR</span><h2><a href="2609.39327/index.html">GEAR：抖音生成式端到端广告检索</a></h2>
-<span class="original">GEAR: Generative End-to-end Ad Retrieval at Douyin</span><p><span class="pill">生成式检索</span> <span class="pill">广告推荐</span> <span class="pill">语义编码</span></p>
-<p class="muted">ByteDance · 2609.39327v1</p>
-<div class="paper-actions"><a href="2609.39327/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2609.39327v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="UniSGR UniSGR：统一语义 ID 生成与排序的框架 UniSGR: Unified Framework for Semantic ID Generation and Ranking 2607.04068 Alibaba 生成式推荐 语义编码 多目标排序" data-topics="[&quot;生成式推荐&quot;, &quot;语义编码&quot;, &quot;多目标排序&quot;]">
-<span class="eyebrow">UniSGR</span><h2><a href="2607.04068/index.html">UniSGR：统一语义 ID 生成与排序的框架</a></h2>
-<span class="original">UniSGR: Unified Framework for Semantic ID Generation and Ranking</span><p><span class="pill">生成式推荐</span> <span class="pill">语义编码</span> <span class="pill">多目标排序</span></p>
-<p class="muted">Alibaba · 2607.04068v1</p>
-<div class="paper-actions"><a href="2607.04068/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2607.04068v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="UniR2 UniR2：在单一仅解码器序列中统一生成式召回与多目标排序 Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence 2607.24439 Kuaishou 生成式召回 多目标排序 统一建模" data-topics="[&quot;生成式召回&quot;, &quot;多目标排序&quot;, &quot;统一建模&quot;]">
-<span class="eyebrow">UniR2</span><h2><a href="2607.24439/index.html">UniR2：在单一仅解码器序列中统一生成式召回与多目标排序</a></h2>
-<span class="original">Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence</span><p><span class="pill">生成式召回</span> <span class="pill">多目标排序</span> <span class="pill">统一建模</span></p>
-<p class="muted">Kuaishou · 2607.24439v1</p>
-<div class="paper-actions"><a href="2607.24439/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2607.24439v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="HyFormer HyFormer：重新审视 CTR 预测中序列建模与特征交互的作用 HyFormer: Revisiting the Roles of Sequence Modeling and Feature Interaction in CTR Prediction 2601.12681 ByteDance 序列建模 特征交互 点击率预测" data-topics="[&quot;序列建模&quot;, &quot;特征交互&quot;, &quot;点击率预测&quot;]">
-<span class="eyebrow">HyFormer</span><h2><a href="2601.12681/index.html">HyFormer：重新审视 CTR 预测中序列建模与特征交互的作用</a></h2>
-<span class="original">HyFormer: Revisiting the Roles of Sequence Modeling and Feature Interaction in CTR Prediction</span><p><span class="pill">序列建模</span> <span class="pill">特征交互</span> <span class="pill">点击率预测</span></p>
-<p class="muted">ByteDance · 2601.12681v2</p>
-<div class="paper-actions"><a href="2601.12681/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2601.12681v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="TIGER TIGER：使用生成式检索的推荐系统 Recommender Systems with Generative Retrieval 2305.05065 Google 生成式检索 语义 ID 推荐系统" data-topics="[&quot;生成式检索&quot;, &quot;语义 ID&quot;, &quot;推荐系统&quot;]">
-<span class="eyebrow">TIGER</span><h2><a href="2305.05065/index.html">TIGER：使用生成式检索的推荐系统</a></h2>
-<span class="original">Recommender Systems with Generative Retrieval</span><p><span class="pill">生成式检索</span> <span class="pill">语义 ID</span> <span class="pill">推荐系统</span></p>
-<p class="muted">Google · 2305.05065v3</p>
-<div class="paper-actions"><a href="2305.05065/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2305.05065v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="HLLM HLLM：利用分层大语言模型进行物品与用户建模，增强序列推荐 HLLM: Enhancing Sequential Recommendations via Hierarchical Large Language Models for Item and User Modeling 2409.12740 ByteDance 序列推荐 大语言模型 分层建模" data-topics="[&quot;序列推荐&quot;, &quot;大语言模型&quot;, &quot;分层建模&quot;]">
-<span class="eyebrow">HLLM</span><h2><a href="2409.12740/index.html">HLLM：利用分层大语言模型进行物品与用户建模，增强序列推荐</a></h2>
-<span class="original">HLLM: Enhancing Sequential Recommendations via Hierarchical Large Language Models for Item and User Modeling</span><p><span class="pill">序列推荐</span> <span class="pill">大语言模型</span> <span class="pill">分层建模</span></p>
-<p class="muted">ByteDance · 2409.12740v1</p>
-<div class="paper-actions"><a href="2409.12740/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2409.12740v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneRec-Think OneRec-Think：面向生成式推荐的文本内推理 OneRec-Think: In-Text Reasoning for Generative Recommendation 2510.11639 Kuaishou 生成式推荐 推理 强化学习" data-topics="[&quot;生成式推荐&quot;, &quot;推理&quot;, &quot;强化学习&quot;]">
-<span class="eyebrow">OneRec-Think</span><h2><a href="2510.11639/index.html">OneRec-Think：面向生成式推荐的文本内推理</a></h2>
-<span class="original">OneRec-Think: In-Text Reasoning for Generative Recommendation</span><p><span class="pill">生成式推荐</span> <span class="pill">推理</span> <span class="pill">强化学习</span></p>
-<p class="muted">Kuaishou · 2510.11639v2</p>
-<div class="paper-actions"><a href="2510.11639/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2510.11639v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneRec Technical Report OneRec 技术报告 OneRec Technical Report 2506.13695 Kuaishou 生成式推荐 强化学习 规模扩展" data-topics="[&quot;生成式推荐&quot;, &quot;强化学习&quot;, &quot;规模扩展&quot;]">
-<span class="eyebrow">OneRec Technical Report</span><h2><a href="2506.13695/index.html">OneRec 技术报告</a></h2>
-<span class="original">OneRec Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">强化学习</span> <span class="pill">规模扩展</span></p>
-<p class="muted">Kuaishou · 2506.13695v4</p>
-<div class="paper-actions"><a href="2506.13695/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2506.13695v4" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneRec-V2 OneRec-V2 技术报告 OneRec-V2 Technical Report 2508.20900 Kuaishou 生成式推荐 强化学习 多目标对齐" data-topics="[&quot;生成式推荐&quot;, &quot;强化学习&quot;, &quot;多目标对齐&quot;]">
-<span class="eyebrow">OneRec-V2</span><h2><a href="2508.20900/index.html">OneRec-V2 技术报告</a></h2>
-<span class="original">OneRec-V2 Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">强化学习</span> <span class="pill">多目标对齐</span></p>
-<p class="muted">Kuaishou · 2508.20900v4</p>
-<div class="paper-actions"><a href="2508.20900/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2508.20900v4" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="Multi-Decoder OneRec Multi-Decoder OneRec：面向多目标工业推荐的可控生成式检索 Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation 2607.26500 Kuaishou 生成式检索 多目标推荐 多解码器" data-topics="[&quot;生成式检索&quot;, &quot;多目标推荐&quot;, &quot;多解码器&quot;]">
-<span class="eyebrow">Multi-Decoder OneRec</span><h2><a href="2607.26500/index.html">Multi-Decoder OneRec：面向多目标工业推荐的可控生成式检索</a></h2>
-<span class="original">Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation</span><p><span class="pill">生成式检索</span> <span class="pill">多目标推荐</span> <span class="pill">多解码器</span></p>
-<p class="muted">Kuaishou · 2607.26500v1</p>
-<div class="paper-actions"><a href="2607.26500/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2607.26500v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="Trinity Trinity：统一多兴趣、长尾兴趣与长期兴趣 Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One 2402.02842 ByteDance 多兴趣 长尾推荐 长期兴趣" data-topics="[&quot;多兴趣&quot;, &quot;长尾推荐&quot;, &quot;长期兴趣&quot;]">
-<span class="eyebrow">Trinity</span><h2><a href="2402.02842/index.html">Trinity：统一多兴趣、长尾兴趣与长期兴趣</a></h2>
-<span class="original">Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One</span><p><span class="pill">多兴趣</span> <span class="pill">长尾推荐</span> <span class="pill">长期兴趣</span></p>
-<p class="muted">ByteDance · 2402.02842v1</p>
-<div class="paper-actions"><a href="2402.02842/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2402.02842v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="LONGER LONGER：扩展工业推荐中的长序列建模 LONGER: Scaling Up Long Sequence Modeling in Industrial Recommenders 2505.04421 ByteDance 长序列 规模扩展 工业推荐" data-topics="[&quot;长序列&quot;, &quot;规模扩展&quot;, &quot;工业推荐&quot;]">
-<span class="eyebrow">LONGER</span><h2><a href="2505.04421/index.html">LONGER：扩展工业推荐中的长序列建模</a></h2>
-<span class="original">LONGER: Scaling Up Long Sequence Modeling in Industrial Recommenders</span><p><span class="pill">长序列</span> <span class="pill">规模扩展</span> <span class="pill">工业推荐</span></p>
-<p class="muted">ByteDance · 2505.04421v2</p>
-<div class="paper-actions"><a href="2505.04421/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2505.04421v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="RankMixer RankMixer：扩展工业推荐中的排序模型 RankMixer: Scaling Up Ranking Models in Industrial Recommenders 2507.15551 ByteDance 排序模型 规模扩展 特征交互" data-topics="[&quot;排序模型&quot;, &quot;规模扩展&quot;, &quot;特征交互&quot;]">
-<span class="eyebrow">RankMixer</span><h2><a href="2507.15551/index.html">RankMixer：扩展工业推荐中的排序模型</a></h2>
-<span class="original">RankMixer: Scaling Up Ranking Models in Industrial Recommenders</span><p><span class="pill">排序模型</span> <span class="pill">规模扩展</span> <span class="pill">特征交互</span></p>
-<p class="muted">ByteDance · 2507.15551v3</p>
-<div class="paper-actions"><a href="2507.15551/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2507.15551v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="TokenMixer-Large TokenMixer-Large：扩展工业推荐中的大型排序模型 TokenMixer-Large: Scaling Up Large Ranking Models in Industrial Recommenders 2602.06563 ByteDance 排序模型 混合专家 规模扩展" data-topics="[&quot;排序模型&quot;, &quot;混合专家&quot;, &quot;规模扩展&quot;]">
-<span class="eyebrow">TokenMixer-Large</span><h2><a href="2602.06563/index.html">TokenMixer-Large：扩展工业推荐中的大型排序模型</a></h2>
-<span class="original">TokenMixer-Large: Scaling Up Large Ranking Models in Industrial Recommenders</span><p><span class="pill">排序模型</span> <span class="pill">混合专家</span> <span class="pill">规模扩展</span></p>
-<p class="muted">ByteDance · 2602.06563v2</p>
-<div class="paper-actions"><a href="2602.06563/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2602.06563v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="KuaFu KuaFu：在十亿级规模下将用户长行为序列压缩为理解 KuaFu: Compressing Long User Behavior into Understanding at Billion Scale 2609.31045 Tencent 长序列 用户理解 压缩" data-topics="[&quot;长序列&quot;, &quot;用户理解&quot;, &quot;压缩&quot;]">
-<span class="eyebrow">KuaFu</span><h2><a href="2609.31045/index.html">KuaFu：在十亿级规模下将用户长行为序列压缩为理解</a></h2>
-<span class="original">KuaFu: Compressing Long User Behavior into Understanding at Billion Scale</span><p><span class="pill">长序列</span> <span class="pill">用户理解</span> <span class="pill">压缩</span></p>
-<p class="muted">Tencent · 2609.31045v1</p>
-<div class="paper-actions"><a href="2609.31045/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2609.31045v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="HELIX HELIX：纯化与统一——重新思考大规模推荐中的特征交互与序列建模 HELIX: Purified and Unified — Rethinking Feature Interaction and Sequence Modeling for Large-Scale Recommendation 2609.37183 ByteDance 统一建模 特征交互 序列推荐" data-topics="[&quot;统一建模&quot;, &quot;特征交互&quot;, &quot;序列推荐&quot;]">
-<span class="eyebrow">HELIX</span><h2><a href="2609.37183/index.html">HELIX：纯化与统一——重新思考大规模推荐中的特征交互与序列建模</a></h2>
-<span class="original">HELIX: Purified and Unified — Rethinking Feature Interaction and Sequence Modeling for Large-Scale Recommendation</span><p><span class="pill">统一建模</span> <span class="pill">特征交互</span> <span class="pill">序列推荐</span></p>
-<p class="muted">ByteDance · 2609.37183v2</p>
-<div class="paper-actions"><a href="2609.37183/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2609.37183v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="PPO 近端策略优化算法 Proximal Policy Optimization Algorithms 1707.06347 OpenAI 强化学习 策略优化 PPO" data-topics="[&quot;强化学习&quot;, &quot;策略优化&quot;, &quot;PPO&quot;]">
-<span class="eyebrow">PPO</span><h2><a href="1707.06347/index.html">近端策略优化算法</a></h2>
-<span class="original">Proximal Policy Optimization Algorithms</span><p><span class="pill">强化学习</span> <span class="pill">策略优化</span> <span class="pill">PPO</span></p>
-<p class="muted">OpenAI · 1707.06347v2</p>
-<div class="paper-actions"><a href="1707.06347/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/1707.06347v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OPD / GKD 语言模型的同策略蒸馏：从自身生成的错误中学习 On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes 2306.13649 Google 知识蒸馏 同策略学习 语言模型" data-topics="[&quot;知识蒸馏&quot;, &quot;同策略学习&quot;, &quot;语言模型&quot;]">
-<span class="eyebrow">OPD / GKD</span><h2><a href="2306.13649/index.html">语言模型的同策略蒸馏：从自身生成的错误中学习</a></h2>
-<span class="original">On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes</span><p><span class="pill">知识蒸馏</span> <span class="pill">同策略学习</span> <span class="pill">语言模型</span></p>
-<p class="muted">Google · 2306.13649v3</p>
-<div class="paper-actions"><a href="2306.13649/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2306.13649v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="GRPO / DeepSeekMath DeepSeekMath：突破开放语言模型的数学推理极限 DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models 2402.03300 DeepSeek 强化学习 数学推理 GRPO" data-topics="[&quot;强化学习&quot;, &quot;数学推理&quot;, &quot;GRPO&quot;]">
-<span class="eyebrow">GRPO / DeepSeekMath</span><h2><a href="2402.03300/index.html">DeepSeekMath：突破开放语言模型的数学推理极限</a></h2>
-<span class="original">DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models</span><p><span class="pill">强化学习</span> <span class="pill">数学推理</span> <span class="pill">GRPO</span></p>
-<p class="muted">DeepSeek · 2402.03300v3</p>
-<div class="paper-actions"><a href="2402.03300/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2402.03300v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="DAPO DAPO：大规模开源大语言模型强化学习系统 DAPO: An Open-Source LLM Reinforcement Learning System at Scale 2503.14476 ByteDance 强化学习 推理 训练系统" data-topics="[&quot;强化学习&quot;, &quot;推理&quot;, &quot;训练系统&quot;]">
-<span class="eyebrow">DAPO</span><h2><a href="2503.14476/index.html">DAPO：大规模开源大语言模型强化学习系统</a></h2>
-<span class="original">DAPO: An Open-Source LLM Reinforcement Learning System at Scale</span><p><span class="pill">强化学习</span> <span class="pill">推理</span> <span class="pill">训练系统</span></p>
-<p class="muted">ByteDance · 2503.14476v2</p>
-<div class="paper-actions"><a href="2503.14476/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2503.14476v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="GSPO 组序列策略优化 Group Sequence Policy Optimization 2507.18071 Alibaba 强化学习 策略优化 MoE" data-topics="[&quot;强化学习&quot;, &quot;策略优化&quot;, &quot;MoE&quot;]">
-<span class="eyebrow">GSPO</span><h2><a href="2507.18071/index.html">组序列策略优化</a></h2>
-<span class="original">Group Sequence Policy Optimization</span><p><span class="pill">强化学习</span> <span class="pill">策略优化</span> <span class="pill">MoE</span></p>
-<p class="muted">Alibaba · 2507.18071v2</p>
-<div class="paper-actions"><a href="2507.18071/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2507.18071v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OPSD 自蒸馏推理器：大语言模型的同策略自蒸馏 Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models 2601.18734 Meta 自蒸馏 推理 同策略学习" data-topics="[&quot;自蒸馏&quot;, &quot;推理&quot;, &quot;同策略学习&quot;]">
-<span class="eyebrow">OPSD</span><h2><a href="2601.18734/index.html">自蒸馏推理器：大语言模型的同策略自蒸馏</a></h2>
-<span class="original">Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models</span><p><span class="pill">自蒸馏</span> <span class="pill">推理</span> <span class="pill">同策略学习</span></p>
-<p class="muted">Meta · 2601.18734v3</p>
-<div class="paper-actions"><a href="2601.18734/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2601.18734v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="Score Centering 得分中心化稳定离策略强化学习 Score Centering Stabilizes Off-policy Reinforcement Learning 2609.20807 Together AI 强化学习 离策略学习 训练稳定性" data-topics="[&quot;强化学习&quot;, &quot;离策略学习&quot;, &quot;训练稳定性&quot;]">
-<span class="eyebrow">Score Centering</span><h2><a href="2609.20807/index.html">得分中心化稳定离策略强化学习</a></h2>
-<span class="original">Score Centering Stabilizes Off-policy Reinforcement Learning</span><p><span class="pill">强化学习</span> <span class="pill">离策略学习</span> <span class="pill">训练稳定性</span></p>
-<p class="muted">Together AI · 2609.20807v1</p>
-<div class="paper-actions"><a href="2609.20807/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2609.20807v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneTrans-V2 OneTrans-V2：以一个 Transformer 统一工业推荐中的召回、粗排与精排 OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender 2609.28589 ByteDance 统一建模 生成式召回 工业推荐" data-topics="[&quot;统一建模&quot;, &quot;生成式召回&quot;, &quot;工业推荐&quot;]">
-<span class="eyebrow">OneTrans-V2</span><h2><a href="2609.28589/index.html">OneTrans-V2：以一个 Transformer 统一工业推荐中的召回、粗排与精排</a></h2>
-<span class="original">OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender</span><p><span class="pill">统一建模</span> <span class="pill">生成式召回</span> <span class="pill">工业推荐</span></p>
-<p class="muted">ByteDance · 2609.28589v1</p>
-<div class="paper-actions"><a href="2609.28589/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2609.28589v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="X-Rec X-Rec 技术报告 X-Rec Technical Report 2609.29180 ByteDance 生成式推荐 多模态 预训练" data-topics="[&quot;生成式推荐&quot;, &quot;多模态&quot;, &quot;预训练&quot;]">
-<span class="eyebrow">X-Rec</span><h2><a href="2609.29180/index.html">X-Rec 技术报告</a></h2>
-<span class="original">X-Rec Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">多模态</span> <span class="pill">预训练</span></p>
-<p class="muted">ByteDance · 2609.29180v1</p>
-<div class="paper-actions"><a href="2609.29180/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2609.29180v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="NoteLLM NoteLLM：面向笔记推荐的可检索大语言模型 NoteLLM: A Retrievable Large Language Model for Note Recommendation 2403.01744 Xiaohongshu 大语言模型 笔记推荐 对比学习" data-topics="[&quot;大语言模型&quot;, &quot;笔记推荐&quot;, &quot;对比学习&quot;]">
-<span class="eyebrow">NoteLLM</span><h2><a href="2403.01744/index.html">NoteLLM：面向笔记推荐的可检索大语言模型</a></h2>
-<span class="original">NoteLLM: A Retrievable Large Language Model for Note Recommendation</span><p><span class="pill">大语言模型</span> <span class="pill">笔记推荐</span> <span class="pill">对比学习</span></p>
-<p class="muted">Xiaohongshu · 2403.01744v2</p>
-<div class="paper-actions"><a href="2403.01744/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2403.01744v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="LETTER LETTER：面向生成式推荐的可学习物品词元化 Learnable Item Tokenization for Generative Recommendation 2405.07314 生成式推荐 物品词元化 语义编码" data-topics="[&quot;生成式推荐&quot;, &quot;物品词元化&quot;, &quot;语义编码&quot;]">
-<span class="eyebrow">LETTER</span><h2><a href="2405.07314/index.html">LETTER：面向生成式推荐的可学习物品词元化</a></h2>
-<span class="original">Learnable Item Tokenization for Generative Recommendation</span><p><span class="pill">生成式推荐</span> <span class="pill">物品词元化</span> <span class="pill">语义编码</span></p>
-<p class="muted"> · 2405.07314v2</p>
-<div class="paper-actions"><a href="2405.07314/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2405.07314v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneSearch OneSearch：电商搜索统一端到端生成式框架的初步探索 OneSearch: A Preliminary Exploration of the Unified End-to-End Generative Framework for E-commerce Search 2509.03236 Kuaishou 生成式检索 电商搜索 偏好优化" data-topics="[&quot;生成式检索&quot;, &quot;电商搜索&quot;, &quot;偏好优化&quot;]">
-<span class="eyebrow">OneSearch</span><h2><a href="2509.03236/index.html">OneSearch：电商搜索统一端到端生成式框架的初步探索</a></h2>
-<span class="original">OneSearch: A Preliminary Exploration of the Unified End-to-End Generative Framework for E-commerce Search</span><p><span class="pill">生成式检索</span> <span class="pill">电商搜索</span> <span class="pill">偏好优化</span></p>
-<p class="muted">Kuaishou · 2509.03236v5</p>
-<div class="paper-actions"><a href="2509.03236/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2509.03236v5" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="RecGPT-V3 RecGPT-V3 技术报告 RecGPT-V3 Technical Report 2607.15591 Alibaba 生成式推荐 用户记忆 潜在推理" data-topics="[&quot;生成式推荐&quot;, &quot;用户记忆&quot;, &quot;潜在推理&quot;]">
-<span class="eyebrow">RecGPT-V3</span><h2><a href="2607.15591/index.html">RecGPT-V3 技术报告</a></h2>
-<span class="original">RecGPT-V3 Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">用户记忆</span> <span class="pill">潜在推理</span></p>
-<p class="muted">Alibaba · 2607.15591v2</p>
-<div class="paper-actions"><a href="2607.15591/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2607.15591v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="SequenceO1 SequenceO1：通过低秩缓存实现推荐中的端到端超长（100K）序列建模 SequenceO1: End-to-End Ultra-Long (100K) Sequence Modeling in Recommendation with Low-Rank Caching 2609.08443 ByteDance 超长序列 缓存 低秩压缩" data-topics="[&quot;超长序列&quot;, &quot;缓存&quot;, &quot;低秩压缩&quot;]">
-<span class="eyebrow">SequenceO1</span><h2><a href="2609.08443/index.html">SequenceO1：通过低秩缓存实现推荐中的端到端超长（100K）序列建模</a></h2>
-<span class="original">SequenceO1: End-to-End Ultra-Long (100K) Sequence Modeling in Recommendation with Low-Rank Caching</span><p><span class="pill">超长序列</span> <span class="pill">缓存</span> <span class="pill">低秩压缩</span></p>
-<p class="muted">ByteDance · 2609.08443v1</p>
-<div class="paper-actions"><a href="2609.08443/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2609.08443v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="Don&#x27;t Rewrite the SID Map 不要重写 SID 映射：动态电商搜索中生成式检索的拓扑保持 Don&#x27;t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search 2610.26105 Alibaba 生成式检索 语义编码 增量更新" data-topics="[&quot;生成式检索&quot;, &quot;语义编码&quot;, &quot;增量更新&quot;]">
+<div class="paper-library"><article class="paper-entry" data-keywords="Don&#x27;t Rewrite the SID Map 不要重写 SID 映射：动态电商搜索中生成式检索的拓扑保持 Don&#x27;t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search 2610.26105 Alibaba 生成式检索 语义编码 增量更新" data-topics="[&quot;生成式检索&quot;, &quot;语义编码&quot;, &quot;增量更新&quot;]" data-published-date="2026-10-19">
 <span class="eyebrow">Don&#x27;t Rewrite the SID Map</span><h2><a href="2610.26105/index.html">不要重写 SID 映射：动态电商搜索中生成式检索的拓扑保持</a></h2>
 <span class="original">Don&#x27;t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search</span><p><span class="pill">生成式检索</span> <span class="pill">语义编码</span> <span class="pill">增量更新</span></p>
-<p class="muted">Alibaba · 2610.26105v1</p>
+<p class="muted">Alibaba · 2610.26105v1 · 首次提交 <time datetime="2026-10-19">2026-10-19</time></p>
 <div class="paper-actions"><a href="2610.26105/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2610.26105v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OpenOneRec OpenOneRec 技术报告 OpenOneRec Technical Report 2512.24762 Kuaishou 生成式推荐 开源模型 指令遵循" data-topics="[&quot;生成式推荐&quot;, &quot;开源模型&quot;, &quot;指令遵循&quot;]">
+<a href="https://arxiv.org/abs/2610.26105v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="GEAR GEAR：抖音生成式端到端广告检索 GEAR: Generative End-to-end Ad Retrieval at Douyin 2609.39327 ByteDance 生成式检索 广告推荐 语义编码" data-topics="[&quot;生成式检索&quot;, &quot;广告推荐&quot;, &quot;语义编码&quot;]" data-published-date="2026-09-30">
+<span class="eyebrow">GEAR</span><h2><a href="2609.39327/index.html">GEAR：抖音生成式端到端广告检索</a></h2>
+<span class="original">GEAR: Generative End-to-end Ad Retrieval at Douyin</span><p><span class="pill">生成式检索</span> <span class="pill">广告推荐</span> <span class="pill">语义编码</span></p>
+<p class="muted">ByteDance · 2609.39327v1 · 首次提交 <time datetime="2026-09-30">2026-09-30</time></p>
+<div class="paper-actions"><a href="2609.39327/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2609.39327v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="HELIX HELIX：纯化与统一——重新思考大规模推荐中的特征交互与序列建模 HELIX: Purified and Unified — Rethinking Feature Interaction and Sequence Modeling for Large-Scale Recommendation 2609.37183 ByteDance 统一建模 特征交互 序列推荐" data-topics="[&quot;统一建模&quot;, &quot;特征交互&quot;, &quot;序列推荐&quot;]" data-published-date="2026-09-29">
+<span class="eyebrow">HELIX</span><h2><a href="2609.37183/index.html">HELIX：纯化与统一——重新思考大规模推荐中的特征交互与序列建模</a></h2>
+<span class="original">HELIX: Purified and Unified — Rethinking Feature Interaction and Sequence Modeling for Large-Scale Recommendation</span><p><span class="pill">统一建模</span> <span class="pill">特征交互</span> <span class="pill">序列推荐</span></p>
+<p class="muted">ByteDance · 2609.37183v2 · 首次提交 <time datetime="2026-09-29">2026-09-29</time></p>
+<div class="paper-actions"><a href="2609.37183/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2609.37183v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="KuaFu KuaFu：在十亿级规模下将用户长行为序列压缩为理解 KuaFu: Compressing Long User Behavior into Understanding at Billion Scale 2609.31045 Tencent 长序列 用户理解 压缩" data-topics="[&quot;长序列&quot;, &quot;用户理解&quot;, &quot;压缩&quot;]" data-published-date="2026-09-25">
+<span class="eyebrow">KuaFu</span><h2><a href="2609.31045/index.html">KuaFu：在十亿级规模下将用户长行为序列压缩为理解</a></h2>
+<span class="original">KuaFu: Compressing Long User Behavior into Understanding at Billion Scale</span><p><span class="pill">长序列</span> <span class="pill">用户理解</span> <span class="pill">压缩</span></p>
+<p class="muted">Tencent · 2609.31045v1 · 首次提交 <time datetime="2026-09-25">2026-09-25</time></p>
+<div class="paper-actions"><a href="2609.31045/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2609.31045v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="X-Rec X-Rec 技术报告 X-Rec Technical Report 2609.29180 ByteDance 生成式推荐 多模态 预训练" data-topics="[&quot;生成式推荐&quot;, &quot;多模态&quot;, &quot;预训练&quot;]" data-published-date="2026-09-24">
+<span class="eyebrow">X-Rec</span><h2><a href="2609.29180/index.html">X-Rec 技术报告</a></h2>
+<span class="original">X-Rec Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">多模态</span> <span class="pill">预训练</span></p>
+<p class="muted">ByteDance · 2609.29180v1 · 首次提交 <time datetime="2026-09-24">2026-09-24</time></p>
+<div class="paper-actions"><a href="2609.29180/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2609.29180v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneTrans-V2 OneTrans-V2：以一个 Transformer 统一工业推荐中的召回、粗排与精排 OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender 2609.28589 ByteDance 统一建模 生成式召回 工业推荐" data-topics="[&quot;统一建模&quot;, &quot;生成式召回&quot;, &quot;工业推荐&quot;]" data-published-date="2026-09-23">
+<span class="eyebrow">OneTrans-V2</span><h2><a href="2609.28589/index.html">OneTrans-V2：以一个 Transformer 统一工业推荐中的召回、粗排与精排</a></h2>
+<span class="original">OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender</span><p><span class="pill">统一建模</span> <span class="pill">生成式召回</span> <span class="pill">工业推荐</span></p>
+<p class="muted">ByteDance · 2609.28589v1 · 首次提交 <time datetime="2026-09-23">2026-09-23</time></p>
+<div class="paper-actions"><a href="2609.28589/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2609.28589v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="Score Centering 得分中心化稳定离策略强化学习 Score Centering Stabilizes Off-policy Reinforcement Learning 2609.20807 Together AI 强化学习 离策略学习 训练稳定性" data-topics="[&quot;强化学习&quot;, &quot;离策略学习&quot;, &quot;训练稳定性&quot;]" data-published-date="2026-09-17">
+<span class="eyebrow">Score Centering</span><h2><a href="2609.20807/index.html">得分中心化稳定离策略强化学习</a></h2>
+<span class="original">Score Centering Stabilizes Off-policy Reinforcement Learning</span><p><span class="pill">强化学习</span> <span class="pill">离策略学习</span> <span class="pill">训练稳定性</span></p>
+<p class="muted">Together AI · 2609.20807v1 · 首次提交 <time datetime="2026-09-17">2026-09-17</time></p>
+<div class="paper-actions"><a href="2609.20807/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2609.20807v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="SequenceO1 SequenceO1：通过低秩缓存实现推荐中的端到端超长（100K）序列建模 SequenceO1: End-to-End Ultra-Long (100K) Sequence Modeling in Recommendation with Low-Rank Caching 2609.08443 ByteDance 超长序列 缓存 低秩压缩" data-topics="[&quot;超长序列&quot;, &quot;缓存&quot;, &quot;低秩压缩&quot;]" data-published-date="2026-09-08">
+<span class="eyebrow">SequenceO1</span><h2><a href="2609.08443/index.html">SequenceO1：通过低秩缓存实现推荐中的端到端超长（100K）序列建模</a></h2>
+<span class="original">SequenceO1: End-to-End Ultra-Long (100K) Sequence Modeling in Recommendation with Low-Rank Caching</span><p><span class="pill">超长序列</span> <span class="pill">缓存</span> <span class="pill">低秩压缩</span></p>
+<p class="muted">ByteDance · 2609.08443v1 · 首次提交 <time datetime="2026-09-08">2026-09-08</time></p>
+<div class="paper-actions"><a href="2609.08443/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2609.08443v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="Multi-Decoder OneRec Multi-Decoder OneRec：面向多目标工业推荐的可控生成式检索 Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation 2607.26500 Kuaishou 生成式检索 多目标推荐 多解码器" data-topics="[&quot;生成式检索&quot;, &quot;多目标推荐&quot;, &quot;多解码器&quot;]" data-published-date="2026-07-29">
+<span class="eyebrow">Multi-Decoder OneRec</span><h2><a href="2607.26500/index.html">Multi-Decoder OneRec：面向多目标工业推荐的可控生成式检索</a></h2>
+<span class="original">Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation</span><p><span class="pill">生成式检索</span> <span class="pill">多目标推荐</span> <span class="pill">多解码器</span></p>
+<p class="muted">Kuaishou · 2607.26500v1 · 首次提交 <time datetime="2026-07-29">2026-07-29</time></p>
+<div class="paper-actions"><a href="2607.26500/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2607.26500v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="UniR2 UniR2：在单一仅解码器序列中统一生成式召回与多目标排序 Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence 2607.24439 Kuaishou 生成式召回 多目标排序 统一建模" data-topics="[&quot;生成式召回&quot;, &quot;多目标排序&quot;, &quot;统一建模&quot;]" data-published-date="2026-07-27">
+<span class="eyebrow">UniR2</span><h2><a href="2607.24439/index.html">UniR2：在单一仅解码器序列中统一生成式召回与多目标排序</a></h2>
+<span class="original">Unifying Generative Recall and Multi-Objective Ranking in a Single Decoder-Only Sequence</span><p><span class="pill">生成式召回</span> <span class="pill">多目标排序</span> <span class="pill">统一建模</span></p>
+<p class="muted">Kuaishou · 2607.24439v1 · 首次提交 <time datetime="2026-07-27">2026-07-27</time></p>
+<div class="paper-actions"><a href="2607.24439/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2607.24439v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="RecGPT-V3 RecGPT-V3 技术报告 RecGPT-V3 Technical Report 2607.15591 Alibaba 生成式推荐 用户记忆 潜在推理" data-topics="[&quot;生成式推荐&quot;, &quot;用户记忆&quot;, &quot;潜在推理&quot;]" data-published-date="2026-07-17">
+<span class="eyebrow">RecGPT-V3</span><h2><a href="2607.15591/index.html">RecGPT-V3 技术报告</a></h2>
+<span class="original">RecGPT-V3 Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">用户记忆</span> <span class="pill">潜在推理</span></p>
+<p class="muted">Alibaba · 2607.15591v2 · 首次提交 <time datetime="2026-07-17">2026-07-17</time></p>
+<div class="paper-actions"><a href="2607.15591/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2607.15591v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="UniSGR UniSGR：统一语义 ID 生成与排序的框架 UniSGR: Unified Framework for Semantic ID Generation and Ranking 2607.04068 Alibaba 生成式推荐 语义编码 多目标排序" data-topics="[&quot;生成式推荐&quot;, &quot;语义编码&quot;, &quot;多目标排序&quot;]" data-published-date="2026-07-05">
+<span class="eyebrow">UniSGR</span><h2><a href="2607.04068/index.html">UniSGR：统一语义 ID 生成与排序的框架</a></h2>
+<span class="original">UniSGR: Unified Framework for Semantic ID Generation and Ranking</span><p><span class="pill">生成式推荐</span> <span class="pill">语义编码</span> <span class="pill">多目标排序</span></p>
+<p class="muted">Alibaba · 2607.04068v1 · 首次提交 <time datetime="2026-07-05">2026-07-05</time></p>
+<div class="paper-actions"><a href="2607.04068/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2607.04068v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneReason OneReason 技术报告 OneReason Technical Report 2606.06260 Kuaishou 生成式推荐 推理 强化学习" data-topics="[&quot;生成式推荐&quot;, &quot;推理&quot;, &quot;强化学习&quot;]" data-published-date="2026-06-04">
+<span class="eyebrow">OneReason</span><h2><a href="2606.06260/index.html">OneReason 技术报告</a></h2>
+<span class="original">OneReason Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">推理</span> <span class="pill">强化学习</span></p>
+<p class="muted">Kuaishou · 2606.06260v1 · 首次提交 <time datetime="2026-06-04">2026-06-04</time></p>
+<div class="paper-actions"><a href="2606.06260/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2606.06260v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="UniPinRec UniPinRec：在 Pinterest 规模下统一生成式检索与排序 UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale 2606.00422 Pinterest 生成式推荐 统一建模 工业部署" data-topics="[&quot;生成式推荐&quot;, &quot;统一建模&quot;, &quot;工业部署&quot;]" data-published-date="2026-05-29">
+<span class="eyebrow">UniPinRec</span><h2><a href="2606.00422/index.html">UniPinRec：在 Pinterest 规模下统一生成式检索与排序</a></h2>
+<span class="original">UniPinRec: Unifying Generative Retrieval and Ranking at Pinterest Scale</span><p><span class="pill">生成式推荐</span> <span class="pill">统一建模</span> <span class="pill">工业部署</span></p>
+<p class="muted">Pinterest · 2606.00422v1 · 首次提交 <time datetime="2026-05-29">2026-05-29</time></p>
+<div class="paper-actions"><a href="2606.00422/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2606.00422v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="Quantized Inference for OneRec-V2 OneRec-V2 的量化推理 Quantized Inference for OneRec-V2 2603.11486 Kuaishou 量化推理 生成式推荐 模型部署" data-topics="[&quot;量化推理&quot;, &quot;生成式推荐&quot;, &quot;模型部署&quot;]" data-published-date="2026-03-12">
+<span class="eyebrow">Quantized Inference for OneRec-V2</span><h2><a href="2603.11486/index.html">OneRec-V2 的量化推理</a></h2>
+<span class="original">Quantized Inference for OneRec-V2</span><p><span class="pill">量化推理</span> <span class="pill">生成式推荐</span> <span class="pill">模型部署</span></p>
+<p class="muted">Kuaishou · 2603.11486v1 · 首次提交 <time datetime="2026-03-12">2026-03-12</time></p>
+<div class="paper-actions"><a href="2603.11486/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2603.11486v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="TokenMixer-Large TokenMixer-Large：扩展工业推荐中的大型排序模型 TokenMixer-Large: Scaling Up Large Ranking Models in Industrial Recommenders 2602.06563 ByteDance 排序模型 混合专家 规模扩展" data-topics="[&quot;排序模型&quot;, &quot;混合专家&quot;, &quot;规模扩展&quot;]" data-published-date="2026-02-06">
+<span class="eyebrow">TokenMixer-Large</span><h2><a href="2602.06563/index.html">TokenMixer-Large：扩展工业推荐中的大型排序模型</a></h2>
+<span class="original">TokenMixer-Large: Scaling Up Large Ranking Models in Industrial Recommenders</span><p><span class="pill">排序模型</span> <span class="pill">混合专家</span> <span class="pill">规模扩展</span></p>
+<p class="muted">ByteDance · 2602.06563v2 · 首次提交 <time datetime="2026-02-06">2026-02-06</time></p>
+<div class="paper-actions"><a href="2602.06563/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2602.06563v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OPSD 自蒸馏推理器：大语言模型的同策略自蒸馏 Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models 2601.18734 Meta 自蒸馏 推理 同策略学习" data-topics="[&quot;自蒸馏&quot;, &quot;推理&quot;, &quot;同策略学习&quot;]" data-published-date="2026-01-26">
+<span class="eyebrow">OPSD</span><h2><a href="2601.18734/index.html">自蒸馏推理器：大语言模型的同策略自蒸馏</a></h2>
+<span class="original">Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models</span><p><span class="pill">自蒸馏</span> <span class="pill">推理</span> <span class="pill">同策略学习</span></p>
+<p class="muted">Meta · 2601.18734v3 · 首次提交 <time datetime="2026-01-26">2026-01-26</time></p>
+<div class="paper-actions"><a href="2601.18734/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2601.18734v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="HyFormer HyFormer：重新审视 CTR 预测中序列建模与特征交互的作用 HyFormer: Revisiting the Roles of Sequence Modeling and Feature Interaction in CTR Prediction 2601.12681 ByteDance 序列建模 特征交互 点击率预测" data-topics="[&quot;序列建模&quot;, &quot;特征交互&quot;, &quot;点击率预测&quot;]" data-published-date="2026-01-19">
+<span class="eyebrow">HyFormer</span><h2><a href="2601.12681/index.html">HyFormer：重新审视 CTR 预测中序列建模与特征交互的作用</a></h2>
+<span class="original">HyFormer: Revisiting the Roles of Sequence Modeling and Feature Interaction in CTR Prediction</span><p><span class="pill">序列建模</span> <span class="pill">特征交互</span> <span class="pill">点击率预测</span></p>
+<p class="muted">ByteDance · 2601.12681v2 · 首次提交 <time datetime="2026-01-19">2026-01-19</time></p>
+<div class="paper-actions"><a href="2601.12681/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2601.12681v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OpenOneRec OpenOneRec 技术报告 OpenOneRec Technical Report 2512.24762 Kuaishou 生成式推荐 开源模型 指令遵循" data-topics="[&quot;生成式推荐&quot;, &quot;开源模型&quot;, &quot;指令遵循&quot;]" data-published-date="2025-12-31">
 <span class="eyebrow">OpenOneRec</span><h2><a href="2512.24762/index.html">OpenOneRec 技术报告</a></h2>
 <span class="original">OpenOneRec Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">开源模型</span> <span class="pill">指令遵循</span></p>
-<p class="muted">Kuaishou · 2512.24762v2</p>
+<p class="muted">Kuaishou · 2512.24762v2 · 首次提交 <time datetime="2025-12-31">2025-12-31</time></p>
 <div class="paper-actions"><a href="2512.24762/index.html">阅读中文全文</a>
-<a href="https://arxiv.org/abs/2512.24762v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article></div><p id="paper-empty" class="muted" hidden>没有匹配的论文。</p>
+<a href="https://arxiv.org/abs/2512.24762v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneTrans OneTrans：在工业推荐中使用一个 Transformer 统一特征交互与序列建模 OneTrans: Unified Feature Interaction and Sequence Modeling with One Transformer in Industrial Recommender 2510.26104 ByteDance 统一建模 序列推荐 特征交互" data-topics="[&quot;统一建模&quot;, &quot;序列推荐&quot;, &quot;特征交互&quot;]" data-published-date="2025-10-30">
+<span class="eyebrow">OneTrans</span><h2><a href="2510.26104/index.html">OneTrans：在工业推荐中使用一个 Transformer 统一特征交互与序列建模</a></h2>
+<span class="original">OneTrans: Unified Feature Interaction and Sequence Modeling with One Transformer in Industrial Recommender</span><p><span class="pill">统一建模</span> <span class="pill">序列推荐</span> <span class="pill">特征交互</span></p>
+<p class="muted">ByteDance · 2510.26104v3 · 首次提交 <time datetime="2025-10-30">2025-10-30</time></p>
+<div class="paper-actions"><a href="2510.26104/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2510.26104v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneRec-Think OneRec-Think：面向生成式推荐的文本内推理 OneRec-Think: In-Text Reasoning for Generative Recommendation 2510.11639 Kuaishou 生成式推荐 推理 强化学习" data-topics="[&quot;生成式推荐&quot;, &quot;推理&quot;, &quot;强化学习&quot;]" data-published-date="2025-10-13">
+<span class="eyebrow">OneRec-Think</span><h2><a href="2510.11639/index.html">OneRec-Think：面向生成式推荐的文本内推理</a></h2>
+<span class="original">OneRec-Think: In-Text Reasoning for Generative Recommendation</span><p><span class="pill">生成式推荐</span> <span class="pill">推理</span> <span class="pill">强化学习</span></p>
+<p class="muted">Kuaishou · 2510.11639v2 · 首次提交 <time datetime="2025-10-13">2025-10-13</time></p>
+<div class="paper-actions"><a href="2510.11639/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2510.11639v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneSearch OneSearch：电商搜索统一端到端生成式框架的初步探索 OneSearch: A Preliminary Exploration of the Unified End-to-End Generative Framework for E-commerce Search 2509.03236 Kuaishou 生成式检索 电商搜索 偏好优化" data-topics="[&quot;生成式检索&quot;, &quot;电商搜索&quot;, &quot;偏好优化&quot;]" data-published-date="2025-09-03">
+<span class="eyebrow">OneSearch</span><h2><a href="2509.03236/index.html">OneSearch：电商搜索统一端到端生成式框架的初步探索</a></h2>
+<span class="original">OneSearch: A Preliminary Exploration of the Unified End-to-End Generative Framework for E-commerce Search</span><p><span class="pill">生成式检索</span> <span class="pill">电商搜索</span> <span class="pill">偏好优化</span></p>
+<p class="muted">Kuaishou · 2509.03236v5 · 首次提交 <time datetime="2025-09-03">2025-09-03</time></p>
+<div class="paper-actions"><a href="2509.03236/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2509.03236v5" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneRec-V2 OneRec-V2 技术报告 OneRec-V2 Technical Report 2508.20900 Kuaishou 生成式推荐 强化学习 多目标对齐" data-topics="[&quot;生成式推荐&quot;, &quot;强化学习&quot;, &quot;多目标对齐&quot;]" data-published-date="2025-08-28">
+<span class="eyebrow">OneRec-V2</span><h2><a href="2508.20900/index.html">OneRec-V2 技术报告</a></h2>
+<span class="original">OneRec-V2 Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">强化学习</span> <span class="pill">多目标对齐</span></p>
+<p class="muted">Kuaishou · 2508.20900v4 · 首次提交 <time datetime="2025-08-28">2025-08-28</time></p>
+<div class="paper-actions"><a href="2508.20900/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2508.20900v4" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="GSPO 组序列策略优化 Group Sequence Policy Optimization 2507.18071 Alibaba 强化学习 策略优化 MoE" data-topics="[&quot;强化学习&quot;, &quot;策略优化&quot;, &quot;MoE&quot;]" data-published-date="2025-07-24">
+<span class="eyebrow">GSPO</span><h2><a href="2507.18071/index.html">组序列策略优化</a></h2>
+<span class="original">Group Sequence Policy Optimization</span><p><span class="pill">强化学习</span> <span class="pill">策略优化</span> <span class="pill">MoE</span></p>
+<p class="muted">Alibaba · 2507.18071v2 · 首次提交 <time datetime="2025-07-24">2025-07-24</time></p>
+<div class="paper-actions"><a href="2507.18071/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2507.18071v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="RankMixer RankMixer：扩展工业推荐中的排序模型 RankMixer: Scaling Up Ranking Models in Industrial Recommenders 2507.15551 ByteDance 排序模型 规模扩展 特征交互" data-topics="[&quot;排序模型&quot;, &quot;规模扩展&quot;, &quot;特征交互&quot;]" data-published-date="2025-07-21">
+<span class="eyebrow">RankMixer</span><h2><a href="2507.15551/index.html">RankMixer：扩展工业推荐中的排序模型</a></h2>
+<span class="original">RankMixer: Scaling Up Ranking Models in Industrial Recommenders</span><p><span class="pill">排序模型</span> <span class="pill">规模扩展</span> <span class="pill">特征交互</span></p>
+<p class="muted">ByteDance · 2507.15551v3 · 首次提交 <time datetime="2025-07-21">2025-07-21</time></p>
+<div class="paper-actions"><a href="2507.15551/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2507.15551v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneRec Technical Report OneRec 技术报告 OneRec Technical Report 2506.13695 Kuaishou 生成式推荐 强化学习 规模扩展" data-topics="[&quot;生成式推荐&quot;, &quot;强化学习&quot;, &quot;规模扩展&quot;]" data-published-date="2025-06-16">
+<span class="eyebrow">OneRec Technical Report</span><h2><a href="2506.13695/index.html">OneRec 技术报告</a></h2>
+<span class="original">OneRec Technical Report</span><p><span class="pill">生成式推荐</span> <span class="pill">强化学习</span> <span class="pill">规模扩展</span></p>
+<p class="muted">Kuaishou · 2506.13695v4 · 首次提交 <time datetime="2025-06-16">2025-06-16</time></p>
+<div class="paper-actions"><a href="2506.13695/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2506.13695v4" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="LONGER LONGER：扩展工业推荐中的长序列建模 LONGER: Scaling Up Long Sequence Modeling in Industrial Recommenders 2505.04421 ByteDance 长序列 规模扩展 工业推荐" data-topics="[&quot;长序列&quot;, &quot;规模扩展&quot;, &quot;工业推荐&quot;]" data-published-date="2025-05-07">
+<span class="eyebrow">LONGER</span><h2><a href="2505.04421/index.html">LONGER：扩展工业推荐中的长序列建模</a></h2>
+<span class="original">LONGER: Scaling Up Long Sequence Modeling in Industrial Recommenders</span><p><span class="pill">长序列</span> <span class="pill">规模扩展</span> <span class="pill">工业推荐</span></p>
+<p class="muted">ByteDance · 2505.04421v2 · 首次提交 <time datetime="2025-05-07">2025-05-07</time></p>
+<div class="paper-actions"><a href="2505.04421/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2505.04421v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="DAPO DAPO：大规模开源大语言模型强化学习系统 DAPO: An Open-Source LLM Reinforcement Learning System at Scale 2503.14476 ByteDance 强化学习 推理 训练系统" data-topics="[&quot;强化学习&quot;, &quot;推理&quot;, &quot;训练系统&quot;]" data-published-date="2025-03-18">
+<span class="eyebrow">DAPO</span><h2><a href="2503.14476/index.html">DAPO：大规模开源大语言模型强化学习系统</a></h2>
+<span class="original">DAPO: An Open-Source LLM Reinforcement Learning System at Scale</span><p><span class="pill">强化学习</span> <span class="pill">推理</span> <span class="pill">训练系统</span></p>
+<p class="muted">ByteDance · 2503.14476v2 · 首次提交 <time datetime="2025-03-18">2025-03-18</time></p>
+<div class="paper-actions"><a href="2503.14476/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2503.14476v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OneRec OneRec：通过生成式推荐与迭代偏好对齐统一召回和排序 OneRec: Unifying Retrieve and Rank with Generative Recommender and Iterative Preference Alignment 2502.18965 Kuaishou 生成式推荐 偏好对齐 统一建模" data-topics="[&quot;生成式推荐&quot;, &quot;偏好对齐&quot;, &quot;统一建模&quot;]" data-published-date="2025-02-26">
+<span class="eyebrow">OneRec</span><h2><a href="2502.18965/index.html">OneRec：通过生成式推荐与迭代偏好对齐统一召回和排序</a></h2>
+<span class="original">OneRec: Unifying Retrieve and Rank with Generative Recommender and Iterative Preference Alignment</span><p><span class="pill">生成式推荐</span> <span class="pill">偏好对齐</span> <span class="pill">统一建模</span></p>
+<p class="muted">Kuaishou · 2502.18965v1 · 首次提交 <time datetime="2025-02-26">2025-02-26</time></p>
+<div class="paper-actions"><a href="2502.18965/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2502.18965v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="HLLM HLLM：利用分层大语言模型进行物品与用户建模，增强序列推荐 HLLM: Enhancing Sequential Recommendations via Hierarchical Large Language Models for Item and User Modeling 2409.12740 ByteDance 序列推荐 大语言模型 分层建模" data-topics="[&quot;序列推荐&quot;, &quot;大语言模型&quot;, &quot;分层建模&quot;]" data-published-date="2024-09-19">
+<span class="eyebrow">HLLM</span><h2><a href="2409.12740/index.html">HLLM：利用分层大语言模型进行物品与用户建模，增强序列推荐</a></h2>
+<span class="original">HLLM: Enhancing Sequential Recommendations via Hierarchical Large Language Models for Item and User Modeling</span><p><span class="pill">序列推荐</span> <span class="pill">大语言模型</span> <span class="pill">分层建模</span></p>
+<p class="muted">ByteDance · 2409.12740v1 · 首次提交 <time datetime="2024-09-19">2024-09-19</time></p>
+<div class="paper-actions"><a href="2409.12740/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2409.12740v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="LETTER LETTER：面向生成式推荐的可学习物品词元化 Learnable Item Tokenization for Generative Recommendation 2405.07314 生成式推荐 物品词元化 语义编码" data-topics="[&quot;生成式推荐&quot;, &quot;物品词元化&quot;, &quot;语义编码&quot;]" data-published-date="2024-05-12">
+<span class="eyebrow">LETTER</span><h2><a href="2405.07314/index.html">LETTER：面向生成式推荐的可学习物品词元化</a></h2>
+<span class="original">Learnable Item Tokenization for Generative Recommendation</span><p><span class="pill">生成式推荐</span> <span class="pill">物品词元化</span> <span class="pill">语义编码</span></p>
+<p class="muted"> · 2405.07314v2 · 首次提交 <time datetime="2024-05-12">2024-05-12</time></p>
+<div class="paper-actions"><a href="2405.07314/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2405.07314v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="NoteLLM NoteLLM：面向笔记推荐的可检索大语言模型 NoteLLM: A Retrievable Large Language Model for Note Recommendation 2403.01744 Xiaohongshu 大语言模型 笔记推荐 对比学习" data-topics="[&quot;大语言模型&quot;, &quot;笔记推荐&quot;, &quot;对比学习&quot;]" data-published-date="2024-03-04">
+<span class="eyebrow">NoteLLM</span><h2><a href="2403.01744/index.html">NoteLLM：面向笔记推荐的可检索大语言模型</a></h2>
+<span class="original">NoteLLM: A Retrievable Large Language Model for Note Recommendation</span><p><span class="pill">大语言模型</span> <span class="pill">笔记推荐</span> <span class="pill">对比学习</span></p>
+<p class="muted">Xiaohongshu · 2403.01744v2 · 首次提交 <time datetime="2024-03-04">2024-03-04</time></p>
+<div class="paper-actions"><a href="2403.01744/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2403.01744v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="HSTU 行动胜于语言：面向生成式推荐的万亿参数序列转导器 Actions Speak Louder than Words: Trillion-Parameter Sequential Transducers for Generative Recommendations 2402.17152 Meta 生成式推荐 序列推荐 规模扩展" data-topics="[&quot;生成式推荐&quot;, &quot;序列推荐&quot;, &quot;规模扩展&quot;]" data-published-date="2024-02-27">
+<span class="eyebrow">HSTU</span><h2><a href="2402.17152/index.html">行动胜于语言：面向生成式推荐的万亿参数序列转导器</a></h2>
+<span class="original">Actions Speak Louder than Words: Trillion-Parameter Sequential Transducers for Generative Recommendations</span><p><span class="pill">生成式推荐</span> <span class="pill">序列推荐</span> <span class="pill">规模扩展</span></p>
+<p class="muted">Meta · 2402.17152v3 · 首次提交 <time datetime="2024-02-27">2024-02-27</time></p>
+<div class="paper-actions"><a href="2402.17152/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2402.17152v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="Trinity Trinity：统一多兴趣、长尾兴趣与长期兴趣 Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One 2402.02842 ByteDance 多兴趣 长尾推荐 长期兴趣" data-topics="[&quot;多兴趣&quot;, &quot;长尾推荐&quot;, &quot;长期兴趣&quot;]" data-published-date="2024-02-05">
+<span class="eyebrow">Trinity</span><h2><a href="2402.02842/index.html">Trinity：统一多兴趣、长尾兴趣与长期兴趣</a></h2>
+<span class="original">Trinity: Syncretizing Multi-/Long-tail/Long-term Interests All in One</span><p><span class="pill">多兴趣</span> <span class="pill">长尾推荐</span> <span class="pill">长期兴趣</span></p>
+<p class="muted">ByteDance · 2402.02842v1 · 首次提交 <time datetime="2024-02-05">2024-02-05</time></p>
+<div class="paper-actions"><a href="2402.02842/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2402.02842v1" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="GRPO / DeepSeekMath DeepSeekMath：突破开放语言模型的数学推理极限 DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models 2402.03300 DeepSeek 强化学习 数学推理 GRPO" data-topics="[&quot;强化学习&quot;, &quot;数学推理&quot;, &quot;GRPO&quot;]" data-published-date="2024-02-05">
+<span class="eyebrow">GRPO / DeepSeekMath</span><h2><a href="2402.03300/index.html">DeepSeekMath：突破开放语言模型的数学推理极限</a></h2>
+<span class="original">DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models</span><p><span class="pill">强化学习</span> <span class="pill">数学推理</span> <span class="pill">GRPO</span></p>
+<p class="muted">DeepSeek · 2402.03300v3 · 首次提交 <time datetime="2024-02-05">2024-02-05</time></p>
+<div class="paper-actions"><a href="2402.03300/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2402.03300v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="OPD / GKD 语言模型的同策略蒸馏：从自身生成的错误中学习 On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes 2306.13649 Google 知识蒸馏 同策略学习 语言模型" data-topics="[&quot;知识蒸馏&quot;, &quot;同策略学习&quot;, &quot;语言模型&quot;]" data-published-date="2023-06-23">
+<span class="eyebrow">OPD / GKD</span><h2><a href="2306.13649/index.html">语言模型的同策略蒸馏：从自身生成的错误中学习</a></h2>
+<span class="original">On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes</span><p><span class="pill">知识蒸馏</span> <span class="pill">同策略学习</span> <span class="pill">语言模型</span></p>
+<p class="muted">Google · 2306.13649v3 · 首次提交 <time datetime="2023-06-23">2023-06-23</time></p>
+<div class="paper-actions"><a href="2306.13649/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2306.13649v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="TIGER TIGER：使用生成式检索的推荐系统 Recommender Systems with Generative Retrieval 2305.05065 Google 生成式检索 语义 ID 推荐系统" data-topics="[&quot;生成式检索&quot;, &quot;语义 ID&quot;, &quot;推荐系统&quot;]" data-published-date="2023-05-08">
+<span class="eyebrow">TIGER</span><h2><a href="2305.05065/index.html">TIGER：使用生成式检索的推荐系统</a></h2>
+<span class="original">Recommender Systems with Generative Retrieval</span><p><span class="pill">生成式检索</span> <span class="pill">语义 ID</span> <span class="pill">推荐系统</span></p>
+<p class="muted">Google · 2305.05065v3 · 首次提交 <time datetime="2023-05-08">2023-05-08</time></p>
+<div class="paper-actions"><a href="2305.05065/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/2305.05065v3" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article><article class="paper-entry" data-keywords="PPO 近端策略优化算法 Proximal Policy Optimization Algorithms 1707.06347 OpenAI 强化学习 策略优化 PPO" data-topics="[&quot;强化学习&quot;, &quot;策略优化&quot;, &quot;PPO&quot;]" data-published-date="2017-07-20">
+<span class="eyebrow">PPO</span><h2><a href="1707.06347/index.html">近端策略优化算法</a></h2>
+<span class="original">Proximal Policy Optimization Algorithms</span><p><span class="pill">强化学习</span> <span class="pill">策略优化</span> <span class="pill">PPO</span></p>
+<p class="muted">OpenAI · 1707.06347v2 · 首次提交 <time datetime="2017-07-20">2017-07-20</time></p>
+<div class="paper-actions"><a href="1707.06347/index.html">阅读中文全文</a>
+<a href="https://arxiv.org/abs/1707.06347v2" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article></div><p id="paper-empty" class="muted" hidden>没有匹配的论文。</p>
 <script>
 const paperSearch=document.querySelector('#paper-search'),paperTopic=document.querySelector('#paper-topic');
+const paperSort=document.querySelector('#paper-sort'),paperList=document.querySelector('.paper-library');
+const paperEntries=[...paperList.querySelectorAll('.paper-entry')];
 function filterPapers(){let count=0;const query=paperSearch.value.toLowerCase().trim();
  document.querySelectorAll('.paper-entry').forEach(el=>{
   el.hidden=!el.dataset.keywords.toLowerCase().includes(query)||(paperTopic.value&&!JSON.parse(el.dataset.topics).includes(paperTopic.value));
@@ -357,6 +361,14 @@ function filterPapers(){let count=0;const query=paperSearch.value.toLowerCase().
  });document.querySelector('#paper-count').textContent='共 '+count+' 篇中文全文';document.querySelector('#paper-empty').hidden=count!==0;
 }
 paperSearch.addEventListener('input',filterPapers);paperTopic.addEventListener('change',filterPapers);
+paperSort.addEventListener('change',()=>{
+ const sorted=[...paperEntries].sort((a,b)=>{
+  const first=a.dataset.publishedDate,last=b.dataset.publishedDate;
+  if(!first||!last)return first?-1:last?1:0;
+  return paperSort.value==='oldest'?first.localeCompare(last):last.localeCompare(first);
+ });
+ sorted.forEach(entry=>paperList.append(entry));filterPapers();
+});
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

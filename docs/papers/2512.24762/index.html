@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OpenOneRec</div><h1>OpenOneRec 技术报告</h1><p class="paper-original-title">OpenOneRec Technical Report</p>
@@ -217,7 +230,7 @@ li{margin:5px 0}
 <div class="ltx_personname">
 <div class="ltx_text" style="font-size:120%;">OneRec Team 
 <br class="ltx_break"/>
-<table class="ltx_tabular ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_right"><span class="ltx_text ltx_align_right ltx_inline-block" style="font-size:67%;width:14.4pt;position:relative; bottom:-3.2pt;"><a href="assets/6425d991300d22da.png" rel="noopener" target="_blank"><img alt="[Uncaptioned image]" class="ltx_graphics" id="g1" loading="lazy" src="assets/6425d991300d22da.png"/></a></span></td>
 <td class="ltx_td ltx_align_left"><a class="ltx_ref ltx_url ltx_font_typewriter" href="https://huggingface.co/OpenOneRec" style="font-size:67%;" title="">https://huggingface.co/OpenOneRec</a></td></tr>
@@ -227,7 +240,7 @@ li{margin:5px 0}
 <span class="ltx_p"><span class="ltx_text" style="color:#4D4D4D;">GitHub</span></span>
 </span></span></span></td>
 <td class="ltx_td ltx_align_left"><a class="ltx_ref ltx_url ltx_font_typewriter" href="https://github.com/Kuaishou-OneRec/OpenOneRec" style="font-size:67%;" title="">https://github.com/Kuaishou-OneRec/OpenOneRec</a></td></tr>
-</table><span class="ltx_text" style="font-size:67%;">
+</table></div><span class="ltx_text" style="font-size:67%;">
 </span></div>
 </div><span class="ltx_author_notes">
 <span class="ltx_contact ltx_role_affiliation">
@@ -389,8 +402,8 @@ li{margin:5px 0}
 </div>
 <figure class="ltx_table" id="S3.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>: </span><span class="ltx_text" style="font-size:90%;">RecIF-Bench 的统计信息。该数据集覆盖三个具有不同交互密度的不同工业领域。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:368.6pt;height:80.8pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-20.9pt,4.6pt) scale(0.898182194346144,0.898182194346144) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r ltx_border_tt"><span class="ltx_text ltx_font_bold">Domain</span></td>
 <td class="ltx_td ltx_align_right ltx_border_r ltx_border_tt"><span class="ltx_text ltx_font_bold"># Users</span></td>
@@ -431,8 +444,8 @@ li{margin:5px 0}
 <td class="ltx_td ltx_align_right ltx_border_bb ltx_border_r ltx_border_t">574.9</td>
 <td class="ltx_td ltx_align_right ltx_border_bb ltx_border_t">17.5</td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <section class="ltx_paragraph" id="S3.SS1.SSS0.Px1">
 <h5 class="ltx_title ltx_title_paragraph">多领域覆盖。</h5>
@@ -518,8 +531,8 @@ li{margin:5px 0}
 </figure>
 <figure class="ltx_table" id="S3.T2">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 2</span>: </span><span class="ltx_text" style="font-size:90%;">RecIF-Bench 的任务分类体系。我们将8个任务形式化为4个能力层级，并指定其输入/输出格式与评估重点。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:130.9pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-51.6pt,15.6pt) scale(0.807833693211088,0.807833693211088) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r ltx_border_tt"><span class="ltx_text ltx_font_bold">Layer</span></td>
 <td class="ltx_td ltx_align_left ltx_border_r ltx_border_tt"><span class="ltx_text ltx_font_bold">Task</span></td>
@@ -608,8 +621,8 @@ li{margin:5px 0}
 <td class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">Explanation</td>
 <td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t">LLM-as-Judge</td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 </section>
 <section class="ltx_subsubsection" id="S3.SS2.SSS1">
@@ -742,7 +755,7 @@ li{margin:5px 0}
 </div>
 <figure class="ltx_table" id="S3.T3">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 3</span>: </span><span class="ltx_text" style="font-size:90%;">推荐基准的特性比较。RecIF-Bench 是唯一同时支持全部七个维度的基准。具体而言，它独特地整合了多行为交互、交错数据（结合文本与物品化词元）和推荐解释，以评估基础模型的指令遵循能力。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Benchmark</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt" style="padding-left:2.0pt;padding-right:2.0pt;">
@@ -855,7 +868,7 @@ li{margin:5px 0}
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="font-size:90%;">✓</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="font-size:90%;">✓</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S3.SS5">
@@ -1262,8 +1275,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <figure class="ltx_table" id="S6.T4">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 4</span>: </span><span class="ltx_text" style="font-size:90%;">所有任务的统一性能比较。对于每个任务，<span class="ltx_text ltx_font_bold">粗体</span>
 结果突出显示最佳结果（橙色背景），次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>标出。缺失条目标记为“–”。</span></figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:433.6pt;height:329.8pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-42.9pt,32.6pt) scale(0.834946851163396,0.834946851163396) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Task</span></td>
 <td class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" style="padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Metric</span></td>
@@ -2333,13 +2346,13 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 </td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="background-color:#FFF5EB;padding-left:5.1pt;padding-right:5.1pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;background-color:#FFF5EB;">4.0381</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <figure class="ltx_table" id="S6.T5">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 5</span>: </span><span class="ltx_text" style="font-size:90%;">通用能力（思考）的性能比较。对于每个任务，<span class="ltx_text ltx_font_bold">粗体</span>结果突出显示最佳结果，次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>标出。</span></figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:433.6pt;height:136.4pt;vertical-align:-0.9pt;"><span class="ltx_transformed_inner" style="transform:translate(-13.6pt,4.2pt) scale(0.941090087661859,0.941090087661859) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:3.4pt;padding-right:3.4pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Category</span></td>
 <td class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" style="padding-left:3.4pt;padding-right:3.4pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Task</span></td>
@@ -2425,13 +2438,13 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.4pt;padding-right:3.4pt;"><span class="ltx_text ltx_framed ltx_framed_underline" style="font-size:80%;">0.4910</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.4pt;padding-right:3.4pt;"><span class="ltx_text" style="font-size:80%;">0.4667</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <figure class="ltx_table" id="S6.T6">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 6</span>: </span><span class="ltx_text" style="font-size:90%;">通用能力（非思考）的性能比较。对于每个任务，<span class="ltx_text ltx_font_bold">粗体</span>结果突出显示最佳结果，次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>标出。</span></figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:433.6pt;height:136.4pt;vertical-align:-0.9pt;"><span class="ltx_transformed_inner" style="transform:translate(-13.6pt,4.2pt) scale(0.941090087661859,0.941090087661859) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:3.4pt;padding-right:3.4pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Category</span></td>
 <td class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" style="padding-left:3.4pt;padding-right:3.4pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Task</span></td>
@@ -2517,8 +2530,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.4pt;padding-right:3.4pt;"><span class="ltx_text ltx_framed ltx_framed_underline" style="font-size:80%;">0.2401</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.4pt;padding-right:3.4pt;"><span class="ltx_text ltx_framed ltx_framed_underline" style="font-size:80%;">0.2401</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_pagination ltx_role_newpage"></div>
 <section class="ltx_subsection" id="S6.SS1">
@@ -2568,8 +2581,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="S6.T7">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 7</span>: </span><span class="ltx_text" style="font-size:90%;">在 Amazon 领域上的跨域泛化性能。最佳结果以粗体和橙色背景标示。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:463.6pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-69.4pt,74.2pt) scale(0.757470923124073,0.757470923124073) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_tt" style="padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold">Model</span></td>
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_tt" style="padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold">Metric</span></td>
@@ -3061,8 +3074,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 </span></span></span>
 </td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <section class="ltx_paragraph" id="S6.SS3.SSS0.Px1">
 <h5 class="ltx_title ltx_title_paragraph">主要结果。</h5>
@@ -3098,8 +3111,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="S6.T8">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 8</span>: </span><span class="ltx_text" style="font-size:90%;">预训练模型利用的自适应策略的性能比较。扩展残差量化（碰撞率：3.05%）、纯文本适配（碰撞率：4.27%）和文本增强的物品词元（碰撞率：0.47%）。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:166.9pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-94.3pt,36.3pt) scale(0.69695958502022,0.69695958502022) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_tt" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold">Strategy</span></td>
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_tt" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold">Metric</span></td>
@@ -3333,8 +3346,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold">0.0354</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:5.7pt;padding-right:5.7pt;"><span class="ltx_text ltx_font_bold">0.0579</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 </section>
 </section>
@@ -3372,8 +3385,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <span class="ltx_tag ltx_tag_subsubsection">6.4.1 </span>关于预训练策略的消融研究</h4>
 <figure class="ltx_table" id="S6.T9">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 9</span>: </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">关于预训练策略的消融研究。<span class="ltx_text ltx_font_medium">我们将我们的模型与消融变体进行比较。w/o Align：移除物品词元-文本对齐阶段。结果在三种模型规模（0.6B、1.7B、8B）上报告。粗体表示在每种模型规模下每个任务的最佳结果。</span></span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:325.2pt;height:256.6pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-8.5pt,6.7pt) scale(0.950362823371678,0.950362823371678) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" rowspan="2" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Task</span></td>
 <td class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" rowspan="2" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Metric</span></td>
@@ -3514,8 +3527,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">3.9420</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:2.0pt;padding-right:2.0pt;"><span class="ltx_text" style="font-size:80%;">3.9329</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S6.SS4.SSS1.p1">
 <p class="ltx_p">我们进行了一项消融研究，以量化<span class="ltx_text ltx_font_bold">物品词元-文本对齐（阶段1）</span>在我们预训练流程中的贡献。我们将完整阶段的模型与绕过该初始阶段的消融变体（w/o Align）进行比较。两个版本均使用相同的预训练配方，包括优化器、学习率调度和上下文长度。由于原始预训练检查点缺乏固有的指令遵循能力，我们对两个变体均应用了第<a class="ltx_ref" href="#S5.SS1" title="5.1 Multi-task Supervised Fine-tuning ‣ 5 Post-Training ‣ OpenOneRec Technical Report An Open Foundation Model and Benchmark to Accelerate Generative Recommendation"><span class="ltx_text ltx_ref_tag">5.1</span></a>节中描述的多任务 SFT，然后在三种模型规模（0.6B、1.7B和8B）上进行基准测试。</p>
@@ -3532,8 +3545,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="S6.T10">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 10</span>: </span><span class="ltx_text ltx_font_bold" style="font-size:90%;"> 后训练各阶段通用能力的性能比较（Thinking）。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:67pt;vertical-align:-0.7pt;"><span class="ltx_transformed_inner" style="transform:translate(-77.6pt,11.9pt) scale(0.736543009178213,0.736543009178213) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_border_r ltx_border_tt"></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold">Math 500</span></td>
@@ -3584,13 +3597,13 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb">0.7634</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">0.4667</td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <figure class="ltx_table" id="S6.T11">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 11</span>: </span><span class="ltx_text ltx_font_bold" style="font-size:90%;"> 后训练各阶段通用能力的性能比较（Non-Thinking）。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:67pt;vertical-align:-0.7pt;"><span class="ltx_transformed_inner" style="transform:translate(-77.6pt,11.9pt) scale(0.736543009178213,0.736543009178213) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_border_r ltx_border_tt"></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold">Math 500</span></td>
@@ -3641,8 +3654,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb">0.7098</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">0.2401</td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S6.SS4.SSS2.p2">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">同策略蒸馏对通用能力的影响。</span>如表<a class="ltx_ref" href="#S6.T10" title="Table 10 ‣ 6.4.2 Evolution of Model Capabilities Across Post-training Stages ‣ 6.4 Ablation Study ‣ 6 Evaluation ‣ OpenOneRec Technical Report An Open Foundation Model and Benchmark to Accelerate Generative Recommendation"><span class="ltx_text ltx_ref_tag">10</span></a>和表<a class="ltx_ref" href="#S6.T11" title="Table 11 ‣ 6.4.2 Evolution of Model Capabilities Across Post-training Stages ‣ 6.4 Ablation Study ‣ 6 Evaluation ‣ OpenOneRec Technical Report An Open Foundation Model and Benchmark to Accelerate Generative Recommendation"><span class="ltx_text ltx_ref_tag">11</span></a>所示，阶段1（多任务 SFT）与阶段2（同策略蒸馏）之间的比较表明，同策略蒸馏显著恢复了通用能力，在大多数通用基准上有效地使模型重新与 Qwen3 基线对齐。尽管有这一显著改进，在若干指标上相对于原始 Qwen3 基础模型仍存在性能差距。这一差距可能归因于蒸馏阶段当前的数据组成和质量，表明需要进一步改进数据策略以完全弥合剩余的差距。</p>
@@ -3656,8 +3669,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="S6.T12">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 12</span>: </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">各后训练阶段的推荐基准性能（非思考模式）。</span></figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:433.6pt;height:45.8pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-124.3pt,13.1pt) scale(0.635520815535683,0.635520815535683) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span class="ltx_text ltx_font_bold">Model</span></td>
 <td class="ltx_td ltx_align_center ltx_border_t"><span class="ltx_text ltx_font_bold">Video Rec</span></td>
@@ -3702,8 +3715,8 @@ teacher}}(x_{t+1}|x_{1..t})\right]</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_b">0.3209</td>
 <td class="ltx_td ltx_align_center ltx_border_b"><span class="ltx_text ltx_font_bold">4.0381</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 </section>
 </section>
@@ -4498,8 +4511,8 @@ q</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="A2.T13">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 13</span>: </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">预训练数据混合。<span class="ltx_text ltx_font_medium">该表展示了通用领域与推荐领域的分布，给出了每个数据集的采样权重以及每个类别的小计占比。</span></span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:411.9pt;height:255.6pt;vertical-align:-0.9pt;"><span class="ltx_transformed_inner" style="transform:translate(-12.3pt,7.6pt) scale(0.943469544348552,0.943469544348552) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Dataset</span></td>
 <td class="ltx_td ltx_align_right ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Weight (%)</span></td>
@@ -4625,13 +4638,13 @@ q</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.46%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Reco</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <figure class="ltx_table" id="A2.T14">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 14</span>: </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">预训练各阶段的数据构成与词元预算。<span class="ltx_text ltx_font_medium">该表说明了<span class="ltx_text ltx_font_italic">Open</span>和<span class="ltx_text ltx_font_italic">Pro</span>模型变体在不同阶段的训练配置，具体规定了参数侧重、数据领域分布以及分配的词元预算。</span></span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:411.9pt;height:96pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(12.9pt,-3.0pt) scale(1.06674532819885,1.06674532819885) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Model</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Stage</span></td>
@@ -4668,8 +4681,8 @@ q</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">47%</span></td>
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">130B</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="A2.SS4.p4">
 <p class="ltx_p">对于OneRec变体，阶段2使用表<a class="ltx_ref" href="#A2.T13" title="Table 13 ‣ B.4 Detailed Data Composition and Token Budgets for Pre-training ‣ Appendix B Appendix ‣ OpenOneRec Technical Report An Open Foundation Model and Benchmark to Accelerate Generative Recommendation"><span class="ltx_text ltx_ref_tag">13</span></a>中列出的所有数据集，共计32B个词元，而阶段1的训练数据则从该语料库中采样。表<a class="ltx_ref" href="#A2.T14" title="Table 14 ‣ B.4 Detailed Data Composition and Token Budgets for Pre-training ‣ Appendix B Appendix ‣ OpenOneRec Technical Report An Open Foundation Model and Benchmark to Accelerate Generative Recommendation"><span class="ltx_text ltx_ref_tag">14</span></a>详细列出了每个预训练阶段所分配的完整数据构成与词元预算，刻画了通用领域知识与推荐领域知识之间的策略性平衡。</p>
@@ -4683,7 +4696,7 @@ q</annotation></semantics></math></td>
 <span class="ltx_tag ltx_tag_subsection">B.5 </span>多任务SFT的详细数据构成与词元预算</h3>
 <figure class="ltx_table" id="A2.T15">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 15</span>: </span><span class="ltx_text ltx_font_bold" style="font-size:90%;">多任务SFT的数据混合。<span class="ltx_text ltx_font_medium">该表展示了推理领域与推荐领域的分布，给出了每个数据集的采样权重以及每个类别的小计占比。</span></span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Dataset</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Weight (%)</span></td>
@@ -4813,7 +4826,7 @@ q</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.094%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Reco</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 </section>
@@ -4824,6 +4837,72 @@ q</annotation></semantics></math></td>
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

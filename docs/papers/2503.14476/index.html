@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / DAPO</div><h1>DAPO：大规模开源大语言模型强化学习系统</h1><p class="paper-original-title">DAPO: An Open-Source LLM Reinforcement Learning System at Scale</p>
@@ -679,7 +692,7 @@ t}\Big{)}\Bigg{]},</annotation></semantics></math></td>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 5</span>: </span><span class="ltx_text" style="font-size:90%;">应用<span class="ltx_text ltx_font_bold">过长奖励塑形（Overlong Reward Shaping）</span>策略前后，策略模型在AIME上的准确率及其生成概率的熵。</span></figcaption>
 </figure>
 <figure class="ltx_table" id="S3.T1">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_top ltx_border_tt">
 <span class="ltx_inline-block ltx_align_top">
@@ -778,7 +791,7 @@ t}\Big{)}\Bigg{]},</annotation></semantics></math></td>
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>: </span></figcaption>
 </figure>
 <div class="ltx_para" id="S3.SS4.p4">
@@ -855,7 +868,7 @@ t}\Big{)}\Bigg{]},</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="S4.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>: </span><span class="ltx_text" style="font-size:90%;">应用于<span class="ltx_text ltx_font_bold">DAPO</span>的渐进式技术的主要结果</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Model</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><math alttext="\textbf{AIME24}_{\text{avg@32}}" class="ltx_Math" display="inline" id="S4.T1.m1"><semantics><msub><mtext class="ltx_mathvariant_bold">AIME24</mtext><mtext>avg@32</mtext></msub><annotation encoding="application/x-tex">\textbf{AIME24}_{\text{avg@32}}</annotation></semantics></math></td>
@@ -888,7 +901,7 @@ t}\Big{)}\Bigg{]},</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_bb">+ Dynamic Sampling (<span class="ltx_text ltx_font_bold ltx_font_smallcaps">DAPO</span>)</td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">50</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S4.SS3">
@@ -951,7 +964,7 @@ t}\Big{)}\Bigg{]},</annotation></semantics></math></td>
 <h3 class="ltx_title ltx_title_subsection">
 <span class="ltx_tag ltx_tag_subsection">4.4 </span>案例研究</h3>
 <figure class="ltx_table" id="S4.T2">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_top ltx_border_tt">
 <span class="ltx_inline-block ltx_align_top">
@@ -1015,7 +1028,7 @@ t}\Big{)}\Bigg{]},</annotation></semantics></math></td>
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 2</span>: </span><span class="ltx_text" style="font-size:90%;">强化学习中反思行为的涌现</span></figcaption>
 </figure>
 <div class="ltx_para" id="S4.SS4.p1">
@@ -1651,7 +1664,7 @@ t}\Big{)}\Bigg{]},</annotation></semantics></math></td>
 <h2 class="ltx_title ltx_title_appendix">
 <span class="ltx_tag ltx_tag_appendix">Appendix B </span>补充案例</h2>
 <figure class="ltx_table" id="A2.T3">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_align_top ltx_border_tt">
 <span class="ltx_inline-block ltx_align_top">
@@ -1772,7 +1785,7 @@ t}\Big{)}\Bigg{]},</annotation></semantics></math></td>
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 3</span>: </span><span class="ltx_text" style="font-size:90%;">反思行为涌现的一个案例。</span></figcaption>
 </figure>
 </section>
@@ -1783,6 +1796,72 @@ t}\Big{)}\Bigg{]},</annotation></semantics></math></td>
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

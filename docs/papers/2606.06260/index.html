@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OneReason</div><h1>OneReason 技术报告</h1><p class="paper-original-title">OneReason Technical Report</p>
@@ -504,8 +517,8 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </div>
 <figure class="ltx_table" id="S3.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>: </span><span class="ltx_text" style="font-size:90%;">OneReason-Bench 在四个推理层次上的任务分类体系。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:161.4pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-133.7pt,49.8pt) scale(0.618470607100456,0.618470607100456) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Layer</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Task</span></td>
@@ -664,8 +677,8 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </table>
 </td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <figure class="ltx_figure" id="S3.F4"><a href="assets/05626997ed9941af.png" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F4.g1" loading="lazy" src="assets/05626997ed9941af.png"/></a>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 4</span>: </span><span class="ltx_text" style="font-size:90%;">任务分类体系示意图。每个任务均给出其指令、上下文和目标格式。</span></figcaption>
@@ -1168,7 +1181,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 <figure class="ltx_table" id="S4.T2">
 <figcaption class="ltx_caption ltx_centering" style="font-size:80%;"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:113%;">Table 2</span>: </span><span class="ltx_text" style="font-size:113%;">每项实验都在前一项的基础上添加新粒度或替换已有组件。
 对于物品语义模式锚定和跨域推荐，我们报告 <span class="ltx_text ltx_font_typewriter">pass@64</span>（%）；对于其余任务，我们报告宏加权 F1（%）。所有数值均以百分比报告。结果显示性能持续提升，其中跨域推荐的最大增益出现在引入用户粒度数据之后。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_tt" colspan="2"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Task</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Exp1</span></td>
@@ -1294,7 +1307,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_framed ltx_framed_underline" style="font-size:80%;">0.73</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:80%;">0.66</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsubsection" id="S4.SS3.SSS2">
@@ -1316,7 +1329,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </div>
 <figure class="ltx_table" id="S4.T3">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 3</span>: </span><span class="ltx_text ltx_font_typewriter" style="font-size:90%;">video<span class="ltx_text ltx_font_serif"> 领域中一个具有代表性的物品理解案例。我们展示各模型实际生成的描述（节选；省略部分用省略号标记），并附上英文分析。基线（Exp1）编造剧名，随后退化为重复而空洞的语句；加入 token 粒度数据后（Exp2），模型能够忠实把握作品类型；进一步引入物品粒度数据后（Exp3），模型虚构了一个具体但错误的剧名，并将该片段重新描述为医疗剧。虚构或错误内容以<span class="ltx_text" style="color:#FF0000;">红色</span>标记。</span></span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_justify ltx_align_top ltx_border_tt" colspan="4" style="padding:0.2pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -1394,7 +1407,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_paragraph" id="S4.SS3.SSS2.Px3">
@@ -1429,8 +1442,8 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </div>
 <figure class="ltx_table" id="S4.T4">
 <figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 4: </span>训练阶段汇总。</figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:355.6pt;height:68.3pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-9.6pt,1.8pt) scale(0.949011645163151,0.949011645163151) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Configuration</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Stage 1</span></td>
@@ -1457,8 +1470,8 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">449B</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">19B</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S4.SS4.p2">
 <p class="ltx_p">所有阶段都采用样本打包以提高序列利用率，生成长度为 48K token 的打包序列。
@@ -1490,7 +1503,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </div>
 <figure class="ltx_table" id="S5.T5">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 5</span>: </span><span class="ltx_text" style="font-size:90%;">具有代表性的 R0 案例：比较物品–描述文本预训练与指令式 SFT 感知监督。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_border_tt" style="padding:0.7pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -1525,7 +1538,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S5.SS1.p4">
 <p class="ltx_p">我们保留 QA 监督，作为指令式感知的补充：它将基于描述文本的语义锚定从物品语义 token 解码扩展到视频和商品领域中面向结构化属性及开放式语义的内容感知问答。描述文本与 QA 数据共同将预训练中获得的、已对齐的物品语义 token 感知转化为能够遵循指令的感知能力。R0 共包含约 <span class="ltx_text ltx_font_bold">941K</span> 个样本，其中描述文本样本约 <span class="ltx_text ltx_font_bold">682K</span> 个，QA 样本约 <span class="ltx_text ltx_font_bold">259K</span> 个。</p>
@@ -1542,7 +1555,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </div>
 <figure class="ltx_table" id="S5.T6">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 6</span>: </span><span class="ltx_text" style="font-size:90%;">具有代表性的 R1 案例：比较消息式关系预训练与单跳 SFT 推导监督。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_border_tt" style="padding:0.7pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -1563,7 +1576,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S5.SS2.p3">
 <p class="ltx_p">表 <a class="ltx_ref" href="#S5.T6" title="Table 6 ‣ 5.2 R1：推导 ‣ 5 SFT 流程 ‣ OneReason 技术报告"><span class="ltx_text ltx_ref_tag">6</span></a> 对比了 R1 与关系预训练。关系预训练以消息式关联呈现源物品和相关目标物品。R1 则仅保留单个源物品语义 token 序列作为指令输入，并在答案端监督模型先给出显式联系，再输出目标物品语义 token，使局部关系判断能够被直接学习。</p>
@@ -1643,7 +1656,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </div>
 <figure class="ltx_table" id="S5.T7">
 <figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 7: </span>推荐推理中具有代表性的画像抽象案例。画像仅用作软先验；最终决策必须由用户行为支持。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_justify ltx_align_top ltx_border_tt" style="padding:0.8pt 5.0pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -1695,7 +1708,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S5.SS4.SSS1.p6">
 <p class="ltx_p">从概念上说，这一协议可写为</p>
@@ -1776,7 +1789,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </figure>
 <figure class="ltx_table" id="S5.T8">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 8</span>: </span><span class="ltx_text" style="font-size:90%;">展示兴趣扩展与转移推断的 R3 推荐 CoT 案例。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_border_tt" style="padding:0.65pt 5.0pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -1808,7 +1821,7 @@ OneReason 的完整训练流程见图 <a class="ltx_ref" href="#S1.F2" title="F
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_paragraph" id="S5.SS4.SSS1.Px3">
@@ -2469,7 +2482,7 @@ IG 筛选根据 token 级优势统计量移除低信息量轨迹，使策略梯�
 </figure>
 <figure class="ltx_table" id="S6.T9">
 <figcaption class="ltx_caption" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 9: </span>不同优化策略的性能比较（单位为 %）。RFT 和 MOPD 都能有效整合领域特定知识，并在不同领域优于 Mix-RL。</figcaption>
-<table class="ltx_tabular ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_justify ltx_align_top ltx_border_tt" style="padding-top:0.35pt;padding-bottom:0.35pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -2856,7 +2869,7 @@ IG 筛选根据 token 级优势统计量移除低信息量轨迹，使策略梯�
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.35pt;padding-bottom:0.35pt;"><span class="ltx_text" style="font-size:90%;">18.17</span></td>
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding-top:0.35pt;padding-bottom:0.35pt;"><span class="ltx_text ltx_framed ltx_framed_underline" style="font-size:90%;">18.66</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 </section>
@@ -2928,7 +2941,7 @@ IG 筛选根据 token 级优势统计量移除低信息量轨迹，使策略梯�
 </div>
 <figure class="ltx_table" id="S7.T10">
 <figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 10: </span>组织为 <math alttext="2\times 2" class="ltx_Math" display="inline" id="S7.T10.m3"><semantics><mrow><mn>2</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2\times 2</annotation></semantics></math> 矩阵的四准则诊断框架：<em class="ltx_emph ltx_font_italic">符号检查与 概率检查</em>（检查类型）<math alttext="\times" class="ltx_Math" display="inline" id="S7.T10.m4"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math> <em class="ltx_emph ltx_font_italic">局部检查与 全局检查</em>（参考范围）。在每一行中，局部单元格都是对全局单元格的严格加强（性质 P1）。跨行来看，符号检查成本低且不需要标签，而概率检查依赖前向传播和标签（性质 P2）。四个单元格缺一不可；每个都针对一种不同的失效模式。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_border_tt" style="padding:1.15pt 4.0pt;"></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:1.15pt 4.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Global (corpus-/trace-bounded)</span></td>
@@ -2962,7 +2975,7 @@ IG 筛选根据 token 级优势统计量移除低信息量轨迹，使策略梯�
 (\mathbf{x}_{\mathrm{hist}})" class="ltx_Math" display="inline" id="S7.T10.m12"><semantics><mrow><mrow><mo maxsize="120%" minsize="120%">(</mo><mrow><mrow><mi class="ltx_font_mathcaligraphic" mathsize="90%">𝒮</mi><mo>⁢</mo><mrow><mo maxsize="90%" minsize="90%">(</mo><mi mathsize="90%">c</mi><mo maxsize="90%" minsize="90%">)</mo></mrow></mrow><mo lspace="0.052em" mathsize="90%" rspace="0.052em">∩</mo><msub><mi class="ltx_font_mathcaligraphic" mathsize="90%">𝒱</mi><mi mathsize="90%">item</mi></msub></mrow><mo maxsize="120%" minsize="120%">)</mo></mrow><mo mathsize="90%">∩</mo><mrow><mi class="ltx_font_mathcaligraphic" mathsize="90%">𝒮</mi><mo>⁢</mo><mrow><mo maxsize="90%" minsize="90%">(</mo><msub><mi mathsize="90%">𝐱</mi><mi mathsize="90%">hist</mi></msub><mo maxsize="90%" minsize="90%">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\big{(}\mathcal{S}(c)\!\cap\!\mathcal{V}_{\mathrm{item}}\big{)}\cap\mathcal{S}%
 (\mathbf{x}_{\mathrm{hist}})</annotation></semantics></math></td>
 </tr>
-</table>
+</table></div>
 </figure>
 <section class="ltx_paragraph" id="S7.SS0.SSS0.Px1">
 <h5 class="ltx_title ltx_title_paragraph">准则 1：CoT 似然增益。</h5>
@@ -3073,7 +3086,7 @@ _{\mathrm{hist}})\right|}{\left|\mathcal{S}(c)\cap\mathcal{V}_{\mathrm{item}}%
 所有数值均以 % 表示；每个指标-领域组合中的最佳值以<span class="ltx_text ltx_font_bold">粗体</span>标出。
 <span class="ltx_text ltx_font_bold">主要结论。</span>(i) 在全部四个领域中，SFT 和 RFT 的 <math alttext="\gamma_{\mathrm{legal}}" class="ltx_Math" display="inline" id="S7.T11.m10"><semantics><msub><mi>γ</mi><mi>legal</mi></msub><annotation encoding="application/x-tex">\gamma_{\mathrm{legal}}</annotation></semantics></math> 均饱和至 100%，说明 RFT 之后合法性已不再是瓶颈。(ii) 在跨视频和跨广告领域，RFT 相比 SFT 提高了 <math alttext="\gamma_{\mathrm{hist}\mid\mathrm{legal}}" class="ltx_Math" display="inline" id="S7.T11.m11"><semantics><msub><mi>γ</mi><mrow><mi>hist</mi><mo>∣</mo><mi>legal</mi></mrow></msub><annotation encoding="application/x-tex">\gamma_{\mathrm{hist}\mid\mathrm{legal}}</annotation></semantics></math>（分别为 +2.50 pt 和 +4.27 pt）。(iii) 在跨直播和跨商品领域，RFT 的 <math alttext="\gamma_{\mathrm{hist}\mid\mathrm{legal}}" class="ltx_Math" display="inline" id="S7.T11.m12"><semantics><msub><mi>γ</mi><mrow><mi>hist</mi><mo>∣</mo><mi>legal</mi></mrow></msub><annotation encoding="application/x-tex">\gamma_{\mathrm{hist}\mid\mathrm{legal}}</annotation></semantics></math> 则出现一定下降（分别为 <math alttext="-1.18" class="ltx_Math" display="inline" id="S7.T11.m13"><semantics><mrow><mo>−</mo><mn>1.18</mn></mrow><annotation encoding="application/x-tex">-1.18</annotation></semantics></math> pt 和 <math alttext="-14.59" class="ltx_Math" display="inline" id="S7.T11.m14"><semantics><mrow><mo>−</mo><mn>14.59</mn></mrow><annotation encoding="application/x-tex">-14.59</annotation></semantics></math> pt）。这一下降与表 <a class="ltx_ref" href="#S6.T9" title="Table 9 ‣ 消融研究。 ‣ 6.3 多教师同策略蒸馏 ‣ 6 RL 流程 ‣ OneReason 技术报告"><span class="ltx_text ltx_ref_tag">9</span></a> 一致：RFT 相比 Mix-RL 在直播和商品领域的相对增益也小于视频和广告领域，表明符号 CoT 诊断与下游推荐指标具有良好一致性。加强直播和商品领域的历史锚定将留待未来优化。
 </span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:0.75pt 5.0pt;"><span class="ltx_text ltx_font_bold">Metric</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:0.75pt 5.0pt;"><span class="ltx_text ltx_font_bold">Method</span></td>
@@ -3116,7 +3129,7 @@ _{\mathrm{hist}})\right|}{\left|\mathcal{S}(c)\cap\mathcal{V}_{\mathrm{item}}%
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.75pt 5.0pt;">98.82</td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.75pt 5.0pt;">83.33</td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_paragraph" id="S7.SS0.SSS0.Px5">
@@ -3139,7 +3152,7 @@ _{\mathrm{hist}})\right|}{\left|\mathcal{S}(c)\cap\mathcal{V}_{\mathrm{item}}%
 </div>
 <figure class="ltx_table" id="S7.T12">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 12</span>: </span><span class="ltx_text" style="font-size:90%;">SFT 推荐 CoT 案例：兴趣停留在表层 IP（<em class="ltx_emph ltx_font_italic">《和平精英》</em>），最终转移落在错误的 IP 系列上。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_border_tt" style="padding:0.65pt 5.0pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -3186,7 +3199,7 @@ _{\mathrm{hist}})\right|}{\left|\mathcal{S}(c)\cap\mathcal{V}_{\mathrm{item}}%
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para ltx_noindent" id="S7.SS0.SSS0.Px5.p2">
 <p class="ltx_p">相比之下，RFT 模型面对<em class="ltx_emph ltx_font_italic">完全相同</em>的输入
@@ -3215,7 +3228,7 @@ _{\mathrm{hist}})\right|}{\left|\mathcal{S}(c)\cap\mathcal{V}_{\mathrm{item}}%
 </div>
 <figure class="ltx_table" id="S7.T13">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 13</span>: </span><span class="ltx_text" style="font-size:90%;">RFT 推荐 CoT 案例：推理锚定于基于物品目录的量化先验，并实现跨 IP 泛化，落在真实目标游戏（<em class="ltx_emph ltx_font_italic">《三角洲行动》</em>）上。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_r ltx_align_justify ltx_border_tt" style="padding:0.65pt 5.0pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -3262,7 +3275,7 @@ _{\mathrm{hist}})\right|}{\left|\mathcal{S}(c)\cap\mathcal{V}_{\mathrm{item}}%
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para ltx_noindent" id="S7.SS0.SSS0.Px5.p4">
 <p class="ltx_p">关键在于，两条轨迹的差异不在于措辞润色，而在于
@@ -3316,8 +3329,8 @@ OneReason 预训练检查点初始化。遵循 LC-Rec 的原始设置，其 SFT 
 <h5 class="ltx_title ltx_title_paragraph">推荐性能。</h5>
 <figure class="ltx_table" id="S8.T14">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 14</span>: </span><span class="ltx_text" style="font-size:90%;">跨域推荐基线结果（单位为 %）。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示，次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>表示。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:237.8pt;vertical-align:-6.4pt;"><span class="ltx_transformed_inner" style="transform:translate(-120.6pt,64.3pt) scale(0.642663454448478,0.642663454448478) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold">Category</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold">Model</span></td>
@@ -3539,7 +3552,7 @@ OneReason 预训练检查点初始化。遵循 LC-Rec 的原始设置，其 SFT 
 <td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFD9B3;">21.10</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#FFD9B3;padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold" style="background-color:#FFD9B3;">18.35</span></td>
 </tr>
-</table>
+</table></div>
 <ul class="ltx_itemize" id="S8.I2">
 <li class="ltx_item" id="S8.I2.ix1" style="list-style-type:none;">
 <span class="ltx_tag ltx_tag_item">*</span>
@@ -3548,7 +3561,7 @@ OneReason 预训练检查点初始化。遵循 LC-Rec 的原始设置，其 SFT 
 </div>
 </li>
 </ul>
-</span></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S8.SS1.SSS0.Px2.p1">
 <p class="ltx_p">根据表 <a class="ltx_ref" href="#S8.T14" title="Table 14 ‣ 推荐性能。 ‣ 8.1 性能比较 ‣ 8 实验 ‣ OneReason 技术报告"><span class="ltx_text ltx_ref_tag">14</span></a> 中的评估结果，我们指出基于 ID 和基于文本的基线性能受限的主要原因：</p>
@@ -3597,8 +3610,8 @@ OneReason 预训练检查点初始化。遵循 LC-Rec 的原始设置，其 SFT 
 </div>
 <figure class="ltx_table" id="S8.T15">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 15</span>: </span><span class="ltx_text" style="font-size:90%;">OneReason-Bench 中 R0–R2 任务的性能比较（单位为 %）。R0 任务的结果在所有领域上取宏平均。锚定任务以 Pass@64 报告。对于使用行为–逻辑得分评估的 R2 任务，基于文本的模型采用 10-gram 软匹配而非精确匹配。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示，次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>表示。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:188.7pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-99.7pt,43.4pt) scale(0.685037741689533,0.685037741689533) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" rowspan="2" style="padding:0.75pt 4.0pt;"><span class="ltx_text ltx_font_bold">Category</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" rowspan="2" style="padding:0.75pt 4.0pt;"><span class="ltx_text ltx_font_bold">Model</span></td>
@@ -3771,8 +3784,8 @@ OneReason 预训练检查点初始化。遵循 LC-Rec 的原始设置，其 SFT 
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.75pt 4.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">39.57</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.75pt 4.0pt;"><span class="ltx_text ltx_font_bold">21.23</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 </section>
 <section class="ltx_paragraph" id="S8.SS1.SSS0.Px4">
@@ -3782,8 +3795,8 @@ OneReason 预训练检查点初始化。遵循 LC-Rec 的原始设置，其 SFT 
 </div>
 <figure class="ltx_table" id="S8.T16">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 16</span>: </span><span class="ltx_text" style="font-size:90%;">通用基准性能比较（单位为 %）。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示，次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>表示。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:157.1pt;vertical-align:-0.9pt;"><span class="ltx_transformed_inner" style="transform:translate(-33.1pt,11.9pt) scale(0.86762412997063,0.86762412997063) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-top:0.75pt;padding-bottom:0.75pt;"><span class="ltx_text ltx_font_bold">Category</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-top:0.75pt;padding-bottom:0.75pt;"><span class="ltx_text ltx_font_bold">Model</span></td>
@@ -3857,8 +3870,8 @@ OneReason 预训练检查点初始化。遵循 LC-Rec 的原始设置，其 SFT 
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.75pt;padding-bottom:0.75pt;"><span class="ltx_text ltx_framed ltx_framed_underline">95.40</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.75pt;padding-bottom:0.75pt;">94.69</td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 </section>
 </section>
@@ -3873,7 +3886,7 @@ OneReason 预训练检查点初始化。遵循 LC-Rec 的原始设置，其 SFT 
 </div>
 <figure class="ltx_table" id="S8.T17">
 <figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 17: </span>训练 token 对齐时的非思考推荐性能比较（单位为 %）。100K unCoT 设置与 40K CoT + 50K unCoT 设置均使用相同的 0.25B token 训练预算。对于每个领域与指标的组合，较好的设置以粗体标出。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:0.35pt 7.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Metric</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:0.35pt 7.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Setting</span></td>
@@ -3942,7 +3955,7 @@ OneReason 预训练检查点初始化。遵循 LC-Rec 的原始设置，其 SFT 
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.35pt 7.0pt;"><span class="ltx_text" style="font-size:90%;">6.68</span></td>
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding:0.35pt 7.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">17.69</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S8.SS2.p3">
 <p class="ltx_p">表 <a class="ltx_ref" href="#S8.T17" title="Table 17 ‣ 8.2 思考监督带来的非思考增益 ‣ 8 实验 ‣ OneReason 技术报告"><span class="ltx_text ltx_ref_tag">17</span></a> 表明，在相同 token 预算下，用 CoT 数据替换部分 unCoT 数据能够改善 Cross-Video、Cross-Product 和 Cross-Live 上的非思考性能。例如，混合设置将 Cross-Video 上的 Pass@64 从 1.64% 提升至 1.95%，将 Cross-Product 上的结果从 4.38% 提升至 4.86%，将 Cross-Live 上的结果从 18.12% 提升至 20.32%。Cross-Ad 是主要例外，混合设置略逊于仅用 unCoT 训练。这表明 CoT 监督的收益并非在各领域中一致，因此有必要更细致地分析 CoT/unCoT 混合比例。</p>
@@ -4124,7 +4137,7 @@ unCoT}}}.\end{split}</annotation></semantics></math></td>
 <p class="ltx_p">表 <a class="ltx_ref" href="#S9.T18" title="Table 18 ‣ 9.3 在线实验 ‣ 9 部署 ‣ OneReason 技术报告"><span class="ltx_text ltx_ref_tag">18</span></a> 表明，直接使用 OneReason 召回以及使用它增强实时 OneRec，都在在线 A/B 实验中取得了显著改进。慢流程中的直接应用提升了收入，而快流程中对 OneRec 的增强进一步改善了表现。联合使用两种范式取得了最佳结果，收入和曝光量均大幅提高，对应快手平台数亿元人民币的年化商业收入增量。此外，我们计算了计算资源消耗与收入之间的比例，表明 OneReason 的 ROI <math alttext="&gt;" class="ltx_Math" display="inline" id="S9.SS3.p2.m1"><semantics><mo>&gt;</mo><annotation encoding="application/x-tex">&gt;</annotation></semantics></math> 5。更多实验分析与讨论见附录 <a class="ltx_ref" href="#A1.SS3" title="A.3 实验分析 ‣ Appendix A 部署细节 ‣ OneReason 技术报告"><span class="ltx_text ltx_ref_tag">A.3</span></a> 和 <a class="ltx_ref" href="#A1.SS4" title="A.4 工业部署讨论 ‣ Appendix A 部署细节 ‣ OneReason 技术报告"><span class="ltx_text ltx_ref_tag">A.4</span></a>。</p>
 </div>
 <figure class="ltx_table" id="S9.T18">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Model</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold">Impressions</span></td>
@@ -4145,7 +4158,7 @@ unCoT}}}.\end{split}</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+10.332%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+8.234%</td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 18</span>: </span><span class="ltx_text" style="font-size:90%;">
 不同部署模型的在线性能比较。
 <span class="ltx_text ltx_font_bold">Combined</span>：联合部署 OneReason 与 OneReason for OneRec。
@@ -5171,7 +5184,7 @@ Ziyi Zhao.
 从表 <a class="ltx_ref" href="#A1.T19" title="Table 19 ‣ A.3 实验分析 ‣ Appendix A 部署细节 ‣ OneReason 技术报告"><span class="ltx_text ltx_ref_tag">19</span></a> 可以看出，OneReason 在不同部署范式下均带来一致的系统级提升。在慢链路中，直接应用 OneReason 通过更好的语义匹配改善流量质量，从而提升转化和点击表现。相比之下，在快链路中增强 OneRec，主要通过扩大召回覆盖来提升系统规模，而单次曝光指标保持相对稳定。组合策略在进一步扩大覆盖的同时取得最佳整体性能，说明两种范式具有互补性：慢链路提高流量效率，快链路扩大系统规模。</p>
 </div>
 <figure class="ltx_table" id="A1.T19">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:5.0pt;padding-right:5.0pt;"><span class="ltx_text ltx_font_bold">Model</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt" style="padding-left:5.0pt;padding-right:5.0pt;"><span class="ltx_text ltx_font_bold">Conv.</span></td>
@@ -5204,7 +5217,7 @@ Ziyi Zhao.
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:5.0pt;padding-right:5.0pt;">+0.519%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:5.0pt;padding-right:5.0pt;">27.2%</td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 19</span>: </span><span class="ltx_text" style="font-size:90%;">
 在线流量效率与召回分布分析。
 <span class="ltx_text ltx_font_bold">Conv.</span> 表示转化次数，
@@ -5218,7 +5231,7 @@ Ziyi Zhao.
 为评估 OneReason 在用户层面的影响，我们对高活跃、中活跃和低活跃用户进行分层分析。表 <a class="ltx_ref" href="#A1.T20" title="Table 20 ‣ A.3 实验分析 ‣ Appendix A 部署细节 ‣ OneReason 技术报告"><span class="ltx_text ltx_ref_tag">20</span></a> 显示，业务收入增益随着用户活跃度降低而增大，低活跃用户的提升最大。传统推荐模型高度依赖用户历史行为，而 OneReason 整合用户画像、有限行为和内容语义，通过推理补全兴趣，使其在交互稀疏的情况下仍能实现有效推荐。总体而言，这些结果验证了其推理能力对低活跃用户的价值，并表明它为整体系统带来了显著的信息增益。</p>
 </div>
 <figure class="ltx_table" id="A1.T20">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">User Level</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold">Impressions</span></td>
@@ -5239,7 +5252,7 @@ Ziyi Zhao.
 <td class="ltx_td ltx_align_center ltx_border_bb">+1.125%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">+13.323%</td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 20</span>: </span><span class="ltx_text" style="font-size:90%;">直接使用 OneReason 进行召回时，按用户活跃度划分的性能明细。</span></figcaption>
 </figure>
 </section>
@@ -5321,8 +5334,8 @@ Ziyi Zhao.
 </div>
 <figure class="ltx_table" id="A2.T21">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 21</span>: </span><span class="ltx_text" style="font-size:90%;">OneReason-Bench 中四个目标领域的 R3 推荐数据统计。每位用户对应一个实例。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:69.7pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-135.8pt,21.8pt) scale(0.614844728215961,0.614844728215961) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Domain</span></td>
 <td class="ltx_td ltx_align_right ltx_border_tt"><span class="ltx_text ltx_font_bold"># Users</span></td>
@@ -5432,8 +5445,8 @@ Ziyi Zhao.
 <td class="ltx_td ltx_align_right ltx_border_bb">152.12</td>
 <td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_bb">1.58</td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="A2.SS2.p2">
 <p class="ltx_p">除规模统计外，我们还从两个互补角度刻画训练集与评估集的重叠：目标层面的可见性，以及转移层面的记忆与泛化。在目标可见性方面，33.69% 的目标物品原始 ID 在训练中未出现，而未见过的目标物品语义模式仅占 11.55%。这表明，许多在物品原始 ID 层面属于冷启动的目标，仍可通过训练中见过的物品语义模式实现基于内容的泛化。</p>
@@ -5445,7 +5458,7 @@ Ziyi Zhao.
 </div>
 <figure class="ltx_table" id="A2.T22">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 22</span>: </span><span class="ltx_text" style="font-size:90%;">OneReason-Bench 中在物品语义模式粒度上统计的 R3 目标转移记忆与泛化情况。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Domain</span></td>
 <td class="ltx_td ltx_align_right ltx_border_tt"><span class="ltx_text ltx_font_bold">Memorized Pairs</span></td>
@@ -5471,7 +5484,7 @@ Ziyi Zhao.
 <td class="ltx_td ltx_align_right ltx_border_bb">73.0%</td>
 <td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_bb">27.0%</td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="A2.SS3">
@@ -5487,8 +5500,8 @@ Ziyi Zhao.
 <figure class="ltx_table" id="A2.T23">
 <div class="ltx_flex_figure ltx_flex_table">
 <div class="ltx_flex_cell ltx_flex_size_1">
-<div class="ltx_inline-block ltx_figure_panel ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:312pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-53.1pt,38.2pt) scale(0.803288194167564,0.803288194167564) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_figure_panel ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_l ltx_align_left ltx_border_tt" style="padding:4.5pt 5.0pt;">
 <span class="ltx_rule" style="width:0.0pt;background:black;display:inline-block;"></span>   <span class="ltx_text ltx_font_bold">Category</span>
@@ -5664,8 +5677,8 @@ Ziyi Zhao.
 <td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="background-color:#6CC180;padding:4.5pt 5.0pt;"><span class="ltx_text" style="color:#FFFFFF;background-color:#6CC180;">✓</span></td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </div>
 <div class="ltx_flex_break"></div>
 <div class="ltx_flex_cell ltx_flex_size_1">
@@ -6163,7 +6176,7 @@ Logic Alignment}.</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="A3.T24">
 <figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 24: </span>在第一嵌入层和最终隐藏层两个深度上，对四个领域分别计算基线（第 <a class="ltx_ref" href="#S4.SS3" title="4.3 推荐语料的消融研究 ‣ 4 预训练流程 ‣ OneReason 技术报告"><span class="ltx_text ltx_ref_tag">4.3</span></a> 节复现的 OpenOneRec）与我们模型的正负物品–描述对的平均余弦相似度及其平均间隔 <math alttext="\Delta" class="ltx_Math" display="inline" id="A3.T24.m3"><semantics><mi mathvariant="normal">Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math>。更大的 <math alttext="\Delta" class="ltx_Math" display="inline" id="A3.T24.m4"><semantics><mi mathvariant="normal">Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math> 表示更强的表征区分能力。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_border_tt"></td>
 <td class="ltx_td ltx_border_tt"></td>
@@ -6254,7 +6267,7 @@ Logic Alignment}.</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;">0.000</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_typewriter" style="font-size:90%;">+0.017</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_paragraph" id="A3.SS1.SSS0.Px3">
@@ -6278,7 +6291,7 @@ Logic Alignment}.</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="A3.T25">
 <figcaption class="ltx_caption ltx_centering" style="font-size:80%;"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:113%;">Table 25</span>: </span><span class="ltx_text" style="font-size:113%;">预训练数据混合方案（推荐语料）。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:0.8pt 2.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Category</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:0.8pt 2.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Modality</span></td>
@@ -6286,20 +6299,20 @@ Logic Alignment}.</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:0.8pt 2.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Token Ratio (%)</span></td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_t" rowspan="5" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">
-<span class="ltx_tabular ltx_align_middle">
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Token</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Granularity</span></span>
-</span> </span></td>
-<td class="ltx_td ltx_align_left ltx_border_t" rowspan="5" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">
-<span class="ltx_tabular ltx_align_middle">
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Itemic</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">+Text</span></span>
-</span> </span></td>
+<td class="ltx_td ltx_align_left ltx_border_t" rowspan="5" style="padding:0.8pt 2.0pt;"><div class="ltx_text" style="font-size:80%;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Token</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Granularity</td></tr>
+</table> </div></td>
+<td class="ltx_td ltx_align_left ltx_border_t" rowspan="5" style="padding:0.8pt 2.0pt;"><div class="ltx_text" style="font-size:80%;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Itemic</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">+Text</td></tr>
+</table> </div></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">Single-Token-Semantic-Prediction</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">0.35</span></td>
 </tr>
@@ -6320,20 +6333,20 @@ Logic Alignment}.</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">2.50</span></td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_t" rowspan="4" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">
-<span class="ltx_tabular ltx_align_middle">
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Item</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Granularity</span></span>
-</span> </span></td>
-<td class="ltx_td ltx_align_left ltx_border_t" rowspan="4" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">
-<span class="ltx_tabular ltx_align_middle">
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Itemic</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">+Text</span></span>
-</span> </span></td>
+<td class="ltx_td ltx_align_left ltx_border_t" rowspan="4" style="padding:0.8pt 2.0pt;"><div class="ltx_text" style="font-size:80%;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Item</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Granularity</td></tr>
+</table> </div></td>
+<td class="ltx_td ltx_align_left ltx_border_t" rowspan="4" style="padding:0.8pt 2.0pt;"><div class="ltx_text" style="font-size:80%;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Itemic</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">+Text</td></tr>
+</table> </div></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">Item Captioning</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">17.28</span></td>
 </tr>
@@ -6350,20 +6363,20 @@ Logic Alignment}.</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">31.84</span></td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_t" rowspan="3" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">
-<span class="ltx_tabular ltx_align_middle">
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Relational</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Granularity</span></span>
-</span> </span></td>
-<td class="ltx_td ltx_align_left ltx_border_t" rowspan="3" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">
-<span class="ltx_tabular ltx_align_middle">
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Itemic</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">+Text</span></span>
-</span> </span></td>
+<td class="ltx_td ltx_align_left ltx_border_t" rowspan="3" style="padding:0.8pt 2.0pt;"><div class="ltx_text" style="font-size:80%;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Relational</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Granularity</td></tr>
+</table> </div></td>
+<td class="ltx_td ltx_align_left ltx_border_t" rowspan="3" style="padding:0.8pt 2.0pt;"><div class="ltx_text" style="font-size:80%;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Itemic</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">+Text</td></tr>
+</table> </div></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">Direct-Item-to-Item Associations</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">0.24</span></td>
 </tr>
@@ -6376,20 +6389,20 @@ Logic Alignment}.</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">3.18</span></td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" rowspan="3" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">
-<span class="ltx_tabular ltx_align_middle">
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">User</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Granularity</span></span>
-</span> </span></td>
-<td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" rowspan="3" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">
-<span class="ltx_tabular ltx_align_middle">
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Itemic</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">+Text</span></span>
-</span> </span></td>
+<td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" rowspan="3" style="padding:0.8pt 2.0pt;"><div class="ltx_text" style="font-size:80%;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">User</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Granularity</td></tr>
+</table> </div></td>
+<td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" rowspan="3" style="padding:0.8pt 2.0pt;"><div class="ltx_text" style="font-size:80%;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Itemic</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">+Text</td></tr>
+</table> </div></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">Domain-Grouped Behavior Sequence</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">21.41</span></td>
 </tr>
@@ -6401,11 +6414,11 @@ Logic Alignment}.</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">Subtotal</span></td>
 <td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">34.05</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_table" id="A3.T26">
 <figcaption class="ltx_caption ltx_centering" style="font-size:80%;"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:113%;">Table 26</span>: </span><span class="ltx_text" style="font-size:113%;">预训练数据混合方案（通用领域语料）。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:0.8pt 2.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Category</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:0.8pt 2.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Modality</span></td>
@@ -6413,13 +6426,13 @@ Logic Alignment}.</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:0.8pt 2.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Token Ratio (%)</span></td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" rowspan="27" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">
-<span class="ltx_tabular ltx_align_middle">
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">General</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Domain</span></span>
-</span> </span></td>
+<td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" rowspan="27" style="padding:0.8pt 2.0pt;"><div class="ltx_text" style="font-size:80%;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">General</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Domain</td></tr>
+</table> </div></td>
 <td class="ltx_td ltx_align_left ltx_border_t" rowspan="23" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">Text</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">In-House-Text-Data</span></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">8.91</span></td>
@@ -6601,13 +6614,13 @@ Logic Alignment}.</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">26.85</span></td>
 </tr>
 <tr class="ltx_tr">
-<td class="ltx_td ltx_align_left ltx_border_t" rowspan="3" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">
-<span class="ltx_tabular ltx_align_middle">
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Itemic</span></span>
-<span class="ltx_tr">
-<span class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">+Text</span></span>
-</span> </span></td>
+<td class="ltx_td ltx_align_left ltx_border_t" rowspan="3" style="padding:0.8pt 2.0pt;"><div class="ltx_text" style="font-size:80%;">
+<table class="ltx_tabular ltx_align_middle">
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">Itemic</td></tr>
+<tr class="ltx_tr">
+<td class="ltx_td ltx_nopad_r ltx_align_center" style="padding:0.8pt 2.0pt;">+Text</td></tr>
+</table> </div></td>
 <td class="ltx_td ltx_align_left ltx_border_t" style="padding:0.8pt 2.0pt;">
 <span class="ltx_text" style="font-size:80%;">Image Generation and Image Edit </span><span class="ltx_note ltx_role_footnote" id="footnote24"><sup class="ltx_note_mark">24</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">24</sup>
 <span class="ltx_tag ltx_tag_note">24</span>
@@ -6638,7 +6651,7 @@ Logic Alignment}.</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">Subtotal</span></td>
 <td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" style="padding:0.8pt 2.0pt;"><span class="ltx_text" style="font-size:80%;">1.59</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="A3.SS3">
@@ -6821,7 +6834,7 @@ Logic Alignment}.</annotation></semantics></math></td>
 <span class="ltx_tag ltx_tag_subsubsection">D.1.2 </span>SFT 数据构成</h4>
 <figure class="ltx_table" id="A4.T27">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 27</span>: </span><span class="ltx_text" style="font-size:90%;">SFT 阶段的数据混合。样本数以 <math alttext="10^{4}" class="ltx_Math" display="inline" id="A4.T27.m2"><semantics><msup><mn>10</mn><mn>4</mn></msup><annotation encoding="application/x-tex">10^{4}</annotation></semantics></math> 为单位；占比以 % 表示。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:1pt 10.0pt;"><span class="ltx_text ltx_font_bold">Category</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding:1pt 10.0pt;"><span class="ltx_text ltx_font_bold">Dataset</span></td>
@@ -6965,7 +6978,7 @@ Logic Alignment}.</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" style="padding:1pt 10.0pt;"><span class="ltx_text ltx_font_bold">395.17</span></td>
 <td class="ltx_td ltx_align_left ltx_border_bb ltx_border_t" style="padding:1pt 10.0pt;"><span class="ltx_text ltx_font_bold">100.00</span></td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 </section>
@@ -7673,7 +7686,7 @@ Logic Alignment}.</annotation></semantics></math></td>
 <span class="ltx_tag ltx_tag_subsubsection">D.3.2 </span>低分推理轨迹案例</h4>
 <figure class="ltx_table" id="A4.T28">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 28</span>: </span><span class="ltx_text" style="font-size:90%;">具有代表性的低质量推荐 CoT 案例。存在问题的 CoT 文本以红色标出；目标片段作为参考证据。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_justify ltx_align_top ltx_border_tt" style="padding:0.4pt 3.0pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -7761,7 +7774,7 @@ Logic Alignment}.</annotation></semantics></math></td>
 </span>
 </td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsubsection" id="A4.SS3.SSS3">
@@ -7933,6 +7946,72 @@ token。助手轨迹遵循主文 R3 构建中使用的相同三阶段
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

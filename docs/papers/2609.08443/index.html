@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / SequenceO1</div><h1>SequenceO1：通过低秩缓存实现推荐中的端到端超长（100K）序列建模</h1><p class="paper-original-title">SequenceO1: End-to-End Ultra-Long (100K) Sequence Modeling in Recommendation with Low-Rank Caching</p>
@@ -865,8 +878,8 @@ SA与原始注意力对比的诊断性实验还额外报告多任务UAUC，以�
 </figure>
 <figure class="ltx_table" id="S5.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 1. </span>在100K设置下，SA相较于原始注意力的UAUC提升。</figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:50.8pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(63.3pt,-7.4pt) scale(1.41244080456339,1.41244080456339) ;">
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt"><span class="ltx_text" style="font-size:90%;">Task</span></th>
@@ -889,8 +902,8 @@ SA与原始注意力对比的诊断性实验还额外报告多任务UAUC，以�
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t"><span class="ltx_text" style="font-size:90%;">+0.01%</span></td>
 </tr>
 </tbody>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S5.SS1.p1">
 <p class="ltx_p">我们分析在100K消融设置下，草图注意力（SA）中的原型级归一化与原始注意力的差异。
@@ -911,7 +924,7 @@ SA与原始注意力对比的诊断性实验还额外报告多任务UAUC，以�
 <figure class="ltx_table" id="S5.T2">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 2. </span>在100K消融设置下的SA架构消融。
 最终SA设置取得+1.07% Finish AUC，相较于STCA(512)；所有数值均报告相对于该最终SA设置的变化。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding:0.25pt 4.0pt;"><span class="ltx_text" style="font-size:90%;">Variant</span></th>
@@ -958,14 +971,14 @@ SA与原始注意力对比的诊断性实验还额外报告多任务UAUC，以�
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.25pt 4.0pt;"><span class="ltx_text" style="font-size:90%;">-0.10%</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_table" id="S5.T3">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 3. </span>在消融设置下100K压缩方法的比较。
 基础模型仅使用STCA(512)，而所有非基础变体在同一排序设置上增加一个超长压缩分支。
 为公平比较，每种压缩方法都将100K历史汇总为紧凑的<math alttext="1K\times 128" class="ltx_Math" display="inline" id="S5.T3.m2"><semantics><mrow><mrow><mn>1</mn><mo>⁢</mo><mi>K</mi></mrow><mo lspace="0.222em" rspace="0.222em">×</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">1K\times 128</annotation></semantics></math>表示。
 数值报告相对于STCA(512)基础模型的Finish AUC提升。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding:0.25pt 4.0pt;"><span class="ltx_text" style="font-size:90%;">Compression method</span></th>
@@ -1008,7 +1021,7 @@ SA与原始注意力对比的诊断性实验还额外报告多任务UAUC，以�
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.25pt 4.0pt;"><span class="ltx_text" style="font-size:90%;">+0.78%</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S5.SS2.p1">
 <p class="ltx_p">在相同的100K轻量级STCA(512)设置下，表<a class="ltx_ref" href="#S5.T2" title="Table 2 ‣ 5.2. Ablations and Compression Methods ‣ 5. Experiments ‣ SequenceO1: End-to-End Ultra-Long (100K) Sequence Modeling in Recommendation with Low-Rank Caching"><span class="ltx_text ltx_ref_tag">2</span></a>报告相对于最终SA配置的变化，而表<a class="ltx_ref" href="#S5.T3" title="Table 3 ‣ 5.2. Ablations and Compression Methods ‣ 5. Experiments ‣ SequenceO1: End-to-End Ultra-Long (100K) Sequence Modeling in Recommendation with Low-Rank Caching"><span class="ltx_text ltx_ref_tag">3</span></a>报告相对于STCA(512)的绝对Finish AUC增益。最终设置——<math alttext="k{=}1\mathrm{K}" class="ltx_Math" display="inline" id="S5.SS2.p1.m1"><semantics><mrow><mi>k</mi><mo>=</mo><mrow><mn>1</mn><mo>⁢</mo><mi mathvariant="normal">K</mi></mrow></mrow><annotation encoding="application/x-tex">k{=}1\mathrm{K}</annotation></semantics></math>、<math alttext="N_{\mathrm{sa}}{=}2" class="ltx_Math" display="inline" id="S5.SS2.p1.m2"><semantics><mrow><msub><mi>N</mi><mi>sa</mi></msub><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">N_{\mathrm{sa}}{=}2</annotation></semantics></math>、<math alttext="d{=}128" class="ltx_Math" display="inline" id="S5.SS2.p1.m3"><semantics><mrow><mi>d</mi><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">d{=}128</annotation></semantics></math>、物品嵌入与动作类型嵌入的动作侧SwiGLU融合，以及每层带SwiGLU FFN的Add&amp;Norm——取得+1.07%。增加到2K个原型或3层分别仅增加+0.03%或+0.02%；我们将这些视为成本–质量指导，而非独立的显著性证据，并保留较小的生产配置。减小宽度或移除细化会降低性能，其中移除动作侧融合带来的-0.20%凸显了动作感知草图的价值。</p>
@@ -1026,7 +1039,7 @@ SA与原始注意力对比的诊断性实验还额外报告多任务UAUC，以�
 <figure class="ltx_table" id="S5.T4">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 4. </span>在抖音数据集完整生产设置下的离线提升。
 基线为带有终身TWIN V2的生产STCA 10K；SequenceO1移除TWIN V2，改为使用端到端100K草图分支。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text" style="font-size:90%;">Metric</span></th>
@@ -1074,7 +1087,7 @@ SA与原始注意力对比的诊断性实验还额外报告多任务UAUC，以�
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text" style="font-size:90%;">+3.63%</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S5.SS3.p2">
 <p class="ltx_p">尽管移除了TWIN V2，SequenceO1仍改进了每个被评估目标，表明100K分支成功替代了两阶段终身模块，同时在完整排序器中进一步提升了所有被评估指标。UAUC增益在偏好敏感目标（点赞、分享、收藏和不喜欢）上最强，而核心消费目标（Finish和Skip）也有所改善，表明其长期个性化比先前的基于聚类的流水线更有效。</p>
@@ -1088,8 +1101,8 @@ SA与原始注意力对比的诊断性实验还额外报告多任务UAUC，以�
 </div>
 <figure class="ltx_table" id="S5.T5">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 5. </span>在抖音和抖音极速版上，相对于生产STCA 10K + TWIN V2基线的在线A/B结果（均统计显著）。</figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:433.6pt;height:70.4pt;vertical-align:-0.6pt;"><span class="ltx_transformed_inner" style="transform:translate(-174.7pt,28.1pt) scale(0.553791964044364,0.553791964044364) ;">
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_th ltx_th_row ltx_border_t" style="padding-top:0.4pt;padding-bottom:0.4pt;"></th>
@@ -1188,8 +1201,8 @@ SA与原始注意力对比的诊断性实验还额外报告多任务UAUC，以�
 <td class="ltx_td ltx_align_center ltx_border_b" style="padding-top:0.4pt;padding-bottom:0.4pt;">-6.5438%</td>
 </tr>
 </tbody>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S5.SS4.p2">
 <p class="ltx_p">SequenceO1在两个应用上显著提升了活跃度、时长、Finish、评论和点赞，同时减少了不喜欢；Finish在抖音上提升+2.33%，在抖音极速版上提升+3.49%，表明持续消费更好。增益在各活跃度分群中保持稳定：低活跃用户在活跃度和时长上改善，表明重新参与，而高活跃用户在Finish和点赞上改善。总体而言，该模型跨平台和人群以稳定的长期偏好补充短期信号。</p>
@@ -3760,6 +3773,72 @@ infer}},p_{\mathrm{hit}}^{\mathrm{infer}})}\approx\frac{43.076}{0.67419}%
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

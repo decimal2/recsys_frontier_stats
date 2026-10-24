@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / Don&#x27;t Rewrite the SID Map</div><h1>不要重写 SID 映射：动态电商搜索中生成式检索的拓扑保持</h1><p class="paper-original-title">Don&#x27;t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search</p>
@@ -489,7 +502,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 </div>
 <figure class="ltx_table" id="S3.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 1. </span>FS与HC标识符的第1天比较：HitRate、MRR以及每个查询解析到的商品数。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_th ltx_th_row ltx_border_tt"></th>
@@ -539,7 +552,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 <td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text" style="font-size:90%;">986</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 </section>
@@ -587,7 +600,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 </div>
 <figure class="ltx_table" id="S4.T2">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 2. </span>第30天在不添加新商品情况下的旧商品指标。<math alttext="\checkmark" class="ltx_Math" display="inline" id="S4.T2.m3"><semantics><mi mathvariant="normal">✓</mi><annotation encoding="application/x-tex">\checkmark</annotation></semantics></math>：已刷新；<math alttext="\times" class="ltx_Math" display="inline" id="S4.T2.m4"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>：冻结。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">SID</span></th>
@@ -662,7 +675,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.2pt;padding-right:3.2pt;"><span class="ltx_text" style="font-size:90%;">0.0519</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S4.SS3.p2">
 <p class="ltx_p">表 <a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.3. Wide Beams Mask Mapping Drift ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">2</span></a> 比较了完全冻结的基线（映射表和特征表示均保持静态）与两种部分刷新配置。同时刷新两个组件会显著降低性能，HC HR@1 从 0.0584 下降到 0.0340（-41.78%），MRR 从 0.1164 下降到 0.0706（-39.35%）。</p>
@@ -688,7 +701,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 </div>
 <figure class="ltx_table" id="S4.T3">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 3. </span>新商品命中率和 MRR（第30天）。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">Policy</span></th>
@@ -717,7 +730,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:90%;">0.0415</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S4.SS4.p3">
 <p class="ltx_p">然后我们改变阈值 <math alttext="t" class="ltx_Math" display="inline" id="S4.SS4.p3.m1"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> 来控制旧商品的重映射比例 <math alttext="\gamma" class="ltx_Math" display="inline" id="S4.SS4.p3.m2"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>。SID 映射表和输入序列特征被一致地刷新。表 <a class="ltx_ref" href="#S4.T4" title="Table 4 ‣ 4.4. Remapping Rate Predicts Degradation ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">4</span></a> 显示出严格的单调模式：随着 <math alttext="\gamma" class="ltx_Math" display="inline" id="S4.SS4.p3.m3"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math> 从 72.75% 降低到 0%，每个 beam 大小下的命中率和 MRR 都增加。即使是中等阈值 <math alttext="t=10" class="ltx_Math" display="inline" id="S4.SS4.p3.m4"><semantics><mrow><mi>t</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">t=10</annotation></semantics></math>，仍比完全冻结低 12.4%，对应 beam 大小 1。在测试的策略中，部分重映射并未能产生有用的稳定性–新鲜度折衷。</p>
@@ -730,7 +743,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 </div>
 <figure class="ltx_table" id="S4.T4">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 4. </span>旧商品指标与重映射比例 <math alttext="\gamma" class="ltx_Math" display="inline" id="S4.T4.m2"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math> 的关系。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Policy</span></th>
@@ -789,7 +802,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.1160</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_figure" id="S4.F2"><a href="assets/06637c4d6b33bd8a.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F2.g1" loading="lazy" src="assets/06637c4d6b33bd8a.svg"/></a>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2. </span><span class="ltx_text ltx_font_bold">单调重映射效应。</span>随着重映射阈值变得更加激进，相对于冻结基线的指标下降率（%）。</figcaption>
@@ -806,7 +819,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 </div>
 <figure class="ltx_table" id="S4.T5">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 5. </span>30 天周期后的热启动比较。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Items</span></th>
@@ -854,7 +867,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.0779</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_figure" id="S4.F3"><a href="assets/cff7fa4f40ccdcb7.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F3.g1" loading="lazy" src="assets/cff7fa4f40ccdcb7.svg"/></a>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3. </span><span class="ltx_text ltx_font_bold">热启动训练相对于冻结基线的改进（第 30 天）。</span> Full-Re 和 Frozen 相对于冻结（不重新训练）策略的相对变化（%）。</figcaption>
@@ -889,7 +902,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 </div>
 <figure class="ltx_table" id="S4.T6">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 6. </span>Frozen 在 30 天后的权重混合消融实验。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Items</span></th>
@@ -969,14 +982,14 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0415</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S4.SS6.p2">
 <p class="ltx_p">表 <a class="ltx_ref" href="#S4.T7" title="Table 7 ‣ 4.6. No Benefit from Weight Mixing ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">7</span></a> 报告了从第 30 天模型初始化的后续七天周期中的相同消融实验，并可在图 <a class="ltx_ref" href="#S4.F3" title="Figure 3 ‣ 4.5. Warm-Start Does Not Repair Remapping ‣ 4. Experiments ‣ Don’t Rewrite the SID Map: Topology Preservation for Generative Retrieval in Dynamic E-Commerce Search"><span class="ltx_text ltx_ref_tag">3</span></a> 中看到。定性模式相似：新商品质量强烈依赖于新检查点，而旧商品质量相对稳定。在 <math alttext="\alpha=0.1" class="ltx_Math" display="inline" id="S4.SS6.p2.m1"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\alpha=0.1</annotation></semantics></math> 处，少数旧商品指标（HR@10、HR@100、MRR）略微超过 <math alttext="\alpha=0" class="ltx_Math" display="inline" id="S4.SS6.p2.m2"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha=0</annotation></semantics></math> 值。这表明，在较短的周期内，保留一小部分旧模型的权重可以略微改善较旧商品的性能。然而，增益是边际的且几乎持平，可能是因为短周期内可用的数据多样性较低，而旧模型已经从大量历史数据中学习过。因此，这种有限的改进并不与以下总体结论相矛盾：直接使用新检查点是最优或接近最优的。</p>
 </div>
 <figure class="ltx_table" id="S4.T7">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 7. </span>Frozen 在额外 7 天周期后（第37天）的权重混合消融实验。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Items</span></th>
@@ -1056,7 +1069,7 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">0.0644</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_figure" id="S4.F4"><a href="assets/ef25e5f92f9d852e.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F4.g1" loading="lazy" src="assets/ef25e5f92f9d852e.svg"/></a>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4. </span><span class="ltx_text ltx_font_bold">对模型混合的非对称敏感性：HR@1000。</span>第 30 天（左）和第 37 天（右）的权重混合消融。横轴是新模型权重 <math alttext="(1-\alpha)" class="ltx_Math" display="inline" id="S4.F4.m3"><semantics><mrow><mo stretchy="false">(</mo><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(1-\alpha)</annotation></semantics></math>。实线显示 HR@1000（左轴），虚线显示 MRR（右轴）。两个指标都随新模型权重单调上升，证实纯新检查点（<math alttext="1-\alpha=1" class="ltx_Math" display="inline" id="S4.F4.m4"><semantics><mrow><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1-\alpha=1</annotation></semantics></math>）是最优或接近最优的。</figcaption>
@@ -1426,6 +1439,72 @@ Buy}(i)}{\mathrm{Exp}(i)+\epsilon},\quad\epsilon=10,</annotation></semantics></m
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OneSearch</div><h1>OneSearch：电商搜索统一端到端生成式框架的初步探索</h1><p class="paper-original-title">OneSearch: A Preliminary Exploration of the Unified End-to-End Generative Framework for E-commerce Search</p>
@@ -371,7 +384,7 @@ li{margin:5px 0}
 </div>
 <figure class="ltx_table" id="S3.T1">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>. </span><span class="ltx_text" style="font-size:90%;">18在快手电商搜索平台上使用命名实体识别提取的结构化属性。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_l ltx_border_r ltx_border_t"><span class="ltx_text" style="font-size:90%;">Entity</span></th>
@@ -400,7 +413,7 @@ li{margin:5px 0}
 <td class="ltx_td ltx_align_center ltx_border_b ltx_border_r ltx_border_t"><span class="ltx_text" style="font-size:90%;">Series</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S3.SS1.SSS1.p2">
 <p class="ltx_p">我们设计了四类相互关联的任务来对齐协同表示和语义表示：1）query2query 和 item2item 对比损失 <math alttext="\mathcal{L_{\text{q2q}}}" class="ltx_Math" display="inline" id="S3.SS1.SSS1.p2.m1"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>q2q</mtext></msub><annotation encoding="application/x-tex">\mathcal{L_{\text{q2q}}}</annotation></semantics></math>、<math alttext="\mathcal{L_{\text{i2i}}}" class="ltx_Math" display="inline" id="S3.SS1.SSS1.p2.m2"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>i2i</mtext></msub><annotation encoding="application/x-tex">\mathcal{L_{\text{i2i}}}</annotation></semantics></math>，用于对齐协同相似对的表示；2）query2item 对比损失 <math alttext="\mathcal{L_{\text{q2i}}}" class="ltx_Math" display="inline" id="S3.SS1.SSS1.p2.m3"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>q2i</mtext></msub><annotation encoding="application/x-tex">\mathcal{L_{\text{q2i}}}</annotation></semantics></math>，用于确保 BGE 能够反映真实商业特征；3）query2item 间隔损失 <math alttext="\mathcal{L_{\text{rank}}}" class="ltx_Math" display="inline" id="S3.SS1.SSS1.p2.m4"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>rank</mtext></msub><annotation encoding="application/x-tex">\mathcal{L_{\text{rank}}}</annotation></semantics></math>，用于进一步学习具有不同行为层级（如曝光、点击、下单）的查询-物品对的协同信号偏差；4）难样本相关性纠正损失 <math alttext="\mathcal{L_{\text{rel}}}" class="ltx_Math" display="inline" id="S3.SS1.SSS1.p2.m5"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>rel</mtext></msub><annotation encoding="application/x-tex">\mathcal{L_{\text{rel}}}</annotation></semantics></math>。对于相似度达到阈值的对，我们使用 LLM 根据查询和物品的完整上下文信息对相关性进行打分，然后让蒸馏后的 BGE 模型拟合该分数。</p>
@@ -447,7 +460,7 @@ rel}}},</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="S3.T2">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 2</span>. </span><span class="ltx_text" style="font-size:90%;">各种 RQ-Kmeans 配置下的码本利用率（CUR）和独立编码率（ICR）。最后的 <sup class="ltx_sup">+</sup> 表示对所有层进行均衡操作。</span></figcaption>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt">Configurations</th>
@@ -541,7 +554,7 @@ rel}}},</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t">33.47%</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsubsection" id="S3.SS1.SSS3">
@@ -549,7 +562,7 @@ rel}}},</annotation></semantics></math></td>
 <span class="ltx_tag ltx_tag_subsubsection">3.1.3. </span>RQ-OPQ 层次量化词元化</h4>
 <figure class="ltx_table" id="S3.T3">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 3</span>. </span><span class="ltx_text" style="font-size:90%;">三种词元化方案的性能比较。指标在真实点击对上评估。</span></figcaption>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Method</th>
@@ -589,7 +602,7 @@ rel}}},</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">0.1194</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S3.SS1.SSS3.p1">
 <p class="ltx_p">常见的 SID 词元化器（如 RQ-VAE、VQ-VAE 和 RQ K-means）侧重于编码相似物品之间的共享特征，这可能导致每个物品的独特特征丢失，最终降低生成式检索模型（GR）的性能。此外，RQ-VAE 的性能不如 RQ-Kmeans <cite class="ltx_cite ltx_citemacro_citep">(Deng<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib38" title="OneRec: unifying retrieve and rank with generative recommender and iterative preference alignment">2025</a>; Ju<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib36" title="Generative recommendation with semantic ids: a practitioner’s handbook">2025b</a>)</cite>，表 <a class="ltx_ref" href="#S3.T3" title="Table 3 ‣ 3.1.3. RQ-OPQ Hierarchical Quantization Tokenization ‣ 3.1. Hierarchical Quantization Encoding ‣ 3. Methodology ‣ OneSearch: A Preliminary Exploration of the Unified End-to-End Generative Framework for E-commerce Search"><span class="ltx_text ltx_ref_tag">3</span></a> 验证了这一点。因此，我们采用 RQ-Kmeans 作为基础词元化器。</p>
@@ -793,7 +806,7 @@ Seq}_{short},{Seq}_{long}^{emb},\mathcal{U}).</annotation></semantics></math></t
 </div>
 <figure class="ltx_table" id="S3.T4">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 4</span>. </span><span class="ltx_text" style="font-size:90%;">偏好感知奖励系统的整体流程。它包含一个用于语义对齐、共现同步和用户个性化建模的三阶段有监督微调方案，以及一个用于个性化偏好排序的自适应奖励系统。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt"><span class="ltx_text ltx_font_bold">Procedure</span></th>
@@ -837,7 +850,7 @@ Seq}_{short},{Seq}_{long}^{emb},\mathcal{U}).</annotation></semantics></math></t
 \text{$item_{lose}$}\end{bmatrix}\mapsto\text{Rank Score}</annotation></semantics></math></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S3.SS4.SSS2.p2">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">自适应加权奖励信号。</span>参照 OneSug <cite class="ltx_cite ltx_citemacro_citep">(Guo<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib5" title="OneSug: the unified end-to-end generative framework for e-commerce query suggestion">2025</a>)</cite>，我们将搜索系统中的用户交互行为划分为六个不同层级：（1）搜索场景下已购物品，（2）推荐场景下已购的同类别物品，（3）已点击物品，（4）已曝光但未点击的物品，（5）同类别中未展示的物品，以及（6）来自其他类别的随机物品。我们为每个层级分别赋予基础奖励权重 <math alttext="{\lambda=[2.0,1.5,1.0,0.5,0.2,0.0]}" class="ltx_Math" display="inline" id="S3.SS4.SSS2.p2.m1"><semantics><mrow><mi>λ</mi><mo>=</mo><mrow><mo stretchy="false">[</mo><mn>2.0</mn><mo>,</mo><mn>1.5</mn><mo>,</mo><mn>1.0</mn><mo>,</mo><mn>0.5</mn><mo>,</mo><mn>0.2</mn><mo>,</mo><mn>0.0</mn><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">{\lambda=[2.0,1.5,1.0,0.5,0.2,0.0]}</annotation></semantics></math>。考虑到近期点击率（CTR）和转化率（CVR）较高的物品更可能被用户选中，我们利用这两个指标来构建自适应加权奖励。然而，CTR 和 CVR 往往存在估计偏差。例如，一个仅曝光一次便被点击的新发布物品，其 CTR 会达到 100%。相反，真正热门的物品常常被线上 MCA 在各种相似但次优的查询下曝光，导致其 CTR 和 CVR 偏低。因此，我们对这两个指标进行如下校准：</p>
@@ -995,7 +1008,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 </div>
 <figure class="ltx_table" id="S4.T5">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 5</span>. </span><span class="ltx_text" style="font-size:90%;">我们提出的方法与 onlineMCA 在工业数据集上的离线性能。最佳结果以粗体显示，各列中的次优结果以下划线标示。“w/o ranking”表示“无排序”，“<math alttext="\backslash" class="ltx_Math" display="inline" id="S4.T5.m2"><semantics><mo>\</mo><annotation encoding="application/x-tex">\backslash</annotation></semantics></math>+ keywords”表示“增加关键词优化”</span></figcaption>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row ltx_border_tt" rowspan="2">
@@ -1145,7 +1158,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 <td class="ltx_td ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold">16.33%</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S4.SS1.p2">
 <p class="ltx_p">我们测试了不同配置下的 RQ-Kmeans 和 KHQE 词元化。如表 <a class="ltx_ref" href="#S3.T2" title="Table 2 ‣ 3.1.2. Core Keyword Enhancement ‣ 3.1. Hierarchical Quantization Encoding ‣ 3. Methodology ‣ OneSearch: A Preliminary Exploration of the Unified End-to-End Generative Framework for E-commerce Search"><span class="ltx_text ltx_ref_tag">2</span></a> 所示，我们发现更高的码本利用率（CUR）和独立编码率（ICR）会带来更好的召回和排序性能。此外，我们测试了添加核心关键词增强、L3 均衡 Kmeans 以及自适应奖励系统的效果。所有这些增强都在不同程度上提升了指标。值得注意的是，自适应奖励偏好学习显著提升了模型的排序能力，平均提升分别为 1.80% 和 3.24%，对应指标为 HR@350 和 MRR@350。</p>
@@ -1155,7 +1168,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 </div>
 <figure class="ltx_table" id="S4.T6">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 6</span>. </span><span class="ltx_text" style="font-size:90%;">多视图行为序列注入的消融实验。Slid. Window 表示滑动窗口策略。</span></figcaption>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row ltx_border_tt" rowspan="2">
@@ -1228,7 +1241,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 <td class="ltx_td ltx_align_center ltx_border_bb">-0.70%</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S4.SS2">
@@ -1248,7 +1261,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 </div>
 <figure class="ltx_table" id="S4.T7">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 7</span>. </span><span class="ltx_text" style="font-size:90%;">不同 OPQ 词元化的消融实验。</span></figcaption>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_row ltx_border_tt" rowspan="2">
@@ -1310,7 +1323,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 <td class="ltx_td ltx_align_center ltx_border_bb">-9.61%</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_figure" id="S4.F5"><a href="assets/1dffaf3608ea1c4b.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F5.g1" loading="lazy" src="assets/1dffaf3608ea1c4b.svg"/></a>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 5</span>. </span><span class="ltx_text" style="font-size:90%;">商品的不同分层量化编码。</span></figcaption>
@@ -1352,7 +1365,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 </div>
 <figure class="ltx_table" id="S4.T8">
 <figcaption class="ltx_caption ltx_centering" style="font-size:80%;"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:113%;">Table 8</span>. </span><span class="ltx_text" style="font-size:113%;">A/B 测试的在线结果。黑色字体表示统计显著性（P 值）小于 0.05，而灰色字体表示大于 0.05，这意味着数据尚不置信。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Method</span></th>
@@ -1405,7 +1418,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb"><span class="ltx_text ltx_font_bold" style="font-size:80%;">+3.22%</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S4.SS3.p2">
 <p class="ltx_p">我们还测量了服务推理期间在旗舰 GPU 上的模型 FLOPs 利用率（MFU）。在图 <a class="ltx_ref" href="#S4.F7" title="Figure 7 ‣ 4.2. Ablation Study ‣ 4. Experiment ‣ OneSearch: A Preliminary Exploration of the Unified End-to-End Generative Framework for E-commerce Search"><span class="ltx_text ltx_ref_tag">7</span></a> 中，onlineMCA 仅为 3.26%，但 OneSearch 可以达到 27.32%，相对提升为 700.38%。这显著优于 onlineMCA 以及常见的大语言模型（LLM），后者在 H100 GPU 上通常达到 40% 的 MFU <cite class="ltx_cite ltx_citemacro_citep">(Dubey<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib35" title="The llama 3 herd of models">2024b</a>)</cite>。
@@ -1419,7 +1432,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 </div>
 <figure class="ltx_table" id="S4.T9">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 9</span>. </span><span class="ltx_text" style="font-size:90%;">在线体验的人工评估结果。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Metric</th>
@@ -1442,11 +1455,11 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 <td class="ltx_td ltx_align_center ltx_border_bb">1.87%</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_table" id="S4.T10">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 10</span>. </span><span class="ltx_text" style="font-size:90%;">三种查询热度下的在线 CTR 提升。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text ltx_font_bold">Method</span></th>
@@ -1463,7 +1476,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb ltx_border_t">+1.33%</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S4.SS4">
@@ -1491,7 +1504,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 </div>
 <figure class="ltx_table" id="S4.T11">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 11</span>. </span><span class="ltx_text" style="font-size:90%;">冷启动商品和用户的在线 CTR 提升。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text ltx_font_bold">Object</span></th>
@@ -1514,7 +1527,7 @@ l}|x_{u})}{\pi_{\text{ref}}(i_{w/l}|x_{u})}.</annotation></semantics></math></td
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb">+2.41%</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S4.SS4.p5">
 <p class="ltx_p">3）<span class="ltx_text ltx_font_bold">OneSearch 在冷启动用户和商品上的表现如何？</span> 我们进行了测试以评估模型在冷启动场景下的性能。在这里，我们将冷启动商品定义为最近七天内发布且没有任何交互行为的商品，将冷启动用户定义为过去 90 天内未使用过快手应用的用户。具体比较结果展示在表 <a class="ltx_ref" href="#S4.T11" title="Table 11 ‣ 4.4. Further Analysis ‣ 4. Experiment ‣ OneSearch: A Preliminary Exploration of the Unified End-to-End Generative Framework for E-commerce Search"><span class="ltx_text ltx_ref_tag">11</span></a> 中。与 onlineMCA 相比，我们发现 OneSearch 对冷启动商品和用户的性能分别提升了 3.31% 和 2.50%。两者均大于热启动的指标。这些结果表明 OneSearch 能够很好地处理冷启动问题。</p>
@@ -2144,6 +2157,72 @@ April 19-23, 2021</span>,
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / Multi-Decoder OneRec</div><h1>Multi-Decoder OneRec：面向多目标工业推荐的可控生成式检索</h1><p class="paper-original-title">Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation</p>
@@ -697,7 +710,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 </div>
 <figure class="ltx_table" id="S5.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 1. </span>在Kwai26上的总体离线性能，指标为Recall@512（<math alttext="\uparrow" class="ltx_Math" display="inline" id="S5.T1.m3"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>）。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示，次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>表示，相对最强基线的提升具有统计显著性（<math alttext="p&lt;0.05" class="ltx_Math" display="inline" id="S5.T1.m4"><semantics><mrow><mi>p</mi><mo>&lt;</mo><mn>0.05</mn></mrow><annotation encoding="application/x-tex">p&lt;0.05</annotation></semantics></math>）。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_nopad_l ltx_nopad_r ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding:0.5pt 1.5pt;"><span class="ltx_text ltx_font_bold">Paradigm</span></th>
@@ -759,7 +772,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 <td class="ltx_td ltx_nopad_l ltx_nopad_r ltx_align_center ltx_border_bb" style="padding:0.5pt 1.5pt;"><span class="ltx_text ltx_font_bold">0.2031</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para ltx_noindent" id="S5.SS1.p2">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">基线。</span> 我们将Multi-Decoder OneRec与五种代表性召回模型进行比较：</p>
@@ -817,7 +830,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 </div>
 <figure class="ltx_table" id="S5.T2">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 2. </span>与单目标解码器的比较。所有值均为Recall@512（<math alttext="\uparrow" class="ltx_Math" display="inline" id="S5.T2.m2"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math>）。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示，次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>表示。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_nopad_l ltx_nopad_r ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding:0.3pt 1.0pt;"><span class="ltx_text ltx_font_bold">Configuration</span></th>
@@ -871,7 +884,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 <td class="ltx_td ltx_nopad_l ltx_nopad_r ltx_align_center ltx_border_bb" style="padding:0.3pt 1.0pt;"><span class="ltx_text ltx_framed ltx_framed_underline">0.2031</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para ltx_noindent" id="S5.SS3.p2">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">MD-CBS。</span> 此处，CBS表示约束束搜索（Constrained Beam Search）。我们使用L2 CBS和L3 CBS分别表示MD-CBS在第二层和第三层SID上应用跨路径约束；No CBS表示无跨路径约束的独立解码。
@@ -879,7 +892,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 </div>
 <figure class="ltx_table" id="S5.T3">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 3. </span>MD-CBS粒度的影响。L2 CBS和L3 CBS分别在第二层和第三层SID上应用CBS；<span class="ltx_text ltx_font_bold">#Cand.</span>为候选数量。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示，次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>表示。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_nopad_l ltx_nopad_r ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding:0.3pt 1.0pt;"><span class="ltx_text ltx_font_bold">Method</span></th>
@@ -916,7 +929,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 <td class="ltx_td ltx_nopad_l ltx_nopad_r ltx_align_center ltx_border_bb" style="padding:0.3pt 1.0pt;">207.67</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S5.SS4">
@@ -929,7 +942,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 </div>
 <figure class="ltx_table" id="S5.T4">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 4. </span>Kwai Brazil短视频服务中的在线A/B测试性能。（所有<math alttext="p&lt;0.05" class="ltx_Math" display="inline" id="S5.T4.m2"><semantics><mrow><mi>p</mi><mo>&lt;</mo><mn>0.05</mn></mrow><annotation encoding="application/x-tex">p&lt;0.05</annotation></semantics></math>）。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding:-0.5pt 5.0pt;"><span class="ltx_text ltx_font_bold">Metric</span></th>
@@ -978,7 +991,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 <td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_bb" style="padding:-0.5pt 5.0pt;">+2.09%</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S5.SS5">
@@ -1007,7 +1020,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 </div>
 <figure class="ltx_table" id="S5.T5">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 5. </span>学习目标对观看时长Recall@512的影响。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding:0.3pt 4.0pt;"><span class="ltx_text ltx_font_bold">Objective</span></th>
@@ -1024,7 +1037,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding:0.3pt 4.0pt;"><span class="ltx_text ltx_font_bold">0.2031</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para ltx_noindent" id="S5.SS5.p5">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">配额分配与束扩展。</span> 图<a class="ltx_ref" href="#S5.F4" title="Figure 4 ‣ 5.5. Further Analysis ‣ 5. Experiments ‣ Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation"><span class="ltx_text ltx_ref_tag">4</span></a>展示了相对于默认设置的Recall@512差值。颜色表示曝光召回、长观看召回、点赞召回和WT召回，x轴分组表示召回干预。前三组将配额向某一目标倾斜。它们将召回引向预期方向，但并非一致地提升所有指标：More Long-View将长观看召回提升+0.10%，但略微降低了曝光和点赞；More Like带来小幅点赞增益（+0.02%）；More WT则产生最大的定向变化，WT召回提升+0.31%。由于输出预算固定，将更多配额分配给某一路径会移除其他路径的候选。最右侧的All-512 beams组则增加束宽，使每个条形均为正值，尤其是在长观看和WT上。因此，配额分配控制召回方向，而束扩展在有额外算力可用时提升候选质量。</p>
@@ -1037,7 +1050,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 </div>
 <figure class="ltx_table" id="S5.T6">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 6. </span>参数与计算开销。FLOPs按每个会话测量。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Configuration</th>
@@ -1067,7 +1080,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 <td class="ltx_td ltx_align_center ltx_border_bb">725.38G (2.23<math alttext="\times" class="ltx_Math" display="inline" id="S5.T6.m8"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>)</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_figure" id="S5.F4">
 <div class="ltx_flex_figure">
@@ -1638,7 +1651,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 </div>
 <figure class="ltx_table" id="A1.T7">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 7. </span>主要符号汇总。</figcaption>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_column ltx_border_r ltx_border_tt" style="padding:0.4pt 4.0pt;">
@@ -1859,7 +1872,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_appendix" id="A2">
@@ -1867,7 +1880,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 <span class="ltx_tag ltx_tag_appendix">Appendix B </span>Kwai26数据集构建</h2>
 <figure class="ltx_table" id="A2.T8">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 8. </span>Kwai26离线数据集的统计信息。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_r ltx_border_tt" style="padding-top:0.3pt;padding-bottom:0.3pt;"><span class="ltx_text ltx_font_bold">Statistic</span></th>
@@ -1914,14 +1927,14 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding-top:0.3pt;padding-bottom:0.3pt;">8</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para ltx_noindent" id="A2.p1">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">范围与来源概况。</span> Kwai26 覆盖 60 个连续日的短视频流量，时间从5月2日至6月30日（2026年）。每个事件记录用户和请求标识符、事件时间和展示位置、Item-ID和作者ID、内容标签、视频时长和观看时长、行为标志以及两个SID字符串。表<a class="ltx_ref" href="#A2.T9" title="Table 9 ‣ Appendix B Kwai26 Dataset Construction ‣ Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation"><span class="ltx_text ltx_ref_tag">9</span></a>报告了未包含在表<a class="ltx_ref" href="#A2.T8" title="Table 8 ‣ Appendix B Kwai26 Dataset Construction ‣ Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation"><span class="ltx_text ltx_ref_tag">8</span></a>中的来源分布诊断信息。所有指标均在正播放过滤之前测量；曝光排名范围互不重叠。</p>
 </div>
 <figure class="ltx_table" id="A2.T9">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 9. </span>正播放过滤前Kwai26来源分布诊断信息。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_r ltx_border_tt" style="padding:0.25pt 3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Diagnostic</span></th>
@@ -1970,7 +1983,7 @@ s_{r}(\mathbf{z}_{0:d}),&amp;\text{otherwise}.\end{cases},</annotation></semanti
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding:0.25pt 3.0pt;"><span class="ltx_text" style="font-size:90%;">69.70%</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para ltx_noindent" id="A2.p2">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">标签与任务视图。</span> 观看时长是连续效用信号；有效观看和长观看是平台定义的消费标签；点赞和转发是显式反馈信号；冷启动标志标记新内容。评估使用General、Long-View、Like和Watch-time视图，其中最后一个视图按原始观看时长对目标加权。有效观看和冷启动标志保留用于分析。</p>
@@ -2177,7 +2190,7 @@ time},\mathrm{position},\mathrm{item}))</annotation></semantics></math><span cla
 <span class="ltx_tag ltx_tag_appendix">Appendix C </span>可复现性细节</h2>
 <figure class="ltx_table" id="A3.T10">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 10. </span>额外训练超参数。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_row ltx_border_r ltx_border_tt" style="padding:0.45pt 8.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Hyperparameter</span></th>
@@ -2204,7 +2217,7 @@ time},\mathrm{position},\mathrm{item}))</annotation></semantics></math><span cla
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding:0.45pt 8.0pt;"><span class="ltx_text" style="font-size:90%;">0.15</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_appendix" id="A4">
@@ -2212,7 +2225,7 @@ time},\mathrm{position},\mathrm{item}))</annotation></semantics></math><span cla
 <span class="ltx_tag ltx_tag_appendix">Appendix D </span>在线报告范围</h2>
 <figure class="ltx_table" id="A4.T11">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 11. </span>来源级上线后在线诊断。FTR表示分享率，Avg. Watch-time按每个视频测量。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding:0.3pt 2.5pt;"><span class="ltx_text ltx_font_bold">Source</span></th>
@@ -2247,7 +2260,7 @@ time},\mathrm{position},\mathrm{item}))</annotation></semantics></math><span cla
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding:0.3pt 2.5pt;"><span class="ltx_text ltx_font_bold">26.3564</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="A4.p1">
 <p class="ltx_p">A/B测试报告了11项结果。表<a class="ltx_ref" href="#S5.T4" title="Table 4 ‣ 5.4. A/B Test ‣ 5. Experiments ‣ Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation"><span class="ltx_text ltx_ref_tag">4</span></a>列出了十项核心结果；个人主页访问设备提升+0.49%（<math alttext="p&lt;0.05" class="ltx_Math" display="inline" id="A4.p1.m1"><semantics><mrow><mi>p</mi><mo>&lt;</mo><mn>0.05</mn></mrow><annotation encoding="application/x-tex">p&lt;0.05</annotation></semantics></math>）。分享、点赞、评论、关注、下载和个人主页页面结果为设备计数，所有报告的变化在<math alttext="p&lt;0.05" class="ltx_Math" display="inline" id="A4.p1.m2"><semantics><mrow><mi>p</mi><mo>&lt;</mo><mn>0.05</mn></mrow><annotation encoding="application/x-tex">p&lt;0.05</annotation></semantics></math>水平上显著。</p>
@@ -2267,7 +2280,7 @@ time},\mathrm{position},\mathrm{item}))</annotation></semantics></math><span cla
 </div>
 <figure class="ltx_table" id="A5.T12">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 12. </span>不同LoRA秩下的Recall@512。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示，次佳结果以<span class="ltx_text ltx_framed ltx_framed_underline">下划线</span>表示。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding:0.45pt 4.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Rank</span></th>
@@ -2307,14 +2320,14 @@ time},\mathrm{position},\mathrm{item}))</annotation></semantics></math><span cla
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding:0.45pt 4.0pt;"><span class="ltx_text" style="font-size:90%;">0.2010</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para ltx_noindent" id="A5.SS1.p2">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">奖励历史大小。</span> 表<a class="ltx_ref" href="#A5.T13" title="Table 13 ‣ E.1. Hyperparameter Sensitivity ‣ Appendix E Extended Experimental Results ‣ Multi-Decoder OneRec: Controllable Generative Retrieval for Multi-Objective Industrial Recommendation"><span class="ltx_text ltx_ref_tag">13</span></a>改变了用于观看时长奖励归一化的近期历史长度。将<math alttext="K" class="ltx_Math" display="inline" id="A5.SS1.p2.m1"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>从8增至500通过稳定用户相对观看时长偏好估计，将WT召回从0.2003提升至0.2031（+1.40%）。</p>
 </div>
 <figure class="ltx_table" id="A5.T13">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 13. </span>奖励历史大小对观看时长Recall@512的影响。最佳结果以<span class="ltx_text ltx_font_bold">粗体</span>表示。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding:0.45pt 4.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Reward-history size</span></th>
@@ -2331,7 +2344,7 @@ time},\mathrm{position},\mathrm{item}))</annotation></semantics></math><span cla
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding:0.45pt 4.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">0.2031</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 </section>
@@ -2342,6 +2355,72 @@ time},\mathrm{position},\mathrm{item}))</annotation></semantics></math><span cla
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

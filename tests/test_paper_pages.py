@@ -6,8 +6,10 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from bs4 import BeautifulSoup
+
 from paper_pipeline.cli import _main
-from paper_pipeline.paper_pages import build_papers, load_catalog, render_paper
+from paper_pipeline.paper_pages import build_papers, load_catalog, render_library, render_paper
 
 
 class PaperPagesTests(unittest.TestCase):
@@ -161,6 +163,44 @@ class PaperPagesTests(unittest.TestCase):
         self.assertIn(".tex-paper{line-height:1.8}", page.read_text())
         self.assertTrue((page.parent / "assets/figure.svg").is_file())
         self.assertNotIn("html_snapshot", (page.parents[1] / "catalog.json").read_text())
+
+    def test_legacy_cached_table_is_repaired_at_render_without_mutating_data(self):
+        record = {**self.records[0], "arxiv_url": "https://arxiv.org/abs/2510.26104v3"}
+        original = ('<article class="tex-paper"><figure class="ltx_table" id="table-1">'
+                    '<span class="ltx_transformed_outer" style="height:8pt;transform:scale(.8)">'
+                    '<span class="ltx_tabular"><span class="ltx_tr">'
+                    '<span class="ltx_td">120.2B</span><span class="ltx_td ltx_colspan_2">'
+                    '<math id="formula"><mi>x</mi></math></span></span></span></span>'
+                    '<figcaption>表注 <a href="#reference">引用</a></figcaption></figure></article>')
+        document = {"format": "arxiv_tex", "body_html": original, "toc": [], "stats": {}}
+        html = render_paper(record, document)
+        soup = BeautifulSoup(html, "html.parser")
+        table = soup.select_one("table.ltx_tabular")
+        self.assertEqual([cell.get_text() for cell in table.select("td")], ["120.2B", "x"])
+        self.assertEqual(table.select("td")[1]["colspan"], "2")
+        self.assertEqual(soup.select_one("#formula").decode(), '<math id="formula"><mi>x</mi></math>')
+        self.assertIsNone(soup.select_one(".ltx_transformed_outer").get("style"))
+        self.assertIsNone(soup.figcaption.find_parent(class_="paper-table-scroll"))
+        self.assertEqual(document["body_html"], original)
+
+    def test_library_defaults_to_publication_date_and_exposes_sort_metadata(self):
+        records = [{**paper, "arxiv_url": "https://arxiv.org/abs/" + paper["arxiv_id"]}
+                   for paper in self.records]
+        # The older arXiv ID is intentionally assigned the later date: the UI
+        # must use verified metadata rather than infer dates from identifiers.
+        records[0]["published_date"] = "2024-01-02"
+        records[1]["published_date"] = "2025-03-04"
+        unknown = {**records[0], "short_name": "Unknown", "arxiv_id": "2601.12345",
+                   "published_date": None}
+        soup = BeautifulSoup(render_library([unknown, *records]), "html.parser")
+        entries = soup.select(".paper-entry")
+        self.assertEqual([entry["data-published-date"] for entry in entries],
+                         ["2025-03-04", "2024-01-02", ""])
+        self.assertEqual(entries[0].time["datetime"], "2025-03-04")
+        self.assertEqual([option["value"] for option in soup.select("#paper-sort option")],
+                         ["newest", "oldest"])
+        self.assertIsNotNone(soup.select_one("#paper-topic"))
+        self.assertIsNotNone(soup.select_one("#paper-search"))
 
 
 if __name__ == "__main__":

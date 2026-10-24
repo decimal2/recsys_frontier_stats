@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / KuaFu</div><h1>KuaFu：在十亿级规模下将用户长行为序列压缩为理解</h1><p class="paper-original-title">KuaFu: Compressing Long User Behavior into Understanding at Billion Scale</p>
@@ -389,7 +402,7 @@ compressed.</span></span>
 </div>
 <figure class="ltx_table" id="S3.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 1. </span>各阶段的可训练集合。C/P/D分别表示压缩器、投影器和解码器；后训练涵盖简单与复杂两个划分。含样本数和词元数的完整配方见附录<a class="ltx_ref" href="#A1" title="Appendix A Training Recipe and Data Construction ‣ KuaFu: Compressing Long User Behavior into Understanding at Billion Scale"><span class="ltx_text ltx_ref_tag">A</span></a>。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:80%;">Stage</span></th>
@@ -429,7 +442,7 @@ compressed.</span></span>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:80%;">update</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S3.SS4">
@@ -484,7 +497,7 @@ compressed.</span></span>
 </div>
 <figure class="ltx_table" id="S4.T2">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 2. </span>生产环境中的下游用户理解任务。<math alttext="\Delta" class="ltx_Math" display="inline" id="S4.T2.m2"><semantics><mi mathvariant="normal">Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math>为 KuaFu 相对于单任务在线模型的百分点变化。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:80%;">Task</span></th>
@@ -543,7 +556,7 @@ compressed.</span></span>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><math alttext="+2.0" class="ltx_Math" display="inline" id="S4.T2.m13"><semantics><mrow><mo mathsize="80%">+</mo><mn mathsize="80%">2.0</mn></mrow><annotation encoding="application/x-tex">+2.0</annotation></semantics></math></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S4.SS3">
@@ -557,7 +570,7 @@ compressed.</span></span>
 </div>
 <figure class="ltx_table" id="S4.T3">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 3. </span>内部基准测试（百分比尺度）。所有软基线均按正文所述的对齐协议重新训练。<math alttext="\dagger" class="ltx_Math" display="inline" id="S4.T3.m3"><semantics><mo>†</mo><annotation encoding="application/x-tex">\dagger</annotation></semantics></math>：比例为<math alttext="5\times" class="ltx_math_unparsed" display="inline" id="S4.T3.m4"><semantics><mrow><mn>5</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">5\times</annotation></semantics></math>的免训练硬压缩，仅作为外部参考列出。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:80%;">Method</span></th>
@@ -627,7 +640,7 @@ compressed.</span></span>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:80%;">—</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_figure" id="S4.F3"><a href="assets/ae4567258794fdb4.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S4.F3.g1" loading="lazy" src="assets/ae4567258794fdb4.svg"/></a>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3. </span>MRQA 精确匹配与压缩比的关系（Llama-3.2-1B）。阴影带：<math alttext="15\times" class="ltx_math_unparsed" display="inline" id="S4.F3.m2"><semantics><mrow><mn>15</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">15\times</annotation></semantics></math>，即其他各处所用的比例。ROUGE-1 F1 及所有基线数值：附录<a class="ltx_ref" href="#A2" title="Appendix B Full MRQA Results ‣ KuaFu: Compressing Long User Behavior into Understanding at Billion Scale"><span class="ltx_text ltx_ref_tag">B</span></a>。</figcaption>
@@ -665,7 +678,7 @@ compressed.</span></span>
 </div>
 <figure class="ltx_table" id="S4.T4">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 4. </span>消融实验汇总。各组最佳值以粗体标出；各组详情见附录<a class="ltx_ref" href="#A4" title="Appendix D Ablation Details and Production Storage ‣ KuaFu: Compressing Long User Behavior into Understanding at Billion Scale"><span class="ltx_text ltx_ref_tag">D</span></a>。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt" style="padding-left:5.0pt;padding-right:5.0pt;"><span class="ltx_text" style="font-size:80%;">Group</span></th>
@@ -716,7 +729,7 @@ compressed.</span></span>
 </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsection" id="S4.SS7">
@@ -1209,7 +1222,7 @@ the online feature store carries profile results only</span></span>
 </div>
 <figure class="ltx_table" id="A1.T5">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 5. </span>四阶段训练方案与数据统计。C/P/D 分别表示压缩器、投影器和解码器；upd. / frz. 标记该模块在该阶段是更新还是冻结。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt"><span class="ltx_text" style="font-size:80%;">Stage</span></th>
@@ -1280,7 +1293,7 @@ the online feature store carries profile results only</span></span>
 <td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text" style="font-size:80%;">41M</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="A1.p2">
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">理解样本。</span> 理解任务主要基于广告行为序列构建。首先由大型指令模型检索相似条目以辅助提示词撰写；然后分两步生成正式样本：统计词频并抽取名词性主语，以确定必须保留的关键信息，并据此生成规范化的问答对。简单理解涵盖实体识别、复述给定索引处的条目、奇偶或连续范围、计数，以及最长兴趣连续段抽取。复杂理解涵盖用户画像与兴趣挖掘、条目相似性、主题覆盖与兴趣分组、行为原因解释、跨源协调，以及时序行为分析。</p>
@@ -1294,7 +1307,7 @@ the online feature store carries profile results only</span></span>
 </div>
 <figure class="ltx_table" id="A2.T6">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 6. </span>完整 MRQA 结果：EM / ROUGE-1 F1，主干为 Llama-3.2-1B。域外各列使用同一检查点，采用零样本设置。只有 KuaFu 在未压缩（Full）列中有结果：基线是压缩方法，不压缩时无定义，因此这些单元格反映的是评测协议的性质，而非数据缺失。</figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_th ltx_th_row ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"></th>
@@ -1382,7 +1395,7 @@ the online feature store carries profile results only</span></span>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">37.5 / 48.2</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_appendix" id="A3">
@@ -1404,11 +1417,11 @@ the online feature store carries profile results only</span></span>
 <figure class="ltx_table" id="A4.T7">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 7. </span>消融细节与生产存储。(a) 压缩器课程：两种设置消耗的总词元数相近，因此差异仅在于难度组织。(b) 在下游 SFT 之前继承预训练压缩器权重。(c) 词元轴组成、宽度轴策略与解码器骨干。(d) 跨用户共享的 20 亿条目去重库存的存储量。</figcaption><div class="ltx_flex_figure">
 <div class="ltx_flex_cell ltx_flex_size_1">
-<div class="ltx_block ltx_figure_panel ltx_minipage ltx_align_center ltx_align_top" style="width:208.1pt;">
+<div class="ltx_block ltx_figure_panel ltx_minipage ltx_align_center ltx_align_top paper-table-layout">
 <div class="ltx_p"><span class="ltx_text ltx_font_bold" style="font-size:70%;">(a) 压缩器课程
 <br class="ltx_break"/></span><span class="ltx_text" style="font-size:70%;">
 </span>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:70%;">Setting</span></td>
@@ -1458,11 +1471,11 @@ the online feature store carries profile results only</span></span>
 <td class="ltx_td ltx_align_right ltx_border_bb ltx_border_t" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:70%;">8.1B</span></td>
 <td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_bb ltx_border_t" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:70%;">2.27</span></td></tr>
 </tbody>
-</table><span class="ltx_text" style="font-size:70%;"></span></div>
+</table></div><span class="ltx_text" style="font-size:70%;"></span></div>
 <div class="ltx_p ltx_align_center"><span class="ltx_text ltx_font_bold" style="font-size:70%;">(b) 继承
 <br class="ltx_break"/></span><span class="ltx_text" style="font-size:70%;">
 </span>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_th ltx_th_row ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"></td>
@@ -1482,11 +1495,11 @@ the online feature store carries profile results only</span></span>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:70%;">0.6</span></td>
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.8</span></td></tr>
 </tbody>
-</table><span class="ltx_text" style="font-size:70%;"></span></div>
+</table></div><span class="ltx_text" style="font-size:70%;"></span></div>
 <div class="ltx_p ltx_align_center"><span class="ltx_text ltx_font_bold" style="font-size:70%;">(d) 生产存储
 <br class="ltx_break"/></span><span class="ltx_text" style="font-size:70%;">
 </span>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:70%;">Compression</span></td>
@@ -1515,15 +1528,15 @@ the online feature store carries profile results only</span></span>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:70%;">74.5</span></td>
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:70%;">186.2</span></td></tr>
 </tbody>
-</table><span class="ltx_text" style="font-size:70%;"></span></div>
+</table></div><span class="ltx_text" style="font-size:70%;"></span></div>
 </div>
 </div>
 <div class="ltx_flex_break"></div>
 <div class="ltx_flex_cell ltx_flex_size_1">
-<div class="ltx_p ltx_figure_panel ltx_minipage ltx_align_center ltx_align_top" style="width:199.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:70%;">(c) 投影器轴与解码器骨干
+<div class="ltx_p ltx_figure_panel ltx_minipage ltx_align_center ltx_align_top paper-table-layout"><span class="ltx_text ltx_font_bold" style="font-size:70%;">(c) 投影器轴与解码器骨干
 <br class="ltx_break"/></span><span class="ltx_text" style="font-size:70%;">
 </span>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:70%;">Token axis</span></td>
@@ -1564,7 +1577,7 @@ the online feature store carries profile results only</span></span>
 <td class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:70%;">e-commerce interest</span></td>
 <td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_bb" style="padding-left:4.0pt;padding-right:4.0pt;"><span class="ltx_text" style="font-size:70%;">0.806 / 0.823 / </span><span class="ltx_text ltx_font_bold" style="font-size:70%;">0.826</span></td></tr>
 </tbody>
-</table><span class="ltx_text" style="font-size:70%;"></span></div>
+</table></div><span class="ltx_text" style="font-size:70%;"></span></div>
 </div>
 </div>
 </figure>
@@ -1630,6 +1643,72 @@ the online feature store carries profile results only</span></span>
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

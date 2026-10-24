@@ -1,0 +1,70 @@
+name: Paper rendering
+
+on:
+  push:
+    branches: [main, 'paper-render-*']
+    paths:
+      - 'docs/**'
+      - 'paper_pipeline/**'
+      - 'paper_catalog.json'
+      - 'tests/browser*.mjs'
+      - '.github/workflows/paper-render.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: paper-render-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      # Official v7 refs verified against the actions repositories.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Prepare Chrome and reproducible reading fonts
+        shell: bash
+        run: |
+          mkdir -p artifacts/paper-render
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk fonts-stix
+          fc-cache -f
+          chrome_bin=$(command -v google-chrome)
+          echo "CHROME_BIN=$chrome_bin" >> "$GITHUB_ENV"
+          "$chrome_bin" --version > artifacts/paper-render/environment.log
+          node --version >> artifacts/paper-render/environment.log
+          python3 --version >> artifacts/paper-render/environment.log
+          fc-match 'Noto Sans CJK SC' >> artifacts/paper-render/environment.log
+          fc-match 'STIXGeneral' >> artifacts/paper-render/environment.log
+      - name: Check browser scripts
+        run: |
+          node --check tests/browser_support.mjs
+          node --check tests/browser_audit.mjs
+          node --check tests/browser_table_assertions.mjs
+          node --check tests/browser_math_assertions.mjs
+      - name: Audit all published reading pages
+        shell: bash
+        run: |
+          set -o pipefail
+          node tests/browser_audit.mjs --site-dir docs --output-dir artifacts/paper-render 2>&1 | tee artifacts/paper-render/audit.log
+      - name: Upload geometry, screenshots, and browser diagnostics
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: paper-render-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            artifacts/paper-render/*.json
+            artifacts/paper-render/*.log
+            artifacts/paper-render/geometry/**
+            artifacts/paper-render/screenshots/**
+          if-no-files-found: error
+          retention-days: 14

@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OneTrans-V2</div><h1>OneTrans-V2：以一个 Transformer 统一工业推荐中的召回、粗排与精排</h1><p class="paper-original-title">OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender</p>
@@ -702,7 +715,7 @@ q\,\|\,P(\cdot\mid\mathcal{H})\right)</annotation></semantics></math> 的解，�
 容量还改变了物品的多模态嵌入应如何进入模型。既有做法 <em class="ltx_emph ltx_font_italic">SimTier</em> <cite class="ltx_cite ltx_citemacro_cite">Sheng<span class="ltx_text ltx_bib_etal"> et al.</span> (<a class="ltx_ref" href="#bib.bib49" title="Enhancing Taobao display advertising with multimodal representations: challenges, approaches and insights">2024</a>)</cite> 并不直接输入多模态嵌入。对每个行为序列，它计算候选与序列中每个物品之间的余弦相似度，将这些分数汇总为直方图，并将直方图作为稠密特征输入模型。OneTrans-V2 则直接输入多模态嵌入，作为每个行为物品和候选的辅助信息。如 §<a class="ltx_ref" href="#S7.SS8" title="7.8 Multimodal Embedding and Model Capacity ‣ 7 Analysis ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">7.8</span></a> 所示，这一选择只有在容量充足时才有益。</p>
 </div>
 <figure class="ltx_table" id="S4.T1">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text" style="font-size:90%;">Hidden-layer quantity</span></th>
@@ -743,7 +756,7 @@ q\,\|\,P(\cdot\mid\mathcal{H})\right)</annotation></semantics></math> 的解，�
 <td class="ltx_td ltx_align_left ltx_border_bb"><math alttext="\times\,1/\sqrt{m_{N}}" class="ltx_Math" display="inline" id="S4.T1.m13"><semantics><mrow><mi></mi><mo lspace="0.222em" mathsize="90%" rspace="0.222em">×</mo><mrow><mn mathsize="90%"> 1</mn><mo maxsize="90%" minsize="90%" stretchy="true" symmetric="true">/</mo><msqrt><msub><mi mathsize="90%">m</mi><mi mathsize="90%">N</mi></msub></msqrt></mrow></mrow><annotation encoding="application/x-tex">\times\,1/\sqrt{m_{N}}</annotation></semantics></math></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 1: </span><math alttext="\mu" class="ltx_Math" display="inline" id="S4.T1.m19"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>P 与 Depth-<math alttext="\mu" class="ltx_Math" display="inline" id="S4.T1.m20"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>P 规则，用于主干隐藏权重，相对于宽度 <math alttext="d_{0}" class="ltx_Math" display="inline" id="S4.T1.m21"><semantics><msub><mi>d</mi><mn>0</mn></msub><annotation encoding="application/x-tex">d_{0}</annotation></semantics></math>、深度 <math alttext="N_{0}" class="ltx_Math" display="inline" id="S4.T1.m22"><semantics><msub><mi>N</mi><mn>0</mn></msub><annotation encoding="application/x-tex">N_{0}</annotation></semantics></math> 的基模型。两条规则以乘法方式复合，<em class="ltx_emph ltx_font_italic">例如，</em>隐藏学习率变为 <math alttext="\eta_{0}/(m_{d}\sqrt{m_{N}})" class="ltx_Math" display="inline" id="S4.T1.m23"><semantics><mrow><msub><mi>η</mi><mn>0</mn></msub><mo>/</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>m</mi><mi>d</mi></msub><mo>⁢</mo><msqrt><msub><mi>m</mi><mi>N</mi></msub></msqrt></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\eta_{0}/(m_{d}\sqrt{m_{N}})</annotation></semantics></math>。</figcaption>
 </figure>
 </section>
@@ -912,8 +925,8 @@ SNT 中的样本组织。
 <h3 class="ltx_title ltx_title_subsection">
 <span class="ltx_tag ltx_tag_subsection">6.2 </span>离线性能</h3>
 <figure class="ltx_table" id="S6.T2">
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:174pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-7.5pt,3.0pt) scale(0.966700647911487,0.966700647911487) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" rowspan="3" style="padding-left:2.5pt;padding-right:2.5pt;"><span class="ltx_text ltx_font_bold" style="font-size:80%;">Type</span></td>
@@ -1047,8 +1060,8 @@ SNT 中的样本组织。
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:2.5pt;padding-right:2.5pt;"><span class="ltx_text" style="font-size:80%;">662</span></td>
 </tr>
 </tbody>
-</table>
-</span></div>
+</table></div>
+</div></div>
 <figcaption class="ltx_caption ltx_centering" style="font-size:80%;"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:113%;">Table 2</span>: </span><span class="ltx_text" style="font-size:113%;">三个阶段的性能。部分 (a) 报告了我们已部署的生产基线，每个基线专门针对一个阶段；部分 (b) 报告了统一多个阶段的模型。“N.A.” 标记模型未覆盖的阶段，以及 UniPinRec 的召回，我们因其非生成式而将其排除。GFLOPs 是每个模型单独处理一次请求的总算术成本，包括该阶段打分的所有候选，粗排为数千，精排为数百。它是在 OneTrans <cite class="ltx_cite ltx_citemacro_cite">Zhang<span class="ltx_text ltx_bib_etal"> et al.</span> (<a class="ltx_ref" href="#bib.bib1" title="OneTrans: unified feature interaction and sequence modeling with One Transformer in industrial recommender">2026</a>)</cite> 中所述优化之后实际执行的成本，<em class="ltx_emph ltx_font_italic">例如</em>，这些候选共享的用户侧序列只编码一次，而不是每个候选编码一次。它不是吞吐量的代理指标，因为实际达到的吞吐量还取决于 MFU。每个质量指标的最佳结果以 <span class="ltx_text ltx_font_bold">粗体</span> 显示。</span></figcaption>
 </figure>
 <div class="ltx_para" id="S6.SS2.p1">
@@ -1085,7 +1098,7 @@ SNT 中的样本组织。
 <p class="ltx_p">我们分析联合训练三个任务是否优于分别训练每个任务。在本小节中，联合模型及其分别训练的对应模型共享相同的架构、参数预算、训练数据和训练目标，§<a class="ltx_ref" href="#S6.SS1" title="6.1 Experimental Setup ‣ 6 Experimental Results ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">6.1</span></a> 的损失权重保持不变。这包括 §<a class="ltx_ref" href="#S4.SS2.SSS2" title="4.2.2 Discriminative Ranking Tasks ‣ 4.2 Task Formulations and Joint Optimization ‣ 4 OneTrans-V2 ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">4.2.2</span></a> 中的蒸馏损失，其中分别训练的粗排从分别训练的精排接收蒸馏。因此，任何增益反映的是联合训练，而不是增加的容量或蒸馏。我们首先分析将粗排与精排合并，然后分析将全部三个阶段一起合并。</p>
 </div>
 <figure class="ltx_table ltx_align_floatright" id="S7.T3">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Task</th>
@@ -1105,7 +1118,7 @@ SNT 中的样本组织。
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb">+0.21%</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 3</span>: </span><span class="ltx_text" style="font-size:90%;">联合训练粗排和精排相对于分别训练每个任务的提升。</span></figcaption>
 </figure>
 <div class="ltx_para ltx_noindent" id="S7.SS1.p2">
@@ -1162,7 +1175,7 @@ SNT 中的样本组织。
 <p class="ltx_p"><span class="ltx_text ltx_font_bold">主通道分析。</span>主目标上<math alttext="1.5\times" class="ltx_math_unparsed" display="inline" id="S7.SS3.p4.m1"><semantics><mrow><mn>1.5</mn><mo lspace="0.222em">×</mo></mrow><annotation encoding="application/x-tex">1.5\times</annotation></semantics></math>的GMV增益主要来自更广的曝光，而非每次曝光更高的价值。表<a class="ltx_ref" href="#S7.T4" title="Table 4 ‣ 7.3 Objective Coverage of DCGR ‣ 7 Analysis ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">4</span></a>(a)显示，与对照组主通道相比，DCGR使曝光量增加了<math alttext="69.3\%" class="ltx_Math" display="inline" id="S7.SS3.p4.m2"><semantics><mrow><mn>69.3</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">69.3\%</annotation></semantics></math>，点击量增加了<math alttext="74.6\%" class="ltx_Math" display="inline" id="S7.SS3.p4.m3"><semantics><mrow><mn>74.6</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">74.6\%</annotation></semantics></math>。其中一部分量在对照组中是由发现通道和广告通道服务的，因为DCGR现在也服务这部分量。其每次曝光的转化较低。具体而言，千次曝光订单数下降了<math alttext="34.0\%" class="ltx_Math" display="inline" id="S7.SS3.p4.m4"><semantics><mrow><mn>34.0</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">34.0\%</annotation></semantics></math>，千次曝光GMV下降了<math alttext="13.0\%" class="ltx_Math" display="inline" id="S7.SS3.p4.m5"><semantics><mrow><mn>13.0</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">13.0\%</annotation></semantics></math>。然而，更大的曝光量足以抵消这些下降，使总订单数增加<math alttext="11.4\%" class="ltx_Math" display="inline" id="S7.SS3.p4.m6"><semantics><mrow><mn>11.4</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">11.4\%</annotation></semantics></math>，总GMV增加<math alttext="48.0\%" class="ltx_Math" display="inline" id="S7.SS3.p4.m7"><semantics><mrow><mn>48.0</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">48.0\%</annotation></semantics></math>。每次曝光的CTR也提高了<math alttext="3.2\%" class="ltx_Math" display="inline" id="S7.SS3.p4.m8"><semantics><mrow><mn>3.2</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">3.2\%</annotation></semantics></math>。曝光物品的平均价格下降了<math alttext="4.4\%" class="ltx_Math" display="inline" id="S7.SS3.p4.m9"><semantics><mrow><mn>4.4</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">4.4\%</annotation></semantics></math>，表明额外曝光更集中于低价物品。</p>
 </div>
 <figure class="ltx_table" id="S7.T4">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt" colspan="2"><em class="ltx_emph ltx_font_italic" style="font-size:90%;">(a) Main channel, treatment against control</em></th>
@@ -1252,7 +1265,7 @@ SNT 中的样本组织。
 <td class="ltx_td ltx_align_right ltx_border_bb"><math alttext="1.2\times" class="ltx_math_unparsed" display="inline" id="S7.T4.m20"><semantics><mrow><mn mathsize="90%">1.2</mn><mo lspace="0.222em" mathsize="90%">×</mo></mrow><annotation encoding="application/x-tex">1.2\times</annotation></semantics></math></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 4: </span>图<a class="ltx_ref" href="#S7.F7" title="Figure 7 ‣ 7.3 Objective Coverage of DCGR ‣ 7 Analysis ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">7</span></a>召回阶段A/B测试的详细结果。(a) 实验组中DCGR相对对照组主通道的相对变化。(a)中GMV一行是该图的主轴。(b)和(c)分别是DCGR与发现通道、广告通道的比值。(b)的第一行和(c)的第二行分别是该图的发现轴和广告轴。(b)中的每对百分比先给出DCGR对发现通道的覆盖率，再给出反向覆盖率。</figcaption>
 </figure>
 <div class="ltx_para" id="S7.SS3.p5">
@@ -1281,7 +1294,7 @@ SNT 中的样本组织。
 <p class="ltx_p">上一小节表明，单个DCGR召回器能够覆盖多个专用目标。我们接下来要问的是，决策前缀本身是否携带有用的召回信号，以及它是否控制物品生成。</p>
 </div>
 <figure class="ltx_table" id="S7.T5">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Intervention on <math alttext="\mathbf{z}" class="ltx_Math" display="inline" id="S7.T5.m1"><semantics><mi>𝐳</mi><annotation encoding="application/x-tex">\mathbf{z}</annotation></semantics></math>
@@ -1339,7 +1352,7 @@ SNT 中的样本组织。
 <td class="ltx_td ltx_align_right ltx_border_bb"><math alttext="+26.7\%" class="ltx_Math" display="inline" id="S7.T5.m26"><semantics><mrow><mo>+</mo><mrow><mn>26.7</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+26.7\%</annotation></semantics></math></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 5</span>: </span><span class="ltx_text" style="font-size:90%;">在一项在线召回阶段A/B测试中，于解码时对同一训练好的模型进行操控。数值是相对于使用预测前缀解码的变化，统计范围为归属于OneTrans-V2召回任务的曝光，如§<a class="ltx_ref" href="#S7.SS3" title="7.3 Objective Coverage of DCGR ‣ 7 Analysis ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">7.3</span></a>所述。订单数统计主订单，每次结账计为一个订单，无论其拆分为多少子订单，AOV为主订单的GMV。曝光量仅针对将<math alttext="z_{aov}" class="ltx_Math" display="inline" id="S7.T5.m29"><semantics><msub><mi>z</mi><mrow><mi>a</mi><mo>⁢</mo><mi>o</mi><mo>⁢</mo><mi>v</mi></mrow></msub><annotation encoding="application/x-tex">z_{aov}</annotation></semantics></math>强制为其最高值的那一行记录，因此表中没有曝光列。在该行中，归属于OneTrans-V2召回任务的曝光下降了<math alttext="19.4\%" class="ltx_Math" display="inline" id="S7.T5.m30"><semantics><mrow><mn>19.4</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">19.4\%</annotation></semantics></math>。</span></figcaption>
 </figure>
 <div class="ltx_para ltx_noindent" id="S7.SS4.p2">
@@ -1371,7 +1384,7 @@ SNT 中的样本组织。
 <p class="ltx_p">表<a class="ltx_ref" href="#S7.T6" title="Table 6 ‣ 7.5 DCGR Decision Steering and Prefix Design ‣ 7 Analysis ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">6</span></a>展示了第二次召回阶段的A/B测试，它在系统层面印证了同样的权衡。与表<a class="ltx_ref" href="#S7.T5" title="Table 5 ‣ 7.4 DCGR Decision Dimensions Analysis ‣ 7 Analysis ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">5</span></a>不同，它统计的是每个用户的全部曝光，而非仅统计归因于DCGR的曝光。仅引导<math alttext="z_{oc}" class="ltx_Math" display="inline" id="S7.SS5.p4.m1"><semantics><msub><mi>z</mi><mrow><mi>o</mi><mo>⁢</mo><mi>c</mi></mrow></msub><annotation encoding="application/x-tex">z_{oc}</annotation></semantics></math>会使订单量提升<math alttext="2.4\%" class="ltx_Math" display="inline" id="S7.SS5.p4.m2"><semantics><mrow><mn>2.4</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">2.4\%</annotation></semantics></math>，但会使GMV下降<math alttext="0.6\%" class="ltx_Math" display="inline" id="S7.SS5.p4.m3"><semantics><mrow><mn>0.6</mn><mo>%</mo></mrow><annotation encoding="application/x-tex">0.6\%</annotation></semantics></math>。加入<math alttext="z_{aov}" class="ltx_Math" display="inline" id="S7.SS5.p4.m4"><semantics><msub><mi>z</mi><mrow><mi>a</mi><mo>⁢</mo><mi>o</mi><mo>⁢</mo><mi>v</mi></mrow></msub><annotation encoding="application/x-tex">z_{aov}</annotation></semantics></math>则以部分订单量换取更高的AOV，使GMV变化转为正值，并在更强设置下达到<math alttext="+3.0\%" class="ltx_Math" display="inline" id="S7.SS5.p4.m5"><semantics><mrow><mo>+</mo><mrow><mn>3.0</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+3.0\%</annotation></semantics></math>。因此，这两个维度控制着业务价值中互补的方面。</p>
 </div>
 <figure class="ltx_table" id="S7.T6">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Offset applied</th>
@@ -1404,7 +1417,7 @@ SNT 中的样本组织。
 <td class="ltx_td ltx_align_right ltx_border_bb"><math alttext="+3.0\%" class="ltx_Math" display="inline" id="S7.T6.m17"><semantics><mrow><mo>+</mo><mrow><mn>3.0</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+3.0\%</annotation></semantics></math></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 6</span>: </span><span class="ltx_text" style="font-size:90%;">业务偏移的第二次召回阶段A/B测试，以每个用户相对对照组的相对变化表示。与表<a class="ltx_ref" href="#S7.T5" title="Table 5 ‣ 7.4 DCGR Decision Dimensions Analysis ‣ 7 Analysis ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">5</span></a>不同，这些指标覆盖用户的全部曝光，而非仅覆盖归因于DCGR的曝光，因此它们展示了该偏移对整个系统的影响。最后两行保持购买级偏移不变，并加入一个消费级偏移。</span></figcaption>
 </figure>
 <div class="ltx_para ltx_noindent" id="S7.SS5.p5">
@@ -1414,7 +1427,7 @@ SNT 中的样本组织。
 <p class="ltx_p">相互独立的决策维度不应被任意串联，因为串联需要选择解码顺序。表 <a class="ltx_ref" href="#S7.T7" title="Table 7 ‣ 7.5 DCGR Decision Steering and Prefix Design ‣ 7 Analysis ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">7</span></a> 在较早的配置上测试了这一效应，该配置具有三个二值维度，分别对应订单、冷启动和发现。订单目标在首先解码时表现最佳，且订单优先的配置也取得了最高的加权 HR@128。因此，解码顺序会使模型偏向某个目标。DCGR 通过将相互独立的维度合并到并行决策词元 <math alttext="\texttt{DT}^{p}" class="ltx_Math" display="inline" id="S7.SS5.p6.m1"><semantics><msup><mtext class="ltx_mathvariant_monospace">DT</mtext><mi>p</mi></msup><annotation encoding="application/x-tex">\texttt{DT}^{p}</annotation></semantics></math> 中，并且只串联真正相互依赖的决策，从而避免了这种偏差：其中 <math alttext="z_{aov}" class="ltx_Math" display="inline" id="S7.SS5.p6.m2"><semantics><msub><mi>z</mi><mrow><mi>a</mi><mo>⁢</mo><mi>o</mi><mo>⁢</mo><mi>v</mi></mrow></msub><annotation encoding="application/x-tex">z_{aov}</annotation></semantics></math> 跟随 <math alttext="z_{oc}" class="ltx_Math" display="inline" id="S7.SS5.p6.m3"><semantics><msub><mi>z</mi><mrow><mi>o</mi><mo>⁢</mo><mi>c</mi></mrow></msub><annotation encoding="application/x-tex">z_{oc}</annotation></semantics></math>，且发生在 <math alttext="\texttt{DT}^{d}" class="ltx_Math" display="inline" id="S7.SS5.p6.m4"><semantics><msup><mtext class="ltx_mathvariant_monospace">DT</mtext><mi>d</mi></msup><annotation encoding="application/x-tex">\texttt{DT}^{d}</annotation></semantics></math> 中。这一设计也缩短了前缀，但其主要优势在于避免顺序偏差，因为各相加维度共享同一个位置，没有解码顺序。</p>
 </div>
 <figure class="ltx_table" id="S7.T7">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Position of the order dimension</th>
@@ -1447,7 +1460,7 @@ SNT 中的样本组织。
 <td class="ltx_td ltx_align_center ltx_border_bb"><math alttext="0.1446" class="ltx_Math" display="inline" id="S7.T7.m12"><semantics><mn>0.1446</mn><annotation encoding="application/x-tex">0.1446</annotation></semantics></math></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 7</span>: </span><span class="ltx_text" style="font-size:90%;">串联决策词元的解码顺序的影响，基于一个较早的配置，该配置具有三个二值维度（<span class="ltx_text ltx_font_typewriter">a</span> = 订单，<span class="ltx_text ltx_font_typewriter">c</span> = 冷启动，<span class="ltx_text ltx_font_typewriter">d</span> = 发现）。前缀以自回归方式解码时的HR@128，对将订单维度置于每个位置的两种排列取平均；加权HR@128列按命中项的交易价值对其加权。</span></figcaption>
 </figure>
 </section>
@@ -1498,7 +1511,7 @@ SNT 中的样本组织。
 <p class="ltx_p"><math alttext="\mu" class="ltx_Math" display="inline" id="S7.SS7.p4.m1"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math><span class="ltx_text ltx_font_bold">P。</span>图<a class="ltx_ref" href="#S7.F11" title="Figure 11 ‣ 7.7 Stabilization Analysis ‣ 7 Analysis ‣ OneTrans-V2: Unifying Retrieval, Pre-rank, and Fine-rank with One Transformer in Industrial Recommender"><span class="ltx_text ltx_ref_tag">11</span></a>(b)表明，不采用<math alttext="\mu" class="ltx_Math" display="inline" id="S7.SS7.p4.m2"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>P加宽模型、并保持原宽度下调优的超参数时，仅带来<math alttext="+0.03\%" class="ltx_Math" display="inline" id="S7.SS7.p4.m3"><semantics><mrow><mo>+</mo><mrow><mn>0.03</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+0.03\%</annotation></semantics></math> CTR AUC和<math alttext="+0.07\%" class="ltx_Math" display="inline" id="S7.SS7.p4.m4"><semantics><mrow><mo>+</mo><mrow><mn>0.07</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+0.07\%</annotation></semantics></math> CTR UAUC的轻微提升。在标准参数化下，模型加宽后这些超参数不再合适，因此每次加宽都需要重新搜索。相比之下，<math alttext="\mu" class="ltx_Math" display="inline" id="S7.SS7.p4.m5"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>P使最优超参数对宽度保持不变，<em class="ltx_emph ltx_font_italic">即</em>超参数迁移<cite class="ltx_cite ltx_citemacro_cite">Yang<span class="ltx_text ltx_bib_etal"> et al.</span> (<a class="ltx_ref" href="#bib.bib31" title="Tensor Programs V: tuning large neural networks via zero-shot hyperparameter transfer">2021</a>)</cite>。此时同样的加宽无需任何重新调优即可获得<math alttext="+0.09\%" class="ltx_Math" display="inline" id="S7.SS7.p4.m6"><semantics><mrow><mo>+</mo><mrow><mn>0.09</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+0.09\%</annotation></semantics></math> CTR AUC和<math alttext="+0.20\%" class="ltx_Math" display="inline" id="S7.SS7.p4.m7"><semantics><mrow><mo>+</mo><mrow><mn>0.20</mn><mo>%</mo></mrow></mrow><annotation encoding="application/x-tex">+0.20\%</annotation></semantics></math> CTR UAUC。</p>
 </div>
 <figure class="ltx_table ltx_align_floatright" id="S7.T8">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text" style="font-size:90%;">Setting</span></th>
@@ -1527,7 +1540,7 @@ SNT 中的样本组织。
 <td class="ltx_td ltx_nopad_r ltx_align_center ltx_border_bb"><math alttext="+0.11\%" class="ltx_Math" display="inline" id="S7.T8.m6"><semantics><mrow><mo mathsize="90%">+</mo><mrow><mn mathsize="90%">0.11</mn><mo mathsize="90%">%</mo></mrow></mrow><annotation encoding="application/x-tex">+0.11\%</annotation></semantics></math></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering" style="font-size:90%;"><span class="ltx_tag ltx_tag_table">Table 8: </span>在精排任务上加深OneTrans-V2时Depth-<math alttext="\mu" class="ltx_Math" display="inline" id="S7.T8.m8"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>P的影响，相对于基础深度。</figcaption>
 </figure>
 <div class="ltx_para ltx_noindent" id="S7.SS7.p5">
@@ -2183,6 +2196,72 @@ SNT 中的样本组织。
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

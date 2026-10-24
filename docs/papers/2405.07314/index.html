@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / LETTER</div><h1>LETTER：面向生成式推荐的可学习物品词元化</h1><p class="paper-original-title">Learnable Item Tokenization for Generative Recommendation</p>
@@ -693,8 +706,8 @@ LoRA <cite class="ltx_cite ltx_citemacro_citep">(Hu<span class="ltx_text ltx_bib
 </div>
 <figure class="ltx_table" id="S4.T1">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 1. </span>在三个数据集上，基线与在两个具竞争力的基于 LLM 的生成式推荐模型上实例化的 LETTER 之间的整体性能比较。加粗结果突出显示了在比较使用和不使用 LETTER 的后端模型时更优的性能。</figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:433.6pt;height:187pt;vertical-align:-0.6pt;"><span class="ltx_transformed_inner" style="transform:translate(-118.2pt,50.8pt) scale(0.647205887996385,0.647205887996385) ;">
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding-left:8.5pt;padding-right:8.5pt;"></th>
@@ -930,8 +943,8 @@ LoRA <cite class="ltx_cite ltx_citemacro_citep">(Hu<span class="ltx_text ltx_bib
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold">0.0211</span></td>
 </tr>
 </tbody>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 </section>
 </section>
@@ -976,8 +989,8 @@ LoRA <cite class="ltx_cite ltx_citemacro_citep">(Hu<span class="ltx_text ltx_bib
 </div>
 <figure class="ltx_table" id="S4.T2">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 2. </span>LETTER-TIGER 的消融实验。</figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:208.1pt;height:81.3pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-57.2pt,22.4pt) scale(0.645112537517984,0.645112537517984) ;">
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding-left:10.8pt;padding-right:10.8pt;"></th>
@@ -1029,8 +1042,8 @@ LoRA <cite class="ltx_cite ltx_citemacro_citep">(Hu<span class="ltx_text ltx_bib
 <td class="ltx_td ltx_align_center ltx_border_b" style="padding-left:10.8pt;padding-right:10.8pt;"><span class="ltx_text ltx_font_bold">0.0364</span></td>
 </tr>
 </tbody>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S4.SS3.SSS1.p2">
 <p class="ltx_p">Instruments 和 Beauty 上的结果描绘于表 <a class="ltx_ref" href="#S4.T2" title="Table 2 ‣ 4.3.1. Ablation Study (RQ2) ‣ 4.3. In-depth Analysis ‣ 4. Experiments ‣ Learnable Item Tokenization for Generative Recommendation"><span class="ltx_text ltx_ref_tag">2</span></a>。为节省篇幅我们省略了 Yelp 上具有类似观察的结果。从表中我们得到几个关键观察：1) 结合协同正则化或多样性正则化都能提升 TIGER 的性能，这分别验证了将协同信号注入代码分配以及提升代码嵌入多样性的有效性。2) 用全部三种正则化优化物品词元化将进一步提升性能（(3) 优于 (0-2)），表明在代码分配中同时考虑语义和协同信息并提升多样性是有效的。3) LETTER-TIGER 取得了最佳性能，其利用了排序引导的生成损失。这表明通过改变温度以增强排序能力来抑制困难负样本是有效的。</p>
@@ -1067,8 +1080,8 @@ LoRA <cite class="ltx_cite ltx_citemacro_citep">(Hu<span class="ltx_text ltx_bib
 </h4>
 <figure class="ltx_table" id="S4.T3">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 3. </span>使用量化嵌入的排序性能。</figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:203.8pt;height:55.4pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-63.6pt,17.3pt) scale(0.615897327781001,0.615897327781001) ;">
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold">Dataset</span></th>
@@ -1111,13 +1124,13 @@ LoRA <cite class="ltx_cite ltx_citemacro_citep">(Hu<span class="ltx_text ltx_bib
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:8.5pt;padding-right:8.5pt;"><span class="ltx_text ltx_font_bold">0.0118</span></td>
 </tr>
 </tbody>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <figure class="ltx_table" id="S4.T4">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 4. </span>具有相似协同信号的物品之间的代码相似度。</figcaption>
-<div class="ltx_inline-block ltx_transformed_outer" style="width:195.1pt;height:34.1pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-57.0pt,10.0pt) scale(0.631378931328887,0.631378931328887) ;">
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_th ltx_th_column ltx_th_row ltx_border_r ltx_border_tt" style="padding-left:28.5pt;padding-right:28.5pt;"></th>
@@ -1143,8 +1156,8 @@ LoRA <cite class="ltx_cite ltx_citemacro_citep">(Hu<span class="ltx_text ltx_bib
 </td>
 </tr>
 </tbody>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <div class="ltx_para" id="S4.SS3.SSS4.p1">
 <p class="ltx_p">为了验证 LETTER 是否如预期将协同信号编码进标识符，我们设计了两个实验进行分析：</p>
@@ -1987,6 +2000,72 @@ Subject to }D_{KL}(Q||P_{0})\leq\rho,</annotation></semantics></math></td>
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

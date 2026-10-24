@@ -1,0 +1,216 @@
+// Run with: CHROME_BIN=google-chrome node tests/browser_audit.mjs --output-dir artifacts/paper-render
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync} from 'node:fs';
+import {dirname, join, relative, resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {Browser, serveSite} from './browser_support.mjs';
+import {collectTableGeometry} from './browser_table_assertions.mjs';
+import {captureMathSource, collectMathEvidence, assertMathEvidence, regressionFixture} from './browser_math_assertions.mjs';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const args = process.argv.slice(2);
+if (args.includes('--help')) {
+  console.log('Usage: node tests/browser_audit.mjs [--site-dir docs] [--output-dir artifacts/paper-render]\nCHROME_BIN selects Chrome. No npm packages, API keys, or user browser profile are used.');
+  process.exit(0);
+}
+const options = {'--site-dir':join(root, 'docs'), '--output-dir':join(root, 'artifacts/paper-render')};
+for (let i = 0; i < args.length; i += 2) {
+  if (!(args[i] in options) || !args[i + 1]) throw new Error(`Invalid option: ${args[i]}`);
+  options[args[i]] = resolve(args[i + 1]);
+}
+const output = options['--output-dir'], siteDir = options['--site-dir'];
+mkdirSync(join(output, 'geometry'), {recursive:true});
+mkdirSync(join(output, 'screenshots'), {recursive:true});
+const report = {status:'running', startedAt:new Date().toISOString(), widths:[1440, 390], theme:'dark',
+  siteDir, pages:[], library:[], fixtures:[], errors:[], screenshots:[]};
+const json = (path, value) => writeFileSync(path, JSON.stringify(value, null, 2) + '\n');
+const save = () => json(join(output, 'report.json'), report);
+const digest = value => createHash('sha256').update(JSON.stringify(value ?? null)).digest('hex');
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+function logResult(name, result) {
+  console.log(`${result.status.toUpperCase()} ${name}: ${result.issues.length} issue(s)`);
+  for (const issue of result.issues.slice(0, 5)) console.log(JSON.stringify({audit:name, ...issue}));
+}
+const cases = [
+  {id:'2402.03300', target:'S2.T1', name:'deepseekmath-table-1'},
+  {id:'2609.28589', target:'S6.T2', name:'onetrans-v2-table-2'},
+  {id:'2405.07314', target:'S4.T3', name:'letter-table-3'},
+  {id:'2405.07314', target:'S7.p7', name:'letter-inline-formulas'},
+];
+let browser, server;
+
+async function capture(page, name, selector) {
+  const path = join(output, 'screenshots', name + '.png');
+  const result = await page.screenshot(path, selector);
+  report.screenshots.push({...result, file:relative(output, path)});
+}
+
+async function paperAudit(paper, width) {
+  const name = `${paper.arxiv_id}-${width}-dark`;
+  const result = {id:paper.arxiv_id, width, theme:'dark', status:'running', issues:[]};
+  report.pages.push(result); save();
+  let page;
+  try {
+    const source = readFileSync(join(siteDir, 'papers', paper.arxiv_id, 'index.html'), 'utf8');
+    const sourceMathCount = (source.match(/<math\b/gi) || []).length;
+    const beforeLoad = `document.addEventListener('DOMContentLoaded',()=>{window.__paperMathBefore=(${captureMathSource.toString()})();},{once:true});`;
+    page = await browser.page(`${server.url}/papers/${paper.arxiv_id}/index.html`, {width, beforeLoad});
+    const tables = await page.eval(`(${collectTableGeometry.toString()})()`);
+    const math = await page.eval(`(${collectMathEvidence.toString()})()`);
+    const before = await page.eval('window.__paperMathBefore');
+    const after = await page.eval(`(${captureMathSource.toString()})()`);
+    result.issues.push(...tables.issues, ...assertMathEvidence(math));
+    if (page.imageErrors.length) result.issues.push({kind:'images-failed-to-load', images:page.imageErrors});
+    if (!Array.isArray(before) || !same(before, after)) result.issues.push({kind:'math-content-changed', beforeCount:before?.length, afterCount:after.length});
+    if (after.length !== sourceMathCount) result.issues.push({kind:'math-node-count-mismatch', htmlSource:sourceMathCount, browser:after.length});
+    const runtimeErrors = page.runtimeErrors();
+    if (runtimeErrors.length) result.issues.push({kind:'browser-script-errors', exceptions:runtimeErrors});
+    const document = await page.eval(`({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth})`);
+    if (document.scrollWidth > width + 2 || document.bodyWidth > width + 2) result.issues.push({kind:'page-horizontal-overflow', ...document});
+    const evidence = {paper:paper.arxiv_id, width, theme:'dark', document, tables, math,
+      mathSource:{htmlCount:sourceMathCount, beforeCount:before?.length, afterCount:after.length, beforeHash:digest(before), afterHash:digest(after)}, runtimeErrors, imageErrors:page.imageErrors};
+    json(join(output, 'geometry', name + '.json'), evidence);
+    result.geometry = `geometry/${name}.json`; result.tables = tables.metrics; result.mathCount = math.mathCount;
+    for (const example of cases.filter(c => c.id === paper.arxiv_id)) {
+      const selector = `[id=${JSON.stringify(example.target)}]`;
+      await capture(page, `${example.name}-${width}-dark`, selector);
+      const scrolls = await page.eval(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});return [...e.querySelectorAll('.paper-table-scroll,[data-reading-math-scroll]')].filter(s=>s.scrollWidth>s.clientWidth+2).map(s=>{s.scrollLeft=s.scrollWidth;return {id:s.id,client:s.clientWidth,scroll:s.scrollWidth};});})()`);
+      if (scrolls.length) {
+        await page.settle();
+        await capture(page, `${example.name}-${width}-dark-scroll-end`, selector);
+        await page.eval(`document.querySelectorAll('.paper-table-scroll,[data-reading-math-scroll]').forEach(e=>e.scrollLeft=0)`);
+      }
+    }
+    if (result.issues.length) {
+      const first = result.issues.find(i => i.selector || i.id);
+      const selector = first?.selector || (first?.id ? `[id=${JSON.stringify(first.id)}]` : 'article.paper-fulltext');
+      await capture(page, `failure-${name}`, selector).catch(() => capture(page, `failure-${name}`, null));
+    }
+    result.status = result.issues.length ? 'failed' : 'passed';
+  } catch (error) {
+    result.status = 'failed'; result.issues.push({kind:'audit-exception', message:error.stack || String(error)});
+    if (page) await capture(page, `failure-${name}`, null).catch(() => {});
+  } finally { if (page) await page.close().catch(() => {}); save(); }
+  logResult(name, result);
+}
+
+async function mathFixtureAudit() {
+  const script = execFileSync('python3', ['-c', 'from paper_pipeline.reading_math import MATH_LAYOUT_SCRIPT; print(MATH_LAYOUT_SCRIPT)'],
+    {cwd:root, encoding:'utf8', env:{...process.env, PYTHONDONTWRITEBYTECODE:'1'}});
+  const result = {name:'measured-inline-math-width-and-native-baseline', status:'running', issues:[], states:[]};
+  report.fixtures.push(result);
+  let page;
+  try {
+    page = await browser.page(null, {width:390}); await page.setContent(regressionFixture);
+    await page.eval(`document.body.style.backgroundColor='#141c25';document.body.style.color='#eef3f8'`);
+    const original = await page.eval(`(${captureMathSource.toString()})()`);
+    const rectangle = `(()=>{const r=document.querySelector('#short').getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};})()`;
+    const baseline = await page.eval(rectangle);
+    await page.eval(script); await page.settle();
+    for (const [width, expectedWrappers, label] of [[390, 1, 'initial-mobile'], [1440, 0, 'desktop'], [390, 1, 'mobile-again']]) {
+      await page.resize(width); await page.settle();
+      const evidence = await page.eval(`(${collectMathEvidence.toString()})()`);
+      const current = await page.eval(`(${captureMathSource.toString()})()`);
+      const short = await page.eval(rectangle);
+      const nested = await page.eval(`document.querySelectorAll('[data-reading-math-scroll] [data-reading-math-scroll]').length`);
+      result.issues.push(...assertMathEvidence(evidence));
+      if (!same(original, current)) result.issues.push({kind:'fixture-math-content-changed', label});
+      if (evidence.wrappers.length !== expectedWrappers || nested) result.issues.push({kind:'fixture-wrapper-count', label, expectedWrappers, actual:evidence.wrappers.length, nested});
+      if (evidence.math.find(m => m.id === 'short')?.wrapped) result.issues.push({kind:'short-formula-wrapped', label});
+      if (width === 390 && Object.keys(baseline).some(k => Math.abs(short[k] - baseline[k]) > 0.5)) result.issues.push({kind:'native-short-formula-baseline-changed', label, baseline, short});
+      result.states.push({label, width, short, evidence});
+      await capture(page, `math-fixture-${label}-dark`, 'article');
+    }
+    result.status = result.issues.length ? 'failed' : 'passed';
+  } catch (error) { result.status = 'failed'; result.issues.push({kind:'fixture-exception', message:error.stack || String(error)}); }
+  finally { if (page) await page.close().catch(() => {}); json(join(output, 'geometry/math-fixture.json'), result); save(); }
+  logResult('math-fixture', result);
+}
+
+async function libraryAudit(catalog, width) {
+  const result = {width, theme:'dark', status:'running', issues:[], states:[]}; report.library.push(result);
+  let page;
+  const keywords = paper => [paper.short_name, paper.title_zh, paper.title_en, paper.arxiv_id, ...(paper.companies || []), ...(paper.topics || [])].join(' ').toLowerCase();
+  const expected = (order, query, topic) => [...catalog].sort((a,b) => (order === 'oldest' ? 1 : -1) * a.published_date.localeCompare(b.published_date))
+    .filter(p => keywords(p).includes(query.toLowerCase().trim()) && (!topic || (p.topics || []).includes(topic))).map(p => p.arxiv_id);
+  try {
+    page = await browser.page(`${server.url}/papers/index.html`, {width});
+    if (page.imageErrors.length) result.issues.push({kind:'images-failed-to-load', images:page.imageErrors});
+    const initial = await page.eval(`(()=>{const controls=['paper-sort','paper-search','paper-topic'].map(id=>({id,present:!!document.getElementById(id)}));
+      return {controls,order:document.querySelector('#paper-sort')?.value,entries:[...document.querySelectorAll('.paper-entry')].map(e=>({id:new URL(e.querySelector('h2 a').href).pathname.split('/').at(-2),date:e.dataset.publishedDate,time:e.querySelector('time[datetime]')?.getAttribute('datetime')}))};})()`);
+    if (initial.controls.some(c => !c.present)) throw new Error('Library control missing: ' + JSON.stringify(initial.controls));
+    if (initial.order !== 'newest') result.issues.push({kind:'default-sort-not-newest', value:initial.order});
+    if (initial.entries.length !== catalog.length || !same(initial.entries.map(e=>e.id), expected('newest','',''))) result.issues.push({kind:'initial-library-order-or-count', initial});
+    for (const entry of initial.entries) {
+      const source = catalog.find(p => p.arxiv_id === entry.id);
+      if (!source || !entry.date || entry.date !== source.published_date || entry.time !== entry.date) result.issues.push({kind:'library-date-metadata', entry});
+    }
+    const anchor = catalog.find(p => p.short_name.includes('OneRec') && p.topics?.length) || catalog.find(p => p.topics?.length);
+    if (!anchor) throw new Error('No topic-bearing catalog entry to exercise combined filters');
+    const query = anchor.short_name.includes('OneRec') ? 'OneRec' : anchor.short_name;
+    const topic = anchor.topics[0];
+    const states = [
+      ['newest','',''], ['oldest','',''], ['newest',query,''], ['oldest',query,topic],
+      ['newest',query,topic], ['newest','',topic], ['oldest','__no_such_paper_9fd628__',topic], ['newest','',''],
+    ];
+    for (let index = 0; index < states.length; index++) {
+      const [order, search, selectedTopic] = states[index];
+      await page.eval(`(()=>{for(const [id,value,event] of ${JSON.stringify([['paper-sort',order,'change'],['paper-search',search,'input'],['paper-topic',selectedTopic,'change']])}){const e=document.getElementById(id);e.value=value;e.dispatchEvent(new Event(event,{bubbles:true}));}})()`);
+      await page.settle();
+      const actual = await page.eval(`(()=>{const cards=[...document.querySelectorAll('.paper-entry')];return {
+        visible:cards.filter(e=>!e.hidden&&e.getClientRects().length).map(e=>new URL(e.querySelector('h2 a').href).pathname.split('/').at(-2)),
+        hiddenButRendered:cards.filter(e=>e.hidden&&e.getClientRects().length).length,count:document.querySelector('#paper-count')?.textContent,
+        emptyHidden:document.querySelector('#paper-empty')?.hidden,width:innerWidth,scrollWidth:document.documentElement.scrollWidth};})()`);
+      const wanted = expected(order, search, selectedTopic);
+      const state = {order, search, topic:selectedTopic, expected:wanted, actual}; result.states.push(state);
+      if (!same(wanted, actual.visible) || actual.hiddenButRendered || Number(actual.count?.match(/\d+/)?.[0]) !== wanted.length || actual.emptyHidden !== !!wanted.length || actual.scrollWidth > width + 2) result.issues.push({kind:'library-filter-or-sort-mismatch', state});
+      if (index < 2) await capture(page, `library-${width}-dark-${order}`, '.paper-library');
+    }
+    if (page.runtimeErrors().length) result.issues.push({kind:'library-script-errors', exceptions:page.runtimeErrors()});
+    result.status = result.issues.length ? 'failed' : 'passed';
+  } catch (error) { result.status = 'failed'; result.issues.push({kind:'library-exception', message:error.stack || String(error)}); }
+  finally { if (page) await page.close().catch(() => {}); json(join(output, `geometry/library-${width}.json`), result); save(); }
+  logResult(`library-${width}-dark`, result);
+}
+
+save();
+try {
+  const catalog = JSON.parse(readFileSync(join(root, 'paper_catalog.json'), 'utf8')).papers;
+  const published = JSON.parse(readFileSync(join(siteDir, 'papers/catalog.json'), 'utf8')).papers;
+  const ids = rows => rows.map(p => p.arxiv_id).sort();
+  if (!catalog.length || new Set(ids(catalog)).size !== catalog.length || !same(ids(catalog), ids(published))) throw new Error('Source and published catalog ID sets must match exactly');
+  const actualPages = readdirSync(join(siteDir,'papers'), {withFileTypes:true})
+    .filter(entry=>entry.isDirectory()&&existsSync(join(siteDir,'papers',entry.name,'index.html'))).map(entry=>entry.name).sort();
+  if (!same(actualPages, ids(catalog))) throw new Error('Actual reading-page ID set differs from catalog');
+  const missingDates = catalog.filter(p => !/^\d{4}-\d{2}-\d{2}$/.test(p.published_date || ''));
+  if (missingDates.length) throw new Error('Missing catalog dates: ' + missingDates.map(p=>p.arxiv_id).join(', '));
+  for (const paper of catalog) {
+    if (published.find(p => p.arxiv_id === paper.arxiv_id).published_date !== paper.published_date) throw new Error('Published date mismatch: ' + paper.arxiv_id);
+    readFileSync(join(siteDir, 'papers', paper.arxiv_id, 'index.html'));
+  }
+  report.catalog = {papers:catalog.length, ids:ids(catalog), missingDates:0, newest:[...catalog].sort((a,b)=>b.published_date.localeCompare(a.published_date))[0].published_date,
+    oldest:[...catalog].sort((a,b)=>a.published_date.localeCompare(b.published_date))[0].published_date};
+  server = await serveSite(siteDir); browser = new Browser({outputDir:output});
+  report.browser = await browser.call('Browser.getVersion'); save();
+  await mathFixtureAudit();
+  for (const width of report.widths) {
+    await libraryAudit(catalog, width);
+    for (const paper of catalog) await paperAudit(paper, width);
+  }
+  const requiredScreenshots = cases.flatMap(c => report.widths.map(w => `${c.name}-${w}-dark.png`));
+  const missingScreenshots = requiredScreenshots.filter(name => !report.screenshots.some(s => s.file === `screenshots/${name}`));
+  if (missingScreenshots.length) report.errors.push({kind:'required-screenshots-missing', files:missingScreenshots});
+  if (report.pages.length !== catalog.length * report.widths.length) report.errors.push({kind:'incomplete-page-coverage'});
+} catch (error) { report.errors.push({kind:'fatal', message:error.stack || String(error)}); }
+finally {
+  if (browser) await browser.close().catch(error => report.errors.push({kind:'browser-close', message:String(error)}));
+  if (server) await server.close().catch(error => report.errors.push({kind:'server-close', message:String(error)}));
+  report.finishedAt = new Date().toISOString();
+  report.status = report.errors.length || [...report.pages, ...report.library, ...report.fixtures].some(r => r.status !== 'passed') ? 'failed' : 'passed';
+  save();
+}
+console.log(JSON.stringify({status:report.status, papers:report.catalog?.papers, pageRuns:report.pages.length,
+  failedPageRuns:report.pages.filter(p=>p.status !== 'passed').length, screenshots:report.screenshots.length, report:join(output,'report.json')}));
+for (const error of report.errors) console.error(JSON.stringify(error));
+process.exitCode = report.status === 'passed' ? 0 : 1;

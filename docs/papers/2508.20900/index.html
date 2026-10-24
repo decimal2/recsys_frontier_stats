@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / OneRec-V2</div><h1>OneRec-V2 技术报告</h1><p class="paper-original-title">OneRec-V2 Technical Report</p>
@@ -342,7 +355,7 @@ li{margin:5px 0}
 </div>
 <figure class="ltx_table" id="S2.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>: </span><span class="ltx_text" style="font-size:90%;">专门用于与损失相关的目标解码的计算比例，针对 1B 参数模型计算。此处上下文表示不直接参与损失计算的用户特征词元。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt">Context Length N</td>
 <td class="ltx_td ltx_align_center ltx_border_tt">512</td>
@@ -455,7 +468,7 @@ li{margin:5px 0}
 <td class="ltx_td ltx_border_bb"></td>
 <td class="ltx_td ltx_border_bb"></td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S2.SS1.p3">
 <p class="ltx_p">为解决上述问题，我们提出按时间顺序组织数据，但将训练损失 <span class="ltx_text ltx_font_italic">仅</span>应用于最新曝光的物品，如图 <a class="ltx_ref" href="#S2.F3" title="Figure 3 ‣ 2 Lazy Decoder-Only Architecture ‣ OneRec-V2 Technical Report"><span class="ltx_text ltx_ref_tag">3</span></a>.c 所示，其中灰色物品被排除在下一词元预测之外。由于先前曝光的物品和最新曝光的物品作用方式不同，我们在先前的 OneRec-V1 <cite class="ltx_cite ltx_citemacro_cite">Zhou<span class="ltx_text ltx_bib_etal"> et al.</span> (<a class="ltx_ref" href="#bib.bib83" title="OneRec technical report">2025</a>)</cite> 中选择了编码器-解码器架构。如表 <a class="ltx_ref" href="#S2.T1" title="Table 1 ‣ 2.1 Design Principles ‣ 2 Lazy Decoder-Only Architecture ‣ OneRec-V2 Technical Report"><span class="ltx_text ltx_ref_tag">1</span></a> 所示，我们对计算细节进行了初步分析。计算可分为两个不同的类别：上下文编码和目标解码。</p>
@@ -685,7 +698,7 @@ RMSNorm}(\mathbf{h}_{\text{self}}^{(l)})\right),</annotation></semantics></math>
 <figure class="ltx_table" id="S2.T2">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 2</span>: </span><span class="ltx_text" style="font-size:90%;">不同架构在不同模型规模下的比较。由于计算资源限制，未进行0.5B和1B规模的朴素仅解码器实验。激活数量在批大小为512下计算。</span></figcaption><div class="ltx_flex_figure">
 <div class="ltx_flex_cell ltx_flex_size_1">
-<table class="ltx_tabular ltx_centering ltx_figure_panel ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_figure_panel ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold">Architecture</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold">Total Parameters<span class="ltx_note ltx_role_footnote" id="footnote1"><sup class="ltx_note_mark">1</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">1</sup>
@@ -779,7 +792,7 @@ RMSNorm}(\mathbf{h}_{\text{self}}^{(l)})\right),</annotation></semantics></math>
 <td class="ltx_td ltx_align_right ltx_border_bb">1.24B</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">3.27</td>
 </tr>
-</table>
+</table></div>
 </div>
 <div class="ltx_flex_break"></div>
 <div class="ltx_flex_cell ltx_flex_size_1">
@@ -825,7 +838,7 @@ RMSNorm}(\mathbf{h}_{\text{self}}^{(l)})\right),</annotation></semantics></math>
 </div>
 <figure class="ltx_table" id="S2.T3">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 3</span>: </span><span class="ltx_text" style="font-size:90%;">键值共享策略对模型效率和性能的影响。激活数量在批大小为512下计算。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_tt"><math alttext="\mathbf{L_{\text{kv}}}" class="ltx_Math" display="inline" id="S2.T3.m1"><semantics><msub><mi>𝐋</mi><mtext>kv</mtext></msub><annotation encoding="application/x-tex">\mathbf{L_{\text{kv}}}</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><math alttext="\mathbf{S_{\text{kv}}}" class="ltx_Math" display="inline" id="S2.T3.m2"><semantics><msub><mi>𝐒</mi><mtext>kv</mtext></msub><annotation encoding="application/x-tex">\mathbf{S_{\text{kv}}}</annotation></semantics></math></td>
@@ -868,7 +881,7 @@ RMSNorm}(\mathbf{h}_{\text{self}}^{(l)})\right),</annotation></semantics></math>
 <td class="ltx_td ltx_align_center ltx_border_bb">2.83B</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">3.27</td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S2.SS3.SSS2.p2">
 <p class="ltx_p">图<a class="ltx_ref" href="#A3.F11.sf1" title="Figure 11(a) ‣ Figure 11 ‣ Appendix C Empirical Results ‣ OneRec-V2 Technical Report"><span class="ltx_text ltx_ref_tag">11(a)</span></a>表明，激进的键值共享在整个训练过程中保持了有竞争力的损失，验证了我们高效的上下文处理策略。</p>
@@ -879,7 +892,7 @@ RMSNorm}(\mathbf{h}_{\text{self}}^{(l)})\right),</annotation></semantics></math>
 <span class="ltx_tag ltx_tag_subsubsection">2.3.3 </span>分组查询注意力</h4>
 <figure class="ltx_table" id="S2.T4">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 4</span>: </span><span class="ltx_text" style="font-size:90%;">分组查询注意力对模型效率和性能的影响。激活数量和交叉注意力中的键值大小在批大小为512下计算。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_tt"><math alttext="\mathbf{G_{\text{kv}}}" class="ltx_Math" display="inline" id="S2.T4.m1"><semantics><msub><mi>𝐆</mi><mtext>kv</mtext></msub><annotation encoding="application/x-tex">\mathbf{G_{\text{kv}}}</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold">GFLOPs</span></td>
@@ -915,7 +928,7 @@ RMSNorm}(\mathbf{h}_{\text{self}}^{(l)})\right),</annotation></semantics></math>
 <td class="ltx_td ltx_align_center ltx_border_bb">7M</td>
 <td class="ltx_td ltx_align_center ltx_border_bb">3.27</td>
 </tr>
-</table>
+</table></div>
 </figure>
 <div class="ltx_para" id="S2.SS3.SSS3.p1">
 <p class="ltx_p">分组查询注意力（GQA）在多个查询头之间共享键值头。
@@ -939,8 +952,8 @@ RMSNorm}(\mathbf{h}_{\text{self}}^{(l)})\right),</annotation></semantics></math>
 </div>
 <figure class="ltx_table" id="S2.T5">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 5</span>: </span><span class="ltx_text" style="font-size:90%;">模型缩放实验的超参数配置和收敛损失。</span></figcaption>
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:139.9pt;vertical-align:-0.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-34.3pt,11.1pt) scale(0.863305846896555,0.863305846896555) ;">
-<table class="ltx_tabular ltx_align_middle">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_tt" style="padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold">Model</span></td>
 <td class="ltx_td ltx_align_center ltx_border_r ltx_border_tt" style="padding-top:1pt;padding-bottom:1pt;"><span class="ltx_text ltx_font_bold">Parameters</span></td>
@@ -1025,8 +1038,8 @@ RMSNorm}(\mathbf{h}_{\text{self}}^{(l)})\right),</annotation></semantics></math>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_r ltx_border_t" style="padding-top:1pt;padding-bottom:1pt;">2.24e-4</td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-top:1pt;padding-bottom:1pt;">3.22</td>
 </tr>
-</table>
-</span></div>
+</table></div>
+</div></div>
 </figure>
 <figure class="ltx_figure" id="S2.F6"><a href="assets/c3aa739a6142726e.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S2.F6.g1" loading="lazy" src="assets/c3aa739a6142726e.svg"/></a>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 6</span>: </span><span class="ltx_text" style="font-size:90%;">稠密模型缩放定律曲线。缩放定律由<math alttext="\hat{L}(N)\triangleq E+\frac{A}{N^{\alpha}}" class="ltx_Math" display="inline" id="S2.F6.m5"><semantics><mrow><mrow><mover accent="true"><mi>L</mi><mo>^</mo></mover><mo>⁢</mo><mrow><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow></mrow><mo>≜</mo><mrow><mi>E</mi><mo>+</mo><mfrac><mi>A</mi><msup><mi>N</mi><mi>α</mi></msup></mfrac></mrow></mrow><annotation encoding="application/x-tex">\hat{L}(N)\triangleq E+\frac{A}{N^{\alpha}}</annotation></semantics></math>拟合，
@@ -1338,7 +1351,7 @@ _{\theta_{old}}^{\prime}(o_{i}|u)}\cdot A_{i}\right],</annotation></semantics></
 </div>
 <figure class="ltx_table" id="S3.T6">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 6</span>: </span><span class="ltx_text" style="font-size:90%;">基于用户反馈信号的强化学习在线A/B测试结果。所有指标均相对OneRec-V1基线有所提升。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_justify ltx_align_top ltx_border_r ltx_border_tt" style="padding:1pt 8.0pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -1439,7 +1452,7 @@ _{\theta_{old}}^{\prime}(o_{i}|u)}\cdot A_{i}\right],</annotation></semantics></
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:1pt 8.0pt;">+0.775%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:1pt 8.0pt;">+5.783%</td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 </section>
@@ -1456,7 +1469,7 @@ _{\theta_{old}}^{\prime}(o_{i}|u)}\cdot A_{i}\right],</annotation></semantics></
 </div>
 <figure class="ltx_table" id="S3.T7">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 7</span>: </span><span class="ltx_text" style="font-size:90%;">OneRec-V2 的强化学习训练的在线 A/B 测试结果。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_justify ltx_align_top ltx_border_r ltx_border_tt" style="padding:1pt 7.0pt;">
 <span class="ltx_inline-block ltx_align_top">
@@ -1574,7 +1587,7 @@ _{\theta_{old}}^{\prime}(o_{i}|u)}\cdot A_{i}\right],</annotation></semantics></
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:1pt 7.0pt;">+7.704%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:1pt 7.0pt;">+6.670%</td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_subsubsection" id="S3.SS2.SSS2">
@@ -1609,7 +1622,7 @@ _{\theta_{old}}^{\prime}(o_{i}|u)}\cdot A_{i}\right],</annotation></semantics></
 </div>
 <figure class="ltx_table" id="S3.T8">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 8</span>: </span><span class="ltx_text" style="font-size:90%;">OneRec-V2 相较于 OneRec-V1 在在线 A/B 测试中的相对提升。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_justify ltx_align_top ltx_border_r ltx_border_tt" style="padding:1pt 20.0pt;">      
 <span class="ltx_inline-block ltx_align_top">
@@ -1703,7 +1716,7 @@ _{\theta_{old}}^{\prime}(o_{i}|u)}\cdot A_{i}\right],</annotation></semantics></
 <td class="ltx_td ltx_align_left ltx_border_bb ltx_border_r" style="padding:1pt 20.0pt;">      Forward</td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:1pt 20.0pt;">      +7.958%</td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 <section class="ltx_paragraph" id="S3.SS2.SSS2.Px2">
@@ -2388,7 +2401,7 @@ _{\theta_{old}}^{\prime}(o_{i}|u)}\cdot A_{i}\right],</annotation></semantics></
 </div>
 <figure class="ltx_table" id="A4.T9">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 9</span>: </span><span class="ltx_text" style="font-size:90%;">OneRec-V2 相较于 OneRec-V1 的相对提升（在该组中，所有流量请求均由 OneRec-V2 处理）。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_justify ltx_align_top ltx_border_r ltx_border_tt" style="padding:1pt 20.0pt;">      
 <span class="ltx_inline-block ltx_align_top">
@@ -2500,7 +2513,7 @@ _{\theta_{old}}^{\prime}(o_{i}|u)}\cdot A_{i}\right],</annotation></semantics></
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding:1pt 20.0pt;">      <span class="ltx_text ltx_font_bold">+7.933%</span>
 </td>
 </tr>
-</table>
+</table></div>
 </figure>
 </section>
 </article></article></div>
@@ -2510,6 +2523,72 @@ _{\theta_{old}}^{\prime}(o_{i}|u)}\cdot A_{i}\right],</annotation></semantics></
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

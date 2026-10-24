@@ -97,6 +97,8 @@ python -m http.server 8080 --bind 127.0.0.1 -d reports/site
 
 当前共 **38 篇**：`LLM4Rec/source` 的 31 篇与 `RL_Training/source` 的 7 篇，清单记录在 `paper_catalog.json`。
 已发布的中文全文保存在 `docs/papers/<arxiv_id>/`，只包含 HTML 和必要图表，不保留下载用 PDF。
+论文列表默认按 arXiv **首次提交日期**从新到旧排列，也可切换为最早在前，并与搜索、主题筛选组合使用。
+日期来自官方元数据的 `published` 字段，记录为 `published_date` 与 `published_date_source`；修订日期不参与排序。
 
 ```bash
 # 从已发布 HTML 快照重建全文、论文列表和首页
@@ -126,6 +128,11 @@ TeX 公式使用浏览器原生 MathML，表格为 HTML 表格，图形使用源
 `html_snapshot` 路径相对目录清单文件，快照内保存正文和重建所需的元数据；
 清理 `/tmp` 与 `reports/paper_cache/` 后仍可重建，无需重新下载源码或重新翻译。
 构建论文会保留已有日报；之后生成日报也会保留论文专栏。
+
+网页排版修复会在每次渲染时应用，也覆盖已有 HTML 快照和正文缓存：解除 TeX 固定尺寸/缩放盒，
+恢复标准表格行列，让宽表格独立横向滚动，表注保持在表格外的正常文档流中。
+正文取消两端强制对齐；浏览器只对实际超出正文宽度的行内公式添加横向滚动，普通行内公式保留原生基线。
+这些调整会核对正文、表格数值、合并单元格、MathML、链接和图片，避免用删减内容解决排版问题。
 
 手动转换中文 TeX 工程仍可使用 `tex_project` + `tex_entry` 配置，需要系统的 `latexmlc` / `latexmlpost`，
 或通过 `LATEXML_ROOT` / 单篇 `latexml_root` 指定解包工具目录。配置的 TeX 缺失时会明确报错。
@@ -177,3 +184,16 @@ logs/<日期>/<时间>.log         每次运行的独立日志
 ```bash
 .venv/bin/python -m unittest discover -s tests -q
 ```
+
+表格和公式还需要真实浏览器检查。安装 Chrome 后，可对发布目录运行：
+
+```bash
+CHROME_BIN="$(command -v google-chrome)" node tests/browser_audit.mjs \
+  --site-dir docs --output-dir /tmp/paper-render-audit
+```
+
+GitHub Actions 的 **Paper rendering** 会在相关页面、渲染代码或测试改动时自动运行。
+它按目录清单检查所有论文的 1440px / 390px 布局，检查表注与数据重叠、数字断行、意外溢出、
+超宽公式滚动、短公式基线，以及日期排序与筛选组合；失败时退出非零。
+在该次运行的 Artifacts 中下载 `paper-render-*`，查看 `report.json`、`geometry/` 和 `screenshots/`。
+单元测试、链接检查或 MathML 数量一致，均不能代替这些渲染检查。

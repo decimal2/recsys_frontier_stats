@@ -8,6 +8,9 @@ import tempfile
 from pathlib import Path
 
 from .publishing import atomic_write, escape, page, publish_index, read_paper_catalog, render_daily
+from .paper_dates import parse_published_date, sort_papers_by_date
+from .reading_math import MATH_LAYOUT_SCRIPT
+from .reading_tables import TABLE_STYLES, normalize_reading_tables
 
 ROOT = Path(__file__).resolve().parents[1]
 LOG = logging.getLogger(__name__)
@@ -27,7 +30,7 @@ READING_STYLES = """
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -35,7 +38,7 @@ READING_STYLES = """
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -50,9 +53,9 @@ READING_STYLES = """
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -60,12 +63,26 @@ READING_STYLES = """
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 """
 
+READING_LAYOUT_STYLES = """
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+""" + TABLE_STYLES
+
 
 def render_paper(paper, document):
+    from bs4 import BeautifulSoup
+
+    # Apply layout repairs even when the source is an older HTML snapshot or a
+    # cached document. Shared helper changes must never leave those pages stale.
+    article = BeautifulSoup(document["body_html"], "html.parser")
+    normalize_reading_tables(article)
+    document = {**document, "body_html": str(article)}
     metadata_json = json.dumps({key: document[key] for key in ("format", "toc", "stats", "extra_head")
                                if key in document}, ensure_ascii=False).replace("<", "\\u003c")
     toc = ''.join(
@@ -90,34 +107,42 @@ def render_paper(paper, document):
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;}});
-</script>'''
+</script><script>{MATH_LAYOUT_SCRIPT}</script>'''
     return page(paper["title_zh"], body, "PAPER LIBRARY / " + paper["short_name"],
                 root_prefix="../../", section="papers", body_class="paper-reader",
-                extra_head=f"<style>{READING_STYLES}</style>" + document.get("extra_head", ""))
+                extra_head=f"<style>{READING_STYLES}</style>" + document.get("extra_head", "")
+                + f"<style>{READING_LAYOUT_STYLES}</style>")
 
 
 def render_library(papers):
+    papers = sort_papers_by_date(papers)
     entries = []
     for paper in papers:
         topics = paper.get("topics", [])
         keywords = " ".join([paper["short_name"], paper["title_zh"], paper["title_en"], paper["arxiv_id"],
                              *paper.get("companies", []), *topics])
         pills = ' '.join(f'<span class="pill">{escape(tag)}</span>' for tag in topics)
-        entries.append(f'''<article class="paper-entry" data-keywords="{escape(keywords)}" data-topics="{escape(json.dumps(topics, ensure_ascii=False))}">
+        published = paper.get("published_date", "") or ""
+        date_label = (f'首次提交 <time datetime="{escape(published)}">{escape(published)}</time>'
+                      if published else '首次提交日期待核实')
+        entries.append(f'''<article class="paper-entry" data-keywords="{escape(keywords)}" data-topics="{escape(json.dumps(topics, ensure_ascii=False))}" data-published-date="{escape(published)}">
 <span class="eyebrow">{escape(paper['short_name'])}</span><h2><a href="{escape(paper['arxiv_id'])}/index.html">{escape(paper['title_zh'])}</a></h2>
 <span class="original">{escape(paper['title_en'])}</span><p>{pills}</p>
-<p class="muted">{escape(' · '.join(paper.get('companies', [])))} · {escape(paper['arxiv_id'] + paper['version'])}</p>
+<p class="muted">{escape(' · '.join(paper.get('companies', [])))} · {escape(paper['arxiv_id'] + paper['version'])} · {date_label}</p>
 <div class="paper-actions"><a href="{escape(paper['arxiv_id'])}/index.html">阅读中文全文</a>
 <a href="{escape(paper['arxiv_url'])}" target="_blank" rel="noopener">英文 arXiv ↗</a></div></article>''')
     topics = sorted({tag for paper in papers for tag in paper.get("topics", [])})
     options = ''.join(f'<option value="{escape(tag)}">{escape(tag)}</option>' for tag in topics)
     body = f'''<p class="lede">深入阅读推荐系统论文，保留中文全文、公式、图表与参考文献。</p>
 <div class="paper-library-filters"><input id="paper-search" type="search" placeholder="搜索论文标题、简称、公司或 arXiv 编号…" aria-label="搜索论文">
-<select id="paper-topic" aria-label="按主题筛选"><option value="">全部主题</option>{options}</select></div>
+<select id="paper-topic" aria-label="按主题筛选"><option value="">全部主题</option>{options}</select>
+<select id="paper-sort" aria-label="按首次提交日期排序"><option value="newest">发表时间：最新在前</option><option value="oldest">发表时间：最早在前</option></select></div>
 <p id="paper-count" class="muted" aria-live="polite">共 {len(papers)} 篇中文全文</p>
 <div class="paper-library">{''.join(entries)}</div><p id="paper-empty" class="muted" hidden>没有匹配的论文。</p>
 <script>
 const paperSearch=document.querySelector('#paper-search'),paperTopic=document.querySelector('#paper-topic');
+const paperSort=document.querySelector('#paper-sort'),paperList=document.querySelector('.paper-library');
+const paperEntries=[...paperList.querySelectorAll('.paper-entry')];
 function filterPapers(){{let count=0;const query=paperSearch.value.toLowerCase().trim();
  document.querySelectorAll('.paper-entry').forEach(el=>{{
   el.hidden=!el.dataset.keywords.toLowerCase().includes(query)||(paperTopic.value&&!JSON.parse(el.dataset.topics).includes(paperTopic.value));
@@ -125,6 +150,14 @@ function filterPapers(){{let count=0;const query=paperSearch.value.toLowerCase()
  }});document.querySelector('#paper-count').textContent='共 '+count+' 篇中文全文';document.querySelector('#paper-empty').hidden=count!==0;
 }}
 paperSearch.addEventListener('input',filterPapers);paperTopic.addEventListener('change',filterPapers);
+paperSort.addEventListener('change',()=>{{
+ const sorted=[...paperEntries].sort((a,b)=>{{
+  const first=a.dataset.publishedDate,last=b.dataset.publishedDate;
+  if(!first||!last)return first?-1:last?1:0;
+  return paperSort.value==='oldest'?first.localeCompare(last):last.localeCompare(first);
+ }});
+ sorted.forEach(entry=>paperList.append(entry));filterPapers();
+}});
 </script>'''
     return page("论文阅读", body, "PAPER LIBRARY / 全文阅读", root_prefix="../", section="papers",
                 extra_head=f"<style>{READING_STYLES}</style>")
@@ -139,6 +172,7 @@ def load_catalog(path):
             raise ValueError("论文目录中的 arXiv ID 重复或无效：" + identifier)
         if not re.fullmatch(r"v[1-9]\d*", paper["version"]):
             raise ValueError("论文目录需要明确 arXiv 版本：" + identifier)
+        parse_published_date(paper.get("published_date"))
         source_keys = (("html_snapshot",) if paper.get("html_snapshot") else
                        ("tex_project", "tex_entry") if paper.get("tex_project") else ("zh_pdf",))
         for key in ("title_zh", "title_en", "short_name", *source_keys):
@@ -279,7 +313,7 @@ def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json
         public.update(url=f"papers/{identifier}/index.html", stats=document["stats"], source_sha256=checksum)
         published[identifier] = public
         LOG.info("中文论文页面已生成：%s；%s", destination / "index.html", document["stats"])
-    catalog = list(published.values())
+    catalog = sort_papers_by_date(published.values())
     atomic_write(library / "catalog.json", json.dumps({"papers": catalog}, ensure_ascii=False, indent=2))
     atomic_write(library / "index.html", render_library(catalog))
     paper_links = {paper["arxiv_id"]: paper["url"] for paper in catalog}

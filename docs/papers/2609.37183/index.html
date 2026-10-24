@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / HELIX</div><h1>HELIX：纯化与统一——重新思考大规模推荐中的特征交互与序列建模</h1><p class="paper-original-title">HELIX: Purified and Unified — Rethinking Feature Interaction and Sequence Modeling for Large-Scale Recommendation</p>
@@ -691,7 +704,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="S3.T1">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 1</span>: </span><span class="ltx_text" style="font-size:90%;">内部工业数据集上的离线对比。质量指标为相对 RankMixer + Transformer 基线的提升；参数量和每样本训练 FLOPs 为绝对值。此处的 OneTrans 使用包含发表后优化的更新生产实现进行评估。在我们的场景中，相对 AUC 提升 0.03% 被认为具有实际意义，并可在在线指标上带来显著收益。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_th ltx_th_row ltx_border_tt" style="padding-left:5.0pt;padding-right:5.0pt;"></th>
@@ -747,7 +760,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_right ltx_border_bb ltx_border_t" style="padding-left:5.0pt;padding-right:5.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">35.28G</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <section class="ltx_subsection" id="S3.SS1">
 <h3 class="ltx_title ltx_title_subsection">
@@ -786,7 +799,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="S3.T2">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 2</span>: </span><span class="ltx_text" style="font-size:90%;">HELIX 模型规模配置。质量指标为相对 HELIX-S 的提升。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">Model</span></th>
@@ -837,7 +850,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding-left:3.5pt;padding-right:3.5pt;"><span class="ltx_text" style="font-size:90%;">130.24G</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <figure class="ltx_figure" id="S3.F2"><a href="assets/63f6d6c6e21c22b8.svg" rel="noopener" target="_blank"><img alt="Refer to caption" class="ltx_graphics ltx_centering" id="S3.F2.g1" loading="lazy" src="assets/63f6d6c6e21c22b8.svg"/></a>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure"><span class="ltx_text" style="font-size:90%;">Figure 2</span>: </span><span class="ltx_text" style="font-size:90%;">CTR 和 CVR AUC 上的缩放行为。虚线显示观察到的 HELIX S/M/L/XL/XXL 配置在 <math alttext="\log(\Delta\mathrm{AUC})" class="ltx_Math" display="inline" id="S3.F2.m2"><semantics><mrow><mi>log</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mrow><mi mathvariant="normal">Δ</mi><mo>⁢</mo><mi>AUC</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\log(\Delta\mathrm{AUC})</annotation></semantics></math> 与 log FLOPs 之间的线性拟合。RankMixer 和 OneTrans 点仅供参考，不纳入拟合。两轴均为对数。</span></figcaption>
@@ -851,7 +864,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="S3.T3">
 <figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 3</span>: </span><span class="ltx_text" style="font-size:90%;">HELIX 中关键设计选择的消融实验带来的相对 AUC 增益。MPTF 与自注意力比较；仅 K/V 缓存交叉注意力与同时关注 mix-token 和序列 K/V 缓存的交叉注意力比较；最终层 K/V 缓存与逐层 K/V 缓存比较。以 <math alttext="+" class="ltx_Math" display="inline" id="S3.T3.m2"><semantics><mo>+</mo><annotation encoding="application/x-tex">+</annotation></semantics></math> 为前缀的行报告添加相应组件所获得的增益。具体而言，我们的最终设计仅采用在值投影之后应用的门控注意力。</span></figcaption>
-<table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_justify ltx_align_top ltx_th ltx_th_column ltx_th_row ltx_border_tt">
@@ -948,7 +961,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 <td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_bb">0.00%</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 <section class="ltx_paragraph" id="S3.SS4.SSS0.Px1">
 <h5 class="ltx_title ltx_title_paragraph">Mixup-PerToken-FFN。</h5>
@@ -994,7 +1007,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="S3.T4">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 4</span>: </span><span class="ltx_text" style="font-size:90%;">HELIX-L 在 TikTok 电商视频推荐系统中的在线 A/B 测试提升。RankMixer + Transformer 为生产对照组。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt"><span class="ltx_text" style="font-size:90%;">Metric</span></th>
@@ -1021,7 +1034,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text" style="font-size:90%;">+5.4624%</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section>
 </section>
@@ -1504,7 +1517,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 <section class="ltx_subsection" id="A1.SSx1">
 <h3 class="ltx_title ltx_title_subsection">核心贡献者（同等贡献）</h3>
 <div class="ltx_para" id="A1.SSx1.p1">
-<table class="ltx_tabular ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_r ltx_align_left">Yuntao Zheng</td>
@@ -1522,13 +1535,13 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 <td class="ltx_td ltx_nopad_r ltx_align_left">Lixiyu Chen</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
 </section>
 <section class="ltx_subsection" id="A1.SSx2">
 <h3 class="ltx_title ltx_title_subsection">贡献者</h3>
 <div class="ltx_para" id="A1.SSx2.p1">
-<table class="ltx_tabular ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tbody class="ltx_tbody">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_nopad_r ltx_align_left">Hao Wang</td>
@@ -1579,7 +1592,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 <td class="ltx_td ltx_nopad_r ltx_align_left">Yinzhou Wang</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <div class="ltx_pagination ltx_role_newpage"></div>
 </div>
 </section>
@@ -1591,7 +1604,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 </div>
 <figure class="ltx_table" id="A2.T5">
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table"><span class="ltx_text" style="font-size:90%;">Table 5</span>: </span><span class="ltx_text" style="font-size:90%;">HELIX-L 相对于 RankMixer + Transformer 生产对照组的代表性在线 A/B 测试提升。所有数值均为相对提升；越高越好。</span></figcaption>
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-top:0.35pt;padding-bottom:0.35pt;"><span class="ltx_text" style="font-size:90%;">Metric</span></th>
@@ -1677,7 +1690,7 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 <td class="ltx_td ltx_align_right ltx_border_bb" style="padding-top:0.35pt;padding-bottom:0.35pt;"><span class="ltx_text" style="font-size:90%;">+1.6013%</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </figure>
 </section><div about="" class="ltx_rdf" content="Data - Global E-Commerce Recommendation Video Team" property="dcterms:creator"></div>
 <div about="" class="ltx_rdf" content="HELIX: Purified and Unified - Rethinking Feature Interaction and Sequence Modeling for Large-Scale Recommendation" property="dcterms:title"></div>
@@ -1688,6 +1701,72 @@ RMSNorm}(\widehat{Z}_{c}^{r})\right).</annotation></semantics></math></td>
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

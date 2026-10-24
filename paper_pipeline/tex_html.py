@@ -18,6 +18,8 @@ from xml.dom import minidom
 from bs4 import BeautifulSoup
 import fitz
 
+from .reading_tables import TABLE_STYLES, normalize_reading_tables
+
 LOG = logging.getLogger(__name__)
 LTX = "http://dlmf.nist.gov/LaTeXML"
 XML_ID = "{http://www.w3.org/XML/1998/namespace}id"
@@ -29,7 +31,7 @@ STYLES = """
 .tex-paper .ltx_creator{display:inline-block;margin-right:1em}
 .tex-paper .ltx_title{display:block;line-height:1.5;margin:1.5em 0 .7em;text-transform:none;letter-spacing:0}
 .tex-paper .ltx_title_abstract{font-size:22px;color:var(--ink)}
-.tex-paper .ltx_p{margin:0 0 1em;text-align:justify}
+.tex-paper .ltx_p{margin:0 0 1em;text-align:start}
 .tex-paper .ltx_para{margin:0}
 .tex-paper .ltx_section,.tex-paper .ltx_subsection,.tex-paper .ltx_subsubsection{margin-top:24px}
 .tex-paper .ltx_title_paragraph{font-size:17px}
@@ -307,29 +309,11 @@ def _normalize_subfigure_wrappers(xml_path):
 
 
 def _normalize_html_tables(article):
-    """Recover semantic tables when adjustbox emits inline span equivalents."""
-    tables = article.select("span.ltx_tabular")
-    names = {"ltx_tr": "tr", "ltx_td": "td", "ltx_th": "th", "ltx_thead": "thead",
-             "ltx_tbody": "tbody", "ltx_tfoot": "tfoot", "ltx_tabular": "table"}
-    for table in tables:
-        for node in [table, *table.find_all(True)]:
-            for class_name, name in names.items():
-                if class_name in node.get("class", []):
-                    node.name = name
-                    break
-            if node.name in {"td", "th"}:
-                for class_name in node.get("class", []):
-                    match = re.fullmatch(r"ltx_(rowspan|colspan)_(\d+)", class_name)
-                    if match:
-                        node[match[1]] = match[2]
-        for parent in table.parents:
-            if parent.name in {"td", "th", "figure", "article", "section"}:
-                break
-            if parent.name in {"span", "p"}:
-                parent.name = "div"
-    if tables:
-        LOG.info("恢复 %s 个内联表格为 HTML table/tr/td，保留原始数据和合并单元格", len(tables))
-    return len(tables)
+    """Use the same content-preserving repair for TeX and saved HTML pages."""
+    counts = normalize_reading_tables(article)
+    if any(counts.values()):
+        LOG.info("规范化论文表格布局：%s", counts)
+    return counts["span_tables"]
 
 
 def convert_tex(source_dir, entrypoint, asset_dir, build_dir, latexml_root=None, timeout=600):
@@ -419,6 +403,6 @@ def convert_tex(source_dir, entrypoint, asset_dir, build_dir, latexml_root=None,
              "mathml": len(article.find_all("math")), "graphics": len(graphics),
              "references": len(article.select(".ltx_bibitem")), "warnings": warnings}
     result = {"format": "arxiv_tex", "body_html": str(article), "toc": toc, "stats": stats,
-              "styles": STYLES, "extra_head": "<style>" + STYLES + "</style>"}
+              "styles": STYLES + TABLE_STYLES, "extra_head": "<style>" + STYLES + TABLE_STYLES + "</style>"}
     (build_dir / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     return result

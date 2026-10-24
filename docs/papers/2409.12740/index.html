@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / HLLM</div><h1>HLLM：利用分层大语言模型进行物品与用户建模，增强序列推荐</h1><p class="paper-original-title">HLLM: Enhancing Sequential Recommendations via Hierarchical Large Language Models for Item and User Modeling</p>
@@ -451,7 +464,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <section class="ltx_subsection" id="S4.SSx1">
 <h3 class="ltx_title ltx_title_subsection">数据集与评估设置</h3>
 <figure class="ltx_table" id="S4.T1">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Dataset</th>
@@ -486,14 +499,14 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_nopad_r ltx_align_right ltx_border_bb">10,053,086</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 1: </span>PixelRec和Amazon Book Reviews的统计信息。</figcaption>
 </figure>
 <div class="ltx_para" id="S4.SSx1.p1">
 <p class="ltx_p">对于离线实验，我们在两个大规模数据集上评估HLLM：PixelRec（包括三个子集：200K、1M和8M）<cite class="ltx_cite ltx_citemacro_cite">Cheng<span class="ltx_text ltx_bib_etal"> et al.</span> (<a class="ltx_ref" href="#bib.bib13" title="An image dataset for benchmarking recommender systems with raw pixels">2024</a>)</cite>，以及Amazon Book Reviews（Books）<cite class="ltx_cite ltx_citemacro_cite">McAuley<span class="ltx_text ltx_bib_etal"> et al.</span> (<a class="ltx_ref" href="#bib.bib15" title="Image-based recommendations on styles and substitutes">2015</a>)</cite>。与先前工作<cite class="ltx_cite ltx_citemacro_cite">Cheng<span class="ltx_text ltx_bib_etal"> et al.</span> (<a class="ltx_ref" href="#bib.bib13" title="An image dataset for benchmarking recommender systems with raw pixels">2024</a>); Zhai<span class="ltx_text ltx_bib_etal"> et al.</span> (<a class="ltx_ref" href="#bib.bib16" title="Actions speak louder than words: trillion-parameter sequential transducers for generative recommendations">2024</a>)</cite>一致，我们采用相同的数据预处理和评估协议以确保公平比较。表<a class="ltx_ref" href="#S4.T1" title="Table 1 ‣ Datasets and Evaluation Setup ‣ 4 Experiments ‣ HLLM: Enhancing Sequential Recommendations via Hierarchical Large Language Models for Item and User Modeling"><span class="ltx_text ltx_ref_tag">1</span></a>和图<a class="ltx_ref" href="#A2.F5" title="Figure 5 ‣ Parameters of Item LLM and User LLM ‣ Appendix B Scaling Up of HLLM on Industrial Dataset ‣ HLLM: Enhancing Sequential Recommendations via Hierarchical Large Language Models for Item and User Modeling"><span class="ltx_text ltx_ref_tag">5</span></a>给出了这些数据集经过预处理后更详细的分析。我们采用留一法将数据划分为训练集、验证集和测试集。性能使用Recall@K（R@K）和NDCG@K（N@K）指标进行衡量。所有开源数据集仅用于离线实验中的训练和评估。</p>
 </div>
 <figure class="ltx_table" id="S4.T2">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Item LLM</th>
@@ -538,7 +551,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_nopad_r ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">3.100</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 2: </span>在Pixel200K上使用HLLM-1B进行预训练的消融研究。</figcaption>
 </figure>
 </section>
@@ -564,7 +577,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <section class="ltx_subsection" id="S4.SSx3">
 <h3 class="ltx_title ltx_title_subsection">预训练与微调（RQ1）</h3>
 <figure class="ltx_table" id="S4.T3">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">#Tokens</th>
@@ -626,11 +639,11 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_nopad_r ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">52.99</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 3: </span>不同预训练token数量对Pixel200K上HLLM-1B的影响。“+chat”表示在对话数据上进行SFT。CSR指标是常识推理任务上的平均性能。</figcaption>
 </figure>
 <figure class="ltx_table" id="S4.T4">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Item LLM</th>
@@ -674,7 +687,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_nopad_r ltx_align_left ltx_border_bb ltx_border_t">1.640</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 4: </span>在Pixel200K上使用HLLM-1B进行微调的消融研究。</figcaption>
 </figure>
 <div class="ltx_para" id="S4.SSx3.p1">
@@ -687,7 +700,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <section class="ltx_subsection" id="S4.SSx4">
 <h3 class="ltx_title ltx_title_subsection">扩展规模（RQ2）</h3>
 <figure class="ltx_table" id="S4.T5">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Item Model</th>
@@ -724,11 +737,11 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_nopad_r ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">2.883</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 5: </span>在Pixel200K上使用不同大小物品模型的实验。所有实验均使用SASRec作为用户模型。</figcaption>
 </figure>
 <figure class="ltx_table" id="S4.T6">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">User Model</th>
@@ -765,7 +778,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_nopad_r ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">2.940</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 6: </span>在Pixel200K上使用不同规模用户模型进行的实验。Llama-2L保持与Llama相同的架构，但仅使用2个解码器层。所有实验均使用TinyLlama-1.1B作为物品模型。所有用户模型均从头开始训练。</figcaption>
 </figure>
 <div class="ltx_para" id="S4.SSx4.p1">
@@ -798,7 +811,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3: </span>HLLM在不同数据规模下的性能实验。报告了Recall@5和NDCG@5。</figcaption>
 </figure>
 <figure class="ltx_table" id="S4.T7">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Dataset</th>
@@ -1010,7 +1023,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_align_right ltx_border_bb"><span class="ltx_text ltx_font_bold">+169.58%</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 7: </span>HLLM与SOTA模型的性能比较。<math alttext="\text{SASRec}_{\text{vit}}" class="ltx_Math" display="inline" id="S4.T7.m17"><semantics><msub><mtext>SASRec</mtext><mtext>vit</mtext></msub><annotation encoding="application/x-tex">\text{SASRec}_{\text{vit}}</annotation></semantics></math>表示SASRec使用ViT作为图像编码器进行物品编码，并使用来自<cite class="ltx_cite ltx_citemacro_cite">Cheng<span class="ltx_text ltx_bib_etal"> et al.</span> (<a class="ltx_ref" href="#bib.bib13" title="An image dataset for benchmarking recommender systems with raw pixels">2024</a>)</cite>的BCE损失进行训练。<math alttext="*" class="ltx_Math" display="inline" id="S4.T7.m18"><semantics><mo>∗</mo><annotation encoding="application/x-tex">*</annotation></semantics></math>表示结果由我们复现。
 <math alttext="\dagger" class="ltx_Math" display="inline" id="S4.T7.m19"><semantics><mo>†</mo><annotation encoding="application/x-tex">\dagger</annotation></semantics></math>表示负样本数量和批大小分别从512和128增加到28k和512。
 “Scratch”表示Item LLM和User LLM均从头开始训练。</figcaption>
@@ -1035,7 +1048,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <section class="ltx_subsection" id="S4.SSx6">
 <h3 class="ltx_title ltx_title_subsection">训练与服务效率（RQ4）</h3>
 <figure class="ltx_table" id="S4.T8">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Method</th>
@@ -1068,7 +1081,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_nopad_r ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">3.524</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 8: </span>物品缓存有效性的实验。<math alttext="\text{HLLM-1B}_{\text{cache}}" class="ltx_Math" display="inline" id="S4.T8.m3"><semantics><msub><mtext>HLLM-1B</mtext><mtext>cache</mtext></msub><annotation encoding="application/x-tex">\text{HLLM-1B}_{\text{cache}}</annotation></semantics></math>利用预训练的Item HLLM提取物品特征，但参数被冻结。</figcaption>
 </figure>
 <div class="ltx_para" id="S4.SSx6.p1">
@@ -1594,7 +1607,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <figure class="ltx_table" id="A1.T9">
 <div class="ltx_flex_figure ltx_flex_table">
 <div class="ltx_flex_cell ltx_flex_size_1">
-<table class="ltx_tabular ltx_centering ltx_figure_panel ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_figure_panel ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Tag</th>
@@ -1647,11 +1660,11 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">5.581</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
 <div class="ltx_flex_break"></div>
 <div class="ltx_flex_cell ltx_flex_size_1">
-<table class="ltx_tabular ltx_centering ltx_figure_panel ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_figure_panel ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Tag</th>
@@ -1704,7 +1717,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">3.099</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
 </div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 9: </span>在Pixel200K上关于文本长度与丰富度的消融研究。</figcaption>
@@ -1717,7 +1730,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <section class="ltx_subsection" id="A1.SSx2">
 <h3 class="ltx_title ltx_title_subsection">Item LLM特征提取方法</h3>
 <figure class="ltx_table" id="A1.T10">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Method</th>
@@ -1744,7 +1757,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_nopad_r ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">2.883</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 10: </span>在Pixel200K上关于Item LLM特征提取方法的消融研究。平均池化是指使用Item LLM最后一层隐藏状态的平均池化作为物品特征。SASRec用作用户模型。</figcaption>
 </figure>
 <div class="ltx_para" id="A1.SSx2.p1">
@@ -1761,7 +1774,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <figure class="ltx_table" id="A1.T11">
 <div class="ltx_flex_figure ltx_flex_table">
 <div class="ltx_flex_cell ltx_flex_size_2">
-<table class="ltx_tabular ltx_centering ltx_figure_panel ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_figure_panel ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_th_row ltx_border_tt">Length</th>
@@ -1794,10 +1807,10 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">28.959</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
 <div class="ltx_flex_cell ltx_flex_size_2">
-<table class="ltx_tabular ltx_centering ltx_figure_panel ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_figure_panel ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_th_row ltx_border_tt">Length</th>
@@ -1830,13 +1843,13 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">8.119</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
 </div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 11: </span>在Pixel1M上关于User LLM序列长度的实验。</figcaption>
 </figure>
 <figure class="ltx_table" id="A1.T12">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Input Features</th>
@@ -1876,7 +1889,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">4.770</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 12: </span>在Pixel1M上关于User LLM输入特征的消融研究。LLM Emb表示使用Item LLM基于文本描述提取的物品特征。</figcaption>
 </figure>
 </section>
@@ -1906,7 +1919,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <p class="ltx_p">抖音拥有海量的用户和推荐候选，并积累了丰富的用户行为记录。我们构建了一个包含 30 百万个样本的数据集，样本来自过去 3 年的日志。每个样本仅包含用户的历史点击序列、目标物品，以及一个表示该物品是否被点击的标签。我们在判别式推荐系统中验证 HLLM 的有效性，使用 AUC 作为评价指标，并从两个方面验证其可扩展性：User LLM 的序列长度，以及 Item LLM 和 User LLM 的参数规模。</p>
 </div>
 <figure class="ltx_table" id="A2.T13">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Sequence Length</th>
@@ -1927,11 +1940,11 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">0.7458</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 13: </span>在工业数据集上关于 User LLM 序列长度的实验。</figcaption>
 </figure>
 <figure class="ltx_table" id="A2.T14">
-<table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
 <thead class="ltx_thead">
 <tr class="ltx_tr">
 <th class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_border_tt">Item LLM</th>
@@ -1961,7 +1974,7 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 <td class="ltx_td ltx_align_left ltx_border_bb"><span class="ltx_text ltx_font_bold">0.7533</span></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 14: </span>在工业数据集上使用不同规模 Item LLM 和 User LLM 的实验。</figcaption>
 </figure>
 <section class="ltx_subsection" id="A2.SSx1">
@@ -2133,6 +2146,72 @@ HLLM由两个参数不共享的LLM组成：Item LLM和User LLM。Item LLM以物�
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});

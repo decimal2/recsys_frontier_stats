@@ -116,7 +116,7 @@ li{margin:5px 0}
 .paper-toc a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
 .paper-toc .toc-level-2{padding-left:12px}.paper-toc .toc-level-3{padding-left:24px}
 .paper-fulltext{min-width:0;font-size:17px;line-height:1.9;overflow-wrap:anywhere}
-.paper-fulltext p{margin:0 0 1em;text-align:justify}
+.paper-fulltext p{margin:0 0 1em;text-align:start}
 .paper-fulltext h2,.paper-fulltext h3,.paper-fulltext h4,.paper-fulltext h5{display:block;color:var(--ink);text-transform:none;letter-spacing:0;line-height:1.5;margin:1.7em 0 .8em;scroll-margin-top:20px}
 .paper-fulltext h2{font-size:24px}.paper-fulltext h3{font-size:21px}.paper-fulltext h4{font-size:18px}
 .paper-fulltext [id]{scroll-margin-top:24px}
@@ -124,7 +124,7 @@ li{margin:5px 0}
 .paper-fulltext :target{outline:2px solid var(--accent);outline-offset:5px}
 .paper-fulltext figure{margin:24px 0;overflow-x:auto;text-align:center}
 .paper-fulltext figure img{max-width:100%;height:auto;background:white;vertical-align:middle}
-.paper-fulltext figure a{display:block}
+.paper-fulltext figure a:has(img){display:block}
 .paper-fulltext .paper-caption,.paper-fulltext figcaption{font-size:14px;line-height:1.7;text-align:left;color:var(--muted);margin:8px 0 16px}
 .paper-fulltext .paper-equation{padding:8px 0}
 .paper-fulltext .paper-equation img{max-height:240px;width:auto;max-width:100%}
@@ -139,9 +139,9 @@ li{margin:5px 0}
 .paper-entry h2{display:block;font-size:21px;margin:6px 0}
 .paper-entry .original{display:block;margin-bottom:12px}
 .paper-entry .paper-actions{margin-bottom:0}
-.paper-library-filters{display:flex;gap:12px;align-items:start;margin:24px 0 0}
-.paper-library-filters input{margin:0;flex:1;min-width:0}
-.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:40%}
+.paper-library-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin:24px 0 0}
+.paper-library-filters input{margin:0;flex:1 1 280px;min-width:0}
+.paper-library-filters select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;max-width:100%}
 @media(max-width:800px){
  .paper-reading-layout{display:block;margin-top:20px}
  .paper-toc{position:static;max-height:none;overflow:visible;border:1px solid var(--line);padding:10px 14px;margin-bottom:24px;border-radius:8px}
@@ -149,6 +149,7 @@ li{margin:5px 0}
  .paper-fulltext{font-size:16px;line-height:1.9}
  .paper-fulltext h2{font-size:22px}.paper-fulltext h3{font-size:19px}
  .paper-reader h1{font-size:26px}
+ .paper-library-filters select{flex:1;min-width:0}
 }
 @media print{.paper-toc,.paper-actions,.site-nav,.paper-bottom{display:none}.paper-reading-layout{display:block}.paper-fulltext{font-size:11pt}}
 </style><style>
@@ -197,6 +198,18 @@ li{margin:5px 0}
 .tex-paper .ltx_item{margin:8px 0}.tex-paper .ltx_itemize,.tex-paper .ltx_enumerate{padding-left:1.5em}
 .tex-paper .ltx_tag{margin-right:.35em}
 .tex-paper [id]{scroll-margin-top:24px}
+</style><style>
+.paper-fulltext .ltx_p:not(.ltx_align_center):not(.ltx_align_right){text-align:start}
+.paper-fulltext math{overflow-wrap:normal;word-break:normal;white-space:nowrap}
+.paper-fulltext .tex-inline-math-scroll{display:block;max-width:100%;overflow-x:auto;margin:.35em 0;padding:2px 0}
+
+.paper-fulltext .paper-table-layout{display:block;max-width:100%;min-width:0}
+.paper-fulltext .paper-table-scroll{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;margin:12px 0;padding:2px 0}
+.paper-fulltext .paper-table-scroll>.ltx_tabular{display:table;width:auto;max-width:none;overflow:visible;table-layout:auto;margin:0 auto}
+.paper-fulltext .ltx_tabular,.paper-fulltext .ltx_tabular td,.paper-fulltext .ltx_tabular th{overflow-wrap:normal;word-break:normal}
+.paper-fulltext figure.ltx_table{overflow:visible}
+.paper-fulltext figure.ltx_table a{display:inline}
+.paper-fulltext .ltx_tabular .ltx_tabular{margin:0 auto}
 </style></head><body class="paper-reader">
 <header><a class="brand" href="../../index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="../../daily/index.html">日报</a><a href="../../papers/index.html" aria-current="page">论文阅读</a></nav></header>
 <main><div class="eyebrow">PAPER LIBRARY / GRPO / DeepSeekMath</div><h1>DeepSeekMath：突破开放语言模型的数学推理极限</h1><p class="paper-original-title">DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models</p>
@@ -516,11 +529,11 @@ DeepSeekMath-Base 展现出强大的少样本自动形式化性能。</p>
 我们将学习率的最大值设为 5.3e-4，并使用 4M 词元的批大小和 4K 的上下文长度。</p>
 </div>
 <figure class="ltx_table" id="S2.T1">
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:137.1pt;vertical-align:-0.9pt;"><div class="ltx_transformed_inner" style="transform:translate(-21.0pt,6.6pt) scale(0.91158,0.91158) ;">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<div class="ltx_inline-block ltx_transformed_outer" style="width:475.7pt;height:150.4pt;vertical-align:-1.0pt;"><div class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<table class="ltx_tabular ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;">Math Corpus</td>
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;">Size</td>
@@ -608,7 +621,7 @@ DeepSeekMath-Base 展现出强大的少样本自动形式化性能。</p>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">41.5%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">5.9%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">23.6%</span></td></tr>
-</table></div>
+</table></div></div>
 </div></div></div>
 </div></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 1: </span>
@@ -677,11 +690,11 @@ DeepSeekMath 语料的规模是现有数学语料的数倍。
 值得注意的是，在竞赛级别的 MATH 数据集上，DeepSeekMath-Base 以超过 10% 个绝对百分点的优势超越现有开源基础模型，并且优于 Minerva 540B <cite class="ltx_cite ltx_citemacro_citep">(Lewkowycz<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib22" title="Solving quantitative reasoning problems with language models">2022a</a>)</cite>——后者是一个规模大 77 倍的闭源基础模型，基于 PaLM <cite class="ltx_cite ltx_citemacro_citep">(Lewkowycz<span class="ltx_text ltx_bib_etal"> et al.</span>, <a class="ltx_ref" href="#bib.bib10" title="Solving quantitative reasoning problems with language models">2022b</a>)</cite> 构建并进一步在数学文本上训练。</p>
 </div>
 <figure class="ltx_table" id="S2.T2">
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:200.3pt;vertical-align:-0.9pt;"><div class="ltx_transformed_inner" style="transform:translate(-23.9pt,11.0pt) scale(0.90085,0.90085) ;">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<div class="ltx_inline-block ltx_transformed_outer" style="width:481.3pt;height:222.4pt;vertical-align:-1.0pt;"><div class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<table class="ltx_tabular ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;">Model</td>
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_rowspan ltx_rowspan_3" rowspan="3" style="padding-left:3.0pt;padding-right:3.0pt;">Size</td>
@@ -795,7 +808,7 @@ DeepSeekMath 语料的规模是现有数学语料的数倍。
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">71.7%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">20.3%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">35.3%</span></td></tr>
-</table></div>
+</table></div></div>
 </div></div></div>
 </div></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 2: </span>
@@ -814,7 +827,7 @@ Minerva 的结果引自 <cite class="ltx_cite ltx_citemacro_cite">Lewkowycz<span
 如表 <a class="ltx_ref" href="#S2.T3" title="Table 3 ‣ Mathematical Problem Solving with Tool Use ‣ 2.3 Training and Evaluating DeepSeekMath-Base 7B ‣ 2 Math Pre-Training ‣ DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models"><span class="ltx_text ltx_ref_tag">3</span></a> 所示，DeepSeekMath-Base 7B 优于此前最先进的 Llemma 34B。</p>
 </div>
 <figure class="ltx_table" id="S2.T3">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Model</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Size</span></td>
@@ -875,7 +888,7 @@ Minerva 的结果引自 <cite class="ltx_cite ltx_citemacro_cite">Lewkowycz<span
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">25.8%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold" style="font-size:90%;">24.6%</span></td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 3: </span>
 对基础模型使用工具求解数学问题以及进行非形式化到形式化定理证明（在 Isabelle 中）能力的少样本评估。
 </figcaption>
@@ -891,7 +904,7 @@ Minerva 的结果引自 <cite class="ltx_cite ltx_citemacro_cite">Lewkowycz<span
 如表 <a class="ltx_ref" href="#S2.T3" title="Table 3 ‣ Mathematical Problem Solving with Tool Use ‣ 2.3 Training and Evaluating DeepSeekMath-Base 7B ‣ 2 Math Pre-Training ‣ DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models"><span class="ltx_text ltx_ref_tag">3</span></a> 所示，DeepSeekMath-Base 7B 在证明自动形式化方面展现出强劲的表现。</p>
 </div>
 <figure class="ltx_table" id="S2.T4">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Model</span></td>
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">Size</span></td>
@@ -934,7 +947,7 @@ Minerva 的结果引自 <cite class="ltx_cite ltx_citemacro_cite">Lewkowycz<span
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">40.9%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">52.6%</span></td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 4: </span>
 在自然语言理解、推理和代码基准上的评估。
 DeepSeek-Coder-Base-v1.5<sup class="ltx_sup"><math alttext="{\dagger}" class="ltx_Math" display="inline" id="S2.T4.m3"><semantics><mo>†</mo><annotation encoding="application/x-tex">{\dagger}</annotation></semantics></math></sup> 是学习率衰减前一刻的检查点，用于训练 DeepSeekMath-Base。
@@ -1037,9 +1050,9 @@ DeepSeek-Coder-Base-v1.5<sup class="ltx_sup"><math alttext="{\dagger}" class="lt
 </div>
 <figure class="ltx_table" id="S3.T5">
 <div class="ltx_p ltx_align_center">
-<div class="ltx_inline-block ltx_transformed_outer" style="width:322.0pt;height:612pt;vertical-align:-0.0pt;"><div class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<table class="ltx_tabular ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;">Model</td>
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;">Size</td>
@@ -1244,7 +1257,7 @@ DeepSeek-Coder-Base-v1.5<sup class="ltx_sup"><math alttext="{\dagger}" class="lt
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">58.8%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">78.4%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">87.6%</span></td></tr>
-</table></div>
+</table></div></div>
 </div></div></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 5: </span>
 开源与闭源模型在英文和中文基准上同时采用思维链与工具集成推理时的性能。
@@ -1545,11 +1558,11 @@ index(1)},\cdots,r_{G}^{index(K_{G})}\}\}</annotation></semantics></math>，其�
 </ul>
 </div>
 <figure class="ltx_table" id="S5.T6">
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:166.5pt;vertical-align:-0.8pt;"><div class="ltx_transformed_inner" style="transform:translate(-42.3pt,16.2pt) scale(0.83686,0.83686) ;">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<div class="ltx_inline-block ltx_transformed_outer" style="width:518.2pt;height:199pt;vertical-align:-1.0pt;"><div class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<table class="ltx_tabular ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;">Training Setting</td>
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_colspan ltx_colspan_3" colspan="3" style="padding-left:3.0pt;padding-right:3.0pt;">Training Tokens</td>
@@ -1638,7 +1651,7 @@ index(1)},\cdots,r_{G}^{index(K_{G})}\}\}</annotation></semantics></math>，其�
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;">36.3%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">19.7%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">13.5%</span></td></tr>
-</table></div>
+</table></div></div>
 </div></div></div>
 </div></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 6: </span>
@@ -1647,11 +1660,11 @@ index(1)},\cdots,r_{G}^{index(K_{G})}\}\}</annotation></semantics></math>，其�
 </figcaption>
 </figure>
 <figure class="ltx_table" id="S5.T7">
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:176.6pt;vertical-align:-0.9pt;"><div class="ltx_transformed_inner" style="transform:translate(-27.6pt,11.2pt) scale(0.88718,0.88718) ;">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<div class="ltx_inline-block ltx_transformed_outer" style="width:488.8pt;height:199pt;vertical-align:-1.0pt;"><div class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<table class="ltx_tabular ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;">Training Setting</td>
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_colspan ltx_colspan_3" colspan="3" style="padding-left:3.0pt;padding-right:3.0pt;">Training Tokens</td>
@@ -1730,7 +1743,7 @@ index(1)},\cdots,r_{G}^{index(K_{G})}\}\}</annotation></semantics></math>，其�
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">35.6%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text ltx_font_bold">29.3%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb ltx_border_t" style="padding-left:3.0pt;padding-right:3.0pt;">39.4%</td></tr>
-</table></div>
+</table></div></div>
 </div></div></div>
 </div></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 7: </span>
@@ -1759,11 +1772,11 @@ index(1)},\cdots,r_{G}^{index(K_{G})}\}\}</annotation></semantics></math>，其�
 一种推测是，DeepSeek-LLM 1.3B 由于规模有限，缺乏同时充分吸收代码数据和数学数据的能力。</p>
 </div>
 <figure class="ltx_table" id="S5.T8">
-<div class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:122.4pt;vertical-align:-0.7pt;"><div class="ltx_transformed_inner" style="transform:translate(-81.3pt,22.8pt) scale(0.72719,0.72719) ;">
+<div class="ltx_inline-block ltx_align_center ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<div class="ltx_inline-block ltx_transformed_outer" style="width:596.3pt;height:168.4pt;vertical-align:-1.0pt;"><div class="ltx_transformed_inner" style="transform:translate(0.0pt,0.0pt) scale(1,1) ;">
+<div class="ltx_inline-block ltx_transformed_outer paper-table-layout"><div class="ltx_transformed_inner paper-table-layout">
 <div class="ltx_p">
-<table class="ltx_tabular ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;">Model</td>
 <td class="ltx_td ltx_align_left ltx_border_tt ltx_rowspan ltx_rowspan_2" rowspan="2" style="padding-left:3.0pt;padding-right:3.0pt;">Size</td>
@@ -1861,7 +1874,7 @@ index(1)},\cdots,r_{G}^{index(K_{G})}\}\}</annotation></semantics></math>，其�
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;">42.6%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;">7.6%</td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;">24.8%</td></tr>
-</table></div>
+</table></div></div>
 </div></div></div>
 </div></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 8: </span>
@@ -1870,7 +1883,7 @@ index(1)},\cdots,r_{G}^{index(K_{G})}\}\}</annotation></semantics></math>，其�
 </figcaption>
 </figure>
 <figure class="ltx_table" id="S5.T9">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">ArXiv Corpus</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">miniF2F-valid</span></td>
@@ -1891,7 +1904,7 @@ index(1)},\cdots,r_{G}^{index(K_{G})}\}\}</annotation></semantics></math>，其�
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">14.8%</span></td>
 <td class="ltx_td ltx_align_center ltx_border_bb" style="padding-left:3.0pt;padding-right:3.0pt;"><span class="ltx_text" style="font-size:90%;">11.9%</span></td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 9: </span>
 数学训练对不同 arXiv 语料库的影响，基础模型为 DeepSeek-Coder-Base-v1.5 7B。
 我们评估在 Isabelle 中的非形式到形式证明。
@@ -1989,7 +2002,7 @@ _{t}|q,o_{&lt;t})\right).</annotation></semantics></math></td>
 3）<span class="ltx_text ltx_font_italic">算法<math alttext="\mathcal{A}" class="ltx_Math" display="inline" id="S5.SS2.SSS1.p1.m4"><semantics><mi class="ltx_font_mathcaligraphic">𝒜</mi><annotation encoding="application/x-tex">\mathcal{A}</annotation></semantics></math></span>：它将训练数据和奖励信号处理为梯度系数 <math alttext="GC" class="ltx_Math" display="inline" id="S5.SS2.SSS1.p1.m5"><semantics><mrow><mi>G</mi><mo>⁢</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">GC</annotation></semantics></math>，该系数决定对数据的惩罚或强化幅度。我们基于这一统一范式分析了几种代表性方法：</p>
 </div>
 <figure class="ltx_table" id="S5.T10">
-<table class="ltx_tabular ltx_centering ltx_align_middle">
+<div aria-label="可横向滚动的论文表格" class="paper-table-scroll" role="region" tabindex="0"><table class="ltx_tabular ltx_centering ltx_align_middle">
 <tr class="ltx_tr">
 <td class="ltx_td ltx_align_left ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Methods</span></td>
 <td class="ltx_td ltx_align_center ltx_border_tt"><span class="ltx_text ltx_font_bold" style="font-size:90%;">Data Source</span></td>
@@ -2052,7 +2065,7 @@ _{t}|q,o_{&lt;t})\right).</annotation></semantics></math></td>
 <span class="ltx_text" style="font-size:90%;">Equation </span><a class="ltx_ref" href="#A1.E21" style="font-size:90%;" title="In A.1.6 Group Relative Policy Optimization (GRPO) ‣ A.1 Analysis of Reinforcement Learning ‣ Appendix A Appendix ‣ DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models"><span class="ltx_text ltx_ref_tag">21</span></a>
 </td>
 </tr>
-</table>
+</table></div>
 <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 10: </span>不同方法的数据来源与梯度系数。<math alttext="P_{sft}" class="ltx_Math" display="inline" id="S5.T10.m15"><semantics><msub><mi>P</mi><mrow><mi>s</mi><mo>⁢</mo><mi>f</mi><mo>⁢</mo><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">P_{sft}</annotation></semantics></math> 表示监督微调数据集的数据分布。<math alttext="\pi_{\theta_{sft}}" class="ltx_Math" display="inline" id="S5.T10.m16"><semantics><msub><mi>π</mi><msub><mi>θ</mi><mrow><mi>s</mi><mo>⁢</mo><mi>f</mi><mo>⁢</mo><mi>t</mi></mrow></msub></msub><annotation encoding="application/x-tex">\pi_{\theta_{sft}}</annotation></semantics></math> 和 <math alttext="\pi_{\theta}" class="ltx_Math" display="inline" id="S5.T10.m17"><semantics><msub><mi>π</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\pi_{\theta}</annotation></semantics></math> 分别表示在线训练过程中的监督微调模型和实时策略模型。</figcaption>
 </figure>
 <div class="ltx_para" id="S5.SS2.SSS1.p2">
@@ -3189,6 +3202,72 @@ t})}-1\right)\right]\nabla_{\theta}\log\pi_{\theta}(o_{i,t}|q,o_{i,&lt;t}).\end{
 const tocPanel=document.querySelector('.paper-toc');
 if(window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;
 tocPanel.addEventListener('click',e=>{if(e.target.closest('a')&&window.matchMedia('(max-width:800px)').matches) tocPanel.open=false;});
+</script><script>
+(() => {
+  function initializeReadingMath() {
+    const article = document.querySelector('article.paper-fulltext');
+    if (!article || article.dataset.readingMathInitialized) return;
+    article.dataset.readingMathInitialized = 'true';
+    const formulas = [...article.querySelectorAll('math:not([display="block"])')]
+      .filter(math => !math.closest('table, .ltx_tabular, .ltx_equation, .ltx_listing, pre, code, svg'));
+    let queued = false;
+
+    function update() {
+      queued = false;
+      for (const math of formulas) {
+        const paragraph = math.closest('.ltx_p, .paper-paragraph, p, li') || article;
+        const style = getComputedStyle(paragraph);
+        const available = paragraph.clientWidth
+          - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+        if (available <= 0) continue;
+        const wrapper = math.parentElement?.matches('[data-reading-math-scroll]')
+          ? math.parentElement : null;
+        const tooWide = math.getBoundingClientRect().width > available + 2;
+        if (tooWide && !wrapper) {
+          const scroller = document.createElement('span');
+          scroller.className = 'tex-inline-math-scroll';
+          scroller.dataset.readingMathScroll = 'true';
+          scroller.tabIndex = 0;
+          scroller.setAttribute('role', 'group');
+          scroller.setAttribute('aria-label', '公式可横向滚动');
+          math.before(scroller);
+          scroller.append(math);
+        } else if (!tooWide && wrapper) {
+          wrapper.replaceWith(...wrapper.childNodes);
+        }
+      }
+    }
+
+    function schedule() {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    let previousWidth = article.getBoundingClientRect().width;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        const width = article.getBoundingClientRect().width;
+        if (Math.abs(width - previousWidth) > 0.5) {
+          previousWidth = width;
+          schedule();
+        }
+      }).observe(article);
+    }
+    window.addEventListener('resize', schedule, {passive: true});
+    if (document.fonts) {
+      document.fonts.ready.then(schedule);
+      document.fonts.addEventListener?.('loadingdone', schedule);
+    }
+    schedule();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReadingMath, {once: true});
+  } else {
+    initializeReadingMath();
+  }
+})();
 </script></main>
 <script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
  const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
