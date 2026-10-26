@@ -1,0 +1,117 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-10-26</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-10-26</h1><div class="metrics"><div><strong>1</strong>全文解读</div><div><strong>1</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><p class="muted">本期没有足够的跨论文证据生成趋势判断。</p></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2610.32326">TGR-EvoDAG：面向腾讯生成式推荐的基于 DAG 的多智能体代码进化框架</a><span>把 GR 代码进化建成 Code DAG，用阶段成本规划与下游协同适配，在 Amazon 和腾讯线上验证。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>重点论文 · 全文 insight</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2610.32326" data-search="TGR-EvoDAG: A DAG-based Multi-Agent Code Evolution Framework for Generative Recommendation on Tencent TGR-EvoDAG：面向腾讯生成式推荐的基于 DAG 的多智能体代码进化框架 Tencent Tencent">
+<div class="paper-meta"><span class="pill">Tencent</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>TGR-EvoDAG：面向腾讯生成式推荐的基于 DAG 的多智能体代码进化框架</h3><a class="original" href="https://arxiv.org/abs/2610.32326" target="_blank" rel="noopener noreferrer">TGR-EvoDAG: A DAG-based Multi-Agent Code Evolution Framework for Generative Recommendation on Tencent ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-23（UTC）</p><p class="reason">有完整 GR pipeline 自动进化、阶段成本规划和腾讯线上 A/B 结果，适合关注 LLM agent 做推荐算法迭代、生成式推荐落地的工程师；但方法偏框架与 agent 编排，单模型细节较少。</p>
+<h4>研究问题</h4><p>论文研究如何用 LLM agent 自动进化生成式推荐（GR）的完整代码管线。现有通用代码进化搜索强但缺推荐领域反馈，推荐专用进化有诊断反馈却多为线性/贪心搜索；直接拼接在 tokenization→预训练→对齐的级联 GR 上会因阶段重训成本不对称和上游改动延迟收益而失效。</p><h4>核心方法</h4><p>TGR-EvoDAG 把代码进化历史组织成 Code DAG，用 Explore/Mutate/Merge 三种算子保留多分支并合并互补创新；每轮由 Operator Selector、Architect-Critic、Coder-Reviewer、Distiller、Pruner 等 LLM agent 通过结构化记录协作。关键改动有两点：节点记录编辑触及的阶段与实际 GPU-hour，Operator Selector 据此做 stage-aware 成本规划；Pruner 对因上游改动导致暂时回退的节点打 [Needs-Downstream-Adaptation] 标签，冻结上游并调度下游再适配，而不是直接剪枝。</p>
+<h4>实验结果</h4><ul><li>Table 1 报告 TGR-EvoDAG 的 test Hit@10=0.0869、Hit@20=0.1389、NDCG@10=0.0478、NDCG@20=0.0609。</li><li>相对最强非进化基线 APAO，离线指标最高提升 37.4%，Agent4Rec 模拟用户满意度提升 19.7%。</li><li>在腾讯大规模商业媒体平台的工业部署离线评估中，进化后的 GR 相对提升 Hit@1 12.16%。</li><li>线上 CTR 提升 0.40%，原文称统计显著；摘要未说明该 0.40% 是相对还是绝对口径。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>级联 GR 的搜索预算应按阶段重训成本调度，而不是按迭代次数均分；先让较便宜的下游成熟，再择机重训 tokenizer，可避免预算被上游吞掉。适用于 tokenizer→预训练→对齐这类多阶段训练管线。</li><li>上游改动短期掉点不一定应剪枝；保留节点并强制下游 co-adaptation 可能释放延迟收益，前提是有诊断信号判断这是兼容性问题而非不可恢复崩溃。</li><li>通用搜索加领域诊断还不等于最优，DAG 多分支合并与成本规划是额外增益来源；工业团队若已有诊断工具，应优先补搜索拓扑和预算路由。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>分析者判断：进化实验主战场是 Amazon Office 这一较小数据集，统一预算 24 GPU-hour；更大数据、更长搜索预算下是否仍优于手工管线未知。</li><li>分析者判断：线上仅在腾讯媒体平台以新增召回通道做 A/B，系统 CTR +0.40% 的绝对/相对口径摘要未明示，长期生态与多业务泛化未验证。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>级联生成式推荐自动进化的关键：搜索拓扑与重训成本协同</h3><p>从该样本看，TGR-EvoDAG 的关键特点是：让 LLM 参与代码进化，并把进化历史组织成 Code DAG，使 Explore、Mutate、Merge 三种算子能保留多分支并合并互补改动。论文中的取舍在于：更丰富的搜索拓扑能提高发现延迟收益的机会，但在级联管线中，tokenizer 等上游编辑会触发全管线重训，成本远高于下游架构调整。因此，论文用 GPU-hour 和编辑触及的阶段做预算路由，并用上游冻结、下游再适配标签替代立即剪枝。工程上可借鉴（推断）：先建立阶段级成本账本，再分配探索预算；对短期回退但可诊断的节点，保留并让下游协同适配，避免因贪心丢弃；同时监控语义 ID 冲突等分布信号，避免把兼容性问题误判为无效创新。该思路适合 tokenizer、预训练、对齐构成的多阶段系统，但前提是流水线可模块化重训、指标可归因。</p><div class="sources"><a href="#paper-2610.32326">TGR-EvoDAG：面向腾讯生成式推荐的基于 DAG 的多智能体代码进化框架</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

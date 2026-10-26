@@ -169,7 +169,6 @@ def render_daily(payload, paper_links=None):
         message = (f"本期已完成 {len(items)} 篇工业界论文，最低要求 {coverage['minimum']} 篇，"
                    f"还差 {coverage['shortfall']} 篇。本期尚未完成，可重新运行 daily 继续补齐。")
         lines += [message, ""]
-        intro += '<aside class="notice">' + escape(message) + '</aside>'
     if not items:
         message = ("本次全文解读未完成，尚未生成论文总结。请查看运行日志后重试。" if payload["errors"]
                    else "本次没有可生成全文解读的论文。可以检查日期范围，或稍后重新检索。")
@@ -289,7 +288,8 @@ def edition_cards(editions, prefix=""):
         search_text = " ".join([item["paper"]["title"] + " " + item["insight"]["analysis"]["title_zh"]
                                 + " " + " ".join(item["companies"]) for item in edition["items"]] + teams)
         team_summary = " · ".join(teams[:4]) + (f" 等 {len(teams)} 家机构" if len(teams) > 4 else "")
-        cards.append(f'<a class="edition" href="{escape(prefix + edition["date"])}.html" data-search="{escape(search_text)}"><span class="eyebrow">{escape(edition["date"])}</span><h2>{len(edition["items"])} 篇全文解读</h2><p>{escape(titles)}</p><span class="muted">{escape(team_summary)} · {escape(edition["status"])}</span></a>')
+        status = "" if edition["status"] == "insufficient" else " · " + escape(edition["status"])
+        cards.append(f'<a class="edition" href="{escape(prefix + edition["date"])}.html" data-search="{escape(search_text)}"><span class="eyebrow">{escape(edition["date"])}</span><h2>{len(edition["items"])} 篇全文解读</h2><p>{escape(titles)}</p><span class="muted">{escape(team_summary)}{status}</span></a>')
     return cards
 
 

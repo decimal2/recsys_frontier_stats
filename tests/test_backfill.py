@@ -124,7 +124,7 @@ class BackfillTests(unittest.TestCase):
         self.assertEqual(again["pending"], 2)
         self.assertEqual(len(self.analyzed), 10)
 
-    def test_shortfall_is_visible_and_resume_keeps_old_insights_and_expanded_window(self):
+    def test_shortfall_stays_in_data_and_resume_keeps_old_insights_and_expanded_window(self):
         original = [self.paper(i) for i in range(3)]
         self.batches = [original, [], []]
         result = digest(self.args, self.config, self.connection)
@@ -133,7 +133,7 @@ class BackfillTests(unittest.TestCase):
         self.assertEqual(result["coverage"]["shortfall"], 2)
         self.assertEqual([s["since"].date().isoformat() for s in self.searches],
                          ["2026-10-15", "2026-10-08", "2026-09-22"])
-        self.assertIn("还差 2 篇", Path(result["html"]).read_text())
+        self.assertNotIn("还差 2 篇", Path(result["html"]).read_text())
         self.batches = [[self.paper(3, "2026-09-28"), self.paper(4, "2026-09-28")]]
         again = digest(self.args, self.config, self.connection)
         self.assertTrue(again["webpage_ready"])
