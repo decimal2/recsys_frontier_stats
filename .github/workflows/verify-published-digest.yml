@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - name: Verify published page hashes and removed note
+      - name: Verify October 26 and 27 pages, homepage and archive
         shell: bash
         run: |
           python3 - <<'PY'
           import hashlib, json, time, urllib.request
-          expected = {"2026-10-24.html":"c4d383ece28c038ac4d091a9f87504980de4452c0aeb219df60f773a0c9b0e36","2026-10-25.html":"d6ed4a62ecf27b89e756ad8d123131e05e72b434dd1e837dda2ca4669f8d10eb"}
+          expected = {"2026-10-26.html":"f38c165c47a8a09394ac033a936ae45b0815cad361c2a32daa7d53892c11df12","2026-10-27.html":"b481543d8215281ab8c581ab5b88b5e94f4341b07bc76a6d7c466d90602024b8","daily/index.html":"bb794dd9f99558df5045062693df0c93e30309b6a174e31e4240f23107f9363a","index.html":"a5e41bfac4f1b3ac48cf734f47154041c6919bd12d1bb46bce08a49d8da37865"}
           forbidden = '基于提取到的全文文字生成；图片未做视觉分析。解读由模型生成，数字与引用请结合原文确认。'
           results = []
           for path, sha256 in expected.items():
@@ -39,5 +39,5 @@ jobs:
                   if attempt < 11: time.sleep(10)
               else:
                   raise RuntimeError(url + ': ' + last_error)
-          print('PUBLISHED_DIGEST_REPORT ' + json.dumps({'status': 'passed', 'commit': 'd2516f01a7de04ba807c24e9a8739a88573d6b67', 'pages': results}))
+          print('PUBLISHED_DIGEST_REPORT ' + json.dumps({'status': 'passed', 'commit': '91068a8b79027742f91cc941c4449c094eef719a', 'pages': results}))
           PY
