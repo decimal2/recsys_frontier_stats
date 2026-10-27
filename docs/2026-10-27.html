@@ -1,0 +1,149 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-10-27</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-10-27</h1><div class="metrics"><div><strong>5</strong>全文解读</div><div><strong>5</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><article class="trend"><h3>样本观察：用结构复用替代单纯扩参</h3><p>基于当天5篇样本，HiRank在参数量不占优时依靠序列与特征token反复交互取得离线与线上增益；LoopGR用共享解码器/更新器循环增加有效深度并蒸馏压缩推理；DuoLM用离线物品向量、共享历史KV和CUDA Graph换吞吐。三者共同指向：在服务预算内，结构复用与计算路径重排比单纯加宽加深更值得优先验证，但需按线上时延与指标验收。</p><div class="sources"><a href="#paper-2610.35318">面向推荐系统的有效秩缩放统一异构特征交互</a> · <a href="#paper-2610.34157">LoopGR：通过循环深度实现生成式推荐的参数高效扩展</a> · <a href="#paper-2610.24481">DuoLM：基于语言模型的快速有效个性化推荐</a></div></article><article class="trend"><h3>样本观察：候选价值与访问状态的分层建模</h3><p>HGE指出容器级排序与物品级成交粒度不一致，把GTV拆为购买概率、数量和单价，并用残差融合处理稀疏；HiRank将CVR/多场景特征交互统一进排序主干；AMIE把检索记忆的持久抑制状态独立成可插拔层。本次样本中，价值预估和候选状态管理出现从单点打分转向分层/状态化建模的迹象，但AMIE并非推荐系统论文，迁移需谨慎。</p><div class="sources"><a href="#paper-2610.32420">分层GTV估计：弥合容器级排序与物品级转化之间的鸿沟</a> · <a href="#paper-2610.35318">面向推荐系统的有效秩缩放统一异构特征交互</a> · <a href="#paper-2610.34977">面向智能体的自适应记忆索引演化</a></div></article><article class="trend"><h3>样本观察：蒸馏与压缩必须带指标护栏</h3><p>LoopGR的RTSD把16-loop教师压到4-loop学生，batch=1延迟从211.08ms降至49.82ms，但这是离线测量；DuoLM用单向量替代物品文本并蒸馏，Books NDCG@10超教师，却可能损失HR@10且离线编码成本未计入吞吐；HiRank的场景压缩也以减少投影输入换效率。当天样本说明压缩可服务化，但需同时监控Top-K、校准和全链路成本。</p><div class="sources"><a href="#paper-2610.34157">LoopGR：通过循环深度实现生成式推荐的参数高效扩展</a> · <a href="#paper-2610.24481">DuoLM：基于语言模型的快速有效个性化推荐</a> · <a href="#paper-2610.35318">面向推荐系统的有效秩缩放统一异构特征交互</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2610.35318">面向推荐系统的有效秩缩放统一异构特征交互</a><span>HiRank 将门控序列建模、长期记忆检索和异构特征交互统一到同一 backbone，淘宝首页 A/B 人均订单 +2.27%。</span></li><li><a href="#paper-2610.32420">分层GTV估计：弥合容器级排序与物品级转化之间的鸿沟</a><span>美团HGE把容器级排序中的GTV估计拆成物品级转化、数量与价格，并用集合编码和残差融合；离线XAUC 0.8158，线上RPS +1.42%。</span></li><li><a href="#paper-2610.34157">LoopGR：通过循环深度实现生成式推荐的参数高效扩展</a><span>LoopGR 用共享解码器与轻量上下文更新器交替循环，在不显著增参下提升 SID 生成式推荐，并用轨迹自蒸馏压缩推理循环。</span></li><li><a href="#paper-2610.24481">DuoLM：基于语言模型的快速有效个性化推荐</a><span>DuoLM 用编码器 LLM 离线把物品压成单向量、排序 LLM 在线个性化打分，配合虚拟 ID、共享历史 KV 与 CUDA Graph，在单 H100 上以接近教师模型的质量实现最高约 60 倍吞吐。</span></li><li><a href="#paper-2610.34977">面向智能体的自适应记忆索引演化</a><span>把记忆索引的持久访问状态作为独立适配层，用检索反馈抑制反复干扰项，离线提升多类记忆系统的检索与下游指标。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>重点论文 · 全文 insight</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2610.35318" data-search="Unified Heterogeneous Feature Interaction via Effective-Rank Scaling for Recommender Systems 面向推荐系统的有效秩缩放统一异构特征交互 Alibaba Alibaba">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★★</span></div>
+<h3>面向推荐系统的有效秩缩放统一异构特征交互</h3><a class="original" href="https://arxiv.org/abs/2610.35318" target="_blank" rel="noopener noreferrer">Unified Heterogeneous Feature Interaction via Effective-Rank Scaling for Recommender Systems ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-26（UTC）</p><p class="reason">方法设计与工程部署信息密度高：统一序列/特征交互、长期记忆检索、场景压缩和请求级解耦变体，且报告淘宝生产数据离线对比、缩放实验与线上 A/B；适合评估是否引入类似统一排序 backbone。</p>
+<h4>研究问题</h4><p>工业推荐排序需在严格时延下同时建模异构特征交互、长期用户行为和跨场景依赖。现有架构常将序列与非序列特征分模块处理，限制双向信息交换；对全部语义 token 直接做同质 self-attention 又不适配序列/非序列信号的有效秩差异，共享表示还可能带来场景负迁移。</p><h4>核心方法</h4><p>HiRank 用统一 backbone 串联：主行为序列做门控 self-attention，候选 token 经共享 K/V 做 cross-attention；首层由主序列生成兴趣 query，并与候选条件 query 分别检索多组长期记忆；检索结果与语义特征 token 进行 head-wise mixing 和逐 token SwiGLU；末端用场景 query 压缩 token bank，再投影为多个 composite token 做高阶 attention。堆叠时交互输出回写主序列状态和下一层检索 query，形成双向耦合；另给出请求内共享用户侧计算的 user-item 解耦变体。</p>
+<h4>实验结果</h4><ul><li>在淘宝首页/主搜离线 CVR 上，HiRank 相对各自最强基线的 AUC 绝对提升为 0.0009/0.0005，GAUC 绝对提升为 0.0186/0.0009。</li><li>Table 2 中 HiRank 的首页 AUC/GAUC 为 0.9163/0.7801，主搜为 0.8764/0.6787；其 dense 参数 299.04M、前向 1.530 GFLOPs/候选。</li><li>消融中同时移除 token interaction 与 High-Rank Attention 造成最大降幅：AUC 降 0.0020、GAUC 降 0.0489。</li><li>淘宝首页线上 A/B 相对生产基线：PV +0.45%、Orders/u +2.27%、GMV/u +2.86%、DAC +2.13%（相对变化）。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>收益更像来自统一 backbone 中序列与特征 token 的反复双向交互，而非单纯堆参数：HiRank 默认 299.04M 参数低于多个 340M+ 基线，却在首页 GAUC 达 0.7801；工程上可优先尝试把特征交互输出回写序列状态/检索 query。</li><li>场景适配用场景 query 压缩共享 token bank 再投影为 composite token，属于软共享而非完全独立场景塔；在场景共享行为强、场景标签可靠时可能降低负迁移，但场景极异质时需线上验证。</li><li>长序列扩展比加宽/加深更值得优先扫：T=96 带来 +0.23 个百分点 AUC，而 width/depth 最多 +0.06 个百分点；但 GFLOPs 随序列增长，生产需结合截断、请求级共享和时延预算。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>论文未报告线上时延/吞吐的具体数值，也未给出 user-item 解耦变体的线上 A/B 结果；部署适用边界需按业务验证（分析者判断）。</li><li>主搜 PCOC 未优于最佳基线：Table 2 中 HiRank 为 0.9864，Improv. 为 -0.0048，说明校准收益并不全面。</li></ul></article><article class="paper" id="paper-2610.32420" data-search="Hierarchical GTV Estimation: Bridging the Gap between Container-Level Ranking and Item-Level Conversion 分层GTV估计：弥合容器级排序与物品级转化之间的鸿沟 Meituan Meituan">
+<div class="paper-meta"><span class="pill">Meituan</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>分层GTV估计：弥合容器级排序与物品级转化之间的鸿沟</h3><a class="original" href="https://arxiv.org/abs/2610.32420" target="_blank" rel="noopener noreferrer">Hierarchical GTV Estimation: Bridging the Gap between Container-Level Ranking and Item-Level Conversion ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-23（UTC）</p><p class="reason">工业问题真实且给出离线+线上A/B结果，PLL分解和RCEF融合可直接借鉴到GTV/GMV/多SKU价值排序；篇幅短，适合优先读方法、消融和线上实验部分。</p>
+<h4>研究问题</h4><p>直播电商和O2O广告按“容器”（直播间/门店）排序，但成交发生在容器内动态物品集上，形成排序粒度与成交粒度不一致。直接回归容器GTV面临单次成交高方差、物品级转化极稀疏和物品异构变化；把容器当“超级物品”或只用热门物品会低估高潜容器，误导竞价与商家ROI。</p><h4>核心方法</h4><p>HGE把容器—物品结构建成层级概率模型：HSAE对容器内动态物品集做集合编码，并在自注意力后注入用户/POI/上下文/query特征；PLL把点击后GTV拆成购买概率、购买数量和确定单价，替代直接回归高方差金额；RCEF用残差塔校正非top-K订单，再以样本级门控将物品聚合预测与通用回归塔（DIN+DCN）加权融合。</p>
+<h4>实验结果</h4><ul><li>离线实验使用Meituan广告日志，数据集含712M条记录、121M用户、949K POI。</li><li>离线Table 1：HGE的XAUC=0.8158、PCOC=0.9858、MAE=4.9915；相对CREAD的0.8095/0.7921/5.0818，XAUC高0.0063（0.63pp），PCOC高0.1937（19.37pp），MAE更低。</li><li>离线消融：去PLL使XAUC从0.8158降至0.7873；去HSAE降至0.8031；去RCEF仅降至0.8146，但MAE由4.9915升至5.01299。</li><li>线上A/B：RPS提升1.42%，95% CI为[+0.80%, +2.05%]。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>对容器级GTV/GMV预估，先把金额拆为转化概率×条件购买概率×数量×单价，比直接回归零膨胀金额更稳；尤其适合多SKU门店、直播房间和多服务卡片。前提是能拿到物品级价格与至少部分物品级转化标签。</li><li>物品级信号稀疏时，物品聚合与容器级回归应双路并存，并用样本级门控融合；工程上要监控门控权重、两路偏差和长尾容器，避免单品稀疏拖累整体。</li><li>HSAE在自注意力后注入用户/POI/query上下文，是先学物品间竞争再按请求调制的折中；对容器内物品集合动态变化、竞争关系强的排序场景更值得试。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>摘要写XAUC +0.63%，正文写+0.63pp；按Table 1的0.8158对0.8095应为0.0063绝对差（0.63pp），引用时不要写成相对百分比。</li><li>离线仅见Meituan单一O2O广告日志，线上也只在主流量验证；跨平台、直播电商等其他容器形态的泛化未验证（分析者判断）。</li></ul></article><article class="paper" id="paper-2610.34157" data-search="LoopGR: Parameter-Efficient Scaling for Generative Recommendation via Recurrent Depth LoopGR：通过循环深度实现生成式推荐的参数高效扩展 Tencent Tencent">
+<div class="paper-meta"><span class="pill">Tencent</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>LoopGR：通过循环深度实现生成式推荐的参数高效扩展</h3><a class="original" href="https://arxiv.org/abs/2610.34157" target="_blank" rel="noopener noreferrer">LoopGR: Parameter-Efficient Scaling for Generative Recommendation via Recurrent Depth ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-25（UTC）</p><p class="reason">对做生成式召回/排序主干的工程师有直接参考：给出可落地的循环深度结构、两阶段蒸馏和工业离线对比；但线上 A/B 未报道，需自行验证延迟与收益。</p>
+<h4>研究问题</h4><p>生成式推荐把下一物品预测为 SID 自回归生成，但真实系统受模型大小和推理成本约束。已有主干要么用深编码器建模长行为序列，要么把计算集中到目标解码，计算深度与参数量耦合，难以在有限预算下兼顾上下文表达与高效生成。论文要解决：如何在不按比例扩参的前提下，灵活分配上下文建模与目标 SID 生成的计算。</p><h4>核心方法</h4><p>LoopGR 由编码器、共享解码器和轻量共享上下文更新器组成：编码器先把历史 SID 序列编码为上下文记忆，随后高层解码循环与低层更新循环交替，解码器基于当前上下文预测目标 SID，更新器把新预测状态写回并细化上下文；高低层循环共享参数，以循环步数而非层数增加有效深度。训练上先用高预算 teacher 做任务监督，再用 RTSD 将低预算 student 初始化自 teacher，并对齐对应循环的预测分布 KL 与 log-prob 变化方向余弦，以压缩推理循环。</p>
+<h4>实验结果</h4><ul><li>在公开离线基准的 12 个评测设置中，论文报告 LoopGR 与 LoopGR-RTSD 合计在 8 个设置取得最优。</li><li>腾讯工业离线数据上，LoopGR 的 R@5=0.5691、R@100=0.7675，高于 TIGER 的 0.5465/0.7164 与 BARGE 的 0.5477/0.7496。</li><li>相比代表性 encoder-decoder 基线，LoopGR 在性能更优的同时模型尺寸最多减少 52%。</li><li>RTSD 将 16-loop teacher 压到 8/4-loop student 时，batch=1 推理延迟从 211.08 ms 降到 104.01/49.82 ms；这是离线延迟测量，非线上 A/B。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>对显存/延迟受限的生成式召回，LoopGR 提供了“用循环步数换有效深度”的路径；适用条件是业务能接受串行循环延迟，并保留低层上下文更新——去掉低层循环会显著掉点。</li><li>RTSD 适合“离线训高预算 teacher、上线跑低预算 student”的部署范式：可在 4-loop 下把延迟压到约 49.82ms；但论文只给出公开与工业离线数据结果，线上收益与全量服务成本仍需 A/B 验证。</li><li>LoopGR 的模块化 Encoder-Decoder-Updater 骨架可与现有生成式推荐增强组件 plug-and-play 组合；工程上可优先替换主干，而不是重写特征链路。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>分析者判断：腾讯工业评测是离线 Recall 对比（Table 2），未提供线上 A/B、全量部署延迟或长期收益；上线前需按真实 serving 预算复测。</li><li>循环深度带来串行计算，即使压缩到 4-loop，论文 batch=1 延迟仍为 49.82 ms；两阶段 teacher-student 蒸馏也增加训练流程复杂度，超大规模候选集下的成本未验证。</li></ul></article><article class="paper" id="paper-2610.24481" data-search="DuoLM: Fast and Effective Personalized Recommendation with Language Models DuoLM：基于语言模型的快速有效个性化推荐 Google Google">
+<div class="paper-meta"><span class="pill">Google</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>DuoLM：基于语言模型的快速有效个性化推荐</h3><a class="original" href="https://arxiv.org/abs/2610.24481" target="_blank" rel="noopener noreferrer">DuoLM: Fast and Effective Personalized Recommendation with Language Models ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-20（UTC）</p><p class="reason">对做 LLM 重排服务化、推理加速和蒸馏的推荐工程师有直接参考价值：方法把离线物品表示、虚拟 ID、共享 prefix KV 和 CUDA Graph 串成端到端服务，并给出质量与吞吐的取舍。但实验为离线数据集与受控 benchmark，没有线上 A/B，候选集也偏简单。</p>
+<h4>研究问题</h4><p>LLM 能利用物品文本、用户历史和反馈做个性化推荐，但每个请求要对大量候选做全文本推理，在线计算和传输成本高、吞吐受限。论文要同时解决两点：一是获得紧凑、可跨用户复用的物品表示，避免全文本 cross-encoder 的候选表示依赖用户上下文；二是把模型计算节省转化为端到端服务收益，减少同一用户历史在多个候选间的重复构造、传输和调度开销。</p><h4>核心方法</h4><p>DuoLM 用编码器 LLM 将物品文本压成一个 EOS hidden state，经 RMS 归一化与尺度校准后，作为一个连续 embedding 替代 ranker 中的物品文本 token；ranker 以“历史物品向量+反馈文本+候选向量”为输入，用最后一个 hidden state 经线性头打分，不做自回归生成。编码器、接口和 ranker 端到端联合训练，损失为推荐交叉熵加冻结全文本教师的候选分布 KL，蒸馏权重线性升到 0.5。离线导出 FP16 物品向量表，在线用虚拟 token ID 查表；在 SGLang 上实现 multi-item scoring，一次 prefill 共享历史 prefix KV，用树状 attention mask 隔离候选，并用 CUDA Graph 重放分段 prefill。</p>
+<h4>实验结果</h4><ul><li>在 Amazon Books 下一物品推荐（固定 100 候选）上，DuoLM 的 NDCG@10 为 0.5586，高于全文本教师 0.5440；Video Games 为 0.5298，教师 0.5313。</li><li>Books 评分预测的平均 NLL 为 0.9263，接近教师 0.9233；DuoLM 的 expected-rating MAE 和 RMSE 更低，教师的 median-based MAE 和 RPS 更低。</li><li>单 H100、100 候选/请求下，DuoLM 吞吐从 C=1 的约 8,870 升到 C=64 的 26,400 candidate scores/s；C=64 时 p99 为 536.90 ms，vLLM 教师为 17,093.82 ms。</li><li>固定模型与请求轨迹时，MIS 相对独立打分提升 4.81–29.3×，CUDA Graph 再带来 1.06–3.54×；VID 在评分诊断中把请求大小降低 99.0%，C=8 吞吐提升 66.5%。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>把物品内容离线压成单向量并用虚拟 ID 查表，可把在线成本从“编码+传输全文本/向量”降为“ID+反馈文本”，适合物品内容稳定、候选量大的重排/打分场景；但一旦内容或编码器更新就要重建表，且单向量可能丢失用户相关细节。</li><li>多候选共享 prefix KV 的 MIS 在高并发下相对收益更大（C=64 为 29.3×，C=1 为 4.81×），CUDA Graph 则在低并发下收益更大（C=1 为 3.54×，C=64 为 1.06×）；部署时应按流量形态组合两项优化，而不是只看单点加速比。</li><li>教师蒸馏主要提升 top-1 和 NDCG，但可能牺牲 HR@10；self-alignment 增加 2.29× 训练时间且 NDCG 下降。工业落地应按目标指标调 β/τ，并先验证蒸馏是否值得额外训练成本。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>离线评测只在 Amazon Books/Video Games、0.6B backbone 上进行；候选集为固定随机未交互物品，可能比强检索系统产出的候选更容易区分，且没有线上 A/B。</li><li>单向量压缩可能丢失对特定用户重要的细节；物品内容或编码器参数变化后需重新生成离线表示；吞吐测量不含训练和离线编码成本，且只在 H100 受控负载下验证。</li></ul></article><article class="paper" id="paper-2610.34977" data-search="Adaptive Memory Index Evolution for Agents 面向智能体的自适应记忆索引演化 Meituan Meituan">
+<div class="paper-meta"><span class="pill">Meituan</span><span>阅读优先级 ★★★☆☆</span></div>
+<h3>面向智能体的自适应记忆索引演化</h3><a class="original" href="https://arxiv.org/abs/2610.34977" target="_blank" rel="noopener noreferrer">Adaptive Memory Index Evolution for Agents ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-26（UTC）</p><p class="reason">如果你在做召回/重排的在线状态或记忆检索，这篇值得快速读：它把“内容不变、只改访问权重”的持久层讲清楚，并给出 count 基线、候选池 headroom 与粒度边界；不是推荐系统论文，别期待 CTR 或线上 A/B。</p>
+<h4>研究问题</h4><p>长期智能体持续积累记忆，但相似条目增多会让原本有用的经验“还在却取不到”。现有系统常同时改记忆内容和访问方式，缺少把持久索引更新单独隔离、并评估其对后续查询前瞻价值的框架。论文将其形式化为 Memory Index Evolution：固定存储内容，学习一个在线更新规则，使后续检索与任务效用变好。</p><h4>核心方法</h4><p>AMIE 把记忆索引从内容中拆出，做成宿主检索接口上的可插拔更新层：策略读取当前 query 与宿主原生有序反馈列表，一次前向输出每个候选记忆的 keep/suppress 二值掩码；用 GPT-5.6-Sol 教师掩码和类平衡 BCE 蒸馏到 Qwen3-8B 学生。被选中的记忆按 ID 累积为有界饱和的抑制状态，再以惩罚项降低其后续排序分数。更新在答案上下文封存后提交，只影响后续查询；wrapper 接入宿主评分接口，不改存储内容、不重训宿主。</p>
+<h4>实验结果</h4><ul><li>离线评测覆盖 LoCoMo、GroupMem、MemBench 三个基准与 BM25、Mem0、MemoryOS、A-MEM、Memory-R2 五个宿主；Trained AMIE 在全部 15 个下游效用对比中提升，幅度 0.70–3.37 个百分点。</li><li>在论文的基准评测中，检索指标在全部 10 组对比中提升。</li><li>在 GroupMem MemoryOS 上，count 策略失去效用，而 trained 选择比 count 高 3.61 个百分点。</li><li>BM25 回放中，检索单元从单轮变粗时，count 增益从 +1.48 降至 +0.48，并继续趋近零。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>工业检索/推荐可把物品级持久抑制状态做成轻量重排层，但先看候选池内是否有可回收 headroom：BM25 回放中最大 count 点估计出现在高占用且缺失 gold 仍在池内的子集，池外证据无法被救回；粗粒度单元还会把证据和干扰绑在一起。</li><li>先上线 retrieval-frequency count 作为零调用基线，再评估语义策略；论文中 count 接近 frozen F1，rate-matched random mask 也恢复部分增益，说明增益很大程度来自累积抑制而非语义理解。若高频记忆经常有用，则需选择性策略。</li><li>学习选择性的收益是减少对反复有用记忆的伤害，但会牺牲部分未见证据收益；适合候选复用高、有用证据反复出现的场景，需用曝光分层监控两类错误。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>持久状态绑定具体 memory ID，不能跨 store 迁移；跨 store 只能迁移策略，不能迁移状态（论文明确说明）。</li><li>策略拟合与超参选择在 LoCoMo 上完成，GroupMem/MemBench 只验证固定策略迁移；论文明确称 LoCoMo 结果不构成独立泛化证据。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>专题：服务预算下的效果—效率折中：共享、循环、离线化与状态化</h3><p>共同线索是把昂贵计算从在线逐候选路径移走或复用。HiRank用统一backbone让序列/特征token反复交互，并以场景query压缩token bank，靠交互而非扩参；LoopGR用共享解码器与轻量更新器交替循环，再用RTSD把高预算教师轨迹蒸馏到低预算学生，适合用串行循环换深度；DuoLM把物品文本离线压成向量，在线以虚拟ID查表，并用共享历史prefix KV、树状mask和CUDA Graph服务多候选；HGE则用容器—物品分层和残差门控融合处理价值稀疏；AMIE以可插拔持久状态抑制反复干扰项，不改宿主。工程取舍：HiRank/HGE有线上A/B但未充分报告时延；LoopGR延迟数据为离线batch=1；DuoLM吞吐不含训练/离线编码且单向量有信息损失；AMIE状态不可跨store迁移。推断建议：先定端到端时延和Top-K/校准护栏，再优先试低侵入的共享KV/离线向量/插件状态；循环深度和统一主干需A/B验证，蒸馏要检查长尾与HR@10。</p><div class="sources"><a href="#paper-2610.35318">面向推荐系统的有效秩缩放统一异构特征交互</a> · <a href="#paper-2610.34157">LoopGR：通过循环深度实现生成式推荐的参数高效扩展</a> · <a href="#paper-2610.24481">DuoLM：基于语言模型的快速有效个性化推荐</a> · <a href="#paper-2610.32420">分层GTV估计：弥合容器级排序与物品级转化之间的鸿沟</a> · <a href="#paper-2610.34977">面向智能体的自适应记忆索引演化</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>

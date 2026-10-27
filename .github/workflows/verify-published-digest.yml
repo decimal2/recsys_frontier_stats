@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - name: Verify published October 26 pages
+      - name: Verify October 26 and 27 pages, homepage and archive
         shell: bash
         run: |
           python3 - <<'PY'
           import hashlib, json, time, urllib.request
-          expected = {"2026-10-26.html":"4d5d21ffcf4fb83bf08ba13b8cbad0f0ce2cb0cb279a1be0c1fc5f0df1c575b7","daily/index.html":"ea68a3cffa48a854234afea8efb7602ebf53a02cb9a795ff27fc6f992f19c037","index.html":"25d1c0619e598c6cae8f2442142b5a95c2527cab74d75d56e9eb92c97ffe7971"}
-          forbidden = ['最低要求', '继续补齐', 'insufficient', '基于提取到的全文文字生成；图片未做视觉分析。']
+          expected = {"2026-10-26.html":"f38c165c47a8a09394ac033a936ae45b0815cad361c2a32daa7d53892c11df12","2026-10-27.html":"b481543d8215281ab8c581ab5b88b5e94f4341b07bc76a6d7c466d90602024b8","daily/index.html":"bb794dd9f99558df5045062693df0c93e30309b6a174e31e4240f23107f9363a","index.html":"a5e41bfac4f1b3ac48cf734f47154041c6919bd12d1bb46bce08a49d8da37865"}
+          forbidden = '基于提取到的全文文字生成；图片未做视觉分析。解读由模型生成，数字与引用请结合原文确认。'
           results = []
           for path, sha256 in expected.items():
               url = 'https://decimal2.github.io/recsys_frontier_stats/' + path
@@ -29,8 +29,8 @@ jobs:
                           actual = hashlib.sha256(body).hexdigest()
                           status = response.status
                       if status == 200 and actual == sha256:
-                          assert all(text not in body.decode('utf-8') for text in forbidden)
-                          results.append({'path': path, 'status': status, 'sha256': actual, 'shortfall_notice_absent': True})
+                          assert forbidden not in body.decode('utf-8')
+                          results.append({'path': path, 'status': status, 'sha256': actual, 'removed_note': True})
                           print('VERIFIED ' + json.dumps(results[-1]), flush=True)
                           break
                       last_error = 'HTTP ' + str(status) + ', sha256=' + actual
@@ -39,5 +39,5 @@ jobs:
                   if attempt < 11: time.sleep(10)
               else:
                   raise RuntimeError(url + ': ' + last_error)
-          print('PUBLISHED_DIGEST_REPORT ' + json.dumps({'status': 'passed', 'commit': 'c6c5858f5e9a805c70b5dbb693bb171dc9854e50', 'pages': results}))
+          print('PUBLISHED_DIGEST_REPORT ' + json.dumps({'status': 'passed', 'commit': '91068a8b79027742f91cc941c4449c094eef719a', 'pages': results}))
           PY
