@@ -426,7 +426,7 @@ class InsightTests(unittest.TestCase):
         try:
             self.assertTrue(connection.execute("SELECT 1 FROM digest_queue WHERE arxiv_id=?", (next_day["arxiv_id"],)).fetchone())
             self.assertFalse(connection.execute("SELECT 1 FROM digest_queue WHERE arxiv_id=?", (unchosen_same_day["arxiv_id"],)).fetchone())
-            self.assertEqual(connection.execute("SELECT COUNT(*) FROM state").fetchone()[0], 0)
+            self.assertEqual(connection.execute("SELECT COUNT(*) FROM pending_metadata").fetchone()[0], 0)
         finally:
             connection.close()
 

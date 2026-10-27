@@ -76,6 +76,10 @@ class OfficialAPIError(RuntimeError):
         super().__init__(f"{provider} API HTTP {status}; {details}")
 
 
+class OfficialTransportError(RuntimeError):
+    """A transient connection failure after retries, distinct from credentials or permissions."""
+
+
 class OfficialClient:
     def __init__(self, config, provider=None):
         self.provider = provider or config["llm"]["provider"]
@@ -138,7 +142,7 @@ class OfficialClient:
                     raise RuntimeError(f"{self.provider} API 请求被当前执行环境的网络权限阻止（EPERM/EACCES）；尚无法验证密钥，请在允许联网的环境运行。") from None
                 if attempt == self.settings["retries"]:
                     LOG.error("官方 API 网络连接失败，重试已用尽 provider=%s", self.provider, exc_info=True)
-                    raise RuntimeError(f"{self.provider} API 网络连接失败；未完成的论文可重试。") from None
+                    raise OfficialTransportError(f"{self.provider} API 网络连接失败；未完成的论文可重试。") from None
                 LOG.warning("官方 API 网络连接失败 provider=%s，%s 秒后重试", self.provider, 2 ** (attempt + 1), exc_info=True)
                 time.sleep(2 ** (attempt + 1))
         raise RuntimeError("Official API retry exhausted")
@@ -212,7 +216,8 @@ class DeepSeekSearch:
 
     def fetch(self, url):
         # A missing/unfetchable page is a routine outcome, not a client failure.
-        result = self.client.post("/v1/tools/fetch", {"url": url}, warn_statuses={400, 403, 404, 422})
+        result = self.client.post("/v1/tools/fetch", {"url": url},
+                                  warn_statuses={400, 403, 404, 408, 422, 429, 500, 502, 503, 504})
         if not isinstance(result.get("content"), str) or not result["content"].strip():
             raise ValueError("DeepSeek Fetch returned no content")
         return result

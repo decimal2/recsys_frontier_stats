@@ -174,11 +174,11 @@ class DiscoveryTests(unittest.TestCase):
 
     def test_fetch_failure_can_be_returned_to_model_for_recovery(self):
         turns = [turn("web_search", {"query": "recsys"}), turn("web_fetch", {"url": URL}),
-                 turn("web_fetch", {"url": URL}),
-                 turn("submit_papers", {"summary": "Recovered", "papers": [candidate()]})]
+                 turn("web_fetch", {"url": BLOG}),
+                 turn("submit_papers", {"summary": "Recovered", "papers": [candidate(source=BLOG)]})]
         with patch.object(self.agent.client, "tools", side_effect=turns), \
              patch.object(self.agent.web, "search", return_value=[{"url": URL}]), \
-             patch.object(self.agent.web, "fetch", side_effect=[OfficialAPIError("deepseek", 404, "Missing"), {"content": "Paper"}]), \
+             patch.object(self.agent.web, "fetch", side_effect=[OfficialAPIError("deepseek", 404, "Missing"), {"content": URL}]), \
              self.assertLogs("paper_pipeline.discovery", level="WARNING"):
             self.assertEqual(len(self.agent.run(self.since, self.until, 10)["papers"]), 1)
 
@@ -284,7 +284,10 @@ class DiscoveryTests(unittest.TestCase):
             output = discover(self.discover_args(), self.config, connection)
         self.assertEqual(output["metadata_failed"], ["2601.00001", "2601.00002"])
         self.assertEqual(output["unique_seen"], 0)
-        self.assertEqual(connection.execute("SELECT status FROM runs").fetchone()[0], "completed")
+        self.assertEqual(output["agent_candidates"], 2)
+        self.assertEqual(output["metadata_verified"], 0)
+        self.assertEqual(connection.execute("SELECT status FROM runs").fetchone()[0], "partial")
+        self.assertEqual(connection.execute("SELECT COUNT(*) FROM pending_metadata").fetchone()[0], 2)
 
     def test_old_rule_collection_cli_options_are_removed(self):
         for args in (["run"], ["reclassify"], ["daily", "--search"], ["discover", "--query", "fixed query"]):

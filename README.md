@@ -16,7 +16,7 @@ daily
  ├─ 1. 发现(discovery.py)
  │     LangGraph 检索 agent 调用 web_search / web_fetch 自主找论文,
  │     提交候选(bucket / priority / reason / source_url),
- │     再用 arXiv 官方 API 按 id_list 核对元数据后入库。
+ │     再用 arXiv 官方 API 按 id_list 核对元数据后入库；失败候选保留待重试。
  ├─ 2. 全文(fulltext.py)
  │     下载 arXiv HTML(失败回退 PDF),切成带 block id 的可引用文本块。
  ├─ 3. 解读(insights.py)
@@ -33,7 +33,7 @@ daily
        并更新双专栏首页 reports/site/index.html 和日报归档 daily/index.html。
 ```
 
-数量不足、综合失败等情况会降级为 partial/empty 并以退出码 1 报告；已完成的解读有缓存，重跑不重复花费。
+数量不足、综合失败等情况会以 partial/empty/insufficient 和退出码 1 报告；已完成的解读有缓存，重跑复用。
 
 ## 安装与配置
 
@@ -68,9 +68,9 @@ cp .env.example .env   # 填入使用的 provider 密钥
 | `daily` | 采集 + 全文解读 + 日报，一条命令（退出码：0 完成；1 部分完成/为空/不足/预算耗尽） |
 | `digest` | 只对已在队列里的候选做解读和日报，不主动检索 |
 | `discover` | 只运行检索 agent 入库（`--since/--until` 指定窗口，默认近 7 天） |
-| `pending` | 查看全文解读待处理队列 |
+| `pending` | 分别查看待验证元数据的候选与待全文解读的论文 |
 | `preview` | 用已有解读重新渲染日报与归档，不联网不调模型 |
-| `papers` | 将本地中文 TeX 工程或已有中文 PDF 构建为全文专栏，不联网不调模型 |
+| `papers` | 从已有中文 HTML 重建论文阅读页面和目录 |
 | `fulltext --id <arxiv_id>` | 单独下载/导入一篇全文 |
 | `fetch --url <url>` | 用 DeepSeek Fetch 保存网页 Markdown 证据 |
 | `tasks` / `resume <task_id>` | 查看/恢复中断的 LangGraph 任务（checkpoint 在 data/ 下） |
@@ -86,6 +86,71 @@ python pipeline.py daily --limit 12               # 本期上限(不得低于 di
 python pipeline.py preview                        # 改完样式后离线重建页面
 ```
 
+### 日常使用的两个脚本
+
+在项目目录运行，无需手动激活 `.venv`：
+
+```bash
+bash scripts/collect_daily.sh   # 收集北京时间当天日报，生成 HTML
+bash scripts/publish.sh         # 发布 reports/site/，等待线上页面更新
+```
+
+采集脚本沿用 `pipeline_config.json`，当前默认 DeepSeek、下限 5 篇、上限 10 篇。参数直接传给 `daily`，例如补齐指定日期：
+
+```bash
+bash scripts/collect_daily.sh --date 2026-10-27 --provider deepseek --limit 10
+```
+
+后台采集当天日报，成功后自动发布，控制台输出追加到 `nohup.out`：
+
+```bash
+nohup bash -c 'bash scripts/collect_daily.sh && bash scripts/publish.sh' >> nohup.out 2>&1 &
+```
+
+`&&` 表示采集返回 0 才自动发布；篇数不足、部分完成或失败时停止后续发布，可查看日志处理后重跑。两种脚本都保留实际运行日期的 `logs/YYYY-MM-DD/HH-MM-SS.log`。
+
+发布使用临时目录克隆远端 `main`，把已生成站点覆盖到克隆内的 `docs/`，只提交网页并保留远端其他文件；当前工作目录的 Git 历史和文件不参与提交。它不调用模型、不重新生成页面，也不改写项目本地 `docs/` 快照。需要重新渲染已有结果时，先运行 `.venv/bin/python pipeline.py preview`。
+
+```bash
+bash scripts/publish.sh --dry-run    # 克隆、检查链接和文件差异，不推送
+bash scripts/publish.sh --no-verify  # 推送后结束，不等待线上校验
+```
+
+默认线上校验最长等待 600 秒，逐个比较本次改动文件的 HTTP 状态与 SHA256；超时会返回非零，但已经推送的提交仍保留。修复部署后再次执行即可，无变化时不会重复提交，会校验源站点的全部文件以确认上次部署结果。临时克隆在退出时自动清理。
+
+**首次发布需配置本机 Git 的提交身份和 GitHub 写入权限。** Codex 连接器的登录不会自动提供给命令行：
+
+```bash
+git config --global user.name "你的 GitHub 用户名"
+git config --global user.email "你的提交邮箱"
+```
+
+HTTPS 使用本机 Git credential helper；已安装 GitHub CLI 时可执行 `gh auth login`、`gh auth setup-git`。已配置 SSH 密钥时可运行：
+
+```bash
+PUBLISH_REPO_URL=git@github.com:decimal2/recsys_frontier_stats.git bash scripts/publish.sh
+```
+
+不要把密钥放进仓库 URL。可用环境变量覆盖 `PUBLISH_REPO_URL`、`PUBLISH_BRANCH`（默认 `main`）、`PUBLISH_SITE_URL` 和 `PUBLISH_VERIFY_TIMEOUT`（秒）。发布需要 GitHub Pages 已启用 `main` 的 `/docs`。
+
+### 失败与补齐
+
+单个网页的抓取超时、403/404 或临时服务错误会返回给检索模型，让它换源继续；认证、配置和程序错误仍会停止检索并记录完整堆栈。订阅预览、搜索错误页和空列表会被标记，失败 URL 在有限时间内不重复请求。
+
+候选先持久化，再查询 arXiv 元数据。429 限流立即延后，其他临时网络错误最多即时重试一次；保留来源、选择理由、最后错误和下次重试时间，并遵守服务端的冷却时间。新的 `daily` 任务会先恢复历史失败候选并重试已到期的元数据，再按需检索；等待重试的 ID 不重复交给模型发现。成功验证后仍需通过日期和全文机构筛选。
+
+`resume <task_id>` 恢复中断任务；对于已经结束但篇数不足的日报，重新运行 `daily` 补齐。已经结束的日报任务使用 `resume` 会返回原结果。已结束且仍有元数据失败的 `discover` 任务支持通过 `resume` 重试元数据，复用原检索结果。
+
+例如补齐 10-27，日志由程序自动写入实际运行日期的目录：
+
+```bash
+source .venv/bin/activate
+python pipeline.py pending
+nohup python -u pipeline.py daily --provider deepseek --date 2026-10-27 --limit 10 > /dev/null 2>&1 &
+```
+
+查看 `logs/YYYY-MM-DD/HH-MM-SS.log`、`data/raw/run-*/agent-trace.json` 和日报 JSON 中的 `coverage`、`discovery`、`metadata_recovery`。候选提交数、元数据验证数和失败数分别统计；达到篇数下限仍取决于实际找到并验证的工业界论文，不通过放宽机构证据凑数。
+
 浏览器看日报（本地静态服务）：
 
 ```bash
@@ -95,10 +160,7 @@ python -m http.server 8080 --bind 127.0.0.1 -d reports/site
 
 ## 论文阅读专栏
 
-当前共 **38 篇**：`LLM4Rec/source` 的 31 篇与 `RL_Training/source` 的 7 篇，清单记录在 `paper_catalog.json`。
-已发布的中文全文保存在 `docs/papers/<arxiv_id>/`，只包含 HTML 和必要图表，不保留下载用 PDF。
-论文列表默认按 arXiv **首次提交日期**从新到旧排列，也可切换为最早在前，并与搜索、主题筛选组合使用。
-日期来自官方元数据的 `published` 字段，记录为 `published_date` 与 `published_date_source`；修订日期不参与排序。
+论文阅读提供中文全文 HTML 浏览；新增和维护流程见 [AGENTS.md](AGENTS.md)。
 
 ```bash
 # 从已发布 HTML 快照重建全文、论文列表和首页
@@ -115,34 +177,6 @@ python -m http.server 8080 --bind 127.0.0.1 -d reports/site
 # http://127.0.0.1:8080/papers/
 ```
 
-新增全文采用固定版本 arXiv TeX 源码，在 `/tmp` 独立任务目录中下载、解压并转换为结构化 HTML，
-再翻译标题、正文、章节标题和图表说明。数学、表格数据、代码、原图、作者与参考文献保持原样。
-逐段对照英文审阅，并核对公式、引用、图片和 HTML 结构后，发布到 GitHub Pages；上线验证后删除本次临时源码与构建缓存。
-PPO 的 arXiv 源码只有 PDF 外壳，没有正文 TeX，因此单独从英文 PDF 转换和翻译，公式与图表保留原版裁图。
-
-TeX 公式使用浏览器原生 MathML，表格为 HTML 表格，图形使用源码中的图片或矢量图；体积过大的密集矢量图以 216 dpi 无损 PNG/WebP 发布；WebP 编码前后逐像素核对。
-全文保留正文、附录和逐条参考文献；章节、公式、图表与文献的交叉引用可直接跳转。
-原图中的英文文字及参考文献题名保留原文。
-
-`papers` 是离线重建命令，不调用模型、检索或日报数据库，不需要 API 密钥。
-`html_snapshot` 路径相对目录清单文件，快照内保存正文和重建所需的元数据；
-清理 `/tmp` 与 `reports/paper_cache/` 后仍可重建，无需重新下载源码或重新翻译。
-构建论文会保留已有日报；之后生成日报也会保留论文专栏。
-
-网页排版修复会在每次渲染时应用，也覆盖已有 HTML 快照和正文缓存：解除 TeX 固定尺寸/缩放盒，
-恢复标准表格行列，让宽表格独立横向滚动，表注保持在表格外的正常文档流中。
-表格中的下划线保持普通文字样式；高亮单元格和代码块保留原背景色，并修正不足的文字对比度。
-正文取消两端强制对齐；浏览器只对实际超出正文宽度的行内公式添加横向滚动，普通行内公式保留原生基线。
-SVG 图示采用适合原图的白底黑色默认文字；不能直接缩放的宽图整体横向滚动，避免裁切图中的公式和标签。
-OneTrans-V2 图 3 与 KuaFu 图 2 的 TikZ 坐标转换失真，已改用原论文对应区域提取的矢量图，
-可点击查看大图；页面元数据记录了来源文件、版本依据、页码与裁切范围，项目中不保留原 PDF。
-这些调整会核对正文、表格数值、合并单元格、MathML、链接和图片，避免用删减内容解决排版问题。
-
-手动转换中文 TeX 工程仍可使用 `tex_project` + `tex_entry` 配置，需要系统的 `latexmlc` / `latexmlpost`，
-或通过 `LATEXML_ROOT` / 单篇 `latexml_root` 指定解包工具目录。配置的 TeX 缺失时会明确报错。
-旧条目的 `zh_pdf` 模式也保留兼容能力，路径相对 `--source-dir`（默认 `../LLM4Rec/source/`）。
-这些输入模式同样只输出 HTML 和图形，并清除页面目录中旧 `paper.zh.pdf` / `paper_zh.pdf` 副本。
-
 ## GitHub Pages 在线阅读
 
 启用后访问：https://decimal2.github.io/recsys_frontier_stats/
@@ -151,30 +185,29 @@ OneTrans-V2 图 3 与 KuaFu 图 2 的 TikZ 坐标转换失真，已改用原论�
 将 Source 设为 **Deploy from a branch**，选择 **main** 分支和 **/docs** 目录，点击 Save。
 GitHub Pages 会发布首页、日报和论文阅读专栏。
 
-本地生成新日报后，将页面同步到发布目录并提交到 GitHub：
+本地生成新日报后，用发布脚本同步并提交到 GitHub：
 
 ```bash
-mkdir -p docs
-cp -R reports/site/. docs/
-touch docs/.nojekyll
-git add docs
-git commit -m "Update published research pages"
-git push origin main
+bash scripts/publish.sh
 ```
 
 GitHub Pages 展示已生成的静态页面；采集和模型调用仍由 `pipeline.py daily` 执行。
-应递归复制整棵 `reports/site/`，以包含论文子目录、图表和目录 JSON。
-不需要上传 `.env`、数据库或 `reports/paper_cache/` 转换缓存。
+脚本递归同步 `reports/site/`，包含论文子目录、图表和目录 JSON，自动补上 `.nojekyll`。
+仅发布静态文件；PDF、隐藏文件（`.nojekyll` 除外）、符号链接和不支持的文件类型会中止发布。
 
 ## 目录
 
 ```
-data/papers.sqlite3            论文、运行记录、解读队列、日报 editions、任务记录(唯一数据库)
+scripts/collect_daily.sh       采集当天或指定日期日报
+scripts/publish.sh             独立克隆、同步静态站点、推送及线上校验
+data/papers.sqlite3            论文、运行记录、元数据重试与解读队列、日报 editions、任务记录
 data/agent_checkpoints.sqlite3 LangGraph checkpoint(resume 用)
+data/raw/run-*/agent-trace.json 检索工具调用、结果和错误轨迹
+data/raw/fetch-failures.json    有期限的失败 URL 缓存
 data/fulltext/<id>v<n>/        全文缓存(source + document.json)
 data/insights/<sha>.json       单篇解读缓存(daily- 前缀为综合缓存)
 reports/daily/<日期>.md/.json  日报
-paper_catalog.json             中文论文目录（首批三篇）
+paper_catalog.json             论文阅读目录
 reports/site/                  双专栏首页与各期日报
 reports/site/daily/            日报归档
 reports/site/papers/           论文阅读列表、HTML 全文与图表

@@ -1,5 +1,7 @@
 """Model-driven web search/fetch; arXiv only resolves discovered IDs."""
 import copy
+import hashlib
+import http.client
 import html
 import ipaddress
 import json
@@ -7,17 +9,20 @@ import logging
 import re
 import string
 import urllib.parse
+import xml.etree.ElementTree as ET
 from datetime import timedelta
 from pathlib import Path
 from uuid import uuid4
 
 from langgraph.graph import END, START, StateGraph
 
-from .arxiv import ArxivClient, ENDPOINT, arxiv_id, date_boundary, iso, parse_atom, timestamp, utcnow
-from .providers import DeepSeekSearch, OfficialAPIError, OfficialClient, redact_secrets
+from .arxiv import ArxivClient, ENDPOINT, arxiv_id, date_boundary, iso, parse_atom, retry_after, timestamp, utcnow
+from .providers import DeepSeekSearch, OfficialAPIError, OfficialClient, OfficialTransportError, redact_secrets
 from .publishing import atomic_write
 from .runtime import execute_graph, get_task
-from .storage import dumps, fail_run, finish_run, run_summary, save_paper, start_run
+from .storage import (defer_metadata, dumps, fail_run, finish_run, pending_metadata,
+                      queue_metadata, run_summary, save_paper, start_run)
+from .web_evidence import FailedPages, PAGE_TTL, TRANSIENT_TTL, page_problem
 
 LOG = logging.getLogger(__name__)
 PROMPTS = Path(__file__).resolve().parents[1] / "prompts"
@@ -36,7 +41,7 @@ def tool(name, description, properties, required):
 TOOLS = [
     tool("web_search", "搜索公开网页，返回 URL、摘要与日期；根据结果调整下一次查询。查询最多 128 字符。",
          {"query": {"type": "string"}}, ["query"]),
-    tool("web_fetch", "读取公开网页，返回 Markdown 正文。可以沿链接访问、构造分页 URL，或由已知 arXiv ID 构造论文 URL。",
+    tool("web_fetch", "读取公开网页，返回 Markdown 正文与可用性提示。优先沿链接访问论文或公司页，可由已知 arXiv ID 构造论文 URL；失败或空列表后换来源。",
          {"url": {"type": "string"}}, ["url"]),
     tool("submit_papers", "结束检索，提交有实际来源的候选论文。日期、版本由 arXiv 元数据核对。",
          {"summary": {"type": "string"}, "papers": {"type": "array", "items": {
@@ -82,6 +87,9 @@ class SearchAgent:
         self.config, self.settings, self.cache = config, config["discovery"], cache
         self.client, self.web = OfficialClient(config, provider), DeepSeekSearch(config)
         self.sources, self.memo = {}, {}
+        # Daily lookback windows have separate run directories but share failed URLs.
+        memory_dir = cache.parent if cache.parent.name == "raw" and re.fullmatch(r"run-\d+", cache.name) else cache
+        self.failed_pages = FailedPages(memory_dir / "fetch-failures.json")
         self.excluded_ids = set()
         self.searches, self.fetches, self.calls = 0, 0, 0
         self.trace = {"provider": self.client.provider, "model": self.client.model,
@@ -149,6 +157,10 @@ class SearchAgent:
         key = dumps([name, args])
         if key in self.memo:
             return {**self.memo[key], "cached": True}
+        if name == "web_fetch" and set(args) == {"url"}:
+            cached_failure = self.failed_pages.get(web_url(args["url"]))
+            if cached_failure:
+                return cached_failure
         if self.calls >= self.settings["max_tool_calls"]:
             raise ValueError("Web tool budget exhausted; submit the supported candidates now")
         self.calls += 1
@@ -177,9 +189,15 @@ class SearchAgent:
             page = self.web.fetch(url)
             content = page["content"][:self.settings["max_page_chars"]]
             result = {"url": url, "title": str(page.get("title") or "")[:500], "content": content,
-                      "truncated": len(page["content"]) > len(content)}
-            self.observe(content, url)
-            self.fetches += 1
+                      "truncated": len(page["content"]) > len(content), "usable": True}
+            problem = page_problem(page["content"])
+            if problem:
+                result.update(usable=False, page_status=problem[0], warning=problem[1], next_action=problem[1])
+                self.failed_pages.remember(url, result, PAGE_TTL)
+                LOG.warning("Agent 网页不能作为完整证据 url=%s reason=%s", url, problem[0])
+            else:
+                self.observe(content, url)
+                self.fetches += 1
         self.memo[key] = result
         return result
 
@@ -227,7 +245,7 @@ class SearchAgent:
         if self.messages is None:
             # A fresh conversation can use saved evidence without persisting private reasoning.
             context = {"task": state["task"], "previous_tools": self.trace["tools"],
-                       "observed_sources": state["sources"]}
+                       "observed_sources": state["sources"], "recent_failed_pages": self.failed_pages.hints()}
             self.messages = [{"role": "system", "content": PROMPT},
                              {"role": "user", "content": dumps(context)}]
         LOG.info("Agent 检索轮次=%s/%s web_calls=%s/%s", step, self.settings["max_rounds"],
@@ -256,16 +274,32 @@ class SearchAgent:
             if name == "submit_papers" and len(state["pending"]) != 1:
                 raise ValueError("Call submit_papers alone after reading all tool results")
             result = self.execute(name, args)
-        except (ValueError, OfficialAPIError) as error:
+        except Exception as error:
+            recoverable = isinstance(error, ValueError)
             if isinstance(error, OfficialAPIError):
-                recoverable = {400, 404, 422} | ({403} if name == "web_fetch" else set())
-                if error.status not in recoverable:
-                    raise
+                statuses = {400, 404, 422} | ({403, 408, 429, 500, 502, 503, 504} if name == "web_fetch" else set())
+                recoverable = error.status in statuses
+            if name == "web_fetch" and isinstance(error, (OfficialTransportError, TimeoutError, ConnectionError)):
+                recoverable = True
+            result = {"error": redact_secrets(str(error)), "recoverable": recoverable}
+            if isinstance(error, OfficialAPIError):
+                result["http_status"] = error.status
+            if name == "web_fetch":
+                result.update(usable=False, next_action="该 URL 暂时无法读取，不代表论文不存在；请换论文原文、公司页等来源。")
+                if recoverable and isinstance(error, (OfficialAPIError, OfficialTransportError, TimeoutError, ConnectionError)):
+                    url = web_url(args["url"])
+                    result["url"] = url
+                    ttl = PAGE_TTL if result.get("http_status") in {400, 403, 404, 422} else TRANSIENT_TTL
+                    self.failed_pages.remember(url, result, ttl)
+            event["result"] = result
+            self.write_trace()
+            if not recoverable:
+                LOG.error("Agent 工具出现不可恢复错误 name=%s", name, exc_info=True)
+                raise
             LOG.warning("Agent 工具失败 name=%s，返回错误供模型调整", name, exc_info=True)
-            result = {"error": redact_secrets(str(error))}
         event["result"] = result
         self.write_trace()
-        LOG.info("Agent 工具完成 name=%s error=%s", name, "error" in result)
+        LOG.info("Agent 工具完成 name=%s error=%s usable=%s", name, "error" in result, result.get("usable"))
         progress = {"rounds_left": self.settings["max_rounds"] - state["round"],
                     "web_calls_left": max(0, self.settings["max_tool_calls"] - self.calls),
                     "observed_papers": len(self.sources),
@@ -337,6 +371,161 @@ def agent_selection(paper, decision, config):
             "text_basis": "agent_web_evidence", "method": "agent", "agent_decision": decision}
 
 
+def import_pending_metadata(connection, directory):
+    """Recover pre-queue failures from their already-validated agent traces, once."""
+    recovered = []
+    rows = connection.execute("SELECT * FROM runs WHERE kind='agent_search' AND summary_json IS NOT NULL").fetchall()
+    for run in rows:
+        marker = f"pending_metadata_import:{run['id']}"
+        if connection.execute("SELECT 1 FROM state WHERE key=?", (marker,)).fetchone():
+            continue
+        summary = json.loads(run["summary_json"])
+        failed = set(summary.get("metadata_failed", []))
+        if not failed:
+            continue
+        path = Path(directory) / "raw" / f"run-{run['id']:06d}" / "agent-trace.json"
+        try:
+            trace = json.loads(path.read_text(encoding="utf-8"))
+            results = [event.get("result", {}) for event in trace.get("tools", [])
+                       if event.get("name") == "submit_papers"]
+            results += [event.get("result", {}) for event in trace.get("finalization", [])]
+            submitted = next(value for value in reversed(results) if isinstance(value.get("papers"), list))
+            decisions = {item["arxiv_id"]: item for item in submitted["papers"]}
+            if not failed <= decisions.keys():
+                raise ValueError("Trace does not contain every failed metadata candidate")
+            for identifier in failed:
+                decision = decisions[identifier]
+                if arxiv_id(identifier)[0] != identifier or not decision.get("reason"):
+                    raise ValueError("Invalid saved candidate")
+                web_url(decision["source_url"])
+                if decision["bucket"] not in {"recsys", "related_ir", "llm_for_ir"}:
+                    raise ValueError("Invalid saved candidate bucket")
+                if type(decision.get("priority")) is not int or not 1 <= decision["priority"] <= 5:
+                    raise ValueError("Invalid saved candidate priority")
+            with connection:
+                for identifier in sorted(failed):
+                    if connection.execute("SELECT 1 FROM papers WHERE arxiv_id=?", (identifier,)).fetchone():
+                        continue
+                    queue_metadata(connection, run["id"], decisions[identifier],
+                                   timestamp(run["since_utc"]), timestamp(run["until_utc"]))
+                    recovered.append(identifier)
+                connection.execute("INSERT OR REPLACE INTO state VALUES (?,?)", (marker, iso(utcnow())))
+                summary["agent_candidates"] = max(summary.get("agent_candidates", 0), len(decisions))
+                summary.setdefault("metadata_verified", summary.get("unique_seen", 0) + len(summary.get("outside_window", [])))
+                connection.execute("UPDATE runs SET status='partial',summary_json=? WHERE id=?",
+                                   (dumps(summary), run["id"]))
+        except (OSError, ValueError, KeyError, TypeError, StopIteration):
+            LOG.warning("历史候选恢复失败 run_id=%s trace=%s", run["id"], path, exc_info=True)
+    if recovered:
+        LOG.info("从历史轨迹恢复待验证元数据候选 count=%s ids=%s", len(recovered), recovered)
+    return recovered
+
+
+def _candidate_metadata(config, cache, connection, decisions):
+    """Resolve IDs with a bounded retry, retaining failures and partial batches."""
+    identifiers, papers, failed = sorted(decisions), [], []
+    arxiv = ArxivClient(config, cache, metadata=True)
+    for start in range(0, len(identifiers), 50):
+        batch = identifiers[start:start + 50]
+        key = hashlib.sha256(",".join(batch).encode()).hexdigest()[:20]
+        path = cache / f"ids-{key}.xml"
+        cooldown = connection.execute("SELECT value FROM state WHERE key='arxiv_metadata_retry_at'").fetchone()
+        if not path.exists() and cooldown and timestamp(cooldown[0]) > utcnow():
+            with connection:
+                defer_metadata(connection, batch, "arXiv metadata endpoint cooling down", timestamp(cooldown[0]), attempted=False)
+            failed.extend(batch)
+            LOG.info("arXiv 元数据冷却期间保留候选 ids=%s next_retry_at=%s", batch, cooldown[0])
+            continue
+        url = ENDPOINT + "?" + urllib.parse.urlencode({"id_list": ",".join(batch), "max_results": len(batch)})
+        try:
+            raw = path.read_bytes() if path.exists() else arxiv.request(url)
+            parsed, _, _ = parse_atom(raw, config)
+            returned = {paper["arxiv_id"] for paper in parsed}
+            if not returned <= set(batch):
+                raise ValueError("arXiv metadata returned unexpected IDs")
+            papers.extend(parsed)
+            missing = sorted(set(batch) - returned)
+            if missing:
+                with connection:
+                    defer_metadata(connection, missing, "arXiv metadata omitted these IDs", utcnow() + timedelta(minutes=5))
+                failed.extend(missing)
+                LOG.warning("arXiv 元数据响应缺少 ID；已保留重试 ids=%s", missing)
+            else:
+                path.write_bytes(raw)
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ConnectionError,
+                http.client.HTTPException, ET.ParseError, ValueError) as error:
+            delay = max(300, retry_after((error.headers or {}).get("Retry-After"))) if isinstance(error, urllib.error.HTTPError) else 300
+            with connection:
+                defer_metadata(connection, batch, redact_secrets(str(error)), utcnow() + timedelta(seconds=delay))
+                if isinstance(error, urllib.error.HTTPError) and (error.code == 429 or retry_after((error.headers or {}).get("Retry-After")) > 5):
+                    connection.execute("INSERT OR REPLACE INTO state VALUES ('arxiv_metadata_retry_at',?)",
+                                       (iso(utcnow() + timedelta(seconds=delay)),))
+            failed.extend(batch)
+            LOG.warning("arXiv 元数据批次失败，已保留 %s 个候选供重试：%s", len(batch), redact_secrets(str(error)), exc_info=True)
+    return papers, failed
+
+
+def _save_agent_candidate(connection, run_id, paper, decision, config, cache, provider=None, model=None):
+    save_paper(connection, run_id, paper, config,
+               selection_override=agent_selection(paper, decision, config))
+    connection.execute("INSERT OR REPLACE INTO provenance VALUES (?,?,?,?)",
+        (paper["arxiv_id"], "agent_search", decision["source_url"],
+         dumps({"decision": decision, "provider": provider, "model": model, "run_id": run_id,
+                "trace": str(cache / "agent-trace.json"), "recorded_at": iso(utcnow())})))
+
+
+def recover_pending_metadata(args, config, connection, since, until, excluded_ids=(), force=False, candidate_ids=None):
+    """Retry saved decisions without a model/search call; daily supplies its full window."""
+    imported = import_pending_metadata(connection, args.db.parent)
+    excluded, now = set(excluded_ids), utcnow()
+    wanted = None if candidate_ids is None else set(candidate_ids)
+    jobs = [job for job in pending_metadata(connection)
+            if job["arxiv_id"] not in excluded and (wanted is None or job["arxiv_id"] in wanted)
+            and timestamp(job["since_utc"]) < until and timestamp(job["until_utc"]) > since
+            and (force or not job["next_retry_at"] or timestamp(job["next_retry_at"]) <= now)]
+    jobs = jobs[:config["discovery"]["max_candidates"]]
+    decisions = {job["arxiv_id"]: job["decision"] for job in jobs}
+    output = {"kind": "metadata_recovery", "attempted_ids": list(decisions), "imported_ids": imported,
+              "metadata_verified": 0, "metadata_failed": [], "outside_window": [],
+              "unique_seen": 0, "selected_seen": 0, "pending_ids": [job["arxiv_id"] for job in pending_metadata(connection)]}
+    cooldown = connection.execute("SELECT value FROM state WHERE key='arxiv_metadata_retry_at'").fetchone()
+    if cooldown and timestamp(cooldown[0]) > now:
+        return {**output, "status": "deferred", "attempted_ids": [], "next_retry_at": cooldown[0]}
+    if not jobs:
+        return {**output, "status": "deferred" if output["pending_ids"] else "completed"}
+    papers, failed = _candidate_metadata(config, args.db.parent / "raw" / "metadata-recovery", connection, decisions)
+    by_id = {paper["arxiv_id"]: paper for paper in papers}
+    accepted, outside = [], []
+    with connection:
+        for run_id in sorted({job["run_id"] for job in jobs}):
+            run = connection.execute("SELECT summary_json FROM runs WHERE id=?", (run_id,)).fetchone()
+            summary = json.loads(run[0] or "{}")
+            run_jobs = [job for job in jobs if job["run_id"] == run_id]
+            verified = [by_id[job["arxiv_id"]] for job in run_jobs if job["arxiv_id"] in by_id]
+            for paper in verified:
+                identifier = paper["arxiv_id"]
+                if since <= timestamp(paper["updated"]) < until:
+                    _save_agent_candidate(connection, run_id, paper, decisions[identifier], config,
+                                          args.db.parent / "raw" / f"run-{run_id:06d}")
+                    accepted.append(identifier)
+                else:
+                    outside.append(identifier)
+                connection.execute("DELETE FROM pending_metadata WHERE arxiv_id=?", (identifier,))
+            remaining = [row[0] for row in connection.execute("SELECT arxiv_id FROM pending_metadata WHERE run_id=? ORDER BY arxiv_id", (run_id,))]
+            summary.update({**run_summary(connection, run_id),
+                            "agent_candidates": max(summary.get("agent_candidates", 0), len(run_jobs)),
+                            "metadata_verified": summary.get("metadata_verified", 0) + len(verified),
+                            "metadata_failed": remaining,
+                            "outside_window": sorted(set(summary.get("outside_window", [])) | (set(outside) & {job["arxiv_id"] for job in run_jobs})),
+                            "metadata_recovered_at": iso(utcnow())})
+            finish_run(connection, run_id, summary)
+    pending = [job["arxiv_id"] for job in pending_metadata(connection)]
+    LOG.info("待验证元数据恢复 attempted=%s verified=%s accepted=%s failed=%s pending=%s", len(jobs), len(papers), len(accepted), len(failed), len(pending))
+    return {**output, "status": "partial" if failed else "completed", "metadata_verified": len(papers),
+            "metadata_failed": failed, "outside_window": outside, "unique_seen": len(accepted),
+            "selected_seen": len(accepted), "pending_ids": pending}
+
+
 def discover(args, config, connection):
     child_id = getattr(args, "discovery_task_id", None)
     task_id = child_id or getattr(args, "task_id", None) or uuid4().hex
@@ -354,6 +543,20 @@ def discover(args, config, connection):
     else:
         since, until = discovery_window(args, config)
         run_id = None
+    # A finished graph may still contain deferred metadata. Explicit discover
+    # resume repairs its saved candidates, without executing the search graph.
+    if saved and saved["status"] == "completed" and (not child_id or getattr(args, "resume", False)):
+        original = saved["result"] or {}
+        if original.get("metadata_failed"):
+            recovery = recover_pending_metadata(args, config, connection, since, until,
+                                                candidate_ids=original["metadata_failed"])
+            row = connection.execute("SELECT status,summary_json FROM runs WHERE id=?", (run_id,)).fetchone()
+            output = {**original, **json.loads(row["summary_json"]), "status": row["status"], "metadata_recovery": recovery}
+            with connection:
+                connection.execute("UPDATE agent_tasks SET result_json=?,updated_at=? WHERE task_id=?",
+                                   (dumps(output), iso(utcnow()), task_id))
+            return output
+        return original
     client = OfficialClient(config, args.provider)
     client.validate_generation()
     client.require_key()
@@ -369,63 +572,51 @@ def discover(args, config, connection):
 
     def search(state):
         agent = SearchAgent(config, args.provider, cache)
+        pending_ids = {job["arxiv_id"] for job in pending_metadata(connection)}
+        previous_search = get_task(cache, "search")
+        search_excluded = (set(previous_search["request"]["task"]["excluded_arxiv_ids"])
+                           if previous_search else excluded | pending_ids)
         result = agent.run(since, until, min(getattr(args, "limit", None) or config["digest"]["max_papers"],
-                                            config["discovery"]["max_candidates"]), excluded_ids=excluded)
+                                            config["discovery"]["max_candidates"]), excluded_ids=search_excluded)
         return {**state, "result": result}
 
     def metadata(state):
         decisions = {paper["arxiv_id"]: paper for paper in state["result"]["papers"] if paper["arxiv_id"] not in excluded}
-        identifiers, papers, metadata_failed = sorted(decisions), [], []
-        arxiv = ArxivClient(config, cache)
-        for start in range(0, len(identifiers), 50):
-            batch = identifiers[start:start + 50]
-            url = ENDPOINT + "?" + urllib.parse.urlencode({"id_list": ",".join(batch), "max_results": len(batch)})
-            path = cache / f"ids-{start:04d}.xml"
-            try:
-                raw = path.read_bytes() if path.exists() else arxiv.request(url)
-            except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ConnectionError) as error:
-                # A rate-limited or failed batch must not discard the agent's other candidates.
-                LOG.warning("arXiv 元数据批次失败，跳过 %s 个候选：%s", len(batch), error)
-                metadata_failed.extend(batch)
-                continue
-            parsed, _, _ = parse_atom(raw, config)
-            if {paper["arxiv_id"] for paper in parsed} != set(batch):
-                raise RuntimeError("arXiv metadata did not return all agent-selected IDs")
-            path.write_bytes(raw)
-            papers.extend(parsed)
-        accepted, outside = [], []
-        for paper in papers:
-            if since <= timestamp(paper["updated"]) < until:
-                accepted.append(paper)
-            else:
-                outside.append(paper["arxiv_id"])
-                LOG.info("Agent 候选不在指定日期范围，跳过 arxiv_id=%s updated=%s", paper["arxiv_id"], paper["updated"])
+        with connection:
+            for decision in decisions.values():
+                queue_metadata(connection, run_id, decision, since, until)
+        papers, failed = _candidate_metadata(config, cache, connection, decisions)
+        accepted = [paper for paper in papers if since <= timestamp(paper["updated"]) < until]
+        outside = [paper["arxiv_id"] for paper in papers if not since <= timestamp(paper["updated"]) < until]
         if not accepted:
-            LOG.warning("Agent 未找到日期范围内的可入库论文；候选=%s，日期排除=%s", len(papers), len(outside))
+            LOG.warning("Agent 暂无日期范围内的可入库论文；提交候选=%s，元数据成功=%s，待重试=%s，日期排除=%s",
+                        len(decisions), len(papers), len(failed), len(outside))
         return {**state, "decisions": decisions, "accepted": accepted, "outside": outside,
-                "candidate_count": len(papers), "metadata_failed": metadata_failed}
+                "candidate_count": len(decisions), "metadata_verified": len(papers), "metadata_failed": failed}
 
     def ingest(state):
         row = connection.execute("SELECT status, summary_json FROM runs WHERE id=?", (run_id,)).fetchone()
         with connection:
             # A committed ingestion can be replayed if its graph checkpoint was interrupted.
-            if row["status"] == "completed":
+            if row["status"] in {"completed", "partial"}:
                 summary = json.loads(row["summary_json"])
             else:
                 for paper in state["accepted"]:
                     decision = state["decisions"][paper["arxiv_id"]]
-                    save_paper(connection, run_id, paper, config,
-                               selection_override=agent_selection(paper, decision, config))
-                    connection.execute("INSERT OR REPLACE INTO provenance VALUES (?,?,?,?)",
-                        (paper["arxiv_id"], "agent_search", decision["source_url"],
-                         dumps({"decision": decision, "provider": client.provider, "model": client.model,
-                                "trace": str(cache / "agent-trace.json"), "recorded_at": iso(utcnow())})))
+                    _save_agent_candidate(connection, run_id, paper, decision, config, cache, client.provider, client.model)
+                resolved = [paper["arxiv_id"] for paper in state["accepted"]] + state["outside"]
+                connection.executemany("DELETE FROM pending_metadata WHERE arxiv_id=?", [(identifier,) for identifier in resolved])
                 summary = {**run_summary(connection, run_id), "agent_candidates": state["candidate_count"],
+                           "metadata_verified": state.get("metadata_verified", len(state["accepted"]) + len(state["outside"])),
                            "outside_window": state["outside"], "metadata_failed": state["metadata_failed"],
                            "search_summary": state["result"]["summary"]}
+                if state["metadata_failed"]:
+                    connection.execute("INSERT OR REPLACE INTO state VALUES (?,?)", (f"pending_metadata_import:{run_id}", iso(utcnow())))
                 finish_run(connection, run_id, summary)
-        LOG.info("Agent 检索入库完成 run_id=%s accepted=%s", run_id, len(state["accepted"]))
+        LOG.info("Agent 检索入库完成 run_id=%s submitted=%s verified=%s accepted=%s metadata_pending=%s", run_id,
+                 summary["agent_candidates"], summary["metadata_verified"], summary["unique_seen"], len(summary["metadata_failed"]))
         return {**state, "output": {"task_id": task_id, "run_id": run_id, "kind": "agent_search", **summary,
+                "status": "partial" if summary["metadata_failed"] else "completed",
                 "since_utc": iso(since), "until_utc": iso(until), "trace": str(cache / "agent-trace.json")}}
 
     builder = StateGraph(dict)
@@ -441,6 +632,6 @@ def discover(args, config, connection):
         return state["output"]
     except Exception as error:
         connection.rollback()
-        if connection.execute("SELECT status FROM runs WHERE id=?", (run_id,)).fetchone()[0] != "completed":
+        if connection.execute("SELECT status FROM runs WHERE id=?", (run_id,)).fetchone()[0] not in {"completed", "partial"}:
             fail_run(connection, run_id, error)
         raise

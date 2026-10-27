@@ -5,14 +5,15 @@
 本项目包含「日报」与「论文阅读」两个专栏。以下命令均在 `recsys_frontier_stats/` 根目录执行。
 
 - `pipeline.py`：CLI 入口；`paper_pipeline/`：检索、全文提取、解读、存储和页面构建。
+- `scripts/collect_daily.sh`：采集当天/指定日期日报；`scripts/publish.sh`：从已有站点发布，独立克隆并校验线上内容。
 - `prompts/`、`pipeline_config.json`：模型提示词与日报配置；`paper_catalog.json`：全文阅读目录。
 - `paper_pipeline/paper_pages.py`：快照读取、页面包装、目录与离线重建；`tex_html.py`：LaTeXML 转换。
 - `reading_tables.py`、`reading_math.py`：共享排版修复；修复应同时覆盖新转换、旧快照与缓存。
 - `tests/`：单元测试与浏览器检查；`docs/`：GitHub Pages 发布快照及必要图片。
 - `reports/site/`：本地生成网页；`data/`、`logs/`、`reports/paper_cache/`：运行数据，不提交。
-- `../LLM4Rec/`、`../RL_Training/`、`../Frontier_LLM/`：用户的论文资料，清理时保留原件。
+- 用户原始论文资料不属于项目运行输入，清理时保留原件。
 
-**`papers` 只做离线转换和重建，不调用模型，不自动翻译英文，也不修改日报数据库。** 首次英文转中文由执行任务的 Agent 或单独翻译脚本完成；已有中文快照直接复用。缺少中文内容且未安排翻译的论文先跳过，不将英文页面标为中文全文。
+**`papers` 只从已翻译的 HTML 快照重建页面，不调用模型，也不修改日报数据库。** 新增论文从固定版本 arXiv 源码开始，在独立工作目录完成翻译与 HTML 转换，再登记发布快照。缺少中文内容且未安排翻译的论文不加入阅读目录，不将英文页面标为中文全文。
 
 ## 开发与运行命令
 
@@ -26,9 +27,11 @@ python3 -m venv .venv
 `doctor` 离线检查配置与依赖。只有需要模型调用时才配置 `.env`，使用 `.env.example` 中的变量。
 
 - `.venv/bin/python pipeline.py daily`：联网检索、解读并生成日报，消耗 API 额度。
+- `bash scripts/collect_daily.sh [daily 参数]`：自动使用项目 `.venv`，默认北京时间当天，保留 CLI 退出码。
+- `bash scripts/publish.sh --dry-run`：检查发布差异；省略 `--dry-run` 会提交、推送并等待线上文件哈希一致，需要本机 Git 认证。
 - `.venv/bin/python pipeline.py preview`：用已有解读离线重建日报。
 - `.venv/bin/python pipeline.py papers`：离线重建全部论文及目录。
-- `.venv/bin/python pipeline.py papers --paper OneTrans --force`：重建指定简称或 ID，忽略转换缓存；`--paper` 可重复。
+- `.venv/bin/python pipeline.py papers --paper OneTrans --force`：重建指定简称或 ID，重新读取 HTML 快照；`--paper` 可重复。
 - `python3 -m http.server 8080 --bind 127.0.0.1 -d reports/site`：本地预览，论文入口为 `/papers/`。
 
 ## 新增论文与中文 HTML 流程
@@ -57,7 +60,7 @@ python3 -m venv .venv
 
 转换需要 `latexmlc`、`latexmlpost`；可配置 `LATEXML_ROOT` 指向解包后的工具根目录。检查 `digest.log`、`post.log` 与 LaTeXML 日志，修复错误节点、缺失图片和未解析引用；不得通过删除正文、公式或参考文献来消除错误。兼容宏包的调整放在临时副本或转换适配中，保留原始源码。
 
-已有完整中文 TeX 时可用 `tex_project`（建议绝对路径）与 `tex_entry`（工程内相对路径）直接构建；完成后仍应转成可独立重建的 HTML 快照。输入选择优先级是 `html_snapshot` → `tex_project` → `zh_pdf`，切换来源时移除旧的高优先级字段。
+目录只接受项目内的相对 `html_snapshot` 路径。`papers --source-dir`、`zh_pdf`、`tex_project`、`tex_entry` 等旧本地导入入口已删除；不要恢复对某台机器论文目录的依赖。下载的 arXiv 源码使用上述 `convert_tex` 转换器单独处理，完成翻译与校验后再登记 HTML。
 
 PPO 已有从英文 PDF 转换的例外；遇到其他只有 PDF 外壳的源码，先记录情况，不静默套用该例外。PDF 图形可转换为 SVG 或必要裁图，但发布目录不保留 PDF。
 
@@ -130,6 +133,8 @@ git status --short
 
 执行发布任务时提交并推送到目标仓库，确认 Pages 部署成功，再检查线上首页、列表、新论文和图片；必要时比对文件哈希。仅修改文档的任务不需要触发论文转换或模型调用。
 
+日常发布可直接运行 `bash scripts/publish.sh`，只将 `reports/site/` 同步到临时克隆内的 `docs/` 并推送，不更改本地 Git 历史或 `docs/` 快照。`--no-verify` 只确认推送，不能据此宣称部署成功。脚本改动使用本地 bare Git 仓库和模拟 HTTP 响应测试，避免验证时意外发布或消耗模型额度。
+
 CLI 自动将 INFO、WARNING、ERROR 和异常堆栈写入 `logs/YYYY-MM-DD/HH-MM-SS.log`，日期与时间是实际运行时间，不是日报归档日期。手工转换也应保留阶段、arXiv ID/版本、命令、退出码、完整异常与校验结果；不要只留下成功摘要或记录密钥。
 
 上线验证后清理本次 `/tmp` 任务目录、下载包和不再需要的转换缓存，先保存必要诊断记录。保留 `docs/`、现有站点、日志及用户原始资料；不提交 API 密钥、数据库、缓存或 PDF 副本。发布快照必须能在缓存清理后独立重建。
@@ -139,5 +144,7 @@ CLI 自动将 INFO、WARNING、ERROR 和异常堆栈写入 `logs/YYYY-MM-DD/HH-M
 Python 3.10+，四空格缩进，函数和模块用 `snake_case`，类用 `PascalCase`；`.mjs` 沿用所在文件格式。未配置统一 formatter/linter，避免无关格式化。模型调用集中在 `providers.py`，数据库结构修改集中在 `storage.py`。
 
 使用 `unittest`，文件命名 `tests/test_*.py`，方法命名 `test_*`；网络和模型调用用现有 fixture/FakeClient 模拟。没有数值覆盖率门槛，应覆盖改动行为及实际回归；文档修改无需新增测试。
+
+检索容错改动需覆盖单页超时后换源、认证错误停止、订阅预览/错误页识别，以及元数据限流后的持久化与重试。候选应在元数据请求前落库，失败不丢弃来源证据；重试仍须通过日期、机构与历史去重检查。新的 `daily` 先恢复待验证候选，再按需搜索；已经结束的日报使用 `resume` 保持历史结果，补齐须新建 `daily` 任务。测试使用临时数据库与模拟响应，不改已有日报，不因离线测试通过就声称真实检索已补足篇数。
 
 提交沿用简短范围前缀，如 `publishing: widen layout`、`discovery: tolerate metadata batch failures`。PR 说明问题、最终行为、验证结果和相关 issue；视觉修改附桌面与手机截图，明确未验证部分。

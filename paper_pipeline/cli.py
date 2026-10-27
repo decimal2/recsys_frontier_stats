@@ -125,13 +125,12 @@ def parser():
     fetch = commands.add_parser("fetch", help="用 DeepSeek 官方 Fetch 保存网页 Markdown 证据")
     fetch.add_argument("--url", required=True)
     commands.add_parser("doctor", help="检查配置和依赖，不联网、不显示密钥")
-    commands.add_parser("pending", help="查看全文解读待处理队列")
+    commands.add_parser("pending", help="查看待验证元数据与待全文解读队列")
     commands.add_parser("preview", help="用已有解读重新生成日报及归档，不联网、不调用模型")
-    papers = commands.add_parser("papers", help="将中文 TeX 工程或已有中文 PDF 构建为论文专栏，不联网、不调用模型")
-    papers.add_argument("--source-dir", type=Path, default=ROOT.parent / "LLM4Rec" / "source")
+    papers = commands.add_parser("papers", help="从已翻译的 HTML 快照重建论文专栏，不联网、不调用模型")
     papers.add_argument("--catalog", type=Path, default=ROOT / "paper_catalog.json")
     papers.add_argument("--paper", action="append", help="只构建指定简称或 arXiv ID，可重复；默认构建目录中全部论文")
-    papers.add_argument("--force", action="store_true", help="重新转换中文正文、公式与图表，不复用转换缓存")
+    papers.add_argument("--force", action="store_true", help="重新读取 HTML 快照，不复用正文缓存")
     tasks = commands.add_parser("tasks", help="查看 LangGraph 任务状态，可在任务运行时使用")
     tasks.add_argument("--task-id", help="只查看指定任务")
     resume = commands.add_parser("resume", help="按已保存配置恢复中断的任务")
@@ -148,7 +147,7 @@ def _main(argv=None):
     try:
         if args.command == "papers":
             from .paper_pages import build_papers
-            output = build_papers(args.source_dir, args.output_dir, args.catalog, args.paper, args.force)
+            output = build_papers(args.output_dir, args.catalog, args.paper, args.force)
             LOG.info("运行结果：%s", json.dumps(output, ensure_ascii=False))
             print(json.dumps(output, ensure_ascii=False, indent=2))
             return 0 if output["status"] == "completed" else 1
@@ -186,8 +185,12 @@ def _main(argv=None):
                         "database": str(args.db), "network_tested": False}
                 elif args.command == "pending":
                     from .daily import queued
+                    from .discovery import import_pending_metadata
+                    from .storage import pending_metadata
+                    import_pending_metadata(connection, args.db.parent)
                     output = {"pending": [{"arxiv_id": job["paper"]["arxiv_id"], "title": job["paper"]["title"],
-                        "score": job["selection"]["score"], "last_error": job["last_error"]} for job in queued(connection)]}
+                        "score": job["selection"]["score"], "last_error": job["last_error"]} for job in queued(connection)],
+                        "pending_metadata": pending_metadata(connection)}
                 elif args.command == "preview":
                     from .publishing import rebuild_reports
                     output = rebuild_reports(connection, args.output_dir, config)

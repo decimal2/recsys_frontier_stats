@@ -1,4 +1,4 @@
-"""Build a local Chinese full-paper library independently of the daily agent."""
+"""Rebuild the reading library from portable, translated HTML snapshots."""
 import hashlib
 import json
 import logging
@@ -173,25 +173,28 @@ def load_catalog(path):
         if not re.fullmatch(r"v[1-9]\d*", paper["version"]):
             raise ValueError("论文目录需要明确 arXiv 版本：" + identifier)
         parse_published_date(paper.get("published_date"))
-        source_keys = (("html_snapshot",) if paper.get("html_snapshot") else
-                       ("tex_project", "tex_entry") if paper.get("tex_project") else ("zh_pdf",))
-        for key in ("title_zh", "title_en", "short_name", *source_keys):
-            if not isinstance(paper[key], str) or not paper[key].strip():
+        if {"zh_pdf", "tex_project", "tex_entry", "latexml_root"} & paper.keys():
+            raise ValueError("已删除本地 PDF/TeX 导入；请将 arXiv 译文转换为 HTML 并配置 html_snapshot：" + identifier)
+        for key in ("title_zh", "title_en", "short_name", "html_snapshot"):
+            if not isinstance(paper.get(key), str) or not paper[key].strip():
                 raise ValueError("论文目录缺少 " + key)
+        snapshot = Path(paper["html_snapshot"])
+        if snapshot.is_absolute() or ".." in snapshot.parts:
+            raise ValueError("HTML 快照必须位于目录清单所在目录内，使用相对路径：" + str(snapshot))
         paper["arxiv_url"] = "https://arxiv.org/abs/" + identifier + paper["version"]
         seen.add(identifier)
     return papers
 
 
-def project_checksum(directory):
-    """Hash source and resource bytes so an edited include or figure rebuilds HTML."""
+def snapshot_checksum(directory):
+    """Hash the published HTML and assets so edits invalidate the document cache."""
     directory = Path(directory)
     if not directory.is_dir():
-        raise ValueError("找不到中文 TeX 工程：" + str(directory))
+        raise ValueError("找不到 HTML 快照目录：" + str(directory))
     digest = hashlib.sha256()
     for path in sorted(directory.rglob("*")):
         if path.is_symlink():
-            raise ValueError("TeX 工程中不支持符号链接：" + str(path))
+            raise ValueError("HTML 快照中不支持符号链接：" + str(path))
         if path.is_file():
             digest.update(str(path.relative_to(directory)).encode())
             digest.update(b"\0")
@@ -222,10 +225,7 @@ def read_html_snapshot(path, asset_dir):
     return document
 
 
-def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json", identifiers=None, force=False):
-    from .paper_html import convert_pdf
-
-    source_dir = Path(source_dir).resolve()
+def build_papers(output_dir, catalog_path=ROOT / "paper_catalog.json", identifiers=None, force=False):
     output_dir = Path(output_dir)
     site = output_dir / "site"
     library = site / "papers"
@@ -240,29 +240,17 @@ def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json
             raise ValueError("论文目录中没有：" + ", ".join(sorted(wanted - known)))
         papers = [paper for paper in papers if wanted & {paper["short_name"].casefold(), paper["arxiv_id"]}]
     published = {paper["arxiv_id"]: paper for paper in read_paper_catalog(site)}
-    built, cached, skipped = [], [], []
+    built, cached = [], []
+    catalog_root = Path(catalog_path).resolve().parent
+    converter_hash = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     for paper in papers:
         identifier = paper["arxiv_id"]
-        snapshot = ((Path(catalog_path).resolve().parent / paper["html_snapshot"]).resolve()
-                    if paper.get("html_snapshot") else None)
-        tex_project = Path(paper["tex_project"]) if paper.get("tex_project") else None
-        pdf_path = (source_dir / paper["zh_pdf"]).resolve() if paper.get("zh_pdf") else None
-        if pdf_path and not pdf_path.is_relative_to(source_dir):
-            raise ValueError("中文 PDF 必须位于 source-dir 内：" + paper["zh_pdf"])
-        if not snapshot and not tex_project and (not pdf_path or not pdf_path.is_file()):
-            LOG.warning("跳过 %s：没有中文 PDF（%s）", paper["short_name"], pdf_path)
-            skipped.append(identifier)
-            continue
-        if snapshot:
-            if not snapshot.is_file():
-                raise ValueError("找不到 HTML 全文快照：" + str(snapshot))
-            checksum = project_checksum(snapshot.parent)
-        elif tex_project:
-            checksum = hashlib.sha256((project_checksum(tex_project) + "\0" + paper["tex_entry"]).encode()).hexdigest()
-        else:
-            checksum = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
-        converter_file = "paper_pages.py" if snapshot else "tex_html.py" if tex_project else "paper_html.py"
-        converter_hash = hashlib.sha256(Path(__file__).with_name(converter_file).read_bytes()).hexdigest()
+        snapshot = (catalog_root / paper["html_snapshot"]).resolve()
+        if not snapshot.is_relative_to(catalog_root):
+            raise ValueError("HTML 快照必须位于目录清单所在目录内：" + str(snapshot))
+        if not snapshot.is_file():
+            raise ValueError("找不到 HTML 全文快照：" + str(snapshot))
+        checksum = snapshot_checksum(snapshot.parent)
         destination = library / identifier
         assets = destination / "assets"
         assets.mkdir(parents=True, exist_ok=True)
@@ -281,18 +269,11 @@ def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json
             cached.append(identifier)
             LOG.info("复用中文正文缓存：%s", paper["short_name"])
         else:
-            LOG.info("构建中文全文：%s (%s)", paper["short_name"], snapshot or tex_project or pdf_path.name)
+            LOG.info("重建中文 HTML 全文：%s (%s)", paper["short_name"], snapshot)
             with tempfile.TemporaryDirectory(prefix=identifier + "-", dir=cache_dir) as temporary:
                 staged = Path(temporary) / "assets"
                 staged.mkdir()
-                if snapshot:
-                    document = read_html_snapshot(snapshot, staged)
-                elif tex_project:
-                    from .tex_html import convert_tex
-                    document = convert_tex(tex_project, paper["tex_entry"], staged,
-                                           cache_dir / (identifier + "-tex-build"), paper.get("latexml_root"))
-                else:
-                    document = convert_pdf(pdf_path, staged)
+                document = read_html_snapshot(snapshot, staged)
                 current_assets = {path.name for path in staged.iterdir() if path.is_file()}
                 for path in staged.iterdir():
                     if path.is_file():
@@ -309,7 +290,7 @@ def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json
             (destination / legacy_pdf).unlink(missing_ok=True)
         for warning in document["stats"].get("warnings", []):
             LOG.warning("%s 全文转换提示：%s", paper["short_name"], warning)
-        public = {key: value for key, value in paper.items() if key not in {"zh_pdf", "tex_project", "tex_entry", "latexml_root", "html_snapshot"}}
+        public = {key: value for key, value in paper.items() if key != "html_snapshot"}
         public.update(url=f"papers/{identifier}/index.html", stats=document["stats"], source_sha256=checksum)
         published[identifier] = public
         LOG.info("中文论文页面已生成：%s；%s", destination / "index.html", document["stats"])
@@ -322,5 +303,5 @@ def build_papers(source_dir, output_dir, catalog_path=ROOT / "paper_catalog.json
         _, webpage = render_daily(payload, paper_links=paper_links)
         atomic_write(site / (saved.stem + ".html"), webpage)
     homepage = publish_index(None, site)
-    return {"status": "completed" if catalog else "empty", "built": built, "cached": cached, "skipped": skipped,
+    return {"status": "completed" if catalog else "empty", "built": built, "cached": cached,
             "papers": len(catalog), "library": str(library / "index.html"), "homepage": homepage}

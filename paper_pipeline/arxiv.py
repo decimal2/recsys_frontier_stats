@@ -114,17 +114,21 @@ def network_permission_denied(error):
 
 
 class ArxivClient:
-    def __init__(self, config, cache_dir):
+    def __init__(self, config, cache_dir, *, metadata=False):
         self.config = config
         self.settings = config["arxiv"]
         self.cache_dir = cache_dir
         self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.metadata = metadata
         # Also leave a full interval after a previous CLI process releases the DB lock.
         self.last_request = time.monotonic()
 
     def request(self, url, accept="application/atom+xml"):
         settings = self.settings
-        for attempt in range(settings["retries"] + 1):
+        # Candidate metadata has a durable retry queue. Do not hold an entire
+        # daily run in an exponential 30+60+120+240+480 second 429 loop.
+        retries = min(settings["retries"], 1) if self.metadata else settings["retries"]
+        for attempt in range(retries + 1):
             if self.last_request is not None:
                 time.sleep(max(0, settings["request_interval_seconds"] - (time.monotonic() - self.last_request)))
             self.last_request = time.monotonic()
@@ -134,10 +138,15 @@ class ArxivClient:
                 with urllib.request.urlopen(request, timeout=settings["timeout_seconds"]) as response:
                     return response.read()
             except urllib.error.HTTPError as error:
-                if error.code not in {408, 429, 500, 502, 503, 504} or attempt == settings["retries"]:
+                if self.metadata and error.code == 429:
+                    LOG.warning("arXiv 元数据限流，保留候选并延后重试")
+                    raise
+                if error.code not in {408, 429, 500, 502, 503, 504} or attempt == retries:
                     raise
                 delay = max((30.0 if error.code == 429 else 3.1) * 2 ** attempt,
-                            retry_after(error.headers.get("Retry-After")))
+                            retry_after((error.headers or {}).get("Retry-After")))
+                if self.metadata and delay > 5:
+                    raise  # Honor long Retry-After in the persistent queue.
                 LOG.warning("arXiv HTTP %s; retry in %.1fs", error.code, delay)
                 error.close()
                 time.sleep(delay)
@@ -146,7 +155,7 @@ class ArxivClient:
                 if network_permission_denied(error):
                     LOG.error("arXiv 网络权限被阻止", exc_info=True)
                     raise RuntimeError("arXiv 请求被当前执行环境的网络权限阻止（EPERM/EACCES）；请在允许联网的环境运行。") from None
-                if attempt == settings["retries"]:
+                if attempt == retries:
                     raise
                 LOG.warning("arXiv 网络请求失败，%.1f 秒后重试", 3.1 * 2 ** attempt, exc_info=True)
                 time.sleep(3.1 * 2 ** attempt)

@@ -44,6 +44,13 @@ def connect(path):
             metadata_json TEXT NOT NULL, selection_json TEXT NOT NULL,
             added_at TEXT NOT NULL, last_error TEXT
         );
+        CREATE TABLE IF NOT EXISTS pending_metadata (
+            arxiv_id TEXT PRIMARY KEY, decision_json TEXT NOT NULL,
+            run_id INTEGER NOT NULL REFERENCES runs(id),
+            since_utc TEXT NOT NULL, until_utc TEXT NOT NULL, created_at TEXT NOT NULL,
+            attempts INTEGER NOT NULL DEFAULT 0, last_attempt TEXT,
+            next_retry_at TEXT, last_error TEXT
+        );
         CREATE TABLE IF NOT EXISTS digest_processed (
             arxiv_id TEXT NOT NULL, version INTEGER NOT NULL, outcome TEXT NOT NULL,
             processed_at TEXT NOT NULL, PRIMARY KEY (arxiv_id,version)
@@ -90,6 +97,31 @@ def start_run(connection, kind, config, since=None, until=None):
          iso(until) if until else None, dumps(config)))
     connection.commit()
     return cursor.lastrowid
+
+
+def queue_metadata(connection, run_id, decision, since, until):
+    """Persist the model's evidence before trying the independent metadata API."""
+    connection.execute("""INSERT OR IGNORE INTO pending_metadata
+        (arxiv_id,decision_json,run_id,since_utc,until_utc,created_at)
+        VALUES (?,?,?,?,?,?)""", (decision["arxiv_id"], dumps(decision), run_id,
+                                 iso(since), iso(until), iso(utcnow())))
+
+
+def pending_metadata(connection):
+    rows = connection.execute("SELECT * FROM pending_metadata ORDER BY created_at,arxiv_id")
+    result = []
+    for row in rows:
+        item = dict(row)
+        item["decision"] = json.loads(item.pop("decision_json"))
+        result.append(item)
+    return result
+
+
+def defer_metadata(connection, identifiers, error, next_retry_at, *, attempted=True):
+    connection.executemany("""UPDATE pending_metadata SET attempts=attempts+?,
+        last_attempt=CASE WHEN ? THEN ? ELSE last_attempt END,next_retry_at=?,last_error=? WHERE arxiv_id=?""",
+        [(int(attempted), attempted, iso(utcnow()), iso(next_retry_at), str(error), identifier)
+         for identifier in identifiers])
 
 
 def save_paper(connection, run_id, incoming, config, selection_override=None):
@@ -189,8 +221,9 @@ def run_summary(connection, run_id):
 
 
 def finish_run(connection, run_id, summary):
-    connection.execute("UPDATE runs SET status='completed',finished_at=?,summary_json=? WHERE id=?",
-                       (iso(utcnow()), dumps(summary), run_id))
+    status = "partial" if summary.get("metadata_failed") else "completed"
+    connection.execute("UPDATE runs SET status=?,finished_at=?,summary_json=?,error=NULL WHERE id=?",
+                       (status, iso(utcnow()), dumps(summary), run_id))
 
 
 def fail_run(connection, run_id, error):

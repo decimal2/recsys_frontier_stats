@@ -95,6 +95,7 @@ def _initial_state(args, config, connection, client):
     return {"day": day, "limit": limit, "minimum": minimum,
             "since": iso(since) if since else None, "until": iso(until) if until else None,
             "windows": windows, "window_index": 0, "items": items, "other_ids": sorted(other_ids),
+            "window_searched": True,
             "attempted": [], "collections": [], "errors": errors, "rejected": rejected,
             "previous_discovery": previous.get("discovery", []), "search_failed": False,
             "edition_revision": hashlib.sha256(saved[0].encode()).hexdigest() if saved else None}
@@ -109,6 +110,7 @@ class DailyState(TypedDict, total=False):
     until: str | None
     windows: list[str]
     window_index: int
+    window_searched: bool
     items: dict
     other_ids: list[str]
     attempted: list[str]
@@ -118,6 +120,7 @@ class DailyState(TypedDict, total=False):
     previous_discovery: list[dict]
     edition_revision: str | None
     search_failed: bool
+    metadata_recovery: dict
     jobs: list[dict]
     payload: dict
     synthesis_ok: bool
@@ -135,6 +138,24 @@ def digest(args, config, connection):
     cache = args.db.parent / "insights"
     task_id = getattr(args, "task_id", None) or uuid4().hex
 
+    def recover_metadata(state):
+        if getattr(args, "command", None) != "daily" or len(state["items"]) >= state["minimum"]:
+            return {}
+        from .discovery import recover_pending_metadata
+        excluded = set(state["other_ids"]) | state["items"].keys() | {
+            row[0] for row in connection.execute("SELECT arxiv_id FROM digest_processed")}
+        # Resolve old candidates once, before buying another model search. Older
+        # papers remain queued until load_queue admits their lookback window.
+        since = min(state["windows"]) if state["windows"] else state["since"]
+        try:
+            result = recover_pending_metadata(args, config, connection, timestamp(since),
+                                              timestamp(state["until"]), excluded_ids=excluded)
+            return {"metadata_recovery": result}
+        except (OSError, ValueError, RuntimeError, ET.ParseError) as error:
+            LOG.exception("日报候选元数据恢复失败，保留已有解读 date=%s", state["day"])
+            return {"search_failed": True, "errors": state["errors"] + [
+                {"arxiv_id": "metadata_recovery", "task_id": task_id, "error": str(error)}]}
+
     def load_queue(state):
         excluded = set(state["attempted"]) | set(state["other_ids"]) | state["items"].keys()
         since = timestamp(state["since"]) if state["since"] else None
@@ -146,13 +167,16 @@ def digest(args, config, connection):
     def next_step(state):
         if state["jobs"] and len(state["items"]) < state["limit"]:
             return "read_paper"
-        if (len(state["items"]) < state["minimum"] and not state["search_failed"]
-                and state["window_index"] < len(state["windows"])):
-            return "expand_window"
+        if len(state["items"]) < state["minimum"] and not state["search_failed"]:
+            if not state.get("window_searched", True):
+                return "discover"
+            if state["window_index"] < len(state["windows"]):
+                return "expand_window"
         return "synthesize"
 
     def expand_window(state):
-        return {"since": state["windows"][state["window_index"]], "window_index": state["window_index"] + 1}
+        return {"since": state["windows"][state["window_index"]],
+                "window_index": state["window_index"] + 1, "window_searched": False}
 
     def search(state):
         from .discovery import discover
@@ -167,10 +191,12 @@ def digest(args, config, connection):
                  state["minimum"] - len(state["items"]), state["since"], state["until"], len(excluded))
         try:
             collection = discover(search_args, config, connection)
-            return {"collections": state["collections"] + [collection]}
+            return {"collections": state["collections"] + [collection], "window_searched": True}
         except (OSError, ValueError, RuntimeError, ET.ParseError) as error:
             LOG.exception("日报补齐检索失败，保留已完成解读 date=%s", state["day"])
-            return {"search_failed": True, "errors": state["errors"] + [{"arxiv_id": "discovery", "error": str(error)}]}
+            return {"search_failed": True, "window_searched": True, "errors": state["errors"] + [{"arxiv_id": "discovery",
+                "task_id": search_args.discovery_task_id, "window_index": state["window_index"],
+                "since_utc": state["since"], "until_utc": state["until"], "error": str(error)}]}
 
     def read_paper(state):
         job = state["jobs"][0]
@@ -234,6 +260,7 @@ def digest(args, config, connection):
         payload = {"date": state["day"], "generated_at": iso(utcnow()), "status": status, "task_id": task_id,
                    "paper_window": paper_window, "coverage": coverage,
                    "discovery": state["previous_discovery"] + state["collections"],
+                   "metadata_recovery": state.get("metadata_recovery", {}),
                    "provider": client.provider, "model": client.model, "items": items, "synthesis": synthesis,
                    "errors": errors, "rejected": state["rejected"]}
         return {"payload": payload, "synthesis_ok": synthesis_ok}
@@ -269,12 +296,14 @@ def digest(args, config, connection):
         return {"result": {"date": state["day"], "status": payload["status"], "fulltext_insights": len(payload["items"]),
                 "webpage_ready": payload["status"] == "completed", "coverage": payload["coverage"],
                 "discovery": state["collections"], "errors": payload["errors"],
+                "metadata_recovery": state.get("metadata_recovery", {}),
                 "pending": connection.execute("SELECT COUNT(*) FROM digest_queue").fetchone()[0],
                 "pending_in_window": sum(in_window(job["paper"], since, until) for job in queued(connection)),
                 "paper_window": payload["paper_window"], **paths}}
 
     builder = StateGraph(DailyState)
     builder.add_node("initialize", lambda state: _initial_state(args, config, connection, client))
+    builder.add_node("recover_metadata", recover_metadata)
     builder.add_node("load_queue", load_queue)
     builder.add_node("expand_window", expand_window)
     builder.add_node("discover", search)
@@ -282,10 +311,11 @@ def digest(args, config, connection):
     builder.add_node("synthesize", summarize)
     builder.add_node("publish", publish)
     builder.add_edge(START, "initialize")
-    builder.add_edge("initialize", "load_queue")
+    builder.add_edge("initialize", "recover_metadata")
+    builder.add_edge("recover_metadata", "load_queue")
     builder.add_conditional_edges("load_queue", next_step)
     builder.add_conditional_edges("read_paper", next_step)
-    builder.add_edge("expand_window", "discover")
+    builder.add_edge("expand_window", "load_queue")
     builder.add_edge("discover", "load_queue")
     builder.add_edge("synthesize", "publish")
     builder.add_conditional_edges("publish", lambda state: END if state.get("result") else "load_queue")
