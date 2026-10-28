@@ -851,6 +851,74 @@
       "html_snapshot": "docs/papers/2610.20913/index.html",
       "source_format": "arxiv_tex",
       "source_url": "https://arxiv.org/src/2610.20913v1"
+    },
+    {
+      "arxiv_id": "2606.19348",
+      "version": "v1",
+      "short_name": "DeepSeek-V4",
+      "title_en": "DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence",
+      "title_zh": "DeepSeek-V4：迈向高效的百万词元上下文智能",
+      "companies": [
+        "DeepSeek"
+      ],
+      "topics": [
+        "大模型",
+        "模型架构",
+        "后训练",
+        "长上下文"
+      ],
+      "collection": "RL_Training",
+      "published_date": "2026-04-26",
+      "published_date_source": "https://arxiv.org/abs/2606.19348v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.19348v1",
+      "html_snapshot": "docs/papers/2606.19348/index.html",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2606.19348v1"
+    },
+    {
+      "arxiv_id": "2609.19969",
+      "version": "v1",
+      "short_name": "DeepSeek-V4.1-Flash",
+      "title_en": "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression",
+      "title_zh": "DeepSeek-V4.1-Flash：突破 KV 缓存压缩极限",
+      "companies": [
+        "DeepSeek"
+      ],
+      "topics": [
+        "KV 缓存压缩",
+        "多模态",
+        "长上下文"
+      ],
+      "arxiv_url": "https://arxiv.org/abs/2609.19969v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2609.19969v1",
+      "published_date": "2026-09-17",
+      "published_date_source": "https://arxiv.org/abs/2609.19969",
+      "html_snapshot": "docs/papers/2609.19969/index.html",
+      "collection": "RL_Training"
+    },
+    {
+      "short_name": "Kimi K3",
+      "arxiv_id": "2607.24653",
+      "version": "v2",
+      "title_en": "Kimi K3: Open Frontier Intelligence",
+      "title_zh": "Kimi K3：开放的前沿智能",
+      "companies": [
+        "Moonshot AI"
+      ],
+      "collection": "RL_Training",
+      "topics": [
+        "混合注意力",
+        "多模态",
+        "长上下文",
+        "强化学习"
+      ],
+      "published_date": "2026-07-27",
+      "published_date_source": "https://arxiv.org/abs/2607.24653",
+      "html_snapshot": "docs/papers/2607.24653/index.html",
+      "arxiv_url": "https://arxiv.org/abs/2607.24653v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2607.24653v2"
     }
   ]
 }

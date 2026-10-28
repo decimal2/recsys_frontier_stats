@@ -37,7 +37,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "3a34f4a39c6437990dbf188665964b9ede75a8bfb50892c00d96be5c214f2797"
+      "source_sha256": "a5ffa6dae286fbf8cab9344186144746cf97ae22b2fca753d2b7497baf08ba17"
     },
     {
       "short_name": "SimOPD",
@@ -77,7 +77,7 @@
           "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Anything' at acl_latex.tex; line 216 col 16"
         ]
       },
-      "source_sha256": "e43b5d0532cd7513b2273a03b14026d455cd99b3db7eb42ccd4ea1ccb72d2124"
+      "source_sha256": "a9cd1b10f3f49888bc9b597cc6e6174349d13f2818e076ca2bbd9c95d15d54f8"
     },
     {
       "short_name": "TransX",
@@ -174,7 +174,7 @@
           }
         ]
       },
-      "source_sha256": "b016436b5b717fb4d9a570eef6c1b25a5025d3fd800018ac919c093d7a66a4e4"
+      "source_sha256": "963b9ad957bef6f588e362255b75c5abf23ab45f2ff3316107256842fe1a5fcc"
     },
     {
       "short_name": "GEAR",
@@ -215,7 +215,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "41c2d63ed11c55680ed8016862172894c5cf3da1df4f45aa4cf27c1273f0ecb5"
+      "source_sha256": "61f36f323fae4f16262cf29864c8fbe0c891e7e9acf0e3212948c67693f7a570"
     },
     {
       "short_name": "HELIX",
@@ -254,7 +254,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "9cf6ffc48c947306dd033b9231d70d752c6c0f599e6cdf869a85e45da2b119e6"
+      "source_sha256": "aad1d5a248db61d9ec6e028b060b33bfd059b3b19c51ca9e4530fca3d5ad94cf"
     },
     {
       "short_name": "KuaFu",
@@ -411,7 +411,7 @@
           }
         ]
       },
-      "source_sha256": "45570e518132e4751c3d950d174e641aeedd3de37c67634af30c897423d3dc76"
+      "source_sha256": "bbf8c28f5ac24358018b8bf146620beec3b1a3204bf96a4d6c481f143bda6db9"
     },
     {
       "short_name": "X-Rec",
@@ -473,7 +473,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "7c6998607e324a6be64a099e344d626f8aeeaaeaf40c81747c23d738b1cf9894"
+      "source_sha256": "306ba86c551f90109230ee603bf24ba115bb336d88241e1b7060eb810bf42844"
     },
     {
       "short_name": "OneTrans-V2",
@@ -572,7 +572,7 @@
           }
         ]
       },
-      "source_sha256": "ddcf435bb827991368092884ce7decb384e18785a6f2fd9b2496cbf4e2066bb6"
+      "source_sha256": "d9b66475db16a267eff7bccb0642ffaeb1a5088e92ab5ad98275fce6c77ae9c4"
     },
     {
       "short_name": "Score Centering",
@@ -613,7 +613,63 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "aa0b88ae4bbf6cb95889c8e581e237f76f97dba92d5991e8c476fc4504415aaf"
+      "source_sha256": "e98e2db36846b62cbd4e621964d7809ae70efd2a29f30d49e3d14438650edda4"
+    },
+    {
+      "arxiv_id": "2609.19969",
+      "version": "v1",
+      "short_name": "DeepSeek-V4.1-Flash",
+      "title_en": "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression",
+      "title_zh": "DeepSeek-V4.1-Flash：突破 KV 缓存压缩极限",
+      "companies": [
+        "DeepSeek"
+      ],
+      "topics": [
+        "KV 缓存压缩",
+        "多模态",
+        "长上下文"
+      ],
+      "arxiv_url": "https://arxiv.org/abs/2609.19969v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2609.19969v1",
+      "published_date": "2026-09-17",
+      "published_date_source": "https://arxiv.org/abs/2609.19969",
+      "collection": "RL_Training",
+      "url": "papers/2609.19969/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 86107,
+        "sections": 58,
+        "figures": 12,
+        "tables": 5,
+        "table_cells": 358,
+        "mathml": 263,
+        "graphics": 13,
+        "references": 99,
+        "warnings": [
+          "Warning:uninitialized:value Use of uninitialized value value in hash element at at <tooling>/latexml-root/usr/share/perl5/LaTeXML/Core/Alignment.pm line 923",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 601 col 35",
+          "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Anything' at main.tex; line 732 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 860 col 269",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 860 col 414",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 1573 col 165",
+          "Warning:missing_file:compat.ltxml Can't find package compat.ltxml at String; line 0 col 0",
+          "Info:unexpected:compress Unexpected option 'compress' passed to natbib.sty at natbib.sty.ltxml; line 101",
+          "Info:unexpected:round Unexpected option 'round' passed to natbib.sty at natbib.sty.ltxml; line 101"
+        ],
+        "translation": {
+          "language": "zh-CN",
+          "source_version": "v1",
+          "complete": true,
+          "source_sections": 57,
+          "license": "MIT",
+          "license_source": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/LICENSE",
+          "licensed_report_comparison": "51 pages; same substantive text, formulas and data; watermarked arXiv copy has two minor English spelling/grammar differences documented in local verification.",
+          "official_report_commit": "314113f8a7dadb388215396ba5fbee2c610a04d6"
+        }
+      },
+      "source_sha256": "422fb0d620c2402070d2d1a7b8e31c4e3793d2134ef93b9dca51107fd87d79da"
     },
     {
       "short_name": "SequenceO1",
@@ -660,7 +716,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "1a3229573440ffa9793e266c9b2afbef007db6a321f1c2744c060ea153e2776c"
+      "source_sha256": "e95c8d475a948ba6102e7d4c8f89320d14f52a9c2da5afd450cdfb5250076c36"
     },
     {
       "short_name": "Multi-Decoder OneRec",
@@ -701,7 +757,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "c957f0ff719688b2b29bfdca769a260c79a4c944e0c8e87c7cad1d1ef4891ae5"
+      "source_sha256": "131e507f766546ee49d4942a25d13b88fedfd195354a484a016cc089a1b47780"
     },
     {
       "short_name": "UniR2",
@@ -744,7 +800,221 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "6785b8dbee0d75ec056ca340b052e9c0d5075936025eb16cefc47c714d101a60"
+      "source_sha256": "ddf1f363b66e07caf955d0231c616239f4dbbdab004d6f1f9df8ab5d90a67753"
+    },
+    {
+      "short_name": "Kimi K3",
+      "arxiv_id": "2607.24653",
+      "version": "v2",
+      "title_en": "Kimi K3: Open Frontier Intelligence",
+      "title_zh": "Kimi K3：开放的前沿智能",
+      "companies": [
+        "Moonshot AI"
+      ],
+      "collection": "RL_Training",
+      "topics": [
+        "混合注意力",
+        "多模态",
+        "长上下文",
+        "强化学习"
+      ],
+      "published_date": "2026-07-27",
+      "published_date_source": "https://arxiv.org/abs/2607.24653",
+      "arxiv_url": "https://arxiv.org/abs/2607.24653v2",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2607.24653v2",
+      "url": "papers/2607.24653/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 138030,
+        "sections": 68,
+        "figures": 16,
+        "tables": 5,
+        "table_cells": 665,
+        "mathml": 565,
+        "graphics": 21,
+        "references": 152,
+        "warnings": [
+          "Warning:missing_file:textgreek Can't find binding for package textgreek at main.tex; line 27 col 11",
+          "Warning:missing_file:border=0pt Can't find binding for package border=0pt at benchmark0727-fixed.tex; line 1 col 0",
+          "Info:unexpected:rowspan Rowspan 3 in cell(0,3) covers non-empty cells; truncating.to 1 at 2-model-architecture.tex; line 244 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 110 col 121",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at 1-introduction.tex; line 14 col 307",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at 1-introduction.tex; line 38 col 75",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at arch.tex; line 148 col 60",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at arch.tex; line 149 col 60",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at 2-model-architecture.tex; line 21 col 103",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at 3-pre-training.tex; line 21 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at 3-pre-training.tex; line 21 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at 3-pre-training.tex; line 23 col 178",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at 3-pre-training.tex; line 101 col 15",
+          "Warning:not_parsed:RELOP.NUMBER.CLOSE>POSTSUBSCRIPT MathParser failed to match rule 'Anything' at appendix.tex; line 111 col 11",
+          "Warning:not_parsed:RELOP.NUMBER.CLOSE>POSTSUBSCRIPT MathParser failed to match rule 'Anything' at appendix.tex; line 111 col 11"
+        ],
+        "translation": {
+          "language": "zh-CN",
+          "source_version": "2607.24653v2",
+          "official_document_commit": "3cb39dfd32e51c3328e2e4b4af21341247d06c43",
+          "license": "Kimi K3 License",
+          "license_source": "https://github.com/MoonshotAI/Kimi-K3/blob/3cb39dfd32e51c3328e2e4b4af21341247d06c43/LICENSE",
+          "independent_review": true
+        },
+        "render_repairs": [
+          {
+            "kind": "layout_schema_normalization",
+            "description": "KCP diagram layout wrappers logical-block > para changed to block > block; all original attributes, children, SVG and formulas retained."
+          },
+          {
+            "kind": "bibliography_title_logo",
+            "description": "Restored original logo image to three generated bibliography back-reference title clones whose graphic IDs were omitted by LaTeXML."
+          },
+          {
+            "kind": "original_pdf_figure",
+            "figure": 1,
+            "source_url": "https://arxiv.org/pdf/2607.24653v2",
+            "source_sha256": "1a21e4d15de52eb0d4cf09cdbffc6248c497ba6897572cc5574af237c13da51d",
+            "version": "v2",
+            "version_basis": "English source compilation and official GitHub report match fixed arXiv v2 normalized full text; verified 47 pages.",
+            "page_1based": 1,
+            "crop_bbox_pt": [
+              90,
+              415,
+              540,
+              660
+            ],
+            "coordinate_system": "PDF points, top-left origin, page size 612 x 792",
+            "asset": "assets/arxiv-v2-figure-1.svg",
+            "asset_sha256": "f18b88f88ea0b17f342e8967265fb1d382e8326a3d00d5f00e96c676b73b5aad",
+            "reason": "Independent Chrome comparison found native TikZ overlapping labels, clipped size, or incorrect merged cells. Replaced only figure content; original caption, number and anchor retained."
+          },
+          {
+            "kind": "original_pdf_figure",
+            "figure": 2,
+            "source_url": "https://arxiv.org/pdf/2607.24653v2",
+            "source_sha256": "1a21e4d15de52eb0d4cf09cdbffc6248c497ba6897572cc5574af237c13da51d",
+            "version": "v2",
+            "version_basis": "English source compilation and official GitHub report match fixed arXiv v2 normalized full text; verified 47 pages.",
+            "page_1based": 3,
+            "crop_bbox_pt": [
+              72,
+              50,
+              540,
+              438
+            ],
+            "coordinate_system": "PDF points, top-left origin, page size 612 x 792",
+            "asset": "assets/arxiv-v2-figure-2.svg",
+            "asset_sha256": "675b92d3c08ab3830eea1a6395661f74b1eb5913b89ad864d47d5242fa05af83",
+            "reason": "Independent Chrome comparison found native TikZ overlapping labels, clipped size, or incorrect merged cells. Replaced only figure content; original caption, number and anchor retained."
+          },
+          {
+            "kind": "original_pdf_figure",
+            "figure": 4,
+            "source_url": "https://arxiv.org/pdf/2607.24653v2",
+            "source_sha256": "1a21e4d15de52eb0d4cf09cdbffc6248c497ba6897572cc5574af237c13da51d",
+            "version": "v2",
+            "version_basis": "English source compilation and official GitHub report match fixed arXiv v2 normalized full text; verified 47 pages.",
+            "page_1based": 7,
+            "crop_bbox_pt": [
+              70,
+              53,
+              543,
+              180
+            ],
+            "coordinate_system": "PDF points, top-left origin, page size 612 x 792",
+            "asset": "assets/arxiv-v2-figure-4.svg",
+            "asset_sha256": "62faea59aa5a4f3d3206061f02773933a3e406af936359552e616bc80f084d77",
+            "reason": "Independent Chrome comparison found native TikZ overlapping labels, clipped size, or incorrect merged cells. Replaced only figure content; original caption, number and anchor retained."
+          },
+          {
+            "kind": "original_pdf_figure",
+            "figure": 12,
+            "source_url": "https://arxiv.org/pdf/2607.24653v2",
+            "source_sha256": "1a21e4d15de52eb0d4cf09cdbffc6248c497ba6897572cc5574af237c13da51d",
+            "version": "v2",
+            "version_basis": "English source compilation and official GitHub report match fixed arXiv v2 normalized full text; verified 47 pages.",
+            "page_1based": 23,
+            "crop_bbox_pt": [
+              126,
+              335,
+              491,
+              455
+            ],
+            "coordinate_system": "PDF points, top-left origin, page size 612 x 792",
+            "asset": "assets/arxiv-v2-figure-12.svg",
+            "asset_sha256": "089dc13316b260152eaee80ad687a14dbcb876c410c4af2e44d3a85908406038",
+            "reason": "Independent Chrome comparison found native TikZ overlapping labels, clipped size, or incorrect merged cells. Replaced only figure content; original caption, number and anchor retained."
+          },
+          {
+            "kind": "original_pdf_figure",
+            "figure": 14,
+            "source_url": "https://arxiv.org/pdf/2607.24653v2",
+            "source_sha256": "1a21e4d15de52eb0d4cf09cdbffc6248c497ba6897572cc5574af237c13da51d",
+            "version": "v2",
+            "version_basis": "English source compilation and official GitHub report match fixed arXiv v2 normalized full text; verified 47 pages.",
+            "page_1based": 33,
+            "crop_bbox_pt": [
+              85,
+              53,
+              540,
+              246
+            ],
+            "coordinate_system": "PDF points, top-left origin, page size 612 x 792",
+            "asset": "assets/arxiv-v2-figure-14.svg",
+            "asset_sha256": "4efb10ed024c7337b248d68ab03a1d57217026b956ed27ce430a5285fe453e6f",
+            "reason": "Independent Chrome comparison found native TikZ overlapping labels, clipped size, or incorrect merged cells. Replaced only figure content; original caption, number and anchor retained."
+          },
+          {
+            "kind": "original_pdf_figure",
+            "figure": 16,
+            "source_url": "https://arxiv.org/pdf/2607.24653v2",
+            "source_sha256": "1a21e4d15de52eb0d4cf09cdbffc6248c497ba6897572cc5574af237c13da51d",
+            "version": "v2",
+            "version_basis": "English source compilation and official GitHub report match fixed arXiv v2 normalized full text; verified 47 pages.",
+            "page_1based": 46,
+            "crop_bbox_pt": [
+              72,
+              52,
+              542,
+              242
+            ],
+            "coordinate_system": "PDF points, top-left origin, page size 612 x 792",
+            "asset": "assets/arxiv-v2-figure-16.svg",
+            "asset_sha256": "89772702a905f5f3786c3e8089fc463248bc078ebb54b9af22ae065bd36b2094",
+            "reason": "Independent Chrome comparison found native TikZ overlapping labels, clipped size, or incorrect merged cells. Replaced only figure content; original caption, number and anchor retained."
+          },
+          {
+            "kind": "diagram_scroll_container",
+            "target": "S5.SS1.SSS2.p3.p2",
+            "description": "Constrain the parent of the fixed-width KCP drawing to the reading area and allow independent keyboard-accessible scrolling. SVG, MathML and original transforms unchanged. Set the KCP transformed outer height to auto to fit its original line box, eliminating unnecessary vertical scrolling without changing SVG dimensions or transforms."
+          }
+        ],
+        "source_verification": {
+          "arxiv_pdf_pages": 47,
+          "english_compiled_pdf_pages": 47,
+          "english_compiled_text_matches_reference": true,
+          "official_report_text_matches_reference": true,
+          "reference_pdf_sha256": "1a21e4d15de52eb0d4cf09cdbffc6248c497ba6897572cc5574af237c13da51d",
+          "native_svg_count": 10
+        },
+        "native_svg": 4,
+        "image_instances": 21,
+        "source_graphic_instances": 81,
+        "figure_math_rendering": {
+          "before": {
+            "mathml": 642,
+            "native_svg": 10,
+            "table_cells": 681
+          },
+          "after": {
+            "mathml": 565,
+            "native_svg": 4,
+            "table_cells": 665
+          },
+          "explanation": "Mathematical labels and the SiTU comparison table inside repaired figures are preserved as exact vector artwork from the original fixed-version PDF, so they no longer contribute DOM MathML or table-cell counts."
+        }
+      },
+      "source_sha256": "ee8bbe6da6909fc365c65bd4214aec28070e98575f1fbf08555706215ebb9de5"
     },
     {
       "short_name": "RecGPT-V3",
@@ -796,7 +1066,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "e7300a80467eaa202228592243bf5af054199c02fe2c17d2dd7988b3a95abc79"
+      "source_sha256": "2375600bf44b601465a33a740237b8b4c5a9708fd89d509af6b85d57cc422e72"
     },
     {
       "short_name": "UniSGR",
@@ -833,7 +1103,7 @@
         "warnings": [],
         "language": "zh-CN"
       },
-      "source_sha256": "ec78c5263d4ff315bbdbc74979b9bc479ba2b435074984fe6ff4609a2e373afb"
+      "source_sha256": "6648fe76b9c17cf746c6eabc814c982e098d3443f8c727f770501085d9d38620"
     },
     {
       "short_name": "OneReason",
@@ -882,7 +1152,7 @@
           "Warning:missing_file:bbding Can't find package bbding at bbding.sty.ltxml; line 18"
         ]
       },
-      "source_sha256": "cb5cf00a381fad51104d19c02e16239cda83c51c049e051a8877fd53ffd6bb60"
+      "source_sha256": "2c2328b605267a499fc063add0ec74a3c8502d489a84da669b4b436458e56734"
     },
     {
       "short_name": "UniPinRec",
@@ -939,7 +1209,66 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "361027ab03d5d2d2cfaad4f1a28e2d798d403a6dc5a1067360ae3cfd8b484cfe"
+      "source_sha256": "6cde8a662838c1f3914166be6cfc14e130ca7312956ea0880db0db800b930a9e"
+    },
+    {
+      "arxiv_id": "2606.19348",
+      "version": "v1",
+      "short_name": "DeepSeek-V4",
+      "title_en": "DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence",
+      "title_zh": "DeepSeek-V4：迈向高效的百万词元上下文智能",
+      "companies": [
+        "DeepSeek"
+      ],
+      "topics": [
+        "大模型",
+        "模型架构",
+        "后训练",
+        "长上下文"
+      ],
+      "collection": "RL_Training",
+      "published_date": "2026-04-26",
+      "published_date_source": "https://arxiv.org/abs/2606.19348v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.19348v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2606.19348v1",
+      "url": "papers/2606.19348/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 102994,
+        "sections": 57,
+        "figures": 14,
+        "tables": 14,
+        "table_cells": 1431,
+        "mathml": 357,
+        "graphics": 16,
+        "references": 103,
+        "warnings": [
+          "Warning:missing_file:xltabular Can't find binding for package xltabular at main.tex; line 12 col 11",
+          "Warning:uninitialized:value Use of uninitialized value value in string eq at at <tooling>/latexml-root/usr/share/perl5/LaTeXML/Core/Alignment.pm line 1294",
+          "Warning:uninitialized:value Use of uninitialized value value in hash element at at <tooling>/latexml-root/usr/share/perl5/LaTeXML/Core/Alignment.pm line 923",
+          "Warning:uninitialized:value Use of uninitialized value value in string eq at at <tooling>/latexml-root/usr/share/perl5/LaTeXML/Core/Alignment.pm line 1294",
+          "Warning:uninitialized:value Use of uninitialized value value in hash element at at <tooling>/latexml-root/usr/share/perl5/LaTeXML/Core/Alignment.pm line 923",
+          "Warning:not_parsed:NUMBER.RELOP.NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 632 col 29",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 632 col 83",
+          "Info:unexpected:sort&compress Unexpected option 'sort&compress' passed to natbib.sty at natbib.sty.ltxml; line 101",
+          "Info:unexpected:round Unexpected option 'round' passed to natbib.sty at natbib.sty.ltxml; line 101"
+        ],
+        "source_version": "2606.19348v1",
+        "translation_review": {
+          "protected_content": "review/html-integrity.json",
+          "independent_front_infrastructure_tail": "review/independent-front-infrastructure-tail.json",
+          "other_sections": "reviewed by root and tooling_review; see task review records"
+        },
+        "license": {
+          "name": "MIT",
+          "source": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/89d501aed998d33fa4f4702102ec1bb2331e10f6/LICENSE",
+          "official_report_commit": "89d501aed998d33fa4f4702102ec1bb2331e10f6",
+          "verified_against_arxiv": "All58pagespixelidenticalexceptarxivwatermark"
+        }
+      },
+      "source_sha256": "4468689411d605584bbbc859ec4724d20622c01f77766da8f65086d50d13fb6c"
     },
     {
       "short_name": "Quantized Inference for OneRec-V2",
@@ -978,7 +1307,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "9c603f165e9271c3fa149d8fdedad533c7e510c482d6517099563dcc15e885d5"
+      "source_sha256": "8c963d62746e25f0ecb4a702e11ad176244f32c1a244ee9988954ab07ab3d0ac"
     },
     {
       "short_name": "TokenMixer-Large",
@@ -1015,7 +1344,7 @@
         "warnings": [],
         "language": "zh-CN"
       },
-      "source_sha256": "895e83a35424b201ea1acc370f9440b708af2d2d4ea4f7b5db5e2fa271a0b3c9"
+      "source_sha256": "23e330157d551e59704c991fe86d39c631d4ad52ff255de72e2836b46c0401b7"
     },
     {
       "short_name": "OPSD",
@@ -1099,7 +1428,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "f3af5ceb84c92f6010a7cf47b8afa78de84d93d117edbfcf4dcd11f813f32313"
+      "source_sha256": "8bd5c92bd3905ffbfd408a53f670ae98a7bb8a8497769e4e68064ac77a7e3138"
     },
     {
       "short_name": "HyFormer",
@@ -1419,7 +1748,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "b8cbfcb069015d278ee99f327d3e8f937ce884c5d5ebe37432161a5e35f33200"
+      "source_sha256": "b500f85e0ba7c693648c6fe7ff11167c4b11f75f51b0172601c0b0d3e3ed3eba"
     },
     {
       "short_name": "OpenOneRec",
@@ -1469,7 +1798,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "04ccbe1bc11fea74a04caf2612bc448a4dd9ecfc62fc95caafbaf92368b42631"
+      "source_sha256": "faa80ee9761d3230fe5d375de8dd0ce6d9fd6c3f72407f2b1cf5e23c3980211e"
     },
     {
       "short_name": "OneTrans",
@@ -1511,7 +1840,7 @@
           "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 912 col 123"
         ]
       },
-      "source_sha256": "437ad0069898ea7701874bf36b01d0c910cd50461c2559bd88c1518dffef8bea"
+      "source_sha256": "3c7aff89294e53e60d11762dc6c321ab1928e20a13b33a6ba1eeac343a665cb3"
     },
     {
       "short_name": "OneRec-Think",
@@ -1568,7 +1897,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "9aedf68889cc055ec10ca4b3afc95ba3789fbcd7c14a7b537f313e23b2499125"
+      "source_sha256": "8e54cd5dd3b022ef6bb38ab2f2ffde813e1d3597c4ae0c6ed42616e684f81b9e"
     },
     {
       "short_name": "OneSearch",
@@ -1611,7 +1940,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "b541d7bdc753dec8b4c967dbde37358b7b2c9131cd4d03c778371721036a41e6"
+      "source_sha256": "d9560c8dd43f58fdf3bd0f584dbc27714bca715752c67c541c1053b0647f4aad"
     },
     {
       "short_name": "OneRec-V2",
@@ -1655,7 +1984,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "40f70c9c3d0bda29c4d9d63b857e3fe7baa24e906fcae92ff8067f0bd172cdb6"
+      "source_sha256": "8f77bf6912295eed31c360c4a6d7740a80b02dc781c436e1c4c4fdd03135bf8f"
     },
     {
       "short_name": "GSPO",
@@ -1720,7 +2049,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "611dcf67fcedde6511cbfd4b028f7bf80a265de34f439c7fb5e928eb3e0ad735"
+      "source_sha256": "025514cf83bbba23f1f2c9d5bb62ce38aa1d64c9790609150feb176f7d037b7d"
     },
     {
       "short_name": "RankMixer",
@@ -1759,7 +2088,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "302c2dc90c972bba50141a63a6924af74301c0bed59cfd4d209ddbe441e9bf70"
+      "source_sha256": "2bf4abf7b92d35af971d707599e3d01b6a3ef780559d6f348ffd08657c2c2147"
     },
     {
       "short_name": "OneRec Technical Report",
@@ -1808,7 +2137,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "beb9b1ea5bcc707a1f332ab7eda0798daf5faba8c7c1dffb2cb8c394d733a637"
+      "source_sha256": "b257de0204717e278a993177abd043d9c1285bb99b63cd11fc6b96b2b0e0416b"
     },
     {
       "short_name": "LONGER",
@@ -2128,7 +2457,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "d9c4daac792d98bc4d41419de01c2cfec51d210c59306302ddce812384d6b3c5"
+      "source_sha256": "e5d06955ba28e3541f6a16258cd6a81719fe8e7ccdf67f433c3558275ee99635"
     },
     {
       "short_name": "DAPO",
@@ -2181,7 +2510,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "ac0671fe7bd00c67687d8a44d360de31a1e6737a33415b52aecd9a4633ea8509"
+      "source_sha256": "45e2fd1ff5192fac7155f345028f52063507cd5731ac1016d2eaef87706b6dcf"
     },
     {
       "short_name": "OneRec",
@@ -2512,7 +2841,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "c5ee0e92a90f3f966711d5639eed6518206c3f23ac7f7ecc5977fd53afa91e54"
+      "source_sha256": "ebd3949bf45869ad9c20d40b0e7b79e878c8f97c339f37c9a087485aacb7e70c"
     },
     {
       "short_name": "HLLM",
@@ -2553,7 +2882,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "a66d1eac4bcbbaffb29abfea181fa58dc028fbe49c377f9343acfb9456ebbd18"
+      "source_sha256": "bd882b2b197558170ce858d1341c0a043a2e0065ffe8741dbd5747ac8a6018b2"
     },
     {
       "short_name": "LETTER",
@@ -2606,7 +2935,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "2ff25ed77ebbc13c57d2bd3e3e537d75d3c60c68af788768429e861b49b7c852"
+      "source_sha256": "2b8f7c2861e3b4e63d81adf1f57cbd31661b27b4daa5a22d6aaf885db96054a6"
     },
     {
       "short_name": "NoteLLM",
@@ -2643,7 +2972,7 @@
         "warnings": [],
         "language": "zh-CN"
       },
-      "source_sha256": "9094bf6d450b8526f502de4aaedd0d8d479e1ab7bf0d2d4b0ced13e2528acfc2"
+      "source_sha256": "188b1b48459b6400cecbc376fe3357b03652c9587d7f17408b43637147a3bb18"
     },
     {
       "short_name": "HSTU",
@@ -2685,7 +3014,7 @@
           "Warning:not_parsed:ADDOP.NUMBER.CLOSE>MULOP MathParser failed to match rule 'Anything' at sec_appendix.tex; line 552 col 13"
         ]
       },
-      "source_sha256": "28d8469f4150e201ca140d726c9794be13c88a58710e4dd6b0044926d2ffdb89"
+      "source_sha256": "b298e943e4eddbd8633f8c37aeb8ca3ab81d305097cf3fd6a7fa6388dc2367c9"
     },
     {
       "short_name": "Trinity",
@@ -2730,7 +3059,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "6ede3920e9fe095f1d978842bb53e5f12367399136df3e2974478d93ad86b3f1"
+      "source_sha256": "f6cea09ce47614aa11a3988327c704a9fa8fa1d964f0af8169dbb829ee58e382"
     },
     {
       "short_name": "GRPO / DeepSeekMath",
@@ -2785,7 +3114,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "c1df1b5fd76473c9e1571cf6514206e188702bdf34a90008ab52550c75128942"
+      "source_sha256": "764473df7dbf8d39b1f6de54063636f60f6d34332ba7fa29cc8fc8602f14944d"
     },
     {
       "short_name": "OPD / GKD",
@@ -2852,7 +3181,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "c6ae89d48e5cdca16b0785ceea65d1a411a8cf89c778176fc5f2f19ce21f74db"
+      "source_sha256": "cd2ca6f89dcfa22e44ac2a20f310f4275d01c274a8a800f9a537546f2eb78cc3"
     },
     {
       "short_name": "TIGER",
@@ -2893,7 +3222,7 @@
         ],
         "language": "zh-CN"
       },
-      "source_sha256": "0f878916270018afbf33a72e98d2d0cbde784fd805c4f85535cd7a1320907a08"
+      "source_sha256": "f6847ea7d614d57920e266b60ba6c6695bd80a5157c90a754c2056f27ac3d2da"
     },
     {
       "short_name": "PPO",
@@ -2938,7 +3267,7 @@
         "language": "zh-CN",
         "table_cells": 0
       },
-      "source_sha256": "8aa91ce966fe68d43469caa218278ace77127fda2f58eb58c3414cb130b16157"
+      "source_sha256": "760953a9d91a1733a7bfc8dc557b1b229dff7b42803ea271f38123af8898a8d2"
     }
   ]
 }

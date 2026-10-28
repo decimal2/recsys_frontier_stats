@@ -103,7 +103,19 @@ export function collectMathEvidence() {
     }
     return result;
   });
-  return {viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,mathCount:math.length,wrappers,math,regions,diagramReadability,justifiedParagraphs:[...article.querySelectorAll('.ltx_p,.paper-paragraph')].filter(p=>getComputedStyle(p).textAlign==='justify').length};
+  const equationNotes=[];
+  for(const cell of article.querySelectorAll('.ltx_eqn_cell')){
+    const walker=document.createTreeWalker(cell,NodeFilter.SHOW_TEXT);
+    for(let node=walker.nextNode();node;node=walker.nextNode()){
+      if(node.parentElement.closest('math,svg'))continue;
+      for(const match of node.textContent.matchAll(/[\p{L}\p{N}_]{2,}/gu)){
+        const range=document.createRange();range.setStart(node,match.index);range.setEnd(node,match.index+match[0].length);
+        const boxes=[...range.getClientRects()].filter(r=>r.width>0&&r.height>0);
+        if(boxes.some(r=>Math.abs(r.y-boxes[0].y)>2))equationNotes.push({id:cell.closest('[id]')?.id,word:match[0],lines:boxes.length});
+      }
+    }
+  }
+  return {viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,mathCount:math.length,wrappers,math,regions,diagramReadability,equationNotes,justifiedParagraphs:[...article.querySelectorAll('.ltx_p,.paper-paragraph')].filter(p=>getComputedStyle(p).textAlign==='justify').length};
 }
 
 export function assertMathEvidence(report) {
@@ -126,6 +138,7 @@ export function assertMathEvidence(report) {
     for(const detail of d.wrappedWords)errors.push({id:d.id,problem:'diagram word is split across lines',...detail});
     for(const detail of d.multilineLabels)errors.push({id:d.id,problem:'single-line diagram label wrapped',...detail});
   }
+  for(const detail of report.equationNotes||[])errors.push({problem:'equation annotation word is split across lines',...detail});
   for(const w of report.wrappers){
     if(!['auto','scroll'].includes(w.overflowX))errors.push({id:w.diagram||w.math,problem:'wrapper does not allow horizontal scrolling'});
     if(w.scrollWidth<=w.clientWidth+2)errors.push({id:w.diagram||w.math,problem:'wrapper added without actual overflow'});
@@ -155,6 +168,19 @@ body{margin:20px}p{font:18px/1.8 sans-serif}article{max-width:none}
 <p id="icon-baseline">小图标 <svg id="short-diagram" class="ltx_picture" width="24" height="24"><circle cx="12" cy="12" r="10" fill="blue"/></svg> 保持行内。</p>
 <div class="ltx_para"><svg id="wide-diagram" class="ltx_picture" width="760" height="80" overflow="visible"><path d="M 0 40 L 750 40" stroke="black"/><foreignObject x="20" y="10" width="700" height="50"><span xmlns="http://www.w3.org/1999/xhtml">图内公式 <math id="diagram-math"><msup><mi>x</mi><mn>2</mn></msup></math></span></foreignObject></svg></div>
 </article>`;
+
+// Equation notes are outside MathML, but must remain readable beside the
+// formula. Exercise English, CJK and short identifiers inside real table rows.
+export const equationNotesFixture=`<!doctype html><meta charset="utf-8"><style>
+body{margin:20px}article{font:16px/1.8 sans-serif;overflow-wrap:anywhere}
+.tex-equation-scroll{max-width:100%;overflow:auto}
+table{border-collapse:collapse;width:100%}.ltx_equation{display:table;width:100%}
+.ltx_eqn_cell{width:1px}.ltx_eqn_center_padleft{width:50%}
+.narrow-note{display:inline-block;width:1px}
+</style><article class="paper-fulltext"><div class="tex-equation-scroll">
+<table id="notes" class="ltx_eqn_table"><tbody>
+${['Residual update','压缩率','KV'].map((note,i)=>`<tr class="ltx_equation" id="note-${i}"><td class="ltx_eqn_cell ltx_eqn_center_padleft"></td><td class="ltx_eqn_cell"><math id="note-math-${i}"><mi>x</mi></math></td><td class="ltx_eqn_cell"><span class="narrow-note">${note}</span></td></tr>`).join('')}
+</tbody></table></div></article>`;
 
 // Runner requirements:
 // 1. Load fixture at 390px, await fonts.ready, snapshot every math.outerHTML and

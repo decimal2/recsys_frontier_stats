@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {Browser, serveSite} from './browser_support.mjs';
 import {collectTableGeometry} from './browser_table_assertions.mjs';
 import {captureMathSource, captureDiagramSource, collectMathEvidence, assertMathEvidence,
-  regressionFixture, diagramRegressionFixture} from './browser_math_assertions.mjs';
+  regressionFixture, diagramRegressionFixture, equationNotesFixture} from './browser_math_assertions.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -70,6 +70,15 @@ const cases = [
   {id:'2610.20913', target:'S2.Ex17', name:'transx-amortization-formula'},
   {id:'2610.20913', target:'S4.F4', name:'transx-training-diagram'},
   {id:'2610.20913', target:'A5.T19', name:'transx-post-training-table'},
+  {id:'2606.19348', target:'S4.T1', name:'deepseek-v4-base-evaluation'},
+  {id:'2606.19348', target:'S5.T4', name:'deepseek-v4-tool-schema', widths:[390]},
+  {id:'2609.19969', target:'S5.T3', name:'deepseek-v41-evaluation'},
+  {id:'2609.19969', target:'A3.EGx1', name:'deepseek-v41-equation-notes'},
+  {id:'2609.19969', target:'S1.F3', name:'deepseek-v41-architecture', widths:[390]},
+  {id:'2607.24653', target:'S2.F4', name:'kimi-k3-situ-figure'},
+  {id:'2607.24653', target:'S5.SS1.SSS2.p3.p2', name:'kimi-k3-kcp-diagram'},
+  {id:'2607.24653', target:'S6.T3', name:'kimi-k3-internal-evaluation'},
+  {id:'2607.24653', target:'A6.F16', name:'kimi-k3-chat-template'},
 ];
 let browser, server;
 
@@ -262,6 +271,35 @@ async function diagramFixtureAudit() {
   logResult('diagram-fixture',result);
 }
 
+async function equationNotesAudit() {
+  const styles=execFileSync('python3',['-c','from paper_pipeline.reading_math import MATH_LAYOUT_STYLES; print(MATH_LAYOUT_STYLES)'],
+    {cwd:root,encoding:'utf8',env:{...process.env,PYTHONDONTWRITEBYTECODE:'1'}});
+  const result={name:'equation-notes-and-table-rows',status:'running',issues:[],states:[]};
+  report.fixtures.push(result);
+  let page;
+  try {
+    page=await browser.page(null,{width:390});await page.setContent(equationNotesFixture);await page.settle();
+    const original=await page.eval('document.querySelector("#notes").outerHTML');
+    const broken=await page.eval(`(${collectMathEvidence.toString()})()`);
+    result.before=broken.equationNotes;
+    for(const word of ['Residual','压缩率','KV'])if(!broken.equationNotes.some(n=>n.word===word))result.issues.push({kind:'equation-note-negative-control-missed',word});
+    await page.eval(`(()=>{const s=document.createElement('style');s.textContent=${JSON.stringify(styles)};document.head.append(s)})()`);
+    for(const width of [390,1440]) {
+      await page.resize(width);await page.settle();
+      const evidence=await page.eval(`(${collectMathEvidence.toString()})()`);
+      result.issues.push(...assertMathEvidence(evidence));
+      const current=await page.eval('document.querySelector("#notes").outerHTML');
+      if(current!==original)result.issues.push({kind:'equation-note-content-changed',width});
+      if(evidence.documentWidth>width+2)result.issues.push({kind:'equation-note-page-overflow',width});
+      result.states.push({width,evidence,contentHash:digest(current)});
+      await capture(page,`equation-notes-fixture-${width}`,'article');
+    }
+    result.status=result.issues.length?'failed':'passed';
+  } catch(error) {result.status='failed';result.issues.push({kind:'equation-note-fixture-exception',message:error.stack||String(error)});}
+  finally {if(page)await page.close().catch(()=>{});json(join(output,'geometry/equation-notes-fixture.json'),result);save();}
+  logResult('equation-notes-fixture',result);
+}
+
 async function libraryAudit(catalog, width) {
   const result = {width, theme:'dark', status:'running', issues:[], states:[]}; report.library.push(result);
   let page;
@@ -329,6 +367,7 @@ try {
   report.browser = await browser.call('Browser.getVersion'); save();
   await mathFixtureAudit();
   await diagramFixtureAudit();
+  await equationNotesAudit();
   for (const width of report.widths) {
     await libraryAudit(catalog, width);
     for (const paper of catalog) await paperAudit(paper, width);

@@ -6,6 +6,8 @@ MathML, equation identifiers, or surrounding prose are rewritten.
 
 
 MATH_LAYOUT_STYLES = """
+.paper-fulltext .ltx_eqn_table tr.ltx_equation{display:table-row;width:auto;margin:0}
+.paper-fulltext .ltx_eqn_cell{overflow-wrap:normal;word-break:normal;white-space:nowrap}
 .paper-fulltext figure.ltx_minipage,.paper-fulltext .ltx_listing{max-width:100%;box-sizing:border-box}
 .paper-fulltext .ltx_listing{text-align:start;overflow-wrap:normal;word-break:normal}
 .paper-fulltext .ltx_listing .ltx_lst_space{white-space:pre}
