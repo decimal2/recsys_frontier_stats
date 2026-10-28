@@ -347,10 +347,36 @@
             "source_version_verified": false,
             "source_artifact": "LLM4Rec/source/en/KuaFu_en.pdf",
             "source_pdf_sha256": "24b4c9bbb4b7d7e9aaaeb8358f2b84f1dde909d53b916a8f004c17b125947e1f"
+          },
+          {
+            "kind": "tex-figure-wrapper-layout",
+            "figure_id": "S4.F5",
+            "source": "arxiv:2609.31045v1",
+            "original_snapshot_sha256": "91420d8f08f6266a7978caebd4b120ec3be4bd4fd46468ccb3573ee9a554ac71",
+            "description": "Remove PDF-oriented fixed-height/scale wrappers around the unchanged native SVG; keep caption below its intrinsic height in normal document flow.",
+            "removed_wrapper_attributes": {
+              "outer": {
+                "class": [
+                  "ltx_inline-block",
+                  "ltx_align_center",
+                  "ltx_transformed_outer"
+                ],
+                "style": "width:433.6pt;height:141.8pt;vertical-align:-1.0pt;"
+              },
+              "inner": {
+                "class": [
+                  "ltx_transformed_inner"
+                ],
+                "style": "transform:translate(-8.8pt,2.9pt) scale(0.960855390853201,0.960855390853201) ;"
+              }
+            },
+            "original_svg_sha256": "98985583350d249191c141392e2150524c6c40ba958a9f847ec1e9165af706a8",
+            "result_svg_sha256": "98985583350d249191c141392e2150524c6c40ba958a9f847ec1e9165af706a8",
+            "new_graphic_resource": null
           }
         ]
       },
-      "source_sha256": "95ecf3b76b7b0631457134c8dfe7aafaf22feae9c5f5f9eef9e8a9a9bf0d51a5"
+      "source_sha256": "ab68563ef32e24515cb9453db2742c7da174bc8ff29e7e58998e834028396698"
     },
     {
       "short_name": "X-Rec",

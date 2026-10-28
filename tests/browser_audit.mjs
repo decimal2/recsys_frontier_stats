@@ -58,6 +58,7 @@ const cases = [
   {id:'2609.20807', selector:'.ltx_listing.ltx_minipage', name:'score-centering-listing', widths:[390]},
   {id:'2510.11639', target:'p1.pic1', name:'onerec-think-diagram', widths:[390]},
   {id:'2609.31045', target:'S3.F2.pic1', name:'kuafu-diagram', widths:[390]},
+  {id:'2609.31045', target:'S4.F5', name:'kuafu-production-diagram'},
   {id:'2402.17152', target:'alg1', name:'hstu-algorithm-1', widths:[390]},
   {id:'2306.13649', target:'alg1', name:'gkd-algorithm-1', widths:[390]},
   {id:'2609.29180', target:'S4.F9.pic1', name:'x-rec-diagram-9', widths:[390]},
