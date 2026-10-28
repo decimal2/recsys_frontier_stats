@@ -280,13 +280,13 @@
       "stats": {
         "format": "arxiv_tex",
         "converter": "LaTeXML",
-        "text_chars": 31145,
+        "text_chars": 30497,
         "sections": 31,
         "figures": 6,
         "tables": 7,
         "table_cells": 333,
         "mathml": 203,
-        "graphics": 8,
+        "graphics": 9,
         "references": 36,
         "warnings": [
           "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at main.tex; line 280 col 66",
@@ -373,10 +373,45 @@
             "original_svg_sha256": "98985583350d249191c141392e2150524c6c40ba958a9f847ec1e9165af706a8",
             "result_svg_sha256": "98985583350d249191c141392e2150524c6c40ba958a9f847ec1e9165af706a8",
             "new_graphic_resource": null
+          },
+          {
+            "kind": "restore_original_pdf_figure",
+            "figure_id": "S4.F5",
+            "source_pdf": "paper_pdfs/source/en/KuaFu_en.pdf",
+            "source_artifact": "paper_pdfs/source/en/KuaFu_en.pdf",
+            "source_pdf_sha256": "24b4c9bbb4b7d7e9aaaeb8358f2b84f1dde909d53b916a8f004c17b125947e1f",
+            "source_version": "v1",
+            "source_version_verified": true,
+            "source_version_basis": "Local PDF SHA256 exactly matches the KuaFu v1 entry of paper_pdfs/download_manifest_llm4rec.json.",
+            "manifest_sha256": "36768111eeb9fe40f95c271793e2bedb26a8cf1a7c561b713d828d66f5921f51",
+            "source_page": 9,
+            "crop_box_pt": [
+              53.0,
+              83.0,
+              556.0,
+              235.0
+            ],
+            "replaced_svg_id": "S4.F5.pic1",
+            "original_svg_sha256": "98985583350d249191c141392e2150524c6c40ba958a9f847ec1e9165af706a8",
+            "asset": "assets/676d1890dd8afc30.svg",
+            "asset_sha256": "676d1890dd8afc3091ef23b768f1c164cf49551d37b42164ccea230a26fb5b3b",
+            "removed_inline_mathml": 0,
+            "original_english_labels_preserved": true,
+            "reason": "LaTeXML TikZ text/matrix coordinate conversion overlaps labels inside the original SVG; restore the version-matched PDF vector diagram with glyphs converted to paths. Original caption remains outside the independently scrolling figure in normal flow.",
+            "html_counts": {
+              "mathml_before": 203,
+              "mathml_after": 203,
+              "graphics_before": 8,
+              "graphics_after": 9,
+              "text_chars_before": 31145,
+              "text_chars_after": 30497
+            },
+            "source_arxiv_pdf_url": "https://arxiv.org/pdf/2609.31045v1",
+            "source_artifact_type": "compiled_from_arxiv_latex"
           }
         ]
       },
-      "source_sha256": "ab68563ef32e24515cb9453db2742c7da174bc8ff29e7e58998e834028396698"
+      "source_sha256": "45570e518132e4751c3d950d174e641aeedd3de37c67634af30c897423d3dc76"
     },
     {
       "short_name": "X-Rec",
