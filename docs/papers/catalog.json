@@ -140,9 +140,41 @@
           "Warning:not_parsed:POSTSUBSCRIPT.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Anything' at scaling.tex; line 148 col 8",
           "Warning:not_parsed:POSTSUBSCRIPT.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Anything' at scaling.tex; line 148 col 8",
           "Warning:not_parsed:RELOP.UNKNOWN.POSTSUBSCRIPT>OPEN MathParser failed to match rule 'Anything' at post-training.tex; line 299 col 0"
+        ],
+        "render_repairs": [
+          {
+            "kind": "tex-figure-wrapper-layout",
+            "figure_id": "S4.F4",
+            "source": "arxiv:2610.20913v1",
+            "source_file": "sections/04-core-training.tex",
+            "source_pdf_sha256": "16788b1a0dd7d9a804a5fbbc438fb587b3f3c62be9f42886e656cced5447dbb3",
+            "reference_page_1based": 15,
+            "description": "Remove the PDF-oriented fixed width/height outer box and inner translate/scale wrapper. Keep the original SVG, all labels/formulas and caption byte-identical. The white figure container takes its intrinsic SVG height and scrolls independently if wider than the text column.",
+            "removed_outer_attributes": {
+              "class": [
+                "ltx_inline-block",
+                "ltx_align_center",
+                "ltx_transformed_outer"
+              ],
+              "style": "width:303.5pt;height:161.2pt;vertical-align:-0.0pt;"
+            },
+            "removed_inner_attributes": {
+              "class": [
+                "ltx_transformed_inner"
+              ],
+              "style": "transform:translate(-40.2pt,21.3pt) scale(0.790726883542279,0.790726883542279) ;"
+            },
+            "original_svg_sha256": "dac7fe79b7ea53e0b632a59b950662b5ae6d97b94479dc3f33667df2e9581fa3",
+            "result_svg_sha256": "dac7fe79b7ea53e0b632a59b950662b5ae6d97b94479dc3f33667df2e9581fa3",
+            "figure_mathml_preserved": 16,
+            "html_mathml_before": 996,
+            "html_mathml_after": 996,
+            "new_graphic_resource": null,
+            "pdf_crop": null
+          }
         ]
       },
-      "source_sha256": "2940f112f605bf53bd73aa19928a735cca78100ea575a8f4bb30bcfc91758a19"
+      "source_sha256": "b016436b5b717fb4d9a570eef6c1b25a5025d3fd800018ac919c093d7a66a4e4"
     },
     {
       "short_name": "GEAR",

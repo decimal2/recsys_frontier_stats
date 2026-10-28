@@ -112,6 +112,24 @@ async function paperAudit(paper, width) {
     page = await browser.page(`${server.url}/papers/${paper.arxiv_id}/index.html`, {width, beforeLoad});
     const tables = await page.eval(`(${collectTableGeometry.toString()})()`);
     const math = await page.eval(`(${collectMathEvidence.toString()})()`);
+    const figureCaptionIssues = await page.eval(`(()=>{
+      const issues=[];
+      for (const figure of document.querySelectorAll('article.paper-fulltext figure.ltx_figure')) {
+        const caption=figure.querySelector('figcaption');
+        if (!caption) continue;
+        const c=caption.getBoundingClientRect();
+        for (const svg of figure.querySelectorAll('svg')) {
+          if (caption.contains(svg)) continue;
+          const s=svg.getBoundingClientRect();
+          const overlapX=Math.min(s.right,c.right)-Math.max(s.left,c.left);
+          const overlapY=Math.min(s.bottom,c.bottom)-Math.max(s.top,c.top);
+          if (overlapX>1 && overlapY>1) issues.push({kind:'figure-caption-overlap',
+            figure:figure.id,svg:svg.id,overlapX,overlapY});
+        }
+      }
+      return issues;
+    })()`);
+    result.issues.push(...figureCaptionIssues);
     const before = await page.eval('window.__paperMathBefore');
     const after = await page.eval(`(${captureMathSource.toString()})()`);
     const diagramsBefore = await page.eval('window.__paperDiagramsBefore');
