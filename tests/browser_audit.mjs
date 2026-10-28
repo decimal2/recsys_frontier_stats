@@ -65,6 +65,10 @@ const cases = [
   {id:'2606.06260', target:'S6.T9', name:'onereason-table-9'},
   {id:'2607.26500', target:'S5.T2', name:'multidecoder-table-2'},
   {id:'2512.24762', target:'S6.T4', name:'openonerec-table-4'},
+  {id:'2610.20913', target:'S2.T1', name:'transx-notation-table'},
+  {id:'2610.20913', target:'S2.Ex17', name:'transx-amortization-formula'},
+  {id:'2610.20913', target:'S4.F4', name:'transx-training-diagram'},
+  {id:'2610.20913', target:'A5.T19', name:'transx-post-training-table'},
 ];
 let browser, server;
 

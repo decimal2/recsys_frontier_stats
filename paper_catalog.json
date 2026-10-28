@@ -829,6 +829,28 @@
       "html_snapshot": "docs/papers/2610.23306/index.html",
       "source_format": "arxiv_tex",
       "source_url": "https://arxiv.org/src/2610.23306v1"
+    },
+    {
+      "short_name": "TransX",
+      "arxiv_id": "2610.20913",
+      "version": "v1",
+      "title_en": "TransX Technical Report: Scaling Sequence Transduction for Recommendation",
+      "title_zh": "TransX 技术报告：面向推荐系统的序列转导规模化扩展",
+      "companies": [
+        "LinkedIn"
+      ],
+      "collection": "LLM4Rec",
+      "topics": [
+        "序列转导",
+        "模型与基础设施协同设计",
+        "推荐模型扩展"
+      ],
+      "arxiv_url": "https://arxiv.org/abs/2610.20913v1",
+      "published_date": "2026-10-14",
+      "published_date_source": "https://arxiv.org/abs/2610.20913",
+      "html_snapshot": "docs/papers/2610.20913/index.html",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2610.20913v1"
     }
   ]
 }
