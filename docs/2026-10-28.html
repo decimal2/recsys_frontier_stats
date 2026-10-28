@@ -1,0 +1,189 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-10-28</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-10-28</h1><div class="metrics"><div><strong>10</strong>全文解读</div><div><strong>9</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><article class="trend"><h3>工业验证从离线指标扩展到线上与部署证据</h3><p>基于当天样本观察，工业论文的验证正从单一离线指标扩展到线上A/B或生产部署，且证据形式多样：生成式检索报告GMV/浏览，序列推荐报告年化GMV，生成排序报告CTR/CTCVR，多目标蒸馏报告广告收入，解释评估报告ATC/GMV，ANN索引报告存储与延迟。推断样本更强调可部署收益，但各文的流量规模、周期和归因方式不同，横向比较需谨慎，不能据此断言全行业趋势。</p><div class="sources"><a href="#paper-2610.36958">PailitaoMMSearch2.0 技术报告：将生成式检索扩展为统一端到端多模态搜索</a> · <a href="#paper-2610.36239">BehaveRec：长期行为历史何时有助于序列推荐？会话、历史与社群信号研究</a> · <a href="#paper-2610.36890">面向生成式推荐排序的隐式残差推理</a> · <a href="#paper-2610.36973">KL-MOPD：面向生成推荐的差异感知多目标在策略蒸馏</a> · <a href="#paper-2610.36389">MAREval：评估自然语言推荐解释的多智能体框架</a> · <a href="#paper-2610.37176">面向高效近似最近邻搜索的近邻图索引无损压缩</a></div></article><article class="trend"><h3>生成式推荐/检索的统一端到端与轻量插件两条路线</h3><p>基于当天样本，生成式推荐/检索出现统一端到端与轻量插件两条路线：Pailitao把多意图统一到一个VLM生成SID，API复用SAE特征索引降低词表学习，KL-MOPD在token级做多目标蒸馏；Refiner冻结排序基座只训LoRA/残差，LinkedIn把打包生成改为点式语义打分。推断团队按数据基础、延迟预算和部署风险取舍：重构生成范式换取统一优化，或在已有链路上低侵入增强。</p><div class="sources"><a href="#paper-2610.36958">PailitaoMMSearch2.0 技术报告：将生成式检索扩展为统一端到端多模态搜索</a> · <a href="#paper-2610.36763">词表已经在这里：适配预训练可解释特征用于生成式推荐</a> · <a href="#paper-2610.36973">KL-MOPD：面向生成推荐的差异感知多目标在策略蒸馏</a> · <a href="#paper-2610.36890">面向生成式推荐排序的隐式残差推理</a> · <a href="#paper-2610.36383">从生成到打分：LinkedIn 大规模 LLM 语义标签</a></div></article><article class="trend"><h3>训练-服务对齐与成本工作点成为显式工程变量</h3><p>基于当天样本，训练-服务对齐和成本工作点成为显式工程变量：Pailitao用Sample–Beam rollout贴近线上束解码，并给多档模型与推理预算；Refiner线上只用1步推理；LinkedIn用MIS共享query编码提高吞吐；HNSW用图重排和Stream VByte压缩边表。推断这些工作不再只追离线指标，而是同时报告延迟、吞吐、内存或推理步数；横向取舍取决于场景延迟包和候选规模。</p><div class="sources"><a href="#paper-2610.36958">PailitaoMMSearch2.0 技术报告：将生成式检索扩展为统一端到端多模态搜索</a> · <a href="#paper-2610.36890">面向生成式推荐排序的隐式残差推理</a> · <a href="#paper-2610.36383">从生成到打分：LinkedIn 大规模 LLM 语义标签</a> · <a href="#paper-2610.37176">面向高效近似最近邻搜索的近邻图索引无损压缩</a></div></article><article class="trend"><h3>评估可靠性与可解释信号被单独处理</h3><p>基于当天样本，评估与可解释性从附属指标变成独立问题：MAREval专门评估推荐解释，并报告人工对齐、稳定性和线上A/B；API用SAE特征贡献解释检索；Pailitao和BehaveRec则主动讨论自动评测器共享错误、单次运行等边界。推断自动评审更适合做上线前过滤门槛，仍需人工标注校准；可解释信号也可用于调试，但不宜直接承诺业务收益。</p><div class="sources"><a href="#paper-2610.36389">MAREval：评估自然语言推荐解释的多智能体框架</a> · <a href="#paper-2610.36763">词表已经在这里：适配预训练可解释特征用于生成式推荐</a> · <a href="#paper-2610.36958">PailitaoMMSearch2.0 技术报告：将生成式检索扩展为统一端到端多模态搜索</a> · <a href="#paper-2610.36239">BehaveRec：长期行为历史何时有助于序列推荐？会话、历史与社群信号研究</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2610.36958">PailitaoMMSearch2.0 技术报告：将生成式检索扩展为统一端到端多模态搜索</a><span>淘宝拍立淘统一多模态生成式检索：图像+自由指令直接生成商品SID，覆盖相似/编辑/搭配，含Sample–Beam RL与线上A/B增益。</span></li><li><a href="#paper-2610.36239">BehaveRec：长期行为历史何时有助于序列推荐？会话、历史与社群信号研究</a><span>Walmart 工业级三信号序列推荐框架，用用户分层给出约20次交互的长期历史启用门槛。</span></li><li><a href="#paper-2610.36763">词表已经在这里：适配预训练可解释特征用于生成式推荐</a><span>用预训练SAE的可解释特征索引作SID词表，并以强度预测与偏好对齐适配生成式推荐，兼顾离线效果与检索解释。</span></li><li><a href="#paper-2610.36890">面向生成式推荐排序的隐式残差推理</a><span>Refiner 在冻结的生成式排序基座上用 LoRA 与候选级隐式推理 token 逐步做残差分数修正，公共/工业离线及 7 天在线 A/B 均有提升。</span></li><li><a href="#paper-2610.37140">重新审视 CTR 预测中的位置编码与交互粒度</a><span>腾讯参与的 CTR 研究：用目标相对秩-时间编码与时间组因果交互替代 NLP 式位置编码，四个公开集 AUC 最高相对提升 4.45%。</span></li><li><a href="#paper-2610.36973">KL-MOPD：面向生成推荐的差异感知多目标在策略蒸馏</a><span>KL-MOPD 用初始学生到两个单目标教师的 token 级 KL 预计算权重，替代 MOPD 等权蒸馏，在公开评测、十亿级工业离线与电商广告在线 A/B 中提升多目标生成推荐。</span></li><li><a href="#paper-2610.36389">MAREval：评估自然语言推荐解释的多智能体框架</a><span>多智能体规划-辩论-仲裁加蒙特卡洛采样，评估推荐解释质量，并通过人工门槛与线上A/B验证。</span></li><li><a href="#paper-2610.36383">从生成到打分：LinkedIn 大规模 LLM 语义标签</a><span>LinkedIn 将 LLM 标签器从打包生成改为单候选语义打分，并用 MIS 在一次前向中共享画像、独立逐项打分，提高一致性与吞吐。</span></li><li><a href="#paper-2610.36557">QESChunker：用单一目标统一 RAG 重叠与非重叠分块</a><span>用问题–证据监督把 RAG 文档分块转成预算感知的组合优化：非重叠用精确 DP，重叠用子模贪心，在五个语料上提升完整证据召回。</span></li><li><a href="#paper-2610.37176">面向高效近似最近邻搜索的近邻图索引无损压缩</a><span>离线图重排+Stream VByte压缩HNSW邻接表，公开基准压缩比最高2.1×，eBay生产图存储降44.3%且无可测延迟退化。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>重点论文 · 全文 insight</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2610.36958" data-search="PailitaoMMSearch2.0 Technical Report: Scaling Generative Retrieval to Unified End-to-End Multimodal Search PailitaoMMSearch2.0 技术报告：将生成式检索扩展为统一端到端多模态搜索 Alibaba Alibaba">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★★</span></div>
+<h3>PailitaoMMSearch2.0 技术报告：将生成式检索扩展为统一端到端多模态搜索</h3><a class="original" href="https://arxiv.org/abs/2610.36958" target="_blank" rel="noopener noreferrer">PailitaoMMSearch2.0 Technical Report: Scaling Generative Retrieval to Unified End-to-End Multimodal Search ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-27（UTC）</p><p class="reason">推荐系统/搜索工程师值得优先读：论文给出数据合成与质量控制、CPT/SFT/RL、Sample–Beam训练-服务对齐、多档推理预算的完整工程配方，并有淘宝线上A/B结果；离线结论需结合自动评测器校准和单域三关系限制理解。</p>
+<h4>研究问题</h4><p>工业生成式检索通常与单一在线场景、固定查询形式和单一检索目标耦合：训练受现有入口流量约束，支持新意图需额外分类器或专家模型，且同一模型难以适配不同延迟与算力预算。论文要在自由图像-文本指令下，用一个模型推断相似、编辑、搭配等隐式检索关系，并直接生成商品Semantic ID。</p><h4>核心方法</h4><p>以原生VLM为骨干，将原始图片与自由文本指令联合处理，自回归并束搜索直接生成三级商品SID；数据侧用可组合工具链完成冷启动合成、真实流量清洗与质量门控；训练侧先做电商CPT，再做多意图、混合推理预算SFT，最后用意图平衡的统一RL优化。RL采用Sample–Beam rollout：采样推理前缀、对SID束解码，使策略优化贴近线上多候选服务。0.8B/2B/4B模型与No/Low/High-think预算组合成质量-成本工作点，服务端不输入意图标签。</p>
+<h4>实验结果</h4><ul><li>离线自动评测表4中，2B Low-think 的 macro NDCG 0.918、macro ER 55.1%，搭配意图 NDCG 0.955/ER 74.3%，平均响应 278 ms 且占 1 张 GPU；该配置是表内 PailitaoMMSearch2.0 变体的宏平均最佳。</li><li>在匹配初始化、意图混合和奖励评测下，Sample–Beam RL 将 macro ER 从 SFT 的 49.03% 提升到 55.00%（+5.97 个百分点），高于标准 RL 的 52.70%；相似/编辑/搭配分别提升 4.09/5.05/8.79 个百分点。</li><li>淘宝拍立淘“Multimodal Search”线上A/B（约10%流量、约14天）中，商品页浏览量+17.90%、交易数+27.04%、GMV+8.94%，原文称均统计显著（p&lt;0.05）。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>把相似/编辑/搭配意图只作为训练采样和奖励切片、不进入服务输入，可把意图分类与路由错误内化为统一策略的一部分；适用条件是模型容量足够且各意图共享SID空间，否则小意图可能被牺牲。</li><li>Sample–Beam rollout是训练-服务对齐的关键工程点：线上用SID束解码多候选，若训练只做自回归采样会与serving错位；采样推理前缀、对每个束候选打分，可让RL优化多候选服务，适用于束宽&gt;1且奖励模型能逐候选打分的场景。</li><li>推理预算和模型规模存在明显非单调权衡：2B Low-think 在 278 ms 达 55.13%，4B High-think 最高 55.41% 但需 1,133 ms；线上应按场景延迟包选工作点，而不是默认最大模型或最大推理预算。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>论文明确“open-ended”仅指查询接口而非关系全覆盖，评测只覆盖一个电商域的三类购物关系，跨域、更多检索关系的泛化未知。</li><li>离线结果依赖自动评测器；论文指出其虽与独立人工标签校准，仍可能与数据过滤和奖励模型共享相关错误，且线上A/B只评估部署整体、无法归因单个模块。</li></ul></article><article class="paper" id="paper-2610.36239" data-search="BehaveRec: When Does Long-Term Behavioral History Help Sequential Recommendation? A Study with Session, History, and Community Signals BehaveRec：长期行为历史何时有助于序列推荐？会话、历史与社群信号研究 Walmart Walmart">
+<div class="paper-meta"><span class="pill">Walmart</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>BehaveRec：长期行为历史何时有助于序列推荐？会话、历史与社群信号研究</h3><a class="original" href="https://arxiv.org/abs/2610.36239" target="_blank" rel="noopener noreferrer">BehaveRec: When Does Long-Term Behavioral History Help Sequential Recommendation? A Study with Session, History, and Community Signals ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-26（UTC）</p><p class="reason">值得读的是用户级剂量-反应分层、容量控制、线上A/B与延迟数据，以及明确的负结果和部署边界；方法本身较工程化，适合需要决定是否上长期行为建模的团队。</p>
+<h4>研究问题</h4><p>会话级模型对相同短期会话给出相同预测，无法利用90天历史区分用户（E18）；但加入长期历史和社群信号并非总有益。论文要回答：长期行为历史在什么条件下、带来多大提升，并给出可部署的启用门槛。</p><h4>核心方法</h4><p>BehaveRec 用三路编码：7天会话的4层因果Transformer、90天历史的4层双向Transformer（[USER] token聚合成256维用户表示）、以及在用户-用户图上做GraphSAGE；图边来自UHE历史嵌入的余弦相似度而非物品共现。ThreeWayGate按用户融合三信号，训练用label-smoothed CE加InfoNCE对齐会话与历史表示，分类器与cluster嵌入权重绑定。相对SASRec的关键变化是显式长期用户表示与行为相似度社群图。</p>
+<h4>实验结果</h4><ul><li>工业离线（137M序列/12.6M用户）：V5 的 R@5=0.7201，较 SASRec 的 0.6975 提升 +0.0226 绝对/+3.2% 相对，用户级95%CI [0.0219,0.0233]，其中 UHE 贡献约83%。</li><li>容量控制：SASRec-Large 6.46M 参数（多于 BehaveRec 5.67M）R@5=0.7024，仅比标准 SASRec 高0.7%，仍比 BehaveRec V5 低2.5%，说明增益主要不是参数量。</li><li>用户级90天历史分层：6–10次交互附近与 SASRec 接近持平，之后随历史变长单调上升，101+ 事件达 +0.017 R@5。</li><li>线上A/B（非离线）：年化 GMV +$2.4M、post-add-to-cart 页面浏览 +55 bps、第三方加购 +300 bps。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>按请求级联合状态路由长期历史：冷会话(≤3)+富历史(51+)的增益最大(+0.0251 R@5)，暖会话+稀疏历史为负(-0.0009)；我推断线上可用会话长度与90天历史长度做门控或流量分层。</li><li>行为相似度用户图比物品共现边多 +0.0013 R@5、总图增益 +0.0038，但消融是共享骨干换边而非独立重训；我推断它更适合作为冷会话补充信号，不应替代 UHE 主信号。</li><li>该模型自2025年上线 Item Detail Page 与 post-ATC，线上 A/B 有正向业务指标；我推断落地前应先用自身历史长度分布从 Table III 估期望增益，再权衡图重算/缓存成本与约20次交互门槛。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>工业主结果单次训练，方差用 MovieLens 五种子间接估计（E12）；图消融共享骨干换边、非独立重训（E11）；全 item 词表单次结果方向混合，R@5 相对 SASRec -2.5%（E13）。</li><li>头条结论限定类别级意图预测；约20次交互是选择的实用操作点而非发现常数（E14）；V-H 的额外分层是单次运行重切片，无逐格置信区间（E15）。</li></ul></article><article class="paper" id="paper-2610.36763" data-search="The Vocabulary Is Already Here: Adapting Pretrained Interpretable Features for Generative Recommendation 词表已经在这里：适配预训练可解释特征用于生成式推荐 Microsoft Microsoft">
+<div class="paper-meta"><span class="pill">Microsoft</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>词表已经在这里：适配预训练可解释特征用于生成式推荐</h3><a class="original" href="https://arxiv.org/abs/2610.36763" target="_blank" rel="noopener noreferrer">The Vocabulary Is Already Here: Adapting Pretrained Interpretable Features for Generative Recommendation ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-27（UTC）</p><p class="reason">适合关注生成式推荐SID、SAE可解释特征复用和离线可解释排序的工程师；有T5/GPT-2与AR/PR对比及监督消融，但仅Amazon离线数据。</p>
+<h4>研究问题</h4><p>生成式推荐通常需在物品描述的PLM表示上额外拟合SID词表，带来词表学习成本，且词表覆盖受拟合域限制。本文试图直接复用预训练稀疏自编码器暴露的可解释特征索引作为SID词表，并解决紧凑token预算下的物品区分、目标物品排序及检索解释三个问题。</p><h4>核心方法</h4><p>API将冻结PLM-SAE的物品特征激活按强度聚合，在top-M候选特征中用“激活强度×稀有度”优先级选K个特征，形成含特征索引、归一化相对强度和语义注释的PID；再用SPA从交互历史编码完整候选特征-强度对，联合预测下一物品的特征索引与强度，以序列似然减去Hellinger强度距离打分，并加入候选集偏好对齐损失；最后把候选分数差分解到各特征贡献并配上预训练语义注释。</p>
+<h4>实验结果</h4><ul><li>在完整框架对比中，API在12个数据集-指标组合中9个取得最佳，Toys四项指标全部最佳。</li><li>在T5-PR/K=8的监督消融中，加入偏好对齐使Beauty/Sports/Toys的Recall@10分别提升13.3%、45.9%、9.4%。</li><li>PID在K=4时将三个数据集的平均碰撞率从native selection的80.76%降至17.09%。</li><li>在Sports的f4260特征上，将历史标准化log激活提高0.50可使exposure@10相对匹配控制编辑提高1.365个百分点（332名合格测试用户）。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>复用语料无关的SAE特征字典可省去推荐域词表拟合成本，但不能直接取最强特征；需按目录稀有度重排并保留相对强度，否则共享主导特征会造成碰撞。</li><li>强度打分单独加入会降低排序指标，只有在item-level偏好对齐同时存在时才带来排序增益，工业落地宜把强度信号当作排序损失的辅助，而非独立召回分。</li><li>可解释特征贡献可进一步用于离线诊断和特征转向；但当前转向效果以exposure@10的百分点计且只在离线测试用户上验证，适合作为调试/可控工具而非线上收益承诺。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>提供的实验仅覆盖Amazon Beauty/Sports/Toys的离线全目录评测，未提及线上A/B，线上延迟、收益与冷启动表现未知。</li><li>AR偏好目标使用1个正样本和4个均匀负样本，不是精确全目录交叉熵，负样本构造对排序的影响尚未量化。</li></ul></article><article class="paper" id="paper-2610.36890" data-search="Latent Residual Reasoning for Ranking in Generative Recommendation 面向生成式推荐排序的隐式残差推理 Meituan Meituan">
+<div class="paper-meta"><span class="pill">Meituan</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>面向生成式推荐排序的隐式残差推理</h3><a class="original" href="https://arxiv.org/abs/2610.36890" target="_blank" rel="noopener noreferrer">Latent Residual Reasoning for Ranking in Generative Recommendation ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-27（UTC）</p><p class="reason">有已部署 MTGR 上的工业离线与 7 天在线 A/B，方法采用冻结基座+LoRA，工程可操作性较强；适合关注低侵入式推理增强排序的读者。</p>
+<h4>研究问题</h4><p>现有生成式推荐排序模型多采用一次前向直接打分，而排序需要细粒度候选评分。已有 LLM 显式推理成本高且不适合非文本/ID 排序；隐式推理虽被引入工业排序，但连续推理步如何逐步改善候选分数仍不清楚。论文关注三点：让推理对齐排序目标、并行候选评分时保留全局用户信息、以及不重训已部署模型。</p><h4>核心方法</h4><p>Refiner 冻结预训练排序骨干，在输入末尾为每个候选追加 reasoning token，并从上一层候选位置输出自回归生成下一步 token；同时从用户历史段抽取固定 history queries 提供压缩的全局兴趣上下文。排序分数按残差累积：S_cum,r = S0 + ΣSr，每步用 MSE 监督累积分数逼近标签。Transformer 注入 LoRA，并另设 reasoning prediction layer，仅训练轻量模块，避免替换或全量重训线上模型。</p>
+<h4>实验结果</h4><ul><li>在 Steam 与 MovieLens10M 的 CTR 任务上，MTGR+Refiner 的 AUC/GAUC 分别为 0.7872/0.7594 与 0.7864/0.7043（表 2）。</li><li>在工业离线数据集上，MTGR+Refiner 的 CTR AUC/GAUC 为 0.7417/0.6920，CTCVR AUC/GAUC 为 0.8574/0.7061（表 3）。</li><li>在 7 天在线 A/B 中，Refiner 相对 MTGR 提升 PV-CTR 0.75%、UV-CTCVR 0.21%、GMV 0.46%。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>对已有稳定 GR 排序的团队，可把 Refiner 作为低侵入插件：冻结基座、只训 LoRA/残差头，先小流量上 1 步推理；在线 A/B 已给出业务指标增益，离线也显示 1–2 步较划算。适用条件是有可复用基座和增量更新管线。</li><li>history queries 的额外开销有限（RIL 可低于 1.1），说明候选并行打分时不必把完整长序列都塞进推理步，可用少量压缩用户上下文补充全局信息；适合长序列、延迟敏感排序，但需按实际 serving 重测。</li><li>冷门 item 上增益最明显，可优先在长尾/冷启动流量验证；这是 Steam 分组离线结论，线上收益仍需按业务验证。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>论文明确限制：任务接口和骨干要求不同，可直接比较的 latent reasoning 方法数量有限；也无法与需要候选交互骨干和特定业务上下文的 OnePiece 公平比较。</li><li>论文明确 RIL 只反映当前实现，额外推理未做专用 serving 优化，不能直接外推为线上端到端成本；线上仅用 1 步推理是出于延迟考虑。</li></ul></article><article class="paper" id="paper-2610.37140" data-search="Rethinking Positional Encoding and Interaction Granularity for CTR Prediction 重新审视 CTR 预测中的位置编码与交互粒度 Tencent Tencent">
+<div class="paper-meta"><span class="pill">Tencent</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>重新审视 CTR 预测中的位置编码与交互粒度</h3><a class="original" href="https://arxiv.org/abs/2610.37140" target="_blank" rel="noopener noreferrer">Rethinking Positional Encoding and Interaction Granularity for CTR Prediction ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-27（UTC）</p><p class="reason">适合做 Transformer CTR、长行为序列建模的工程师：有清晰的动机实验、可插拔的位置编码设计、跨 backbone 迁移与训练效率数据；但仅见公开数据集离线评测。</p>
+<h4>研究问题</h4><p>现有 Transformer CTR 模型多沿用 NLP 的索引/时间位置编码与 token 级因果注意力，但论文观察到六种显式位置编码在 KuaiRand 上均不如 NoPE，且目标相对时间组内双向交互优于事件级因果与全局双向。由此追问：CTR 究竟需要什么位置信息和何种交互粒度。</p><h4>核心方法</h4><p>TRIP 由三部分组成：FRE 用共享基向量和秩特定系数的低秩分解表示行为在序列中的秩；TRTE 以预测时刻为锚，用粗到细的对数时间坐标构造可学习时间势（TRIP-B）或时间旋转（TRIP-R），并按区间事件数做密度校正；TGCI 按目标相对时间分组，组内双向交互、组间保持因果顺序，辅以掩码 item 重建，再把事件压缩成组摘要供后续层建模。相对已有方法，位置表示同时建模秩、事件时间和目标相对时间，交互从 token 级因果变为时间组粒度。</p>
+<h4>实验结果</h4><ul><li>在 KuaiRec、KuaiRand、TAAC、TaobaoAd 四个公开集上，TRIP-B 的 AUC 均优于 11 个基线，平均相对提升 1.47%，TAAC 最大相对提升 4.45%；这是相对 AUC 提升，不是百分点。</li><li>联合秩-时间编码可迁移到其他 Transformer CTR 模型：同一 backbone 上相对八种替代位置编码的最佳结果，相对 AUC 提升最高 4.20%。</li><li>消融显示 FRE 与 TRTE 互补：TAAC 全模型 AUC 0.6337，去掉 FRE 降至 0.6066，去掉 TRTE 降至 0.6073；该差异为 AUC 绝对值。</li><li>组摘要压缩在四个数据集同时提升 AUC 并降低单步训练时间 6.3–32.8%；TaobaoAd AUC 0.6297→0.6304、141.31→95.01 ms/step，KuaiRand 0.7753→0.7778、省 20.7%。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>工业 CTR 不要默认 NLP 式位置编码会带来增益：论文在 KuaiRand 上看到多种显式编码不及 NoPE，而把秩与目标相对时间联合后才能在多个 backbone 上稳定迁移。上线前应把 NoPE、纯时间编码和秩-时间联合编码放在同一 backbone 做对照。</li><li>按目标相对时间分组可把组内双向上下文与组间兴趣演化结合，并用组摘要换取 6.3–32.8% 单步时间节省；但第一层仍需全历史稠密注意力，长历史场景的收益取决于 L 与 G 的比例，不能只凭摘要压缩推断端到端延迟。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>时间组采用固定对数间隔，可能不对齐个体用户的兴趣转移；组摘要均值池化也会淡化后续层的事件级差异（论文自述）。</li><li>KuaiRand 上未校准概率存在高估：验证集拟合的仿射 logit 校准可把 TRIP-B 的 LogLoss 从 0.5778 降至 0.5471 且不改变 AUC，说明排序与概率校准需分开验证。</li></ul></article><article class="paper" id="paper-2610.36973" data-search="KL-MOPD: Discrepancy-Aware Multi-Objective On-Policy Distillation for Generative Recommendation KL-MOPD：面向生成推荐的差异感知多目标在策略蒸馏 Alibaba Alibaba">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>KL-MOPD：面向生成推荐的差异感知多目标在策略蒸馏</h3><a class="original" href="https://arxiv.org/abs/2610.36973" target="_blank" rel="noopener noreferrer">KL-MOPD: Discrepancy-Aware Multi-Objective On-Policy Distillation for Generative Recommendation ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-27（UTC）</p><p class="reason">方法改动小、可插拔，且有公开 benchmark、十亿级工业离线与阿里电商广告在线 A/B 证据；适合评估能否引入现有 MOPD/多目标 GR 管线。理论部分可略读，重点看 token 级 KL 加权与线上收益。</p>
+<h4>研究问题</h4><p>生成推荐把物品表示为离散 token，正物品只有在每个解码步都选对 token 时才能被召回；传统多目标方法只在 item 级协调 CTR/CVR，缺少 token 级监督。将多目标 on-policy 蒸馏（MOPD）直接用于 GR 时，两个单目标教师在每个 token 上的蒸馏难度不同，且较难教师会随解码位置变化，等权蒸馏使某些目标在某些步欠拟合，最终损害两个目标的正物品召回。</p><h4>核心方法</h4><p>论文先形式化 MOPD：学生按当前策略采样序列，两个固定单目标教师（click/value）在每个前缀给出 next-token 分布，学生最小化到两教师的反向 KL；vanilla MOPD 对两个教师始终取 1/2 等权。KL-MOPD 用初始学生到各教师的 token 级 KL 衡量蒸馏难度 d_{j,t}，并归一化为 α_{j,t}=d_{j,t}/(d_{c,t}+d_{v,t})，替换等权，从而在每一步加强对较难教师的监督。权重只依赖初始学生和教师，训练前一次性预计算，不增加前向或架构改动，属于 plug-and-play 的 loss 重加权；作者还在双目标加性联合目标下证明其严格优于 vanilla MOPD 的条件。</p>
+<h4>实验结果</h4><ul><li>公开评测：在 TencentGR、YooChoose、Taobao 三个数据集及 TIGER/REG4Rec 两个 backbone 上，单目标 u_c/u_v 平均 +4.91%（表 3 的 Imp.% 为相对提升口径）。</li><li>联合目标 u_cv 在全部公开设置最佳，相对最强 baseline 与单目标教师平均 +4.12%（相对提升）。</li><li>十亿级工业离线：相对 vanilla MOPD 与单目标教师，u_cv 平均 +3.19%（数据集 49M 用户、158M 广告、&gt;1B 交互）。</li><li>线上 A/B：5 天、10% 对照/10% 实验，广告收入相对 +1.63%、GMV 相对 +2.20%，p&lt;0.05。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>若已有双教师 MOPD/生成推荐管线，KL-MOPD 只需用初始学生预计算每步权重，属于低风险 loss 重加权；适用前提是能获得单目标 teacher 并接受一次性校准成本。</li><li>多目标生成推荐不应只看 item-level 融合指标，应监控每个解码步对两个 teacher 的 KL；固定等权会系统性欠拟合某些步，进而造成 token 召回失败。</li><li>两 teacher 的难度差异越大，理论上 KL 加权收益越明显；若 teacher 分布接近或难度差很小，提升可能有限，需先做离线难度诊断。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>论文明确将扩展到三个及以上 teacher、以及通用语言任务列为未来方向，多 teacher 场景尚未验证。</li><li>线上 A/B 仅覆盖 5 天、10% 流量、单一电商广告平台，长期留存与跨场景迁移未知（分析者判断，未验证风险）。</li></ul></article><article class="paper" id="paper-2610.36389" data-search="MAREval: A Multi-Agent Framework for Evaluating Natural Language Recommendation Explanations MAREval：评估自然语言推荐解释的多智能体框架 Walmart Walmart">
+<div class="paper-meta"><span class="pill">Walmart</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>MAREval：评估自然语言推荐解释的多智能体框架</h3><a class="original" href="https://arxiv.org/abs/2610.36389" target="_blank" rel="noopener noreferrer">MAREval: A Multi-Agent Framework for Evaluating Natural Language Recommendation Explanations ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-26（UTC）</p><p class="reason">有公开数据、电商专有数据、人工标注门槛和线上A/B，且讨论了agent数、采样次数与延迟取舍，适合做推荐解释和LLM评估的团队优先阅读。</p>
+<h4>研究问题</h4><p>推荐解释的质量评估需要与人工判断对齐，但人工标注成本高、难扩展；单智能体LLM评审受提示敏感和输出不一致影响，多智能体辩论又缺乏结构化协调，容易出现提示漂移、冗余和评分方差。论文要在公开对话与电商推荐解释两个场景中，构建更稳定、更贴近人工判断的自动评估框架。</p><h4>核心方法</h4><p>MAREval把评估组织成规划—辩论—仲裁流水线：规划智能体用Chain of Debate先为评估者、主持人和仲裁者生成同步的分轮计划，约束多智能体推理顺序；主持人智能体在每轮压缩评估意见、保留分歧并抑制提示漂移；仲裁者汇总最终摘要给出评分；再用Monte Carlo采样对多次独立运行聚合，黑盒模型跑N次取均值。相比单智能体CoT/Self-Refine和ChatEval式松散辩论，它增加了全局规划、上下文调节和统计聚合。</p>
+<h4>实验结果</h4><ul><li>离线人工对齐（MAREval行）：TopicalChat Overall Chat Quality为ρ=0.548、τ=0.478；电商PE的Relevance为ρ=0.338、κ=0.334，Phraseness为ρ=0.216、κ=0.208。</li><li>稳定性：TopicalChat六项标准上平均标准差0.0197，文中称低于所有基线。</li><li>人工门槛：MAREval 5,000条样本硬约束通过率100%、软约束98.6%；G-Eval 2,500条样本分别为91%、76.1%。</li><li>线上A/B：ATC提升1.18%（p=0.05），GMV提升1.36%（p&lt;0.01）。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>多轮多智能体加Monte Carlo的主要工程价值是降方差；线上过滤阈值严格时可优先增加采样或仲裁聚合，但论文报告五评估者单线程8.16秒/次，需权衡延迟。</li><li>推荐解释评估不能直接照搬通用对话评审：PE的Relevance相关性ρ=0.338，绝对水平仍不高，自动评审更适合做上线前过滤门槛，人工标注门槛仍必要。</li><li>线上A/B的对照是同一商品不展示解释，因此GMV/ATC提升证明了解释展示的业务价值，但不能单独证明MAREval相对其它评估器带来业务增量；需同解释质量分层对照。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>线上A/B只比较展示MAREval通过的解释与不展示解释，未设置展示低质量解释的对照；无法从该实验单独分离评估器筛选质量的增量。这是分析者判断。</li><li>主实验全部基于gpt-3.5-turbo；附录多backbone只在TopicalChat Overall Score上比较，未覆盖电商推荐解释与线上，跨模型泛化仍有限。这是分析者判断。</li></ul></article><article class="paper" id="paper-2610.36383" data-search="From Generation to Scoring: Scaling LLM-Based Semantic Labeling at LinkedIn 从生成到打分：LinkedIn 大规模 LLM 语义标签 LinkedIn LinkedIn">
+<div class="paper-meta"><span class="pill">LinkedIn</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>从生成到打分：LinkedIn 大规模 LLM 语义标签</h3><a class="original" href="https://arxiv.org/abs/2610.36383" target="_blank" rel="noopener noreferrer">From Generation to Scoring: Scaling LLM-Based Semantic Labeling at LinkedIn ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-26（UTC）</p><p class="reason">适合关注 LLM 标签器、检索后精判、推理吞吐和线上部署的工程师；给出训练/读出/MIS/批流两路部署全链路，并明确栈级吞吐与质量限制。</p>
+<h4>研究问题</h4><p>工业 LLM 标签器常把多个候选标签打包进一个 prompt 生成 YES/NO 列表，以共享长画像编码；但列表生成让各判断相互耦合、依赖输出格式，且只能给硬决策。论文要解决：在保持独立判定和可控阈值的前提下，如何降低标签成本并提升一致性。</p><h4>核心方法</h4><p>将打包生成标签器改为 pointwise 语义打分：指令/画像放共享 query，单候选放 item；用单候选参考标签只监督 yes/no token 做 SFT；推理时一次 prefill 读取 yes/no logits 并重归一化为分数，阈值 τ 可调。为批量打分不重复编码长 query，采用 MIS：把 [q;c1;…;cN] 拼成一条序列，用候选隔离 attention mask 和复用 position IDs，让每项只 attend q 与自身前缀，一条请求返回 N 个独立分数；离线封装为 Ray Data API，服务端用 SGLang。相对 packed generation，共享计算但解除预测耦合，并去掉答案列表解码。</p>
+<h4>实验结果</h4><ul><li>在 45K 训练对时，语义打分与参考标签一致率为 86.3%，打包生成仅 50.8%。</li><li>打包生成需约 210K 训练对（约 4.7 倍）才能匹配语义打分在 45K 对时的一致率。</li><li>候选随机重排并重新分组时，语义打分不一致率在所有训练规模下不超过 0.01%。</li><li>相对部署的打包生成栈，MIS 打分栈离线吞吐 1.24×，流式更新服务在 1s p99 目标下 1.9×。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>把“判定契约”和“执行方式”拆开：单候选训练保证每个分数只依赖 query 与当前候选，MIS 只在推理时共享 query 编码。对推荐/检索中的独立候选判定，这可同时获得顺序不变、可调阈值的分数和批量吞吐；若任务需要 listwise 交互或去重，则 MIS 的隔离 mask 不适用。</li><li>MIS 上线后瓶颈可能从 GPU 解码转到主机侧 tokenization/packing/结果处理：论文首版 MIS 仅 4.4K labels/s，低于基线；靠 compact layout、双引擎 MPS 等把离线吞吐提升 44%。工程落地要同时改数据管道和引擎集成，不能只替换 scoring API。</li><li>单 token 打分使较小决策模型有吸引力：0.6B 探索版服务吞吐约 10.9K labels/s/GPU，但论文未报告其质量指标，因此只能作为“待验证的降本方向”，不能推断质量无损。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>质量只测检索候选上的参考标签一致率，不是产品级结果；目录缺失、检索漏召和 early stopping 跳过的候选会影响对缺失标签的解释。</li><li>吞吐是栈级对比，引擎、checkpoint、prompt 格式和运行时调优同时变化，不能把增益单独归因于 MIS；0.6B 小模型质量指标未报告，size-quality 仍未确定。</li></ul></article><article class="paper" id="paper-2610.36557" data-search="QESChunker: A Single Objective Unifies Overlapping and Non-Overlapping Chunking for RAG QESChunker：用单一目标统一 RAG 重叠与非重叠分块 Alibaba Alibaba">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★☆☆</span></div>
+<h3>QESChunker：用单一目标统一 RAG 重叠与非重叠分块</h3><a class="original" href="https://arxiv.org/abs/2610.36557" target="_blank" rel="noopener noreferrer">QESChunker: A Single Objective Unifies Overlapping and Non-Overlapping Chunking for RAG ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-27（UTC）</p><p class="reason">适合正在做 RAG 知识库、文档检索或问答召回的工程师：文中把分块从启发式改成可优化目标，并给出 DP/贪心的可落地求解、预算分析和明确局限。不是核心推荐排序论文，故评级中等。</p>
+<h4>研究问题</h4><p>RAG 检索前必须把文档切成块并建索引，块边界决定问题所需证据能否被完整召回；现有方法多为固定长度、段落、语义分割或 LLM 边界等启发式，没有显式优化问题–证据覆盖。论文要在不访问测试查询的前提下，用已有问题–证据监督构造文档特定的静态块索引。</p><h4>核心方法</h4><p>把文档按最小标点拆成原子块，以“问题–证据块”对为覆盖元素，权重按问题证据数归一；块只有在命中该问题的 hit set 时才贡献覆盖，再加按右端点标点层级的分段结构先验，构成统一效用。非重叠时目标对块可加，在长度约束和整段例外下用动态规划精确求解，时间 O(nKW)；重叠时目标为单调子模，在索引块预算下精确优化 NP-hard，采用带 singleton safeguard 的 lazy 代价–收益贪心，给出 (1−1/√e)≈0.393 近似。相对已有启发式，核心变化是把分块变成有监督、预算感知的组合优化。</p>
+<h4>实验结果</h4><ul><li>非重叠精确 DP 在 10 个展示单元中 9 个领先，唯一落后场景是 PeerQA。</li><li>重叠贪心在全部 10/10 展示单元领先，相对最强基线高 0.61–8.11 个百分点。</li><li>白皮书语料上非重叠 DP 增益最大：@100 提升 3.98 个百分点，@10% 提升 2.61 个百分点。</li><li>预算分析显示，返回上下文预算越紧，QESChunker 的相对优势越明显；曲线变平前差距最大。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>对反复被查询、已积累问题–证据日志的知识库，可把线上问题或人工标注转成离线监督，为高价值文档学习静态块边界；这比通用启发式更贴近真实查询分布。适用条件是查询重复且监督充足，冷启动文档收益不确定。</li><li>预算越紧，优化边界的边际收益越大；工程上应优先在返回上下文受限的 RAG 链路启用该方法，长上下文或接近饱和场景收益会缩小。</li><li>结构先验宜作为弱正则而非硬约束；重叠贪心在结构 bonus 变大时会下降，说明过重的段落先验可能挤掉含证据的块，需按语料扫描 λ。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>论文只评估检索层的完整证据召回，未验证下游生成答案质量；召回增益转化为最终答案质量的比例未知。</li><li>边界拟合依赖问题–证据监督的质量与覆盖；论文明确指出该法更适合反复查询、已有监督的文档，对一次性/冷启动/稀疏标注文档可能不可靠。</li></ul></article><article class="paper" id="paper-2610.37176" data-search="Lossless Compression of Proximity Graph Indexes for Efficient Approximate Nearest Neighbors Search 面向高效近似最近邻搜索的近邻图索引无损压缩 eBay eBay">
+<div class="paper-meta"><span class="pill">eBay</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>面向高效近似最近邻搜索的近邻图索引无损压缩</h3><a class="original" href="https://arxiv.org/abs/2610.37176" target="_blank" rel="noopener noreferrer">Lossless Compression of Proximity Graph Indexes for Efficient Approximate Nearest Neighbors Search ↗</a>
+
+<p class="muted">全文机构行（模型提取） · 论文更新于 2026-10-27（UTC）</p><p class="reason">适合负责向量召回、ANN服务化、主存成本和P99延迟的工程师；有公开基准和eBay生产部署结果，方法可复用。注意作者机构为eBay/ISTI-CNR/University of Pisa，eBay不在给定偏好公司名单，是否进入日报需按公司准入规则过滤。</p>
+<h4>研究问题</h4><p>HNSW等图ANN索引在向量量化后，邻接表/边结构成为内存主要瓶颈；但在线查询需随时解压邻接表，压缩不能以查询延迟为代价。论文要解决：如何对HNSW路由图做无损边压缩，同时保持或改善查询延迟，并在真实商品检索负载上验证。</p><h4>核心方法</h4><p>先做结构性分析：HNSW度受限、邻接表短且重叠少，WebGraph式引用复制理论收益低，因此放弃。随后用EGB离线重排节点ID，把图邻接关系映射到连续ID空间，再做gap编码；邻接表按列表粒度用Stream VByte压缩，依靠字节对齐布局与SIMD无分支解码；offset数组用Elias-Fano。kANNolo中增加邻接表抽象层，查询按需解压单列表并用栈缓冲，重排空间内遍历，仅结果反变换。</p>
+<h4>实验结果</h4><ul><li>在eBay生产部署中，HNSW图在ANN召回相同的情况下缩小44.3%，live workloads下未观察到可测的查询延迟退化。</li><li>在全部四个数据集上，Stream VByte取得最佳操作点，相对无压缩基线压缩比最高2.1×。</li><li>图重排只占构建总时间的3.5%（CoCondenser）到30%（Sift1M），可作为一次性离线成本换取压缩与延迟收益。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>若推荐/搜索召回已用PQ等压缩向量，下一步应优先压缩HNSW边表；论文显示低维或量化场景边占比更高，边压缩可直接释放主存而不改召回模型。</li><li>在线ANN选压缩器不能只看压缩率：Zeta更省空间但在Sift1M慢约27%，Stream VByte用少量空间换SIMD解码，在四个基准上取得接近或优于基线的延迟；延迟敏感在线召回应优先字节对齐SIMD方案。</li><li>图重排既降熵又改善缓存局部性，但需存逆映射且构建时间占比可达30%；工程上应作为离线构建选项，按数据集净收益开启。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>当前只在HNSW上验证；作者把Vamana、NSG等图索引列为未来工作，跨图结构的压缩-延迟权衡尚未验证。</li><li>压缩并非所有数据集零代价：Sift1M上Stream VByte有边际延迟开销，Zeta虽更省空间但在Sift1M慢约27%；生产部署仅称live workloads下无延迟退化，未报告A/B分流与显著性细节（后半句为分析判断）。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>从生成SID到点式打分：候选表示与打分范式的取舍</h3><p>基于当天样本，生成式推荐/检索的候选表示有两条主线：一是把物品编成离散SID并由自回归模型生成（Pailitao、API、KL-MOPD），二是保留基座打分器，用轻量适配或点式语义判定增强（Refiner、LinkedIn MIS）。前者把检索、多意图和多目标放进同一生成序列，便于端到端优化和统一服务，但代价是词表/分词器设计、束解码成本和token级信用分配；API用SAE特征索引降低词表拟合成本，却要处理紧凑token碰撞和强度信号仅辅助排序的问题，KL-MOPD则说明多目标场景需要token级难度加权，而非item级融合。后者工程侵入低：Refiner冻结基座，在分数空间做残差修正，适合已有稳定生成排序且延迟敏感的链路；LinkedIn把打包生成改为单候选打分并用隔离注意力共享query，适合候选独立判定和阈值化，但不适合需要listwise交互或去重的任务。推断的实践建议：先做token级召回失败与候选耦合诊断，再决定重构生成范式还是插件增强；线上按延迟包选择推理预算或采样次数；多目标生成优先验证token级蒸馏；点式打分需保证训练与推理的候选隔离一致。</p><div class="sources"><a href="#paper-2610.36958">PailitaoMMSearch2.0 技术报告：将生成式检索扩展为统一端到端多模态搜索</a> · <a href="#paper-2610.36763">词表已经在这里：适配预训练可解释特征用于生成式推荐</a> · <a href="#paper-2610.36973">KL-MOPD：面向生成推荐的差异感知多目标在策略蒸馏</a> · <a href="#paper-2610.36890">面向生成式推荐排序的隐式残差推理</a> · <a href="#paper-2610.36383">从生成到打分：LinkedIn 大规模 LLM 语义标签</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
