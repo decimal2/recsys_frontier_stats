@@ -1,8 +1,7 @@
-name: Verify published daily digest
+name: Verify published SimOPD
 on:
   push:
-    branches: [publish-verify-20261025-2b3ace6]
-    paths: ['.github/workflows/verify-published-digest.yml']
+    branches: [publish-verify-20261028-691c3bd]
 permissions:
   contents: read
 jobs:
@@ -10,34 +9,33 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - name: Verify October 26 and 27 pages, homepage and archive
+      - name: Check live pages and all SimOPD assets
         shell: bash
         run: |
           python3 - <<'PY'
           import hashlib, json, time, urllib.request
-          expected = {"2026-10-26.html":"f38c165c47a8a09394ac033a936ae45b0815cad361c2a32daa7d53892c11df12","2026-10-27.html":"b481543d8215281ab8c581ab5b88b5e94f4341b07bc76a6d7c466d90602024b8","daily/index.html":"bb794dd9f99558df5045062693df0c93e30309b6a174e31e4240f23107f9363a","index.html":"a5e41bfac4f1b3ac48cf734f47154041c6919bd12d1bb46bce08a49d8da37865"}
-          forbidden = '基于提取到的全文文字生成；图片未做视觉分析。解读由模型生成，数字与引用请结合原文确认。'
+          expected = {"index.html":"734a1ac5b101db8fe16d31d8736ecf4330d4bbb03d67f84597260c978aeebbb2","papers/index.html":"be5d96443ed03c85e9d5ff527d19451a31aaa0c12123d533574466895b7ed71e","papers/catalog.json":"775749d5e8855e8b4e662ab3c26f0a8d8b2cb90f7629fb71d8903eb7b0336a30","papers/2610.23306/index.html":"77c44c6aad4512242fcd0fe412d1f4bf91fbb22055b7a1f5e2c288c6067f043f","papers/2610.23306/assets/9c9f45371d20fa8b.svg":"ca6673c838b719cddf7bde81925815e32a162e17aaf9208d0a537c72e34e09a5","papers/2610.23306/assets/56948019b92c5116.svg":"efb95d3d8d21f0921b09ca50261c5869816da9d3d947d590802e73dcb87adebd","papers/2610.23306/assets/ab31c0c3fc432ae5.png":"51e2ce9a2828c6c5066ba87a67fdff44d5c6354083a85442d4d0e69e9fb7c1a7"}
           results = []
-          for path, sha256 in expected.items():
+          for path, wanted in expected.items():
               url = 'https://decimal2.github.io/recsys_frontier_stats/' + path
               last_error = ''
-              for attempt in range(12):
+              for attempt in range(18):
                   try:
-                      request = urllib.request.Request(url, headers={'User-Agent': 'recsys-pages-verification', 'Cache-Control': 'no-cache'})
-                      with urllib.request.urlopen(request, timeout=20) as response:
+                      req = urllib.request.Request(url, headers={'User-Agent': 'recsys-publication-verification', 'Cache-Control': 'no-cache'})
+                      with urllib.request.urlopen(req, timeout=20) as response:
                           body = response.read()
                           actual = hashlib.sha256(body).hexdigest()
                           status = response.status
-                      if status == 200 and actual == sha256:
-                          assert forbidden not in body.decode('utf-8')
-                          results.append({'path': path, 'status': status, 'sha256': actual, 'removed_note': True})
+                      if status == 200 and actual == wanted:
+                          results.append({'path': path, 'status': status, 'sha256': actual})
                           print('VERIFIED ' + json.dumps(results[-1]), flush=True)
                           break
                       last_error = 'HTTP ' + str(status) + ', sha256=' + actual
                   except Exception as error:
                       last_error = str(error)
-                  if attempt < 11: time.sleep(10)
+                  if attempt < 17:
+                      time.sleep(10)
               else:
                   raise RuntimeError(url + ': ' + last_error)
-          print('PUBLISHED_DIGEST_REPORT ' + json.dumps({'status': 'passed', 'commit': '91068a8b79027742f91cc941c4449c094eef719a', 'pages': results}))
+          print('LIVE_REPORT ' + json.dumps({'status': 'passed', 'commit': '691c3bd1c042b2a890abf82548ca5a35839f796c', 'files': results}))
           PY
