@@ -808,6 +808,27 @@
       "source_url": "https://arxiv.org/src/2512.24762v2",
       "published_date": "2025-12-31",
       "published_date_source": "https://arxiv.org/abs/2512.24762"
+    },
+    {
+      "short_name": "SimOPD",
+      "arxiv_id": "2610.23306",
+      "version": "v1",
+      "title_en": "SimOPD: Relational Knowledge Transfer for On-Policy Distillation",
+      "title_zh": "SimOPD：用于同策略蒸馏的关系知识迁移",
+      "companies": [
+        "Ant Group"
+      ],
+      "collection": "RL_Training",
+      "topics": [
+        "同策略蒸馏",
+        "关系知识迁移"
+      ],
+      "arxiv_url": "https://arxiv.org/abs/2610.23306v1",
+      "published_date": "2026-10-16",
+      "published_date_source": "https://arxiv.org/abs/2610.23306",
+      "html_snapshot": "docs/papers/2610.23306/index.html",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2610.23306v1"
     }
   ]
 }

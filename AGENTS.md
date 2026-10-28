@@ -11,6 +11,7 @@
 - `reading_tables.py`、`reading_math.py`：共享排版修复；修复应同时覆盖新转换、旧快照与缓存。
 - `tests/`：单元测试与浏览器检查；`docs/`：GitHub Pages 发布快照及必要图片。
 - `reports/site/`：本地生成网页；`data/`、`logs/`、`reports/paper_cache/`：运行数据，不提交。
+- `paper_pdfs/`：本地中英文论文 PDF 归档（原名 `PDF_Papers/`），由 Git 忽略，不提交或发布。
 - 用户原始论文资料不属于项目运行输入，清理时保留原件。
 
 **`papers` 只从已翻译的 HTML 快照重建页面，不调用模型，也不修改日报数据库。** 新增论文从固定版本 arXiv 源码开始，在独立工作目录完成翻译与 HTML 转换，再登记发布快照。缺少中文内容且未安排翻译的论文不加入阅读目录，不将英文页面标为中文全文。
@@ -35,6 +36,12 @@ python3 -m venv .venv
 - `python3 -m http.server 8080 --bind 127.0.0.1 -d reports/site`：本地预览，论文入口为 `/papers/`。
 
 ## 新增论文与中文 HTML 流程
+
+### 本地 PDF 资料归档
+
+`paper_pdfs/source/en/` 保存英文 PDF，`paper_pdfs/source/zh/` 保存中文 PDF；沿用现有文件名及下载清单。这里的文件用于本地阅读、译文对照和图表核验，使用前确认论文 ID 与版本一致。它们是用户保留的资料，不是构建缓存，清理临时文件时不得删除。
+
+`daily` 与 `papers` 不依赖此目录；新增论文仍按下述 arXiv 源码与 HTML 快照流程处理。不要将归档 PDF 复制到 `docs/`、`reports/site/` 或加入 `paper_catalog.json` 的运行输入，也不要强制提交被忽略的文件。
 
 ### 1. 确认来源与登记元数据
 

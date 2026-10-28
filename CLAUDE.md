@@ -6,6 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 推荐系统研究阅读站，包括**中文日报**与**论文阅读**两个专栏。`daily` 完成"模型自主检索 arXiv 论文 → 全文解读 → 日报综合 → 发布 Markdown/JSON/HTML"；`papers` 从已翻译的 HTML 快照重建论文页面。Python 3.10+，依赖见 requirements.txt；arXiv 源码转换另需 LaTeXML。
 
+## 本地 PDF 资料
+
+`paper_pdfs/`（原名 `PDF_Papers/`）保存中英文论文 PDF 和下载清单：英文位于 `source/en/`，中文位于 `source/zh/`。沿用现有文件名，用于本地阅读、译文对照和图表核验，使用前确认论文 ID 与版本一致。
+
+整个目录由 `.gitignore` 忽略，不提交 GitHub，也不复制到 `docs/` 或 `reports/site/`。它属于用户保留的资料，清理缓存或临时文件时不得删除。`daily` 和 `papers` 不依赖该目录；新增网页继续走固定版本 arXiv 源码 → 翻译与校验 → HTML 快照流程，不恢复旧 PDF 导入入口。
+
 ## 常用命令
 
 ```bash
