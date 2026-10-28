@@ -1,43 +1,47 @@
-name: Verify published daily digest
+name: Verify published site
+
 on:
   push:
-    branches: [publish-verify-20261025-2b3ace6]
-    paths: ['.github/workflows/verify-published-digest.yml']
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'scripts/verify_pages.py'
+      - 'tests/test_verify_pages.py'
+      - '.github/workflows/verify-published-digest.yml'
+  workflow_dispatch:
+
 permissions:
   contents: read
+
+concurrency:
+  group: verify-pages-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
-      - name: Verify October 26 and 27 pages, homepage and archive
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Test publication verifier
+        run: python3 -m unittest discover -s tests -p test_verify_pages.py -q
+      - name: Verify current published snapshot
         shell: bash
+        env:
+          PAGES_SITE_URL: ${{ vars.PAGES_SITE_URL }}
         run: |
-          python3 - <<'PY'
-          import hashlib, json, time, urllib.request
-          expected = {"2026-10-26.html":"f38c165c47a8a09394ac033a936ae45b0815cad361c2a32daa7d53892c11df12","2026-10-27.html":"b481543d8215281ab8c581ab5b88b5e94f4341b07bc76a6d7c466d90602024b8","daily/index.html":"bb794dd9f99558df5045062693df0c93e30309b6a174e31e4240f23107f9363a","index.html":"a5e41bfac4f1b3ac48cf734f47154041c6919bd12d1bb46bce08a49d8da37865"}
-          forbidden = '基于提取到的全文文字生成；图片未做视觉分析。解读由模型生成，数字与引用请结合原文确认。'
-          results = []
-          for path, sha256 in expected.items():
-              url = 'https://decimal2.github.io/recsys_frontier_stats/' + path
-              last_error = ''
-              for attempt in range(12):
-                  try:
-                      request = urllib.request.Request(url, headers={'User-Agent': 'recsys-pages-verification', 'Cache-Control': 'no-cache'})
-                      with urllib.request.urlopen(request, timeout=20) as response:
-                          body = response.read()
-                          actual = hashlib.sha256(body).hexdigest()
-                          status = response.status
-                      if status == 200 and actual == sha256:
-                          assert forbidden not in body.decode('utf-8')
-                          results.append({'path': path, 'status': status, 'sha256': actual, 'removed_note': True})
-                          print('VERIFIED ' + json.dumps(results[-1]), flush=True)
-                          break
-                      last_error = 'HTTP ' + str(status) + ', sha256=' + actual
-                  except Exception as error:
-                      last_error = str(error)
-                  if attempt < 11: time.sleep(10)
-              else:
-                  raise RuntimeError(url + ': ' + last_error)
-          print('PUBLISHED_DIGEST_REPORT ' + json.dumps({'status': 'passed', 'commit': '91068a8b79027742f91cc941c4449c094eef719a', 'pages': results}))
-          PY
+          set -o pipefail
+          mkdir -p artifacts/pages-verify
+          python3 -u scripts/verify_pages.py --site-dir docs \
+            --report artifacts/pages-verify/report.json \
+            2>&1 | tee artifacts/pages-verify/verify.log
+      - name: Upload publication verification report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: pages-verify-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/pages-verify/
+          if-no-files-found: warn
+          retention-days: 14

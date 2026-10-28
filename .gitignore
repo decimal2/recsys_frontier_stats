@@ -12,3 +12,6 @@ nohup.out
 # Local bilingual paper PDF archive (including the former directory name).
 /paper_pdfs/
 /PDF_Papers/
+
+# Local editor settings; GitHub Actions workflows remain tracked.
+/.vscode/

@@ -192,7 +192,10 @@ bash scripts/publish.sh
 ```
 
 GitHub Pages 展示已生成的静态页面；采集和模型调用仍由 `pipeline.py daily` 执行。
-脚本递归同步 `reports/site/`，包含论文子目录、图表和目录 JSON，自动补上 `.nojekyll`。
+
+`Verify published site` 会在 `main` 的 `docs/`、校验脚本或工作流更新后自动运行，也可在 Actions 手动触发。它按当前提交核对整个 `docs/` 的公开页面和资源的 HTTP 状态及 SHA256，最多等待 10 分钟让 Pages 更新；失败时返回非零，日志和 `report.json` 保存在 `pages-verify-*` Artifact。默认使用仓库的 GitHub Pages 地址，自定义域名可设置仓库 Actions 变量 `PAGES_SITE_URL`。`Paper rendering` 继续负责浏览器排版检查；`.vscode/` 仅保留在本地。
+
+`scripts/publish.sh` 递归同步 `reports/site/`，包含论文子目录、图表和目录 JSON，自动补上 `.nojekyll`。
 仅发布静态文件；PDF、隐藏文件（`.nojekyll` 除外）、符号链接和不支持的文件类型会中止发布。
 
 ## 目录
