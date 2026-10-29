@@ -1,0 +1,5 @@
+# Fold assistant co-author identities into the repository owner so they are
+# not listed as separate GitHub contributors.
+decimal2 <73096166+decimal2@users.noreply.github.com> Claude <claude@anthropic.com>
+decimal2 <73096166+decimal2@users.noreply.github.com> Claude <noreply@anthropic.com>
+decimal2 <73096166+decimal2@users.noreply.github.com> Claude Fable 5 <noreply@anthropic.com>
