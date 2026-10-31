@@ -1,0 +1,181 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-10-31</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-10-31</h1><div class="metrics"><div><strong>9</strong>全文解读</div><div><strong>9</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><article class="trend"><h3>检索从单向打分走向基于反馈的迭代查询理解</h3><p>小红书 ARR 让检索器自行选有反馈价值的物品并更新查询向量；ReMind 在已选记忆条件下循环重排并按充分性停止；Netflix 把 SID 头与内容理解联合训练。基于当天样本推断：检索的瓶颈正从&#x27;更好的初始表示&#x27;转向&#x27;让中间反馈改变后续查询与记忆选择&#x27;，且都保留物品索引不变、只改查询侧。</p><div class="sources"><a href="#paper-2610.11666">自回归检索器：利用物品反馈改进通用多模态搜索的查询理解</a> · <a href="#paper-2610.16137">回忆促发回忆：面向个性化大语言模型的循环记忆排序</a> · <a href="#paper-2610.15864">基于语义 ID 的个性化 LLM 推荐：自回归束搜索对比多词元预测</a></div></article><article class="trend"><h3>工业推荐的可靠性工程从效果指标转向稳定与公平约束</h3><p>Google 用 G-W-L 级联把训练发散拆成梯度、权重、损失三段干预，A/A 离在线中性但能通过极端压力测试；Meta 把公平保底与余量奖励解耦，监控跨簇迁移而非只看总曝光；Snap 把相关性评估规范与教师-学生蒸馏绑定。基于当天样本推断：生产系统的验收正在把训练完成率、公平保底缺口、评审一致性纳入与 AUC/CTR 并列的门槛。</p><div class="sources"><a href="#paper-2610.14394">从级联视角理解并缓解大规模推荐系统的训练不稳定性</a> · <a href="#paper-2610.38155">先保底，再补足：面向公平视频内容推荐的创作者生态模拟</a> · <a href="#paper-2610.14550">基于大语言模型的动态商品广告用户—商品相关性评估</a></div></article><article class="trend"><h3>LLM 在排序与评估中的角色分化：表示型编码器仍是强基线</h3><p>Walmart 表示型 ModernBERT 加浅层头 AUC 0.853 显著优于全部提示式方法；H2CE 用文本化分桶加数值 MLP 的两阶段交叉编码器，半矩阵版本省 26.4% 延迟仅损 0.3%；Snap 蒸馏小模型 F1 0.869 反超教师 0.860。基于当天样本推断：在有标注日志与结构化特征的工业场景，LLM 更适合作教师或反馈器，直接当排序/评审主力未必优于轻量编码器。</p><div class="sources"><a href="#paper-2610.10920">用于电商搜索页面级布局决策的语言模型</a> · <a href="#paper-2610.11277">H2CE：面向 POI 重排序的地理—语义交互建模与异构两阶段交叉编码器</a> · <a href="#paper-2610.14550">基于大语言模型的动态商品广告用户—商品相关性评估</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2610.15864">基于语义 ID 的个性化 LLM 推荐：自回归束搜索对比多词元预测</a><span>Netflix 的工业规模对照显示，短 SID 下单头束搜索在多数质量指标和训练成本上优于 MTP，后者仅胜在推理吞吐。</span></li><li><a href="#paper-2610.38561">面向个性化 AI 助手的反馈式人格学习</a><span>PLF用反馈门控的在线自蒸馏训练可复用LoRA人格头，再按上下文路由或组合，在离线单轮与模拟多轮教学中提升偏好契合度。</span></li><li><a href="#paper-2610.38155">先保底，再补足：面向公平视频内容推荐的创作者生态模拟</a><span>Meta 构建约 4.2 万创作者、12 周的生态模拟器，用“保底覆盖＋差距奖励”的预算化多臂老虎机评估视频流量公平分配。</span></li><li><a href="#paper-2610.16137">回忆促发回忆：面向个性化大语言模型的循环记忆排序</a><span>ReMind 用已选记忆循环扩展查询线索，并以充分性预测自适应决定记忆数量，在多证据个性化问答的排序与下游答案质量上均优于单遍重排。</span></li><li><a href="#paper-2610.14550">基于大语言模型的动态商品广告用户—商品相关性评估</a><span>Snap用语义ID压缩行为历史，再以蒸馏后的LLM评审聚合用户—商品相关性，为动态商品广告召回提供A/B测试前的离线质量门禁。</span></li><li><a href="#paper-2610.14394">从级联视角理解并缓解大规模推荐系统的训练不稳定性</a><span>Google 用“梯度—权重—损失”级联解释推荐模型发散，组合梯度、激活与损失干预，在工业短视频模型上降低失稳并保持任务表现。</span></li><li><a href="#paper-2610.11666">自回归检索器：利用物品反馈改进通用多模态搜索的查询理解</a><span>ARR 让多模态检索器把已检索物品作为反馈，自回归更新查询向量，并用 SFT 与 GRPO 学习选物和利用反馈，在保持物品索引独立的同时提升离线检索。</span></li><li><a href="#paper-2610.11277">H2CE：面向 POI 重排序的地理—语义交互建模与异构两阶段交叉编码器</a><span>H2CE结合数值特征双重表示与Top-K成对重排，离线POI排序优于XGBoost和BGE基线，代价是更高的单卡推理延迟。</span></li><li><a href="#paper-2610.10920">用于电商搜索页面级布局决策的语言模型</a><span>Walmart 用 1.1 万条搜索日志比较三类语言模型布局评估法，ModernBERT 嵌入加浅层分类器以 0.8530 AUC 领先。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>重点论文 · 全文 insight</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2610.15864" data-search="Personalized LLM Recommendation with Semantic IDs: Autoregressive Beam Search vs. Multi-Token Prediction 基于语义 ID 的个性化 LLM 推荐：自回归束搜索对比多词元预测 Netflix Netflix 生成式推荐 语义 ID 推理优化">
+<div class="paper-meta"><span class="pill">Netflix</span><span>阅读优先级 ★★★★★</span></div>
+<h3>基于语义 ID 的个性化 LLM 推荐：自回归束搜索对比多词元预测</h3><a class="original" href="https://arxiv.org/abs/2610.15864v1" target="_blank" rel="noopener noreferrer">Personalized LLM Recommendation with Semantic IDs: Autoregressive Beam Search vs. Multi-Token Prediction ↗</a>
+
+<p class="muted">作者署名块 b0001 标注“Affiliation: Netflix Personalization Foundations Team”，且通讯作者邮箱使用 netflix.com。 · 论文更新于 2026-10-11（UTC）</p><p class="reason">少见的同骨干、同数据、同 token 预算工业规模对照，同时给出排序、QA、训练成本与推理解码细节，能直接帮助选择 SID 生成范式并评估工程代价。</p>
+<h4>研究问题</h4><p>生成式推荐把物品表示为短层级 Semantic ID，但解码可采用逐码自回归束搜索或多头并行预测。既有并行方法多在小规模、仅检索任务上验证；工业多任务环境下，排序与内容理解质量、训练成本及推理吞吐如何取舍，尤其并行头的条件独立假设是否会损害联合物品打分，仍缺少受控比较。</p><h4>核心方法</h4><p>以相同骨干、4 级 SID、数据混合和每 token 预算比较两种方案：单头用下一 token 损失学习层级依赖，并在 vLLM 上做 trie 与请求可推荐目录约束的束搜索、复用历史 KV cache；MTP 在共享隐状态上并行预测各码，另引入基于联合物品分数的辅助排序损失。二者共同执行检索、内容 QA 和指令任务，统一评估 nMRR、QA、语言能力及训练/推理成本。</p>
+<h4>实验结果</h4><ul><li>Qwen3-8B 受控对照中，单头相对 MTP 的发现、新用户、整体 nMRR 分别相对提升 7.3%、2.1%、2.0%。</li><li>8B 对照中，单头训练美元成本约 2.6 倍更低；MTP 的原始推理吞吐则高 75%，质量与训练成本优势并未转化为吞吐优势。</li><li>完整单头加原生 SID 方案相对旧非 SID 辅助排序头基线，物品冷启动排序提升 77%、内容 QA 提升 22%，训练速度快 2.8 倍。</li><li>完整方案的 SID 词表扩展导致语言指标回退；作者报告 RL 后训练可使 IFEval 提升 12.8%。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>对本文的短 SID，单头更适合作为质量与训练成本优先的默认方案；MTP 更应留给全目录稠密打分或吞吐优先场景，不能把该选择直接外推到长 SID。</li><li>采用原生 SID 头时，上线门槛应同时覆盖冷启动与 QA 收益和语言能力回退，并为指令 RL 后训练预留预算，而不是只凭 nMRR 决定发布。</li><li>联合 SFT 中增加内容 QA 不等于提升排序；若同时需要两类能力，可把内容理解 CPT 后接排序 SFT 作为对照实验，而非假定多任务必然正迁移。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>实验主要是私有流媒体日志上的离线相对指标，未提供线上 A/B，也未披露绝对指标、目录规模和成本，外部复现性与线上收益仍未知。</li><li>结论基于 4 级 SID 和当前多任务 SFT，码本形状等消融尚未完成；对更长 SID、不同目录规模和任务配比的适用性未知。</li></ul></article><article class="paper" id="paper-2610.38561" data-search="Persona Learning from Feedback for Personalized AI Assistants 面向个性化 AI 助手的反馈式人格学习 Alibaba Alibaba 个性化生成 偏好学习 LoRA路由">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>面向个性化 AI 助手的反馈式人格学习</h3><a class="original" href="https://arxiv.org/abs/2610.38561v1" target="_blank" rel="noopener noreferrer">Persona Learning from Feedback for Personalized AI Assistants ↗</a>
+
+<p class="muted">作者署名块 b0001 显示 Liuyi Yao 隶属于 Alibaba Group，其余作者署名 UC San Diego。 · 论文更新于 2026-10-28（UTC）</p><p class="reason">适合关注个性化生成和对话式推荐的工程师：论文不仅比较同路由器下的提示与训练，还拆解反馈门控、KL方向、组合校准及切换检测，能直接看出收益来自哪里及哪些环节容易失效。</p>
+<h4>研究问题</h4><p>个性化助手不仅要推断用户想要什么，还要决定当前请求下如何回应。仅用人格提示或在人格条件生成上微调，无法针对具体回答指出该改与保留的部分，也难在偏好组合或对话中变化时复用行为。论文关注不逐用户微调条件下，如何从响应级反馈学习可复用偏好行为，并在生成前依据可观察上下文正确选择。</p><h4>核心方法</h4><p>PLF在共享冻结骨干上为每种人格训练独立LoRA。策略先自行采样，批评模型或模拟学生的下一条回复给出响应级反馈；冻结自教师结合人格卡与反馈，在策略自身前缀上提供top-256前向KL监督，满意样本经门控不计损失。部署时冻结人格头，用骨干末token表示训练MLP路由器；单选激活对应头，双偏好用验证集确定强度的带符号权重组合，系数固定且可合并为一个LoRA，无需逐用户微调。</p>
+<h4>实验结果</h4><ul><li>在PRISM的499个单轮改写请求上，按模型双顺序评判、平局半分计，PLF对同路由器的persona prompting、persona distillation、feedback imitation胜率分别为61.7%、59.6%、54.4%（95% CI分别为[58,65]、[56,63]、[51,58]）。</li><li>在500个教学开场、两类模拟学生组成的1000组对话对中，PLF对persona prompting和persona distillation的模型评判胜率分别为55.3% [52.6,58.2]与56.2% [53.5,58.9]；这是离线模拟结果。</li><li>偏好未宣告切换时，PLF对Direct、Interactive固定头和base的平均胜率分别为61%、68%、56%，对预先知道切换的oracle为43%；每个切换方向使用500个测试开场。</li><li>附录的小规模人评中，PLF相对persona prompting在96个单轮比较和100个多轮比较上的胜率分别为56.3%与56.0%，平局按半分计。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>对对话式推荐，较合理的落地单元是“可复用响应行为头+轻量路由器”，而非为每用户训练参数；反馈只作为训练期特权信息，线上靠请求或对话选头。但该设计预设固定人格目录和已知偏好映射，适合风格、讲解策略等稳定维度，不能直接等同于开放域用户兴趣建模。</li><li>偏好切换收益不应只归因为人格头学习能力，线上还需单独监控路由检测延迟和未检测率：仿真中仅39.8%在首次可响应时切到新头，338/1000个对话直到结束都未切换，平均胜率可能掩盖会话级失效。</li><li>反馈门控应被视为质量控制而非端到端训练降本开关：教学消融中它不改变rollout和教师计算，两种变体墙钟时间几乎相同，因此主要作用是筛选更新样本，而不是省去采样或教师前向开销。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>证据以离线模型评判为主：单轮偏好由模型改写进请求，多轮除数据集开场外均由模型生成，模拟满意度不等于真人学习效果；虽有小样本人评，但没有线上A/B。</li><li>路由与组合并不稳健：1000个偏好切换对话中338个未选中新头，impersonal-concise组合也未对组成头显示明确优势，实际部署需按场景校准并监控。</li></ul></article><article class="paper" id="paper-2610.38155" data-search="Floor It, Then Fill It: Simulating Creator Ecosystems for Fair Video-Content Recommendation Systems 先保底，再补足：面向公平视频内容推荐的创作者生态模拟 Meta Meta 创作者公平 用户模拟 多臂老虎机">
+<div class="paper-meta"><span class="pill">Meta</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>先保底，再补足：面向公平视频内容推荐的创作者生态模拟</h3><a class="original" href="https://arxiv.org/abs/2610.38155v1" target="_blank" rel="noopener noreferrer">Floor It, Then Fill It: Simulating Creator Ecosystems for Fair Video-Content Recommendation Systems ↗</a>
+
+<p class="muted">作者署名块 b0001 明确列出 Meta Platforms, Inc.，通讯邮箱亦使用 meta.com 域名。 · 论文更新于 2026-10-28（UTC）</p><p class="reason">它把创作者公平从单步重排扩展到跨周生态闭环，给出明确的保底与余量分配公式、奖励消融及 Sim2Real 验证清单，适合负责冷启动和创作者生态的推荐工程师。</p>
+<h4>研究问题</h4><p>参与度导向的视频排序会通过历史信号不断强化头部创作者，使新创作者陷入曝光不足、信号稀缺、估计保守的冷启动循环。真实平台上的长期去偏实验成本高且难以归因，而过度简化或未经校准的模拟又可能放大政策收益。论文因此要同时解决跨周创作者—观众动态建模、带公平约束的流量分配，以及模拟结论能否迁移到生产环境三个问题。</p><h4>核心方法</h4><p>作者按真实平台分布初始化 42,436 名创作者，用四类 VPV 平价差距簇和创作者—内容双状态机模拟冷启动、成长、毕业与自然流量复利。每周把流量分配置于预算化 MAB：先按自然流量抵扣后的缺口补足 90% 平价目标，再按四种奖励之一对余量贪心灌水，单创作者上限为 3 倍目标；小创作者保留比例 ρ 进一步切分余量，并消融阶梯/渐变目标和奖励权重。</p>
+<h4>实验结果</h4><ul><li>在 12 周模拟的最优配置下，低于 VPV 平价的创作者 100% 获得流量扶持，24%–32% 预算仍由奖励分配，小创作者自然触达每周约增长 33%。</li><li>在 graduated target、ρ=0.7 的四种奖励比较中，parity-gap 取得最高排序一致性（Spearman=0.645）和最低周转率（0.144）。</li><li>持续活跃平衡队列中，3,222 名创作者由低于平价转为高于平价，3,125 名反向迁移，净跨线仅为 +97。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>从工程上看，该设计把公平保底与剩余预算优化解耦：自然流量抵扣可避免重复补贴，奖励与 ρ 只影响余量；监控也应分别报告保底缺口和余量去向，而不是只看总曝光。</li><li>约 +33% 的自然增长应被视为模拟内的政策筛选信号，而非线上增量收益；作者要求用 holdout 归因自然增长与毕业并报告增量提升，因此不能直接把该百分比写进上线收益预期。</li><li>净跨线仅 +97 提示“获得扶持”与“摆脱扶持”不是同一目标；公平看板还需并列跨簇迁移、毕业和自然/分配流量比，否则高覆盖可能掩盖生态结构的有限变化。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>全部增长与政策收益均为 12 周模拟结果，不是线上 A/B；生产侧仅展示流量分布趋势的对齐，holdout 和分段 A/B 仍是作者提出的后续验证方案。</li><li>固定创作者队列、7 天快照、自然增长难以干净归因，以及真实创作者可能针对保底规则进行策略性适应，都会造成 Sim2Real 偏差。</li></ul></article><article class="paper" id="paper-2610.16137" data-search="Recall Begets Recall: Recurrent Memory Ranking for Personalized LLMs 回忆促发回忆：面向个性化大语言模型的循环记忆排序 Alibaba Alibaba 检索增强 个性化 LLM 重排序">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>回忆促发回忆：面向个性化大语言模型的循环记忆排序</h3><a class="original" href="https://arxiv.org/abs/2610.16137v1" target="_blank" rel="noopener noreferrer">Recall Begets Recall: Recurrent Memory Ranking for Personalized LLMs ↗</a>
+
+<p class="muted">作者署名块 b0001 的机构信息中明确出现 Alibaba Group；公司归属仅依据该署名块，不由模型或数据名称推断。 · 论文更新于 2026-10-12（UTC）</p><p class="reason">它把“选什么”和“选多少”放进同一循环框架，并给出同骨干单遍对照、按证据数量分层及下游问答实验；对做长期用户记忆、个性化 RAG 或多跳检索排序的工程师，方法与评估设计都可直接借鉴。</p>
+<h4>研究问题</h4><p>个性化 LLM 跨会话作答时，需从海量、含噪的用户历史中挑选少量记忆进入有限上下文。现有重排器只对原始查询做单遍打分并固定截取 top-K，既难发现只有结合已选证据才显相关的记忆，也无法按问题复杂度分配记忆数量，容易漏证据或引入干扰。</p><h4>核心方法</h4><p>ReMind 在共享的 Qwen3-Reranker-4B 上联合训练相关性与充分性两个 yes/no 二分类任务。训练时从含硬负例的选择轨迹前缀构造样本，让模型见过正负记忆混合的中间状态；推理时每轮在已选记忆条件下重排剩余候选，加入最高分记忆，再以充分性分数是否达到阈值决定停止。LoRA 冻结主干，两个任务共享参数。</p>
+<h4>实验结果</h4><ul><li>Dense 检索的 PersonaBench 上，ReMind 的 NDCG@3 为 74.77%，较同骨干、同查询训练的单遍 ReMind-SFT（66.08%）高 8.69 个百分点，R@1 也由 41.77% 提至 49.81%。</li><li>下游 PersonaBench 问答中，充分性停止平均选 3.81 条记忆，Answer EM/F1 为 14.81%/31.91%，高于最佳固定 top-3 的 13.58%/30.88%；固定 top-4/5 反而下降。</li><li>优势随证据需求增加：需 4 条及以上金标准记忆时，ReMind 的 NDCG@3 为 81.74%，比 ReMind-SFT 高 12.67 个百分点；只需 2 条时差距为 3.77 个百分点。</li><li>推理成本实验显示，5 步重排累计 297.48 ms，低于读者模型答案生成的 4829 ms；但每步耗时随已选记忆增多而上升，单步为 28.93 ms，5 步累计约为单步的 10 倍。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>循环机制更适合多证据、多跳查询；若流量以单证据查询为主，额外递推可能不划算。上线前应按证据数量分层，同时比较排序、答案质量与递推步数成本，而不是只看整体均值。</li><li>充分性停止应作为独立的上下文预算控制器评估：论文为公平排序比较会在提前停止后回填候选，因此排名表不能完整反映停止收益；部署更应看下游 EM/F1、平均记忆数和 token 消耗。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>停止仍偏晚：作者指出充分性预测器会晚于必要时刻停止，充分性分数校准或按查询自适应阈值仍未解决。</li><li>评测剔除了无金标准记忆的问题，而模型首次检查充分性前必然先选一条，因此不能显式识别“历史中无证据”；所有结果均为公开基准离线实验，未报告线上 A/B。</li></ul></article><article class="paper" id="paper-2610.14550" data-search="LLM-based User-Product Relevance Evaluation for Dynamic Product Advertising 基于大语言模型的动态商品广告用户—商品相关性评估 Snap Snap 广告 离线评估 LLM评审">
+<div class="paper-meta"><span class="pill">Snap</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>基于大语言模型的动态商品广告用户—商品相关性评估</h3><a class="original" href="https://arxiv.org/abs/2610.14550v1" target="_blank" rel="noopener noreferrer">LLM-based User-Product Relevance Evaluation for Dynamic Product Advertising ↗</a>
+
+<p class="muted">b0001 中全部作者的 Affiliation 均署为 Snap Inc.，邮箱域名为 @snapchat.com，因此公司归为标准名 Snap。 · 论文更新于 2026-10-10（UTC）</p><p class="reason">值得读其完整工程链路：SID压缩、事件加权、人机共建评审规范、教师—学生蒸馏和阈值聚合都有消融或线上对照；尤其适合把LLM-as-judge从成对标注推向可承担上线前门禁的召回评估。</p>
+<h4>研究问题</h4><p>动态商品广告召回没有搜索式显式查询，传统未来互动或转化指标又受曝光选择偏差、反馈稀疏及下游排序影响，难以判断新召回源究竟提升了商品相关性，还是只利用短期行为噪声；线上A/B虽能验证CTR/CVR，却成本高、周期长。论文要解决的是如何从异质、冗长的行为历史中推断多意图，并低成本形成可解释、能跨召回源比较且与业务结果对齐的离线指标。</p><h4>核心方法</h4><p>先将30天行为中的商品经多模态嵌入与RQ-kmeans映射为语义ID，按(SID,事件类型)分组并选最近商品为代表，用log(1+组大小)乘事件强度（购买3、加购2、其他1）构造加权意图集。再由“代理自动发现规则+人工业务校正”的五级相关性规范驱动Gemini-2.5-Pro教师标注，经LoRA指令微调蒸馏为Gemini-2.5-Flash学生。候选累计意图权重达到k=7才计为相关，最终聚合成按用户—候选对等权的MicroRel或按用户等权的MacroRel。</p>
+<h4>实验结果</h4><ul><li>在30天生产日志的意图集消融中，SID分组、事件分层与加权仅花费全序列3.4%的成对评审调用，约减少30倍；用户级MicroRel与全序列的Spearman相关仍为0.99。</li><li>在论文构建的10K生产检索日志人审集上，微调Gemini-2.5-Flash学生F1为0.869，带规范Gemini-2.5-Pro教师为0.860；作者因此将学生用作生产评审。</li><li>在30天生产DPA窗口的六个召回源上，MicroRel与转化精确率CP的跨源Pearson相关为0.97，高于ImpRel的0.95和MacroRel的0.93。</li><li>四个线上A/B中，离线相关性提升与线上CTR/CVR提升方向一致，支持将该指标用于正式A/B前的召回模型迭代筛选。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>SID压缩不是单纯降本，它通过去重与事件加权改变评估目标，抑制重复召回已浏览商品获得的虚假相关性；复现时应把分组和权重视为指标定义的一部分，而非可随意替换的工程预处理。</li><li>自动规则发现的统计门槛会偏向高频样本，低频但业务关键的人口属性错配仍需人工硬覆盖；因此复现时应把人工审查和业务分层坏例纳入规范版本迭代，而非只优化整体F1。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>验证完全依赖Snap内部数据：10K人审集、30天DPA流量和四个A/B；跨源相关仅六个源，线上实验仅内容型与行为型各两次，且作者指出行为型召回对齐较弱，因此不能直接外推为跨平台或长期稳定的离线—线上预测关系。</li><li>k=7是在两个召回源、30天窗口及本文事件权重下扫得，其他权重或候选规模需重新标定；效率也只在Vertex AI、16线程、100个生产检索对的小基准上报告，尚不足以给出普遍成本保证。</li></ul></article><article class="paper" id="paper-2610.14394" data-search="Understanding and Mitigating Training Instability in Large-Scale Recommender Systems: A Cascade Perspective 从级联视角理解并缓解大规模推荐系统的训练不稳定性 Google Google 训练稳定性 工业推荐 短视频推荐">
+<div class="paper-meta"><span class="pill">Google</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>从级联视角理解并缓解大规模推荐系统的训练不稳定性</h3><a class="original" href="https://arxiv.org/abs/2610.14394v1" target="_blank" rel="noopener noreferrer">Understanding and Mitigating Training Instability in Large-Scale Recommender Systems: A Cascade Perspective ↗</a>
+
+<p class="muted">作者署名块明确标注“Affiliation: Google”，因此公司归因为 Google。 · 论文更新于 2026-10-09（UTC）</p><p class="reason">它提供按 G/W/L 定位问题的干预清单、相对基线消融和极端条件压力测试，便于制定稳定性治理方案；但更适合作为工程诊断框架阅读，而非已严格验证的普适因果理论。</p>
+<h4>研究问题</h4><p>短视频推荐平台持续处理海量交互，训练中的数据分布快速漂移与模型扩张容易使优化失稳；单纯梯度裁剪、学习率调度等通用手段效果不稳定，还可能压平学习信号。论文关注如何把梯度、权重与损失异常理解为相互传导的发散过程，并选择可组合且不损害任务表现的干预。</p><h4>核心方法</h4><p>作者将发散概括为数据漂移或激进扩模触发的 G-W-L 级联：梯度爆炸导致过大参数更新与权重膨胀，继而产生极端输出和损失爆炸。干预按三段组合：G 用 SmeLU、注意力层 RMSNorm 和全局梯度裁剪；W 在稠密线性层裁剪激活值；L 将指定回归任务的 MSE 换成 Huber；最终联合 G+W+L，并用梯度范数、损失、裁剪活动及极端学习率或不稳定架构压力测试评估稳定性。</p>
+<h4>实验结果</h4><ul><li>在工业 SFV 模型的离线任务上，G+W+L 相对基线使 BC T1、BC T2 的 AUC 分别提升 0.25% 和 0.38%，Reg T1 的 RMSE 降低 0.03%；均为相对百分比变化。</li><li>同一相对基线比较中，G+W+L 使原始梯度降低 83.6%、总训练损失降低 64.8%，是各方案中两项指标的最大降幅。</li><li>12 个 A/A 实验臂的验证显示，组合策略的离线与线上结果均为中性，论文没有报告线上业务指标提升。</li><li>在五倍学习率或固有不稳定架构的压力场景中，基线模型持续发散，而 G+W+L 能成功完成训练，体现的是鲁棒性收益。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>损失函数也是优化稳定性的杠杆，不能只靠裁剪梯度；Huber 单独降低了梯度与总损失，但同时使 Reg T1 的 RMSE 上升 0.16%，因此多任务推荐中应按任务替换并分别验收，而非全局套用。</li><li>该组合的主要价值是减少训练失败而非提高线上效果：A/A 离在线结果中性，却能通过极端压力测试。评估类似改造时，应优先考察训练完成率、裁剪活动和故障恢复成本，不应预设线上指标会同步增长。</li><li>G-W-L 更适合作为监控与排查的工程分层，而非已证实的严格时间因果链；落地时可分别监控梯度、权重和损失并定位干预，但不应把每次发散都解释为固定的单向传播。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>汇总快照无法对每个发散事件细粒度验证 G→W→L 的时间先后，级联关系主要由干预的跨环节影响间接支持。</li><li>实验仅覆盖单一匿名工业 SFV 模型，未披露数据、模型规模或统计显著性，相对增益能否迁移到其他推荐场景未知。</li></ul></article><article class="paper" id="paper-2610.11666" data-search="Autoregressive Retriever: Improving Query Understanding from Item Feedback for Universal Multimodal Search 自回归检索器：利用物品反馈改进通用多模态搜索的查询理解 Xiaohongshu Xiaohongshu 多模态检索 查询理解 强化学习">
+<div class="paper-meta"><span class="pill">Xiaohongshu</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>自回归检索器：利用物品反馈改进通用多模态搜索的查询理解</h3><a class="original" href="https://arxiv.org/abs/2610.11666v1" target="_blank" rel="noopener noreferrer">Autoregressive Retriever: Improving Query Understanding from Item Feedback for Universal Multimodal Search ↗</a>
+
+<p class="muted">作者署名块 b0001 显示 Yifan Wang、Yang Luo、Boyuan Pan、Xu Kai、Yao Hu 的机构均为 Xiaohongshu；公司归属仅依据作者署名。 · 论文更新于 2026-10-08（UTC）</p><p class="reason">它把检索结果作为查询上下文纳入检索器自身策略，并系统区分反馈训练、反馈推理与选物策略的贡献；方法设计、固定物品索引的工程取舍和逐步消融都值得检索工程师阅读。</p>
+<h4>研究问题</h4><p>通用多模态检索通常只编码一次查询，再与预先独立索引的物品做向量匹配；即便首批结果暴露了消歧线索，查询表示也无法随候选集合调整。论文关注如何在保留物品索引效率的同时，让检索器自行选择有反馈价值的物品、吸收其多模态内容，并把中间选择与最终排序质量关联起来。</p><h4>核心方法</h4><p>ARR 交替执行选物与查询向量更新，最后用更新后的向量排序。SFT 用离线反馈轨迹、逐步对比监督与退化惩罚教会模型吸收反馈；RL 冻结 SFT 主干，仅训练查询侧 LoRA，以最终相关物品倒数排名为终端奖励，通过 GRPO 优化反馈选择，并补充末态对比监督。物品向量保持独立索引，RL 中不更新独立物品表示，避免随策略训练重建语料索引。</p>
+<h4>实验结果</h4><ul><li>M-BEIR 测试集上，ARR-RL 的平均分在 2B 和 8B 规模分别为 56.7 和 61.0，均为所比较方法中的最高值。</li><li>8B 模型的零样本检索评测中，ARR-RL 的报告平均分为 79.01，高于最强基线平均分的 74.10。</li><li>2B M-BEIR 消融显示，未用反馈训练的 ARR-SFT N=1 从 Iter-1 的 55.23 降至 Iter-4 的 46.90；N=4 则从 55.63 升至 56.01，说明直接拼接反馈可能有害，利用反馈需要训练。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>对现有向量检索系统，较低改造路径是保留物品索引、只增加查询侧反馈循环；但 2B 结果中 Iter-2 已获得大部分收益，首版更宜默认一次反馈而非四次，以控制重复编码和检索开销。</li><li>RL 的收益并不依赖多轮推理：ARR-RL 在 Iter-1 已高于 SFT，说明终端排序信用分配也改善了无反馈查询表示；资源受限时可考虑只部署单轮向量，再按业务增益决定是否保留多轮。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>评估均为离线基准，且 RL 的反馈采样、奖励和末态监督使用由 SFT top-100 构造的查询特定候选池；对全库在线检索与业务指标的效果尚未验证（E12）。</li><li>反馈收益主要集中在首次反馈后，四状态训练相对两状态在 Iter-4 仅高 0.10 个百分点；论文未报告端到端推理延迟或线上 A/B，生产收益成本比仍不明确（E10）。</li></ul></article><article class="paper" id="paper-2610.11277" data-search="H2CE: Modeling Geo-Semantic Interactions for POI Reranking with Heterogeneous Two-Stage Cross-Encoders H2CE：面向 POI 重排序的地理—语义交互建模与异构两阶段交叉编码器 Amazon Amazon POI 搜索 重排序 地理语义建模">
+<div class="paper-meta"><span class="pill">Amazon</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>H2CE：面向 POI 重排序的地理—语义交互建模与异构两阶段交叉编码器</h3><a class="original" href="https://arxiv.org/abs/2610.11277v1" target="_blank" rel="noopener noreferrer">H2CE: Modeling Geo-Semantic Interactions for POI Reranking with Heterogeneous Two-Stage Cross-Encoders ↗</a>
+
+<p class="muted">b0001 的作者署名包含 Amazon（Sunnyvale、Boston、Los Angeles）及 @amazon.com 邮箱，因此公司记为 Amazon。 · 论文更新于 2026-10-08（UTC）</p><p class="reason">值得本地搜索与精排工程师阅读：它把数值特征表示、非线性融合、Top-K成对比较和半矩阵优化做了完整消融，并给出单卡延迟与吞吐，便于评估真实部署取舍。</p>
+<h4>研究问题</h4><p>本地搜索重排既要理解查询与POI文本，又要按查询意图权衡距离、评分和评论数；很近的候选可能只部分匹配，稍远者反而更相关。树模型擅长结构化特征但语义较浅，交叉编码器则难以直接比较原始数值，简单标量加权又无法表达条件交互。同时，对数百至上千候选做全量pairwise或LLM重排难以满足实时成本约束。</p><h4>核心方法</h4><p>H2CE以BGE-reranker-large为骨干，将距离、评分、评论数分别文本化为分桶描述符送入交叉编码器，同时把精确标量送入三个数值MLP，再将CLS与数值嵌入拼接，经非线性分类器融合。第一阶段逐点给全部N个候选打分并选Top-K；第二阶段在K=10的候选间做90个有序成对比较，以Copeland净偏好重排，其余候选保持首阶段顺序。训练让成对样本来自首阶段Top-10，以对齐推理分布。</p>
+<h4>实验结果</h4><ul><li>在5,743查询的本地搜索组件测试集上，H2CE的NDCG@5为67.48%，较XGBoost LTR绝对提升22.82个百分点，较零样本LLM重排器高35.89个百分点；这些是离线结果。</li><li>K=10时，第二阶段相对Pointwise HCE带来1.98个百分点的NDCG@5提升和2.73个百分点的RDQ@1提升，收益主要集中在列表头部。</li><li>半矩阵版本在所有报告指标上的相对损失低于0.3%，同时将中位延迟从163ms降至120ms，降低26.4%，为较紧的延迟预算提供折中。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>若需裁剪数值通路，应优先保留Stage 1而非只保留Stage 2：第一阶段决定相关候选能否进入Top-K，漏掉后第二阶段无法恢复；消融也显示仅Stage 1启用数值特征的RDQ@1增益更大。</li><li>K不宜在上线时独立调大：论文中更大的K虽略改善NDCG@10，却损害头部指标并带来二次成本；若要改变K，应同步调整基于Stage 1 Top-K的成对训练采样，而不是只改推理参数。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>只报告私有数据上的组件级离线评测，未提供线上A/B或端到端业务指标；延迟测量也仅来自单张A100-40GB、batch size 1和100个查询，不能直接代表生产环境的P99与成本。</li><li>训练和测试排序依赖商业搜索GSL及LLM辅助标注，作者承认其中可能有重复POI、歧义偏好和不完美判断；主数据集专有，POISS只提供相近而非相同的复现条件。</li></ul></article><article class="paper" id="paper-2610.10920" data-search="Language Models for Page-Level Layout Decisions in E-commerce Search 用于电商搜索页面级布局决策的语言模型 Walmart Walmart 电商搜索 页面布局优化 离线评估">
+<div class="paper-meta"><span class="pill">Walmart</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>用于电商搜索页面级布局决策的语言模型</h3><a class="original" href="https://arxiv.org/abs/2610.10920v1" target="_blank" rel="noopener noreferrer">Language Models for Page-Level Layout Decisions in E-commerce Search ↗</a>
+
+<p class="muted">作者署名块 b0001 显示 Varun Joshi 与 Eva C. Song 隶属 Walmart Global Tech，邮箱均为 @walmart.com；另一作者隶属 UIUC。 · 论文更新于 2026-10-07（UTC）</p><p class="reason">提供 Walmart 真实日志上的受控对比、完整指标与置信区间，对小编码器替代 LLM Judge 及布局特征设计有直接工程参考价值。</p>
+<h4>研究问题</h4><p>电商搜索页除主结果排序外，还要决定是否及在何处插入承载替代意图或商品分组的 secondary stack。布局会同时改变浏览流与主结果曝光，传统排序评估难直接适用，线上 A/B 成本高；历史行为又只覆盖已展示布局。论文因此研究：能否依据页面上下文，离线预测某个插入决策是否比不插入带来更好的用户参与。</p><h4>核心方法</h4><p>将指定位置插入 secondary stack 是否优于不插入建模为 ATC 二分类，以历史日志训练评测。比较 Mistral-7B 直接/六项分解提示（DP/PDJ）、分解分数与显式布局特征训练的轻量分类器（PFC）、ModernBERT 页面嵌入接 32 单元隐层（REC）。使用 Walmart 一周单模块流量的 11,000 个平衡请求，随机划分 8,800/2,200 训练与留出测试。</p>
+<h4>实验结果</h4><ul><li>REC-Snn 的 ROC-AUC 为 0.8530（95% CI 0.8381–0.8683），AP 为 0.8728、Accuracy 为 0.7680、F1 为 0.7645。</li><li>作者按 95% bootstrap 置信区间报告，表示型 REC 在所有指标上显著优于全部提示式方法。</li><li>DP 将全部样本判为 1（总是展示模块），浮点分数也只输出 0.7 或 0.8。</li><li>消融中，去掉显式特征使 PFC 的 AUC 下降 0.02–0.05；给 REC-Snn 增加同类特征仅带来约 0.002 AUC 变化。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>工程上，在有标注日志的布局评估场景，应先把较小文本编码器加浅层监督头作为主力基线，而不是默认使用 LLM Judge；论文未报告时延或成本，因此资源节省仍需另行测量。</li><li>若保留 LLM 分解评分，不宜等权合成最终判断；更合理的是学习各维权重，并显式输入插入位置、模块类型等布局字段，尤其让模型学习重复度的负向作用。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>实验仍是预测已展示且恰好一个 secondary stack 的历史会话 ATC 标签，未报告线上 A/B 或未展示布局验证；因此不能把分类 AUC 解释为插入模块的因果增量收益。</li><li>数据仅来自 Walmart 一周流量且经类别平衡，未确认用户经过模块的会话会被丢弃；结论对自然流量、多模块和其他平台的适用性未知。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>生成式检索的两条工程路线：并行解码与反馈迭代</h3><p>当天 Netflix 与小红书给出两种不同的生成式检索优化方向。Netflix 比较 SID 的单头自回归束搜索与多词元并行预测：单头在相同骨干、4 级 SID、数据混合下 nMRR 相对提升 2.0%–7.3%，训练成本约低 2.6 倍，MTP 原始推理吞吐高 75% 但质量与训练成本不占优；说明短 SID 场景并行头的条件独立假设会损害联合物品打分。小红书 ARR 不改物品索引，只让查询向量在选物-更新循环中吸收反馈：8B 零样本检索平均 79.01 高于最强基线 74.10，但 Iter-2 已获大部分收益，四次迭代收益递减。两条路线的共同点是保留预建索引与物品表示、只改编码或解码路径；推断工程取舍：短 SID 且质量优先选自回归单头，长 SID 或吞吐优先再考虑 MTP；查询理解歧义大的场景优先加一次反馈迭代，而非默认多轮。</p><div class="sources"><a href="#paper-2610.15864">基于语义 ID 的个性化 LLM 推荐：自回归束搜索对比多词元预测</a> · <a href="#paper-2610.11666">自回归检索器：利用物品反馈改进通用多模态搜索的查询理解</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
