@@ -129,6 +129,11 @@ def escape(value):
     return html.escape(str(value), quote=True)
 
 
+def paragraphs(value):
+    return "".join(f"<p>{escape(part.strip())}</p>"
+                   for part in re.split(r"\n\s*\n", str(value)) if part.strip())
+
+
 def anchor(identifier):
     return "paper-" + re.sub(r"[^a-zA-Z0-9.-]", "-", identifier)
 
@@ -183,7 +188,7 @@ def render_daily(payload, paper_links=None):
     for trend in payload["synthesis"]["trends"]:
         lines += [f"### {md(trend['title'])}", "", md(trend["analysis"]), "",
                   "依据：" + "、".join(md(i) for i in trend["paper_ids"]), ""]
-        trends.append(f'<article class="trend"><h3>{escape(trend["title"])}</h3><p>{escape(trend["analysis"])}</p><div class="sources">{source_links(trend["paper_ids"], by_id)}</div></article>')
+        trends.append(f'<article class="trend"><h3>{escape(trend["title"])}</h3>{paragraphs(trend["analysis"])}<div class="sources">{source_links(trend["paper_ids"], by_id)}</div></article>')
     if not trends:
         lines += ["本期没有足够的跨论文证据生成趋势判断。", ""]
         trends.append('<p class="muted">本期没有足够的跨论文证据生成趋势判断。</p>')
@@ -238,7 +243,7 @@ def render_daily(payload, paper_links=None):
 <h3>{escape(analysis['title_zh'])}</h3><a class="original" href="{escape(paper['url'])}" target="_blank" rel="noopener noreferrer">{escape(paper['title'])} ↗</a>
 {reading_link}
 <p class="muted">{escape(source['organization_basis'])} · 论文更新于 {escape(paper_date)}（UTC）</p><p class="reason">{escape(analysis['recommendation_reason'])}</p>
-<h4>研究问题</h4><p>{escape(analysis['problem'])}</p><h4>核心方法</h4><p>{escape(analysis['method'])}</p>
+<h4>研究问题</h4>{paragraphs(analysis['problem'])}<h4>核心方法</h4>{paragraphs(analysis['method'])}
 <h4>实验结果</h4><ul>{''.join(results) or '<li>未提取到可引用的实验结果。</li>'}</ul>
 <div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul>{''.join(insights)}</ul></div>
 <h4>局限与阅读提醒</h4><ul>{''.join(limitations)}</ul></article>''')
@@ -247,7 +252,7 @@ def render_daily(payload, paper_links=None):
     lines += ["## 今日专题", ""]
     if topic:
         lines += [f"### {md(topic['title'])}", "", md(topic["analysis"]), "", "依据：" + "、".join(md(i) for i in topic["paper_ids"]), ""]
-        topic_html = f'<div class="topic"><h3>{escape(topic["title"])}</h3><p>{escape(topic["analysis"])}</p><div class="sources">{source_links(topic["paper_ids"], by_id)}</div></div>'
+        topic_html = f'<div class="topic"><h3>{escape(topic["title"])}</h3>{paragraphs(topic["analysis"])}<div class="sources">{source_links(topic["paper_ids"], by_id)}</div></div>'
     if payload["errors"]:
         lines += ["## 待重试", ""] + [f"- {e['arxiv_id']}：{md(e['error'])}" for e in payload["errors"]]
     body = intro + '<nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav>'
