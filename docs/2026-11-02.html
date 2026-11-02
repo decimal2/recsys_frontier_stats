@@ -1,0 +1,157 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-11-02</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-11-02</h1><div class="metrics"><div><strong>6</strong>全文解读</div><div><strong>5</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><article class="trend"><h3>多一份历史或证据，先证明它真的有帮助</h3><p>本期样本中，MILES-Rec把地图行为转成服务需求，PAMO用跨平台历史修改已有榜单，Trek则发现搜索材料也会干扰答案。三者不能直接比较收益，但共同提示一个工程问题：新增信息是否改善了最终任务，而非只是让理由更丰富。可用有无该信息的对照，并单独检查改坏原本正确结果的情况。</p><div class="sources"><a href="#paper-2610.41319">MILES-Rec：从地图出行行为推断隐含需求，跨域推荐本地服务</a> · <a href="#paper-2610.07588">PAMO：让跨平台个人代理有选择地修改推荐榜单</a> · <a href="#paper-2610.25323">搜索增强大模型为何在快速变化的知识上答错：找到证据之后仍会被干扰</a></div></article><article class="trend"><h3>一个总分，分不清系统在哪一步做错</h3><p>BrowseFlow在整段行为分布上更好，局部点击区分却较弱；代理协作研究中，交付物正确也可能掩盖未核验或越界。基于这两篇样本的推断是：评估应把中间过程与最终结果拆开。先明确要模拟行为、预测点击，还是完成业务，再给不同目标各自的指标，避免用一个漂亮分数代替全部能力。</p><div class="sources"><a href="#paper-2610.41374">BrowseFlow：用稀疏事件流匹配生成用户浏览行为</a> · <a href="#paper-2610.19342">多个代理交付正确，为什么仍会找错同伴或泄露信息？</a></div></article><article class="trend"><h3>提效要看具体阶段，也要算新增的工作</h3><p>RecIS减少特征处理与通信等待，PAMO训练时增加一次遮蔽历史后的打分，MILES-Rec则把近线缓存列为开发方向。它们涉及的成本阶段不同，不能只比较一次请求的耗时。工程上应分别列出训练、状态或数据维护、在线推理的账本；尚在设计中的部署方案，也应与已经测量的系统收益区分。</p><div class="sources"><a href="#paper-2610.41457">RecIS：协同稀疏与稠密计算，提升推荐模型训练效率</a> · <a href="#paper-2610.07588">PAMO：让跨平台个人代理有选择地修改推荐榜单</a> · <a href="#paper-2610.41319">MILES-Rec：从地图出行行为推断隐含需求，跨域推荐本地服务</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2610.41457">RecIS：协同稀疏与稠密计算，提升推荐模型训练效率</a><span>把特征处理、跨卡向量查询和迭代调度连起来优化，在三种工业模型的同配置比较中，训练吞吐达到TorchRec的1.04–1.15倍。</span></li><li><a href="#paper-2610.41374">BrowseFlow：用稀疏事件流匹配生成用户浏览行为</a><span>先抽样用户会浏览多深，再生成少量点击事件；在模拟器评测中关注整段行为的概率分布，而非只复刻一条日志。</span></li><li><a href="#paper-2610.41319">MILES-Rec：从地图出行行为推断隐含需求，跨域推荐本地服务</a><span>把导航、搜地点等出行线索变成有优先级的服务查询，再用后续真实行为训练“单条相关、整组互补”的查询生成器。</span></li><li><a href="#paper-2610.07588">PAMO：让跨平台个人代理有选择地修改推荐榜单</a><span>Meta把个人推荐代理训练成有选择的排序修改者：既用跨平台历史找回平台漏掉的物品，也控制把原本正确推荐改坏的风险。</span></li><li><a href="#paper-2610.25323">搜索增强大模型为何在快速变化的知识上答错：找到证据之后仍会被干扰</a><span>Microsoft参与的Trek把搜索失败拆成可复核的阶段，发现真实时效问答的主要问题常发生在找到证据之后；只测旧闻干扰会高估系统可靠性。</span></li><li><a href="#paper-2610.19342">多个代理交付正确，为什么仍会找错同伴或泄露信息？</a><span>最终答案答对，仍可能泄露底价或漏掉同伴证据；Salesforce以三层评估拆解跨组织智能体协作的20类失败。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>重点论文 · 全文 insight</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2610.41457" data-search="RecIS: Unifying Sparse and Dense Computation for Efficient Recommendation Training RecIS：协同稀疏与稠密计算，提升推荐模型训练效率 Alibaba Alibaba 推荐训练系统 稀疏嵌入 流水线调度">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★★</span></div>
+<h3>RecIS：协同稀疏与稠密计算，提升推荐模型训练效率</h3><a class="original" href="https://arxiv.org/abs/2610.41457v1" target="_blank" rel="noopener noreferrer">RecIS: Unifying Sparse and Dense Computation for Efficient Recommendation Training ↗</a>
+
+<p class="muted">论文作者署名机构包含Alibaba。 · 论文更新于 2026-10-30（UTC）</p><p class="reason">说明GPU利用率低可能源于特征处理与通信的等待链，并给出相同硬件上的系统比较和通信节省未必加速的反例。</p>
+<h4>研究问题</h4><p>工业推荐训练先要把用户、商品等编号转换为向量，再交给后续神经网络计算。数百到上千个不同特征会触发大量细碎的处理任务；多张卡又可能重复请求热门编号，造成通信和负载不均。即使单个算子已经很快，设备仍会因等待数据而闲置。RecIS研究如何连起这条处理链，减少前后阶段互相等待，而不只是优化某一个算子。</p><h4>核心方法</h4><p>首先，把不同特征中同类、互不依赖的转换合并成批量任务，减少反复启动小任务和搬运数据的开销。工作量按实际处理的元素数分配，避免有的计算单元忙、有的空闲。</p><p>其次，先在同一机器内合并各张卡对相同编号的请求，再跨机器交换向量。一个热门编号从同一源机器只需传一次，收到结果后再还原到各个原始请求；梯度更新也尽量先局部合并，减少多个线程争着写同一位置。</p><p>最后，让下一批数据的读取、特征变换和编号请求整理，与当前批次的神经网络计算重叠。这里提前的是不依赖模型参数的准备工作；真正读取向量值和更新参数仍按依赖顺序执行，避免为了并行而用到尚未更新的旧值。</p>
+<h4>实验结果</h4><ul><li>离线系统评测涵盖Ad（96张PPU 810e）、Search（64张H20）和Lazada Ad（8张L20）；每个模型内部三套框架使用同硬件、模型、批大小、精度和优化器。RecIS的单设备吞吐为TorchRec的1.04–1.15倍、PICASSO的1.48–2.62倍，单步延迟分别降低3.9%–12.9%和32.3%–61.5%。三组设备规模不同，不能直接横比各模型吞吐。</li><li>8张H20上的Ad逐项开启优化实验中，从关闭全部所研究优化到完整RecIS，吞吐由385.19提高至908.76样本/秒，单步由3115.36降至1320.48毫秒；仅最后加入多阶段流水线贡献7.1%吞吐提升。表2还显示Ad预处理调用由1351次降至79次。</li><li>128加速器、每步跨设备平均的通信分解中，32维FP32嵌入表的跨节点通信从76.695降至30.487毫秒，但另增加5.405毫秒节点内通信和5.262毫秒ID整理；16维小表的嵌入通信仅省0.740毫秒，却增加0.851毫秒整理。这些组件时间不代表关键路径或端到端训练时间，流量下降不能直接等同整体加速。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>工程推断：先按输入准备、向量查询、通信和稠密计算分段测量等待时间，再决定是否引入流水线。热门ID在同节点多卡重复多、跨节点链路贵时，节点内合并更可能回本；小表或重复少的场景应保留平坦通信作为选择。</li><li>工程推断：把与参数无关的准备工作提前，能在不引入旧嵌入值的前提下提高重叠；实现时需要把请求整理与真实查值明确分开，不能把全文结论泛化为任意嵌入预取都保持训练语义。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>没有线上点击率或业务收入实验，报告的是训练系统吞吐与延迟。</li><li>准确性比较使用32张H20上的TorchRec和32张PPU 810e上的RecIS，硬件不同；末次累计训练AUC（区分正负样本的指标）分别为0.824599和0.824424，不能当作严格同硬件的测试集精度等价证明。</li><li>层次通信额外付出节点内重分发与ID整理，是否加速取决于重复率、表宽和网络；多流准备也可能争用带宽与计算资源。</li></ul></article><article class="paper" id="paper-2610.41374" data-search="BrowseFlow: Sparse Event Flow Matching for Generative User Simulation BrowseFlow：用稀疏事件流匹配生成用户浏览行为 Alibaba Alibaba 用户模拟 离散流匹配 分布评估">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★★</span></div>
+<h3>BrowseFlow：用稀疏事件流匹配生成用户浏览行为</h3><a class="original" href="https://arxiv.org/abs/2610.41374v1" target="_blank" rel="noopener noreferrer">BrowseFlow: Sparse Event Flow Matching for Generative User Simulation ↗</a>
+
+<p class="muted">论文作者署名机构包含Alibaba。 · 论文更新于 2026-10-30（UTC）</p><p class="reason">方法将浏览推进与稀疏点击分开，实验也清楚呈现分布模拟更好但局部点击排序未必更好的取舍。</p>
+<h4>研究问题</h4><p>给定同一个用户和推荐列表，真实用户可能点不同商品，也可能在不同位置离开；日志只记录其中一次。若模拟器逐步预测滚动、点击和退出，频繁滚动占据绝大多数训练目标，稀少但关键的点击容易被淹没，过早退出还会抹掉后面的反馈。只看生成轨迹是否命中日志，无法判断模型是否合理覆盖其他可能行为。</p><h4>核心方法</h4><p>先根据用户和预先给定的完整推荐列表，预测最终会浏览到多深，再抽取一个具体深度。在这个范围内，模型只生成少量点击或点赞事件，最后把事件与深度还原为滚动、点击和退出的完整过程；没有点击也是合法结果。</p><p>训练时随机删掉一部分真实事件，让模型学习应在什么位置、针对哪个商品补回事件。生成时可以从空序列开始，既能在末尾追加，也能在已有事件中间插入，事件数量随过程自然产生。深度预测分支能看完整列表；事件分支只看选定深度内的内容，并按各任务规则屏蔽当时未曝光或重复选择的目标。</p><p>评估不只要求模拟出日志里的那一次行为。能量评分（ES）同时考虑生成结果与观测行为的距离、多次生成之间的差异；点击次数分布距离（Count W1）则检查总体点击数量是否接近真实数据。两者越低越好，并另用点击AUC检查模型能否区分更可能被点击的商品。</p>
+<h4>实验结果</h4><ul><li>TaobaoBrowse离线测试含2万个上下文，每个生成8段行为。BrowseFlow的ES为0.07264，优于最佳基线DBN的0.10847；Count W1为0.0697，优于该指标最佳基线UserSim的0.2595。另在1,024个前缀查询、每个64次采样的局部评估中，点击AUC（曲线下面积）为0.6126，低于RL4RS-DIEN的0.6592，说明整段行为分布拟合与单步点击区分是不同目标。</li><li>固定曝光的KuaiRand-Like上，每个上下文生成128组点赞向量：ES为0.02703，对比最佳基线UserSim的0.02736改善很小，Count W1则从最佳基线CaseRec的0.0363降至0.0207。搜索点击数据AdSERP上，ES由最佳基线RL4RS-DIEN的0.15218降至0.14271，Count W1由最佳基线UserSim的0.4626降至0.1215；这些均为离线分布指标，没有线上推荐提升实验。</li><li>TaobaoBrowse消融中，稀疏表示配合仅末尾追加的流匹配，Count W1为0.09407；允许在事件中间插入后降至0.06969。相反，在稠密动作序列上使用插入会使Count W1恶化至2.56907，表明插入操作的收益依赖恰当的稀疏表示。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>工程推断：离线策略模拟器若只优化下一次点击AUC，可能仍错误生成整段会话的退出深度、零点击比例和点击次数。应将局部区分、整段分布和关键事件计数同时监测；不能仅凭ES更低就宣称线上策略评价可靠。</li><li>工程推断：当大部分动作只是重复推进、少数动作承载偏好时，可先压缩推进过程再建模关键事件。前提是保留真实曝光轨迹和合法目标约束，未曝光商品不能简单作为负反馈。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>方法假设推荐会话完整列表在生成前已知，先抽样浏览深度，生成期间不重新规划；对会根据用户即时反馈刷新候选的闭环推荐，适用性尚未验证。</li><li>两个外部任务给定真实曝光长度，只生成点击或点赞，不检验自然退出；AdSERP仅338个测试样本，来源47名参与者中的可重建交互。</li><li>TaobaoBrowse的局部AUC低于若干基线；Count W1比较的是跨上下文汇总计数分布，不能单独证明每一用户条件分布均准确。</li><li>未报告部署延迟、线上A/B或下游强化学习策略收益。</li></ul></article><article class="paper" id="paper-2610.41319" data-search="MILES-Rec: Uncovering Implicit Intents from Mobility Behaviors for Cross-Domain POI Recommendation MILES-Rec：从地图出行行为推断隐含需求，跨域推荐本地服务 Alibaba Alibaba 跨域推荐 本地服务 意图建模 生成式检索 强化学习">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>MILES-Rec：从地图出行行为推断隐含需求，跨域推荐本地服务</h3><a class="original" href="https://arxiv.org/abs/2610.41319v1" target="_blank" rel="noopener noreferrer">MILES-Rec: Uncovering Implicit Intents from Mobility Behaviors for Cross-Domain POI Recommendation ↗</a>
+
+<p class="muted">论文作者署名机构包含Alibaba。 · 论文更新于 2026-10-30（UTC）</p><p class="reason">值得看的是如何把不等于消费意图的出行信号，变成可接现有检索系统的查询列表；同时提供了语义评分与具体门店命中不一致的反例。</p>
+<h4>研究问题</h4><p>用户导航去亲子公园，并不意味着下一次还要推荐公园；他可能需要附近适合孩子的餐厅、停车场或周边住宿。地图的搜地点、路线规划与导航很多，本地服务消费反馈却少，源域与目标域也没有直接的物品ID对应。研究要从用户画像、按时间排列的异构地图行为和当前城市/时间中，推断有证据支持的多种服务需求，按优先级生成查询，而不是只猜下一个目的地。</p><h4>核心方法</h4><p>输入是预测时刻之前的用户画像、地图事件序列和当前城市/时间，之后的行为只用于训练奖励和评估。先用19,006条经模型反馈和人工复核的示范训练：概括用户情境、引用相关事件，再生成最多10条有优先级的服务查询，区分主要需求和互补需求。</p><p>随后用组相对策略优化（GRPO）继续训练：为同一用户生成多份查询列表，用固定的服务匹配器和文本向量模型，判断它们是否对应后续真实服务和地点。整组奖励看覆盖是否完整、排名是否合理，重复或过长会受罚；单条查询另有局部奖励，只调整该查询的文字，避免整组不错就掩盖其中某条明显不合适。</p><p>实际使用时，模型输出自然语言查询，而不是直接生成门店编号。这些查询接入语义检索、关键词检索融合及地理加权，从200万兴趣点（POI，如商家或景点）中选出结果，因此可以衔接已有搜索系统。</p>
+<h4>实验结果</h4><ul><li>离线、用户互斥的MapRec-Rich与MapRec-Sparse各有1,000名用户，固定200万POI池。4B模型加入GRPO后，相对自身SFT，Rich的Hit@50由1.50%到3.40%（+1.90个百分点），NDCG@50由0.171%到0.325%（+0.154个百分点）；Sparse的NDCG@50仅从0.276%到0.282%（+0.006个百分点）。NDCG同时看能否命中以及相关地点是否排得靠前，表中按百分数报告。</li><li>同一4B设置下，MILES-Rec的Rich/Sparse NDCG@50为0.325%/0.282%，内容多兴趣推荐基线Content-ComiRec-SA为0.212%/0.183%。但在Rich上，通用GPT-OSS-120B的0.329%略高于MILES-Rec，因此不能泛称所有具体POI排序指标均最优。</li><li>消融表明局部奖励分给对应查询有实际作用：相对只有列表奖励，完整4B方法的Rich/Sparse NDCG@50从0.317%/0.217%到0.325%/0.282%。100名Sparse用户的匿名人工对比中，两名评审相对SFT对GRPO的偏好率为80%和73%，按胜率加半数平局计算；这是离线小样本人评，不是线上业务提升。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>工程推断：可以把慢速意图推理放在搜索或导航事件之后异步执行，并缓存查询与向量，再让线上链路负责检索排序。作者附录也描述正在开发这一近线方案，但没有报告已上线的时延、成本或A/B结果，落地收益仍需验证。</li><li>工程推断：服务类别/语义对齐只能作为中间诊断，不能替代具体POI召回。论文中Rank-GRPO的语义评分高于完整方法，但具体POI NDCG更低；上线前应同时检查意图合理性、地点命中及有限查询预算，避免生成“听起来贴心”却无法检索到用户需要门店的查询。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>公开结果来自单一地图平台、十个城市的离线日志；数据和代码承诺接收后开放，当前复现受限，跨平台与跨地区泛化未获验证。未报告线上A/B、端到端时延和成本。</li><li>具体POI命中率低，且全部未来目标保留在分母，包含不在抽样候选池的目标；同时未交互的合理服务需求也可能被当作未命中，不能把该离线绝对值直接等同线上满意度。</li><li>奖励依赖模型生成的类别标注及固定匹配器；语义需求对齐（SDA）又依赖大模型评判，未知约束不视为被证实，语义高分不能证明真实服务可满足需求。</li><li>稀疏历史下增益不稳定：4B完整查询列表才略胜SFT，限制为1、3、5条查询时反而是SFT更好；扩大模型也不一致提高检索效果。</li></ul></article><article class="paper" id="paper-2610.07588" data-search="Personal-Agent Mediated Recommendation with Cross-Platform User History PAMO：让跨平台个人代理有选择地修改推荐榜单 Meta Meta 推荐系统 个人代理 跨平台推荐 强化学习">
+<div class="paper-meta"><span class="pill">Meta</span><span>阅读优先级 ★★★★★</span></div>
+<h3>PAMO：让跨平台个人代理有选择地修改推荐榜单</h3><a class="original" href="https://arxiv.org/abs/2610.07588v1" target="_blank" rel="noopener noreferrer">Personal-Agent Mediated Recommendation with Cross-Platform User History ↗</a>
+
+<p class="muted">论文作者署名机构包含Meta。 · 论文更新于 2026-10-06（UTC）</p><p class="reason">适合正在把用户记忆接入推荐系统的团队：额外历史并不自动增益，论文提供了可对照的训练方法和真实跨服务外部测试。</p>
+<h4>研究问题</h4><p>假设游戏平台已用站内行为和群体协同信号给出50个候选，个人代理还知道用户在其他服务玩的游戏。跨平台历史可能揭示平台看不到的偏好，也可能只是松散关联：代理贸然改榜会把原已进入前10的正确目标挤出去。研究因此同时衡量“救回平台漏掉的目标”和“移除平台已选中的目标”，而不是把任何重排都当作个性化成功。</p><h4>核心方法</h4><p>先固定平台给出的50个候选：平台推荐器和重排模型只能使用站内历史。个人代理额外看到跨平台历史、候选标题和类别，但看不到平台分数、群体交互或模型内部状态；它只能从同一批候选中选前10，既可以改榜，也可以保留。</p><p>训练时，PAMO让Qwen3-4B生成多条回答，再遮掉跨平台历史，对同一段可见理由重新打分。概率变化用来估计这段理由有多依赖个人历史；但依赖得多并不代表建议一定正确。</p><p>它把前若干名的排序质量拆开计算，只在偏离平台的回答之间调整奖惩，保持正、负优势值（训练更新的强弱）总量不变。分配还有任务价值约束：成功救回一侧不能把过多奖励给收益很小的回答；改坏榜单一侧不能让严重损伤得到过少惩罚。这个约束针对训练样本的奖惩分配，不保证训练后或上线后的指标一定不降。新增成本是训练时多一次遮蔽历史后的打分，不增加生成采样和推理期组件。</p>
+<h4>实验结果</h4><ul><li>离线外部测试OpenPlay连接同一人的Steam、Nintendo和Xbox历史，645名用户完全不参加训练或选模。前10命中率为：固定平台40.8%、同预算GRPO（组相对策略优化）47.4%、PAMO47.9%；PAMO比平台高7.1个百分点，比GRPO高0.5个百分点。NDCG@10（目标越靠前得分越高）由GRPO的0.267升至0.284。这里是含一个真实目标和49个采样负例的候选集排序，不能解释为线上点击率。</li><li>同一OpenPlay测试中，PAMO与GRPO平均都替换3.40个前10物品。以全部645个测试样本为分母，“平台原已命中、代理却移出前10”的占比由7.1%降至6.0%，“平台原未命中、代理救回”的占比由13.8%降至13.2%；两者均不是只在平台命中或漏掉样本中计算的条件比例。PAMO的净收益来自损伤减少幅度超过救回减少幅度，并非更激进改榜或救回更多。</li><li>在4个Amazon类别代理平台上，PAMO相对匹配GRPO的前10命中率均提高：Movie 61.2%→62.2%、Toy 53.4%→54.8%、未见Grocery 48.8%→50.6%、未见Beauty 51.2%→51.7%；对应NDCG@10也全部提高。原始Qwen3-4B即使拿到跨平台历史仍在全部5个数据集低于平台，说明“接入记忆”本身并不能替代有选择的训练。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>工程上可把个人记忆作为现有推荐榜单之上的修改层，分别监控救回率、有害覆盖率与改榜数量。仅看整体离线指标会掩盖代理以多少原有正确推荐换来新命中；平台有充分群体证据而个人历史较弱时，允许代理直接保留榜单很有价值。</li><li>可将“移除某类记忆后，同一解释是否仍成立”作为训练归因信号，但应受最终任务效用约束。论文价值下限消融支持这个取舍；它不是历史真实性检验，也不是上线后不降指标的保证。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>Amazon类别只是跨平台代理边界，同属一个电商服务；真实跨平台外部测试仅645名游戏用户，目标平台只有Steam，Xbox侧只有类型信息。没有线上A/B实验。</li><li>每个候选集都预先插入目标，仅评估候选条件下的重排，未验证全库召回；Amazon负例采样使用静态目录和全人群流行度，没有严格限制在目标发生前可用的目录。</li><li>“个人支持”测量的是模型理由对历史的依赖，不能证明理由忠实、历史准确或因果相关；理论局部最优仅针对固定采样组的优势分配，不保证神经策略全局最优或测试效用。</li><li>仅使用一个4B可训练骨干，论文表格未给出置信区间或多随机种子统计；基准计划待内部批准后发布。</li></ul></article><article class="paper" id="paper-2610.25323" data-search="Where and Why Search-Augmented LLMs Fail When Reasoning over Rapidly Evolving Knowledge 搜索增强大模型为何在快速变化的知识上答错：找到证据之后仍会被干扰 Microsoft Microsoft 检索增强生成 搜索代理 时效知识 失败诊断">
+<div class="paper-meta"><span class="pill">Microsoft</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>搜索增强大模型为何在快速变化的知识上答错：找到证据之后仍会被干扰</h3><a class="original" href="https://arxiv.org/abs/2610.25323v1" target="_blank" rel="noopener noreferrer">Where and Why Search-Augmented LLMs Fail When Reasoning over Rapidly Evolving Knowledge ↗</a>
+
+<p class="muted">论文作者署名机构包含Microsoft。 · 论文更新于 2026-10-18（UTC）</p><p class="reason">对搜索和知识助手团队有实用诊断价值：比继续堆召回更重要的，可能是确认模型是否正确使用了已召回证据。</p>
+<h4>研究问题</h4><p>用户询问某个奖项截至指定年份的最高纪录时，搜索会同时返回旧纪录、新纪录、只统计某类人的相似纪录，甚至换了日期的旧报道。模型答错，可能是查询就限定错了、检索没找到关键材料，也可能已找到材料但被别的页面带偏。只看最终准确率无法判断该修哪一层，简单选择最新页面也会误把范围不符的答案当成更新。</p><h4>核心方法</h4><p>TrekTrace先看搜索轨迹中是否出现标准来源或事实等价证据。如果没有，再判断查询本身是否合理，区分“问题问错了”和“查询合理却没找回材料”。随后把同一问题重放两次：只给标准证据、再给标准证据加原有噪声。前者仍错，说明解释证据有困难；前者对而后者错，说明受到干扰。同一题可以同时存在上游与下游问题。</p><p>配套的TrekBench-Wild从三个已有数据集筛出144道英文时效推理题，观察真实搜索组合的表现。TrekBench-Ctrl则固定问题和证据，不再联网，依次混入旧信息、范围不符的真实网页、改日期的旧报道，以及少量改写的虚假材料，并比较来源网址可见和不可见的情况。</p><p>对照包括直接回答、按语义和时间重排、让模型先筛证据，以及先提取结构化证据再处理冲突。这样既能定位错误，也能检查简单修复在什么干扰下仍然失效，而不是把所有失败都归给检索器。</p>
+<h4>实验结果</h4><ul><li>在144题的TrekBench-Wild中，高推理强度GPT-5.4从闭卷48.6%总体准确率升至内置搜索70.1%，增加21.5个百分点；但换为Tavily仅41.0%、DuckDuckGo仅36.1%。这说明搜索后端与模型组合很关键，不能把某个组合收益外推成“联网总会更好”。</li><li>对已审阅失败案例，GPT-5.4的88.9%涉及检索后失败、27.8%涉及查询或检索失败；Gemini-3.1-Pro分别为100.0%与23.1%。这些是失败案例中的多标签比例，可以重叠，不是全题错误率。94个系统相关错误案例中，自动归因与人工核验的一致性Cohen κ为0.930。</li><li>固定证据、不再联网的TrekBench-Ctrl中，GPT-5.4-mini直接回答在纯标准证据下为70.8%；仅旧闻干扰为64.6%，混入范围不符真实网页为55.6%，加入可见可疑来源的对抗材料为43.1%，隐藏来源后为34.0%，分别比纯证据低6.3、15.3、27.8、36.8个百分点。先过滤证据在可见来源对抗设置提升至57.6%，但仍未恢复纯证据表现；该收益不代表所有设置或模型都改善。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>工程上应保留全部检索结果与查询轨迹，而不只保留最终引用；用“只给正确证据”和“正确证据加现有上下文”的配对重放区分召回不足与证据使用失败，再决定优化检索、筛选还是推理。</li><li>评估搜索助手时可加入仅改变角色、地理范围、统计口径等一个条件的真实材料，并把事件有效时间与网页发布时间分开。仅依赖时间衰减排序或看域名可信度容易漏掉这类失败，但本论文没有证明某种修复能彻底解决。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>仅144道英文题，事实通常按天或周变化，没有分钟/秒级行情，也没有生产线上验证；总体准确率保留原始参考答案，作者另行诊断其中已过时的标注。</li><li>对抗重刊和虚构材料由程序或模型构造，自动核验为主，可能与真实错误信息分布不同；隐藏来源、可疑虚构域名也属于人为测试条件。</li><li>自动归因依赖裁判、网页可访问性和反事实重放，不能视为严格因果证明；剩余Randomness标签也可能包含缺失裁判结果，并非统计证明的随机错误。</li><li>正文表3与附录表7的GLM过滤法对抗结果存在不一致，本解读不引用这些冲突数值。附录反事实提示词还把last year映射为参考年份，和通常时间语义不一致；复用诊断代码时需要审查。</li></ul></article><article class="paper" id="paper-2610.19342" data-search="Why Do Agent Teams Fail Across Boundaries? A Failure Taxonomy for Agent-to-Agent Systems with Private States 多个代理交付正确，为什么仍会找错同伴或泄露信息？ Salesforce Salesforce LLM智能体 多智能体 证据核验 企业检索 评估">
+<div class="paper-meta"><span class="pill">Salesforce</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>多个代理交付正确，为什么仍会找错同伴或泄露信息？</h3><a class="original" href="https://arxiv.org/abs/2610.19342v2" target="_blank" rel="noopener noreferrer">Why Do Agent Teams Fail Across Boundaries? A Failure Taxonomy for Agent-to-Agent Systems with Private States ↗</a>
+
+<p class="muted">论文作者署名机构包含Salesforce。 · 论文更新于 2026-10-15（UTC）</p><p class="reason">有助于评估面向用户与商家的服务代理：把业务成功、实际执行与各方利益约束拆开，避免一个总成功率掩盖隐私与协作失败。</p>
+<h4>研究问题</h4><p>例如购物助手替用户询价，商家助手持有私有库存和底价，双方目标并不相同。即使最终合同金额一致，购物助手也可能泄露用户预算；又如总协调者声称缺资料，其实资料在未联系的同伴那里。共享文件夹、统一目标的多智能体评估难以覆盖这些问题，论文研究私有资料、独立权限和不同委托人之间的协作到底在哪些环节失效。</p><h4>核心方法</h4><p>作者分析488个情景、八类业务中约2,500次运行，覆盖合作、部分利益冲突和竞争。每个代理独立运行，有自己的角色说明、私有文件和工具，只能通过能力目录与消息联系其他代理，由协调者最终提交结果。</p><p>评估分三层：工具调用和状态修改实际发生了什么；最终交付物是否正确；每个代理是否遵守其委托人的保密与行为约束。先从日志标记是否查过能力目录、联系了谁、是否尚有请求未回复就提交等事件，再结合人工复核重要标签。</p><p>最终归纳出四组20类故障，涉及发现与委派、证据和记录一致性、核验，以及行为是否符合要求。这是一项故障诊断研究，没有提出训练后超越基线的新推荐算法。</p>
+<h4>实验结果</h4><ul><li>在同一外网问答情景的能力对照中，2–3个智能体没有任何可联网成员时，最终答案得分为0；一个或全部成员有能力时均为1。四成员情景下，只有Codex持有能力时得分1.00，只有Cursor持有时0.67；无持有者仍得0.33，作者追查为一次越过预设边界取得答案。因此只看答案分数会把能力发现失败和越界成功混在一起。这里是情景内诊断分数，不是通用模型准确率。</li><li>合同谈判中，175份有效协议有73份虽然双方提交的合同一致，却未实现情景中已知可获得的联合收益（作者称未兑现帕累托价值），约占41.7%（73/175）。另有180次运行的描述性比较显示，在两种买卖方模型互换配置下，四成员团队得分均低于两成员团队；论文未将其宣称为团队人数的独立因果效应。</li><li>一个服务级别协议（SLA）争议个案中，双方达成24,000美元赔偿并通过全部10项结果检查，但供应商披露了保密事故归因，独立行为审计的披露问题评分为4/10。整个语料中作者未观察到智能体主动重新抓取来源或查询端点来验证同伴的事实陈述，体现结果正确与核验/保密合规是不同维度，而非线上故障率结论。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>工程推断：面向本地服务、购物或企业搜索的多代理系统，应为请求保留状态、授权约束和证据来源，并在提交前检查未完成请求与双方关键字段是否一致。目录里列出某项能力并不保证智能体会发现和使用它，能力声明需要与可执行工具核对。</li><li>工程推断：工具执行、结果质量和角色行为应分开验收。将“安全部门的阻止意见”作为一条普通聊天消息，未必能约束发布者；关键业务规则更适合绑定到执行权限或自动检查，而不是寄望模型读过消息就会遵守。论文给出失效轨迹和干预建议，未证明这些建议的修复幅度。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>这是一套故障诊断情景，不是覆盖真实工业流量的标准排行榜；案例比例不能外推为线上普遍发生率。</li><li>运行框架与模型强绑定，例如Anthropic模型配Claude Code，无法完全区分模型效应和框架效应，作者明确只主张失败类型会出现，不比较各配置总体故障率。</li><li>故障标记部分依赖分析智能体，虽有人审与底层日志核对，仍可能漏掉其他失败；日志可见性不足也可能把真实动作错标为捏造。</li><li>未提供新训练算法或修复措施的控制实验，也不报告推荐质量、线上A/B或生产业务提升。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>给推荐系统加个人历史：先判断该改哪里，再决定改多少</h3><p>MILES-Rec与PAMO都使用原平台之外的行为，但解决的环节不同。前者从地图事件生成服务查询，再到大规模地点池里检索；后者面对已经固定的50个候选，只决定前10名是否需要调整。一个扩大了需求表达和检索入口，一个主要控制排序修改，不能把两者的命中率放在一起排优劣。</p><p>可以据此设计两类对照。若怀疑现有候选没有覆盖用户需要的服务，先看新增历史是否生成可检索、能命中真实地点的查询；若候选已经有正确目标，就分别统计代理救回和挤掉目标的样本，并保持同一分母。解释看起来合理，不足以替代这两项检查。</p><p>这是基于本期论文的工程推断。MILES-Rec在稀疏历史上的收益很小，PAMO的改善也并非来自救回更多，而是减少改坏。上线前宜保留原系统作为对照，允许模型在证据不足时少改或不改；两篇均未提供真实线上A/B来证明这套做法的业务收益。</p><div class="sources"><a href="#paper-2610.41319">MILES-Rec：从地图出行行为推断隐含需求，跨域推荐本地服务</a> · <a href="#paper-2610.07588">PAMO：让跨平台个人代理有选择地修改推荐榜单</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
