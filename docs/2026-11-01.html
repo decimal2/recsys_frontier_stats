@@ -1,0 +1,149 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-11-01</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-11-01</h1><div class="metrics"><div><strong>5</strong>全文解读</div><div><strong>4</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><article class="trend"><h3>记住信息以后，还要检查是否用对了</h3><p>本期两篇助手研究提醒我们：检索到信息只是第一步。Meta发现模型能认出合适回应，却未必在自由对话中采用；ATLAS则区分返回结果的可靠性与有解请求的解决率。工程上的启发是，把“找到了什么、据此采取什么行动、最后是否帮到用户”分别检查，避免一个平均分掩盖不同阶段的问题。</p><div class="sources"><a href="#paper-2610.40930">用户口味变了，模型为何还按旧偏好推荐？</a> · <a href="#paper-2610.39438">ATLAS-Bench：找餐厅时，满足多数要求还不够，必须守住硬条件</a></div></article><article class="trend"><h3>训练信号不仅在单条答案里，也在样本关系里</h3><p>xPRT利用同一文章中相关段落的关系训练检索器，SimOPD让学生学习教师对不同回答的相似性判断。两者任务不同，本期样本共同提示的是：构造哪些样本相互接近，本身就是重要的训练设计。前者依赖已有检索器筛选，后者需要教师隐藏状态，不能把“无人工标注”或“小模型可学”理解为没有额外成本。</p><div class="sources"><a href="#paper-2610.40122">xPRT：让一段文字学会找到同篇文章中与它有关的另一段</a> · <a href="#paper-2610.23306">SimOPD：让小模型学习教师如何判断不同回答之间的关系</a></div></article><article class="trend"><h3>把训练代价与在线代价分开计算</h3><p>TransX把历史状态提前计算并维护，xPRT训练后删除辅助解码器，SimOPD部署时不携带训练队列。它们都把部分工作移到请求之外，但费用来源不同：持续更新状态、准备训练样本、运行教师。基于本期样本的工程推断是，评估提效时应同时列出离线、近实时和在线成本，不能只比较一次请求的延迟。</p><div class="sources"><a href="#paper-2610.20913">TransX：把用户历史提前算好，让推荐模型扩容不再全部挤进在线请求</a> · <a href="#paper-2610.40122">xPRT：让一段文字学会找到同篇文章中与它有关的另一段</a> · <a href="#paper-2610.23306">SimOPD：让小模型学习教师如何判断不同回答之间的关系</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2610.20913">TransX：把用户历史提前算好，让推荐模型扩容不再全部挤进在线请求</a><span>把长期历史编码、历史摘要存储和候选打分分开执行，复用已经算好的用户状态，在生产实验中同时改善推荐效果和服务效率。</span></li><li><a href="#paper-2610.40930">用户口味变了，模型为何还按旧偏好推荐？</a><span>Meta 把“记住偏好”与“知道何时继续用、何时询问或更新偏好”分开评测，并通过训练内部策略表示改善后者。</span></li><li><a href="#paper-2610.39438">ATLAS-Bench：找餐厅时，满足多数要求还不够，必须守住硬条件</a><span>把“必须安静”和“价格最好便宜”分开检查，并把每项判断连到店铺资料或评论，评估搜索助手能否给出真正可用的地点推荐。</span></li><li><a href="#paper-2610.40122">xPRT：让一段文字学会找到同篇文章中与它有关的另一段</a><span>不用人工问题答案对，先筛出文章中有关联的段落，再让检索向量同时学习“哪段相关”和“相关段落讲了什么”，改善已有检索模型。</span></li><li><a href="#paper-2610.23306">SimOPD：让小模型学习教师如何判断不同回答之间的关系</a><span>教师和学生分别比较同一批历史回答的相似程度，学生学习教师给出的关系分布，无需把两者的隐藏向量强行变成同一维度。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>重点论文 · 全文 insight</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2610.20913" data-search="TransX Technical Report: Scaling Sequence Transduction for Recommendation TransX：把用户历史提前算好，让推荐模型扩容不再全部挤进在线请求 LinkedIn LinkedIn 序列推荐 工业部署">
+<div class="paper-meta"><span class="pill">LinkedIn</span><span>阅读优先级 ★★★★★</span></div>
+<h3>TransX：把用户历史提前算好，让推荐模型扩容不再全部挤进在线请求</h3><a class="original" href="https://arxiv.org/abs/2610.20913v1" target="_blank" rel="noopener noreferrer">TransX Technical Report: Scaling Sequence Transduction for Recommendation ↗</a>
+<a class="reading-link" href="papers/2610.20913/index.html">阅读中文全文 →</a>
+<p class="muted">论文作者署名机构包含LinkedIn。 · 论文更新于 2026-10-14（UTC）</p><p class="reason">建议重点看它如何划分可以提前计算的用户状态与必须实时计算的候选匹配，而不是只关注模型规模或最终点击率。</p>
+<h4>研究问题</h4><p>用户连续刷新推荐页时，大部分历史并没有改变，每次请求却可能都要重新编码这些历史，再给上千个候选打分。模型越大，这种重复计算越贵。只提前保存一个用户向量又可能丢失候选所需的细节。TransX要解决的是：哪些计算可以在行为发生时先做并复用，哪些仍需根据当前候选实时完成，以及新增模型容量应该放在哪里才能真正改善预测。</p><h4>核心方法</h4><p>首先，因果编码器按信息实际可用顺序处理用户行为；保留最近事件的详细状态，把更早事件压成摘要，形成大小受控的行为记忆。每个候选结合当前请求生成查询，读取同一份记忆，再预测点击或转化，因此共享历史不妨碍不同候选关注不同证据。</p><p>训练时，同一用户多个时刻的样本共用一次历史编码，各时刻只提取当时可见的记忆，最后汇总候选损失。服务时，批量任务负责模型上线前初始化，近实时任务随新行为更新状态；在线请求只读取版本兼容的只读快照并打分。快照过旧或缺失时使用允许的旧快照或备用模型，不让状态恢复阻塞请求。</p><p>作者分别改变编码器、记忆容量和候选读取模块，比较新增计算的收益；还冻结行为编码部分，训练面向召回和偏好排序的专用读取模块。生成式召回与列表生成仅做离线探索。</p>
+<h4>实验结果</h4><ul><li>用户随机分组、至少7天、实验与对照各约20%流量的生产实验中，基础模型相对现网HSTU式序列模型，点击率提高6.02%、转化提高4.45%，均为相对增幅。召回和偏好排序另有各自的生产基线，不能把三组收益相加。</li><li>固定模型、数据和优化设置，在32张H200上比较训练实现，共享历史与候选计算使每秒完成的监督候选数增加84%，按相同预测指标稳定标准计算，收敛时间约从25小时缩短到13小时。这项对比衡量执行效率，不是换大模型后的质量收益。</li><li>同一TransX模型、相同流量与延迟目标下，分离式部署把每百万请求的在线GPU消耗从5.8降到1.1小时；计入近实时CPU、每日批量计算、存储和网络后的归一化服务成本为同机部署的22%。线上达到约250请求/秒/H200，99%的请求评分延迟不超过49毫秒；这些成本口径依赖作者的生产计价。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>历史变化比请求少、且每次需要给很多候选打分时，提前维护状态才更容易摊薄成本。评估前应同时统计行为更新频率、请求频率和候选数，再计入状态维护费用。</li><li>“读更多历史”和“给候选更强的读取能力”是两种不同投入。本文在更充分监督下观察到后者的相对收益上升，因此扩容前可以先做分模块对照，避免一律加深历史编码器。</li><li>缓存用户状态会把部分计算问题变成新鲜度与版本管理问题。应在同一次请求内固定状态版本，并用真实业务实验决定可接受的延迟更新程度。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>结果来自一个内部社交推荐产品，缺少公开数据上的同预算复现；扩容趋势依赖所测架构与监督预算，不能当作普适规律。</li><li>状态维护增加存储、新鲜度、版本迁移和恢复开销；总服务成本使用归一化内部价格，未提供完整生命周期成本。</li><li>生成式两种扩展仍在离线迭代，存在标识生成有效性、热门集中和逐位置误差传播问题，不能据生产基础模型收益推断它们已上线有效。</li></ul></article><article class="paper" id="paper-2610.40930" data-search="Adaptive Personalization Under Preference Epistemic Uncertainty 用户口味变了，模型为何还按旧偏好推荐？ Meta Meta 对话推荐 动态个性化 偏好变化 模型训练">
+<div class="paper-meta"><span class="pill">Meta</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>用户口味变了，模型为何还按旧偏好推荐？</h3><a class="original" href="https://arxiv.org/abs/2610.40930v1" target="_blank" rel="noopener noreferrer">Adaptive Personalization Under Preference Epistemic Uncertainty ↗</a>
+
+<p class="muted">论文作者署名机构包含Meta。 · 论文更新于 2026-10-29（UTC）</p><p class="reason">适合有用户记忆的推荐助手团队：即使模型准确记住旧偏好，也可能在不该使用时继续使用；这篇给出了可操作的诊断与训练思路。</p>
+<h4>研究问题</h4><p>例如，用户以前喜欢咸食，后来提到正在尝试甜点，助手却每次都只推荐咸味面包。记忆检索没有出错，问题是助手没有判断这条旧偏好现在还能不能直接使用。论文区分偏好已明确、证据不确定、已有新证据推翻旧偏好三种状态，研究模型能否相应选择直接推荐、询问、确认、提供备选或更新判断。它关注的是偏好证据的可靠程度怎样影响对话行为，而不是给用户永久贴上兴趣标签。</p><h4>核心方法</h4><p>作者先用五种语言的人类偏好实验，确定各类状态下哪些回应策略较可接受，再构造带有受控偏好变化的多轮对话。每个测试点既让模型从四条回答中选择，也让它自由生成回答。前者检查是否认得合适策略，后者检查实际说话时会不会采用，从而避免把“会选择答案”当成“会自然做对”。</p><p>诊断发现，模型内部能读出偏好状态，也能读出它准备采用的回应策略，但两者没有可靠地联动。作者据此在四个开放权重模型上训练：基本奖励同时评价策略是否合适、回答质量和模拟用户接受度；额外奖励通过一个从隐藏表示预测策略的小分类器，要求内部策略分布接近当前状态下的人类偏好分布。分类器每十次策略更新重新拟合，跟上模型变化。</p><p>进一步的版本还沿状态方向修改隐藏表示，检查分类器读出的策略分布是否接近假设状态下的人类偏好。这个辅助约束的目标是让模型学到“证据不同，行为也应不同”，而不只是背熟某些提问句式；它需要访问模型隐藏状态，不能直接用于只有文本输出权限的 API。</p>
+<h4>实验结果</h4><ul><li>在 250 个合成人设、五种语言、25,006 个测试回合上，八个模型在偏好不确定时，选择题平均有 82.4% 采用合适策略，自由生成却只有 36.9%；偏好被修订时分别为 83.5% 与 47.9%。这衡量回应策略是否适合当前证据，不是商品点击率；差距说明识别合适回答远不等于自然生成合适回答。</li><li>在四个开放权重模型、相同基础强化学习奖励的比较中，增加内部策略对齐奖励后，跨语言平均策略合适率从 55.5% 升至 65.5%，提高 10 个百分点；由模拟用户判定的接受率从 43.5% 升至 48.0%。这表明改善不仅体现在策略标签，但仍非真实用户线上满意度。</li><li>在训练人设之外的测试集上，基础训练的接受率比同分布留出集低 7.5 个百分点，加入内部策略对齐后差距为 5.0 个百分点，缩小约三分之一。新增反事实约束的平均结果与单独对齐接近，不能把更复杂版本概括为全面显著更好。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>如果助手有长期用户记忆，应给同一偏好设计“继续成立、暂时含糊、已经改变”三类回归用例，并同时测试选择题与自由回答，因为只验证记忆命中或正确答案识别会漏掉实际对话中的策略选择问题。</li><li>当模型会辨认状态却仍机械使用旧偏好时，可以先尝试显式的策略选择与执行分离，并用真实业务反馈验证；若拥有开放权重和训练资源，再评估隐藏状态奖励是否值得额外成本。论文直接指定策略的诊断结果支持定位问题，但尚未证明这种分离方案在生产中有效。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>基准对话、人设、候选回答和大部分评判由语言模型构造，只有 500 个实例经过人类核验；策略合适的定义也依赖预先规定的状态划分，不能覆盖所有真实用户的文化和交互习惯。</li><li>所谓用户接受率主要来自用户模拟器，且历史对话始终沿可接受回答推进，没有让模型错误长期累积；结果不能直接外推到真实长期对话或线上转化。</li><li>训练实验使用七十亿至一百二十亿参数的四个模型，尚未验证更小模型能否保持效果；还需读取隐藏状态、生成额外训练回应并周期性重拟合分类器，只有文本输出权限的黑盒API不能直接提供相同奖励。</li></ul></article><article class="paper" id="paper-2610.39438" data-search="ATLAS-Bench: An Agentic Tool-Use Benchmark for Local Area Search ATLAS-Bench：找餐厅时，满足多数要求还不够，必须守住硬条件 Alibaba Alibaba 本地生活搜索 推荐评估 多条件检索 工具使用">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>ATLAS-Bench：找餐厅时，满足多数要求还不够，必须守住硬条件</h3><a class="original" href="https://arxiv.org/abs/2610.39438v1" target="_blank" rel="noopener noreferrer">ATLAS-Bench: An Agentic Tool-Use Benchmark for Local Area Search ↗</a>
+
+<p class="muted">论文作者署名机构包含Alibaba。 · 论文更新于 2026-10-29（UTC）</p><p class="reason">适合构建本地生活搜索或带工具推荐助手的团队：它说明怎样区分必须满足的条件与可商量的偏好，也展示高可靠性和高回答覆盖率并非同一件事。</p>
+<h4>研究问题</h4><p>用户想找“附近、现在营业、有停车位、必须安静，最好人均六十元的餐厅”。一家便宜但吵闹的店，与一家安静却稍贵、并明确提醒价格超预算的店，可能满足相同数量的条件，却只有后者能接受。只看相关性或满足条件总数，会掩盖这种区别。论文希望检验搜索助手是否理解要求的轻重，能否从商户资料与评论中核实依据，并在确实找不到合适地点时正确说明。</p><h4>核心方法</h4><p>先从真实搜索事件出发，结合地点资料、评论和经过隐私处理的用户背景，扩写成带明确条件的问题。每个条件分别标记为必须满足或尽量满足，以及可以查属性验证、还是需要评论支持。生成后用规则和多个模型交叉检查；反复出现的错误被整理成新的检查规则，而不是更新生成模型参数。</p><p>最终得到三个地区共1200个问题，并提供固定的地点知识库。被评测助手只看到问题、时间与位置，通过找地点、查评论和附近搜索等工具收集依据，再输出推荐或说明无合适选项。历史点击的地点只是参考，其他满足条件的地点也算正确。</p><p>评估同时看推荐是否守住硬条件、事实是否有依据，以及在确实有解的问题上能否至少给出一个可接受选项。这样可以区分“少说少错”和“真正帮助用户找到选择”，并用工具调用次数、文本处理量记录代价。</p>
+<h4>实验结果</h4><ul><li>在11个模型、14种配置的统一工具测试中，GPT-6-Luna的严格约束得分为71.5%，事实检查通过率为95.58%；但在1004个有解问题上，至少找到一个可接受选项的比例只有67.3%。GLM-5.3的后一个比例为85.3%，严格约束得分则为56.9%。高分指标对应不同目标，不能只据一个数字选模型。这里的严格约束得分按已返回推荐中的约束计数，且只有整体合格或可接受的推荐才贡献得分，并非有71.5%的推荐满足全部硬条件。</li><li>用Qwen3.8-27B、不启用思考模式，并将工具候选池固定为100个地点做预算实验时，每次固定返回20个检索结果改为30个，问题成功率从77.9%升至82.6%，事实检查通过率却从76%降到72%，平均词元量从4.94万增至6.10万。多给证据可能找到更多候选，也可能增加干扰与核验负担。</li><li>对201个抽样推荐地点，自动裁判的“完全合格、可接受或不可接受”判定与人工专家一致率为93.03%。这是抽样中的判断一致性；基准总计还有196个刻意设置为无解的问题，需要另查是否正确拒绝，不能用有解问题成功率代替。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>多条件搜索可以先为每个要求注明“必须满足还是可以妥协、用什么证据验证”。如果用户明确说必须安静，就不能用价格低或距离近抵消噪声问题；只有可妥协条件才适合做偏好权衡。</li><li>上线评估应同时保留已返回结果的可靠性和有解请求的解决率。论文中保守模型的结果更可靠却漏掉更多可回答请求，因此还应检查拒答和搜索过早停止是否让用户得不到可用选择。</li><li>增加检索条数前，应先检查模型能否逐项核实并排除不合格候选。预算实验说明更多资料会同时带来覆盖收益、事实错误和处理成本；适合按请求难度逐步增加，而不是默认扩大所有请求的上下文。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>问题源于真实日志，但新增的细粒度条件主要由模型合成，不能等同于原始用户直接表达的真实需求分布。</li><li>只覆盖北京朝阳、上海黄浦和乌鲁木齐达坂城三个地区，且使用固定、经过隐私改写的知识库，未验证实时营业变化或开放网络搜索。</li><li>多数评估依赖DeepSeek-V4-Pro裁判，人工核对仅覆盖抽样；不同约束类型仍可能存在共享判断偏差。</li><li>严格约束得分只统计已返回的推荐及其条件，空答案不进入该指标分母，因此必须结合有解问题成功率看；长程行程安排仅有单个案例，不能证明完整规划能力。</li></ul></article><article class="paper" id="paper-2610.40122" data-search="xPRT: Cross-Passage Retrieval Pretraining xPRT：让一段文字学会找到同篇文章中与它有关的另一段 Microsoft Microsoft 向量检索 无标注预训练 跨段学习 检索增强生成">
+<div class="paper-meta"><span class="pill">Microsoft</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>xPRT：让一段文字学会找到同篇文章中与它有关的另一段</h3><a class="original" href="https://arxiv.org/abs/2610.40122v1" target="_blank" rel="noopener noreferrer">xPRT: Cross-Passage Retrieval Pretraining ↗</a>
+
+<p class="muted">论文作者署名机构包含Microsoft。 · 论文更新于 2026-10-29（UTC）</p><p class="reason">适合有大量文档却缺少人工查询标注的检索团队：它通过控制实验说明训练段落如何配对比单纯增加重建任务更关键，也明确报告了专业领域的退化。</p>
+<h4>研究问题</h4><p>一篇棒球文章里既有“什么是完全比赛”的解释，也可能混着字典插件和导航链接。随机从同一网页取两段当正例，可能把正文和插件教成相关；只让模型重建读过的段落，又不要求它理解另一段怎样回应当前内容。真实搜索却常常需要从一个问题找到没有读过的答案段落。论文研究能否只用无标注文章中的段落关系，为已有向量检索器补充这类学习信号。</p><h4>核心方法</h4><p>先把文章切成短段落，用冻结的初始检索模型找出贴近全文主题的代表段落，尽量排除导航等杂项。再结合向量相似度和关键词相似度，为每个代表段落挑选同篇文章中最相关的四段，形成训练组；配对依据内容，不要求相邻。</p><p>训练时，一方面让代表段落的向量接近最相关伙伴，并与其他文章的段落区分；另一方面把这个向量交给一个小解码器，让它恢复相关段落里被遮住的文字。解码器也能看到目标段落未遮住的部分，因此不是凭空生成整段。结合原段落自预测与基础语言任务，模型既学习段间关系，也保留具体内容。</p><p>在已有E5检索器上继续训练时，还临时约束它不要过快改变原来的相似度结构，随后逐步放松。训练结束后删除解码器等辅助部件，只保留原来的向量编码器，在线检索结构不变；新增开销集中在离线配对与训练。</p>
+<h4>实验结果</h4><ul><li>在相同E5初始模型、10万篇英文网页和训练步数的比较中，41项英语文本任务的平均分从53.06升至54.86，最强对照BoW-DPR为53.14。十项检索任务的前十排序质量指标nDCG@10从43.26升至45.78，对照为43.11；这些是基准分数，不是实际搜索点击率。</li><li>从BERT开始、用100K语料构建的段落组训练六轮时，完整方法的检索nDCG@10为29.21。去掉跨段文字预测，并把精挑的伙伴改成同文随机段落后，只剩19.87；只去掉跨段文字预测仍有28.46。较大收益因此主要支持相关段落配对及其对比学习，不能全归因于文字恢复任务。</li><li>收益并非处处成立。在10万篇继续训练设置下，金融问答FiQA从40.00降到38.87，TREC-COVID从64.39降到62.96；增至百万篇后分别进一步降至37.71和60.90。整体平均分仍提高，但更多通用网页没有自动改善这些专业领域。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>缺少查询标注时，可以先审核已有文档中的段落配对，而不急于生成大量合成问题。正文与导航同处一页并不代表相关；如果能稳定找到讨论同一问题的不同段落，就能构造更接近真实检索关系的训练例子。</li><li>继续训练已有检索器时，应把“保持旧能力”纳入对照。论文对所有方法施加相同的相似度保持约束，仍观察到部分目标使模型退步，因此需要同时测新增领域和既有业务，不能只看训练损失下降。</li><li>若服务延迟已接近上限，可以把改进优先放在离线训练；本方法上线仍使用同一个编码器。但配对依赖初始E5且每组处理多段文章，训练和数据准备成本仍应单独测量。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>主要实验限于英文FineWeb、BERT规模编码器和MTEB英语基准，未给出线上搜索、最终问答或中文领域的收益。</li><li>即使从BERT开始，段落筛选仍借助冻结E5；“无标注”不代表不依赖已有检索模型，也不是完全从零建立数据流程。</li><li>贴近全文主题只说明代表性，不保证内容质量：论文展示法律声明也可能通过筛选，而有价值的访谈导语可能被排除。</li><li>不同目标每组读取的段落数量和模型结构不同；主实验匹配训练步数等设置，不能解释为完全相同的计算量。</li></ul></article><article class="paper" id="paper-2610.23306" data-search="SimOPD: Relational Knowledge Transfer for On-Policy Distillation SimOPD：让小模型学习教师如何判断不同回答之间的关系 Ant Group Ant Group 知识蒸馏 小模型 表示学习">
+<div class="paper-meta"><span class="pill">Ant Group</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>SimOPD：让小模型学习教师如何判断不同回答之间的关系</h3><a class="original" href="https://arxiv.org/abs/2610.23306v1" target="_blank" rel="noopener noreferrer">SimOPD: Relational Knowledge Transfer for On-Policy Distillation ↗</a>
+<a class="reading-link" href="papers/2610.23306/index.html">阅读中文全文 →</a>
+<p class="muted">论文作者署名机构包含Ant Group。 · 论文更新于 2026-10-16（UTC）</p><p class="reason">适合评估开放权重教师到小模型的蒸馏方案；若现有教师只通过文本API返回结果，须先注意本文还需要教师内部隐藏状态。</p>
+<h4>研究问题</h4><p>让小模型照抄大模型的答案，不一定能教会它在自己生成的错误路径上如何改进。另一种办法是让学生生成回答，再向教师学习。但若直接要求两者内部向量逐项相同，维度不同就需要额外映射，即使维度相同也可能束缚学生的表达方式。SimOPD改问：能否不复制教师的向量，而让学生学会“哪些回答在教师看来彼此接近”？</p><h4>核心方法</h4><p>先让学生用当前参数回答训练问题，教师和学生分别读取同一份回答，提取内部隐藏状态并汇总成回答向量。两套队列按相同顺序保存这些历史回答：一套放教师向量，一套放学生向量，因此对应位置始终代表同一个回答。</p><p>遇到新回答时，两模型各自在自己的向量空间中，与历史队列计算相似度，再转成对历史回答的概率分布。学生调整当前回答向量，使自己的分布靠近教师分布；这样比较的是回答之间的关系，两边向量维度可以不同。教师与历史队列在该次更新中固定，更新后加入新向量并移除最旧记录。</p><p>默认使用最后一层、回答末尾最多2000个位置，队列各存2048个回答。它可单独训练，也可加上逐词元反馈，让学生同时学习具体输出格式；这些队列只用于训练，部署学生时无需携带。</p>
+<h4>实验结果</h4><ul><li>Qwen3-8B教师蒸馏到Qwen3-1.7B-Base学生时，SimOPD与逐词元反馈联合训练的综合分为35.3，最强对照为32.2，提高3.1个百分点。综合分先分别平均三项数学、三项代码测试，再等权平均两领域；两领域是独立训练，不能理解为一个模型同时获得全部收益。</li><li>关系监督并非处处占优：同一小学生在MBPP代码测试上的通过率，单独SimOPD为49.1%，逐词元对照为53.4%。加入逐词元反馈后升到56.6%，格式错误比例由23.6%降到13.2%。这说明能理解回答关系仍不等于会按测试要求输出代码。</li><li>在8张A100 80GB、相同批量与回答长度限制的4B同结构数学蒸馏中，SimOPD每步87.20秒，直接匹配隐藏状态的OPRD为83.04秒，训练约慢5%；单卡峰值显存78.77GB。效率测量不包含评估和保存，也不是1.7B实验的耗时。</li></ul>
+<div class="insight"><h4>工程 insight <small>分析推断</small></h4><ul><li>如果教师与学生隐藏维度不同，可以考虑监督相对关系而不是逐坐标匹配。但这个方案仍要运行教师并读取内部状态，不能直接把已有API文本轨迹当作所需关系监督。</li><li>推荐任务通常还有商品标识、工具参数或结构化输出要求。本文的代码格式失误提示，迁移关系监督时应保留具体输出监督，并单独检查格式有效率，而不只看语义表现。</li><li>本文证明小规模学生可以获益，但没有证明推荐轨迹也会获益。应用到推荐前应先用相同候选集合、用户划分和推理预算比较点击预测或排序质量，再判断额外教师计算是否值得。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>只测试数学、代码及少量域外问答，尚无推荐任务、开放式对话或真实线上收益；模型是Qwen3-1.7B-Base，不能与已指令微调版本混称。</li><li>依赖教师隐藏状态与学生自行生成的回答；只有教师文本输出或封闭API时，无法原样运行，仍需另外设计文本监督路线。</li><li>每种方法训练200步；部分敏感性分析与训练耗时仅覆盖指定模型对和任务，没有充分证明更大规模、长时间训练的收益和成本。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>什么时候该直接推荐，什么时候该先问清楚？</h3><p>用户说“想找一家安静的餐厅”，系统至少面对两个不同问题：是否有证据证明餐厅安静，以及这项偏好在当前情境下是否仍成立。ATLAS把前者拆成硬条件、可妥协条件和各自的验证依据；Meta研究后者，区分明确、含糊和已被新证据推翻的偏好。查到旧偏好，并不能替代这两次判断。</p><p>可以据此设计一个小规模业务实验：同一请求分别提供明确偏好、含糊偏好和变化后的偏好，再搭配证据充分、证据不足两种候选。观察助手是否在该确认时确认、该更新时更新，并检查返回地点是否守住硬条件；同时统计有解请求的解决率，避免系统靠少答来提高可靠性。</p><p>这是基于两篇论文的工程推断，并非已验证的统一方案。Meta主要使用合成对话与模拟用户，ATLAS使用固定的三地区地点库；真实业务还需加入实时资料、用户反馈和回答成本，分别验证询问是否有帮助、是否增加了不必要的交互。</p><div class="sources"><a href="#paper-2610.40930">用户口味变了，模型为何还按旧偏好推荐？</a> · <a href="#paper-2610.39438">ATLAS-Bench：找餐厅时，满足多数要求还不够，必须守住硬条件</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
