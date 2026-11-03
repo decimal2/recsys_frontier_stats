@@ -919,6 +919,28 @@
       "arxiv_url": "https://arxiv.org/abs/2607.24653v2",
       "source_format": "arxiv_tex",
       "source_url": "https://arxiv.org/src/2607.24653v2"
+    },
+    {
+      "short_name": "UAGR",
+      "arxiv_id": "2611.02981",
+      "version": "v1",
+      "title_en": "Utility-Aware Generative Recommendation: Utility-Enriched Semantic Codes and Utility-Guided Decoding",
+      "title_zh": "效用感知生成式推荐：效用增强语义编码与效用引导解码",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式推荐",
+        "语义标识",
+        "多目标优化"
+      ],
+      "collection": "LLM4Rec",
+      "arxiv_url": "https://arxiv.org/abs/2611.02981v1",
+      "html_snapshot": "docs/papers/2611.02981/index.html",
+      "published_date": "2026-11-02",
+      "published_date_source": "https://arxiv.org/abs/2611.02981",
+      "license": "CC BY-NC-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
     }
   ]
 }

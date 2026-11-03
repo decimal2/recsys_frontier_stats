@@ -50,6 +50,10 @@ function snapshotDifferences(before, after) {
   return differences;
 }
 const cases = [
+  {id:'2611.02981', target:'S1.F1', name:'uagr-framework'},
+  {id:'2611.02981', target:'S3.T1', name:'uagr-offline-results'},
+  {id:'2611.02981', target:'S3.E7', name:'uagr-decoding-score'},
+  {id:'2611.02981', target:'A2.T6', name:'uagr-bit-allocation'},
   {id:'2402.03300', target:'S2.T1', name:'deepseekmath-table-1'},
   {id:'2609.28589', target:'S6.T2', name:'onetrans-v2-table-2'},
   {id:'2405.07314', target:'S4.T3', name:'letter-table-3'},

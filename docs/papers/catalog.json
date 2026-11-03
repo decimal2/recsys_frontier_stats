@@ -1,6 +1,49 @@
 {
   "papers": [
     {
+      "short_name": "UAGR",
+      "arxiv_id": "2611.02981",
+      "version": "v1",
+      "title_en": "Utility-Aware Generative Recommendation: Utility-Enriched Semantic Codes and Utility-Guided Decoding",
+      "title_zh": "效用感知生成式推荐：效用增强语义编码与效用引导解码",
+      "companies": [
+        "Kuaishou"
+      ],
+      "topics": [
+        "生成式推荐",
+        "语义标识",
+        "多目标优化"
+      ],
+      "collection": "LLM4Rec",
+      "arxiv_url": "https://arxiv.org/abs/2611.02981v1",
+      "published_date": "2026-11-02",
+      "published_date_source": "https://arxiv.org/abs/2611.02981",
+      "license": "CC BY-NC-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "url": "papers/2611.02981/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 40529,
+        "sections": 38,
+        "figures": 3,
+        "tables": 6,
+        "table_cells": 266,
+        "mathml": 153,
+        "graphics": 3,
+        "references": 57,
+        "warnings": [],
+        "translation": {
+          "language": "zh-CN",
+          "source": "https://arxiv.org/abs/2611.02981v1",
+          "blocks": 230,
+          "license": "CC BY-NC-SA 4.0",
+          "translator": "decimal2"
+        }
+      },
+      "source_sha256": "510dad088351b1422ab8e16ee959bf0e602a6df78f48eaa956bc62ee88631245"
+    },
+    {
       "short_name": "Don't Rewrite the SID Map",
       "arxiv_id": "2610.26105",
       "version": "v1",
