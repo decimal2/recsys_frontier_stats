@@ -3094,6 +3094,126 @@
       "source_sha256": "ebd3949bf45869ad9c20d40b0e7b79e878c8f97c339f37c9a087485aacb7e70c"
     },
     {
+      "short_name": "Gated DeltaNet",
+      "arxiv_id": "2412.06464",
+      "version": "v3",
+      "title_en": "Gated Delta Networks: Improving Mamba2 with Delta Rule",
+      "title_zh": "门控 Delta 网络：利用 Delta 规则改进 Mamba2",
+      "companies": [
+        "NVIDIA"
+      ],
+      "topics": [
+        "线性注意力",
+        "门控 Delta 规则",
+        "长上下文",
+        "训练加速"
+      ],
+      "collection": "RL_Training",
+      "arxiv_url": "https://arxiv.org/abs/2412.06464v3",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2412.06464v3",
+      "published_date": "2024-12-09",
+      "published_date_source": "https://arxiv.org/abs/2412.06464v3",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "url": "papers/2412.06464/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 76724,
+        "sections": 19,
+        "figures": 3,
+        "tables": 7,
+        "table_cells": 699,
+        "mathml": 170,
+        "graphics": 3,
+        "references": 107,
+        "warnings": [
+          "Warning:missing_file:inconsolata Can't find binding for package inconsolata at main.tex; line 43 col 11",
+          "Warning:missing_file:fontawesome Can't find binding for package fontawesome at main.tex; line 70 col 11",
+          "Warning:not_parsed:UNKNOWN.POSTSUBSCRIPT.CLOSE>CLOSE MathParser failed to match rule 'Anything' at main.tex; line 313 col 181",
+          "Warning:not_parsed:UNKNOWN.POSTSUBSCRIPT.CLOSE>CLOSE MathParser failed to match rule 'Anything' at main.tex; line 313 col 181"
+        ],
+        "render_repairs": [
+          {
+            "name": "model",
+            "source": "https://arxiv.org/pdf/2412.06464v3",
+            "version": "v3",
+            "source_sha256": "55f84f2ae9c4e52ff494bfa699499867f5e9e17514994ac71de43888363a5fb9",
+            "page": 7,
+            "crop_pdf_points": [
+              135,
+              77,
+              476,
+              269
+            ],
+            "crop_origin": "top-left; x0,y0,x1,y1",
+            "crop_sha256": "7b1ed8fcdd388319c233fc16434714f4079090d1698ee54e1badc50ca8d8598a",
+            "status": "applied; native pgfplots conversion failed with undefined legend/pgfeov and recursive pgfkeys; all three candidate crops visually compared with original PDF",
+            "type": "original_pdf_vector_figure",
+            "arxiv_id": "2412.06464",
+            "language": "zh"
+          },
+          {
+            "name": "length",
+            "source": "https://arxiv.org/pdf/2412.06464v3",
+            "version": "v3",
+            "source_sha256": "55f84f2ae9c4e52ff494bfa699499867f5e9e17514994ac71de43888363a5fb9",
+            "page": 8,
+            "crop_pdf_points": [
+              122,
+              207,
+              489,
+              449
+            ],
+            "crop_origin": "top-left; x0,y0,x1,y1",
+            "crop_sha256": "07abe88c7c87e894fff321a228cfd670e0dccabcd15d8a9a2287d0fc27d0a0d7",
+            "status": "applied; native pgfplots conversion failed with undefined legend/pgfeov and recursive pgfkeys; all three candidate crops visually compared with original PDF",
+            "type": "original_pdf_vector_figure",
+            "arxiv_id": "2412.06464",
+            "language": "zh"
+          },
+          {
+            "name": "throughput",
+            "source": "https://arxiv.org/pdf/2412.06464v3",
+            "version": "v3",
+            "source_sha256": "55f84f2ae9c4e52ff494bfa699499867f5e9e17514994ac71de43888363a5fb9",
+            "page": 9,
+            "crop_pdf_points": [
+              171,
+              258,
+              440,
+              441
+            ],
+            "crop_origin": "top-left; x0,y0,x1,y1",
+            "crop_sha256": "5857856fff87417dfc2d3ce2f52eacf653f81191dcd87a4942a803845d3703cf",
+            "status": "applied; native pgfplots conversion failed with undefined legend/pgfeov and recursive pgfkeys; all three candidate crops visually compared with original PDF",
+            "type": "original_pdf_vector_figure",
+            "arxiv_id": "2412.06464",
+            "language": "zh"
+          }
+        ],
+        "conversion_notes": {
+          "source": "2412.06464v3",
+          "source_pdf_sha256": "55f84f2ae9c4e52ff494bfa699499867f5e9e17514994ac71de43888363a5fb9",
+          "bibliography": "source/main.bbl preserved byte-for-byte",
+          "math_parser_warning": "The source delta-update expression contains an extra closing parenthesis. The original expression, including the extra parenthesis, remains in MathML and TeX annotation; no formula corrected.",
+          "missing_font_packages": "inconsolata controls monospace font only; fontawesome commands are unused. Semantic text remains complete."
+        },
+        "natural_text_translation": {
+          "table_and_generated_label_changes": 70,
+          "protected_structure_exact": true
+        },
+        "translation": {
+          "language": "zh-CN",
+          "source_version": "2412.06464v3",
+          "scope": "Title, abstract, main text, acknowledgments, appendices A-B, table prose and captions translated. Authors, bibliography, model/dataset names, original figures and protected math annotations retained.",
+          "independent_review": true
+        }
+      },
+      "source_sha256": "95067770ed4abb443667a717005ba465322b507f6042823599a442045c8b1829"
+    },
+    {
       "short_name": "HLLM",
       "arxiv_id": "2409.12740",
       "version": "v1",

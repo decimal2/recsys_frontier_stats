@@ -966,6 +966,31 @@
       "published_date_source": "https://arxiv.org/abs/2610.13778v1",
       "license": "CC BY 4.0",
       "license_url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "short_name": "Gated DeltaNet",
+      "arxiv_id": "2412.06464",
+      "version": "v3",
+      "title_en": "Gated Delta Networks: Improving Mamba2 with Delta Rule",
+      "title_zh": "门控 Delta 网络：利用 Delta 规则改进 Mamba2",
+      "companies": [
+        "NVIDIA"
+      ],
+      "topics": [
+        "线性注意力",
+        "门控 Delta 规则",
+        "长上下文",
+        "训练加速"
+      ],
+      "collection": "RL_Training",
+      "arxiv_url": "https://arxiv.org/abs/2412.06464v3",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2412.06464v3",
+      "html_snapshot": "docs/papers/2412.06464/index.html",
+      "published_date": "2024-12-09",
+      "published_date_source": "https://arxiv.org/abs/2412.06464v3",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/"
     }
   ]
 }

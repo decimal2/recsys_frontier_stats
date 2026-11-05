@@ -50,6 +50,12 @@ function snapshotDifferences(before, after) {
   return differences;
 }
 const cases = [
+  {id:'2412.06464', target:'S3.T1', name:'gated-deltanet-update-rules'},
+  {id:'2412.06464', target:'S3.F1', name:'gated-deltanet-architecture'},
+  {id:'2412.06464', target:'S4.T3', name:'gated-deltanet-main-results'},
+  {id:'2412.06464', target:'S4.F2', name:'gated-deltanet-length'},
+  {id:'2412.06464', target:'A2.T1', name:'gated-deltanet-ablation'},
+  {id:'2412.06464', target:'A2.T2', name:'gated-deltanet-model-ablation'},
   {id:'2610.13778', target:'S1.F1', name:'replayssm-overview'},
   {id:'2610.13778', target:'S4.fig4', name:'replayssm-algorithms'},
   {id:'2610.13778', target:'A2.T4', name:'replayssm-notation'},
@@ -132,17 +138,27 @@ async function paperAudit(paper, width) {
     const math = await page.eval(`(${collectMathEvidence.toString()})()`);
     const figureCaptionIssues = await page.eval(`(()=>{
       const issues=[];
+      for (const node of document.querySelectorAll('.gated-deltanet-paper .ltx_tabular .ltx_text,.gated-deltanet-paper .ltx_tabular math')) {
+        const size=parseFloat(getComputedStyle(node).fontSize);
+        if (size < 13.8) issues.push({kind:'table-text-too-small',table:node.closest('figure')?.id,size});
+      }
       for (const figure of document.querySelectorAll('article.paper-fulltext figure.ltx_figure')) {
         const caption=figure.querySelector('figcaption');
         if (!caption) continue;
         const c=caption.getBoundingClientRect();
-        for (const svg of figure.querySelectorAll('svg')) {
+        const graphics = figure.closest('.gated-deltanet-paper') ? 'svg,img' : 'svg';
+        for (const svg of figure.querySelectorAll(graphics)) {
           if (caption.contains(svg)) continue;
           const s=svg.getBoundingClientRect();
           const overlapX=Math.min(s.right,c.right)-Math.max(s.left,c.left);
           const overlapY=Math.min(s.bottom,c.bottom)-Math.max(s.top,c.top);
           if (overlapX>1 && overlapY>1) issues.push({kind:'figure-caption-overlap',
             figure:figure.id,svg:svg.id,overlapX,overlapY});
+          if (svg.tagName === 'IMG' && figure.closest('.gated-deltanet-paper')) {
+            const box=figure.getBoundingClientRect();
+            if (s.height < 100 || s.bottom > box.bottom + 2 || s.top < box.top - 2)
+              issues.push({kind:'figure-image-clipped',figure:figure.id,image:svg.id,height:s.height});
+          }
         }
       }
       return issues;
