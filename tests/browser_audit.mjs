@@ -50,6 +50,10 @@ function snapshotDifferences(before, after) {
   return differences;
 }
 const cases = [
+  {id:'2610.13778', target:'S1.F1', name:'replayssm-overview'},
+  {id:'2610.13778', target:'S4.fig4', name:'replayssm-algorithms'},
+  {id:'2610.13778', target:'A2.T4', name:'replayssm-notation'},
+  {id:'2610.13778', target:'A5.T12', name:'replayssm-accuracy'},
   {id:'2611.02981', target:'S1.F1', name:'uagr-framework'},
   {id:'2611.02981', target:'S3.T1', name:'uagr-offline-results'},
   {id:'2611.02981', target:'S3.E7', name:'uagr-decoding-score'},

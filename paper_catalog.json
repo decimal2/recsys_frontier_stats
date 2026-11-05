@@ -941,6 +941,31 @@
       "published_date_source": "https://arxiv.org/abs/2611.02981",
       "license": "CC BY-NC-SA 4.0",
       "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+    },
+    {
+      "short_name": "ReplaySSM",
+      "arxiv_id": "2610.13778",
+      "version": "v1",
+      "title_en": "ReplaySSM: Cache SSM Inputs, Not State",
+      "title_zh": "ReplaySSM：缓存 SSM 输入，而非状态",
+      "companies": [
+        "NVIDIA"
+      ],
+      "topics": [
+        "状态空间模型",
+        "推测解码",
+        "推理加速",
+        "状态量化"
+      ],
+      "collection": "RL_Training",
+      "arxiv_url": "https://arxiv.org/abs/2610.13778v1",
+      "source_format": "arxiv_tex",
+      "source_url": "https://arxiv.org/src/2610.13778v1",
+      "html_snapshot": "docs/papers/2610.13778/index.html",
+      "published_date": "2026-10-09",
+      "published_date_source": "https://arxiv.org/abs/2610.13778v1",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/"
     }
   ]
 }
