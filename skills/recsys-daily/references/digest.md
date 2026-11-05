@@ -2,6 +2,8 @@
 
 以下路径相对仓库根目录。先阅读 `paper_pipeline/publishing.py` 的 `render_daily` / `edition_cards`，结构随仓库演进，以当前函数为准。
 
+本文件规定存储与渲染契约；正文如何解释、取舍与验收见 [可读性写作与验收](readability.md)。保留现有 JSON 字段，不为可读性审阅增加模型输出的必填字段或评分器。
+
 ## 数据契约
 
 将 harness 生成的完整 JSON 保存为 `reports/daily/YYYY-MM-DD.json`，顶层字段：
@@ -22,18 +24,18 @@
   },
   "companies": ["配置中的公司标准名称"],
   "preferred_companies": ["命中的优先公司"],
-  "company_basis": "作者署名及其可核实来源",
+  "company_basis": "一句简短的作者机构说明；详细核实过程保存在阅读笔记",
   "selection": {"tags": ["主题"]},
   "insight": {
     "analysis": {
       "title_zh": "中文标题", "one_liner": "一句话总结",
       "in_scope": true, "rating": 4,
       "relevance_reason": "主题相关性", "recommendation_reason": "推荐理由",
-      "problem": "研究问题", "method": "具体方法与取舍",
+      "problem": "实际场景、已有做法及障碍", "method": "分段解释输入如何经过关键步骤成为输出，以及改动为何有用",
       "method_evidence_ids": ["E1"],
-      "key_results": [{"finding": "带设置和基线的实验发现", "evidence_id": "E1"}],
-      "insights": [{"idea": "工程推断", "is_inference": true, "evidence_ids": ["E1"]}],
-      "limitations": ["明确的局限"],
+      "key_results": [{"finding": "先说明发现，再给支撑它的基线、指标含义、数值和必要条件", "evidence_id": "E1"}],
+      "insights": [{"idea": "适合什么场景、可采取什么行动、为什么；标为分析推断", "is_inference": true, "evidence_ids": ["E1"]}],
+      "limitations": ["会改变读者采用决策的具体边界或代价"],
       "affiliations": [{"organization": "公司标准名称", "evidence_id": "E2"}],
       "evidence": [
         {"id": "E1", "block_id": "Section 4 / Table 2", "quote": "短原文证据"},
@@ -47,6 +49,8 @@
 ```
 
 这是结构示例，不能把示例文本当成论文内容。若全文中的图表未读取，不能声称已分析。引用只保留必要短片段。
+
+`method` 等长文本使用 `\n\n` 分段，渲染器会生成独立段落；每段围绕一个步骤或机制，不把一整篇方法挤成一段。证据、读取范围和复核记录留在 JSON / 日志中供回查，不在公开正文重新展示“证据定位与原文短片段”或长篇核实过程。交付 Markdown 时也检查它没有将内部证据清单重新附到读者正文。
 
 ## 不运行 pipeline 的渲染
 

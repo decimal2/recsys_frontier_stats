@@ -1,0 +1,165 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-11-05</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-11-05</h1><div class="metrics"><div><strong>7</strong>全文解读</div><div><strong>7</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><article class="trend"><h3>候选多不等于有用，先判断它能否完成当前任务</h3><p>URED 重新利用已被排序模型认可、却没有曝光的商品；实时供给约束检索先排除当前无法配送的商家；RAGCompass 则比较不同检索器实际返回的材料。这些方法分别处理兴趣探索、供给可用性和回答依据，不能直接比较指标。它们共同提示一种工程思路：先定位候选在哪一步失去价值，再决定改召回来源、解码约束还是结果选择。</p><div class="sources"><a href="#paper-2611.05997">URED：把高分却没展示的候选重新用于兴趣探索</a> · <a href="#paper-2611.06323">本地生活生成式召回：把当前可配送商家放进解码约束</a> · <a href="#paper-2611.05596">RAGCompass：先看检索结果，再决定用哪一路证据回答</a></div></article><article class="trend"><h3>算力要花在哪，取决于瓶颈发生在哪一段</h3><p>CAP-Mix 在训练时学习商品间的共享表示，上线前折叠成普通向量表；PiPNN II / GPiPNN 改善离线索引构建；Axia 用有限的训练试验选择模型结构。基于本期样本的推断是，模型质量、建库更新速度和架构搜索效率需要分别评估。解码吞吐、建图速度和训练试验数属于不同环节，任何一项改善都不能直接当成整条线上链路提速。</p><div class="sources"><a href="#paper-2611.05799">CAP-Mix：让商品共享表示，又不被固定语义编号束缚</a> · <a href="#paper-2611.05690">PiPNN II / GPiPNN：让向量检索建图更适合 CPU 和 GPU 批量计算</a> · <a href="#paper-2611.05643">Axia：用少量训练试验，决定推荐模型应该加深、加宽还是扩大表示</a></div></article><article class="trend"><h3>训练监督要贴近真正要完成的工作</h3><p>WISE 不只学习最后的诊断结论，还修复与已观察证据一致的执行过程；RAGCompass 不只学习文档是否相关，而是学习这些材料能否帮助回答。两篇都把监督对准具体任务，但其实验分别是搜索诊断和问答，不能据此认为任何任务都适合同一种训练方案。工程上值得先检查：现有标签是在奖励一个中间信号，还是在奖励最终需要的行为。</p><div class="sources"><a href="#paper-2611.06777">WISE：先找搜索体验问题，再沿内部链路定位原因</a> · <a href="#paper-2611.05596">RAGCompass：先看检索结果，再决定用哪一路证据回答</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2611.05997">URED：把高分却没展示的候选重新用于兴趣探索</a><span>淘宝把过去高分但未曝光的内容积累为一条召回通道，无需重新训练模型，线上增加了新类别发现和完整播放；低活跃用户收益有限。</span></li><li><a href="#paper-2611.05799">CAP-Mix：让商品共享表示，又不被固定语义编号束缚</a><span>把商品表示拆成可学习的共享部分与商品独有部分，在连续向量召回中利用商品之间的关联，同时保留细节。</span></li><li><a href="#paper-2611.06323">本地生活生成式召回：把当前可配送商家放进解码约束</a><span>淘宝闪购在生成商家编号前准备本次请求的可服务集合，避免把搜索分支花在不可配送商家上；历史测量尚不能证明等质量下节省算力。</span></li><li><a href="#paper-2611.06777">WISE：先找搜索体验问题，再沿内部链路定位原因</a><span>快手把结果页检查、链路归因和失败修复串成诊断流程；小模型先学习真实工具轨迹，再区分应修改执行框架还是模型策略。</span></li><li><a href="#paper-2611.05643">Axia：用少量训练试验，决定推荐模型应该加深、加宽还是扩大表示</a><span>先把互相依赖的结构参数归成少数可调方向，再根据已测效果与不确定性选择下一批训练，让有限试验预算找到更好的效果与算力组合。</span></li><li><a href="#paper-2611.05596">RAGCompass：先看检索结果，再决定用哪一路证据回答</a><span>让小型重排模型比较多路检索结果，按最终回答质量选择证据；收益取决于检索器之间是否真的存在互补。</span></li><li><a href="#paper-2611.05690">PiPNN II / GPiPNN：让向量检索建图更适合 CPU 和 GPU 批量计算</a><span>把建图时零散的找邻居操作改成分块计算，并将距离计算与选优融合，重点缩短索引构建时间。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>逐篇解读</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2611.05997" data-search="From Waste to Discovery: Recycling High-Scored Unexposed Candidates in Taobao Feed Recommendation URED：把高分却没展示的候选重新用于兴趣探索 Alibaba Alibaba 兴趣探索 召回 未曝光候选">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>URED：把高分却没展示的候选重新用于兴趣探索</h3><a class="original" href="https://arxiv.org/abs/2611.05997v1" target="_blank" rel="noopener noreferrer">From Waste to Discovery: Recycling High-Scored Unexposed Candidates in Taobao Feed Recommendation ↗</a>
+
+<p class="muted">作者署名为阿里巴巴淘宝天猫团队。 · 论文更新于 2026-11-04（UTC）</p><p class="reason">适合已有多路召回和精排日志、希望增加内容探索但不增加模型训练成本的团队。</p>
+<h4>研究问题</h4><p>信息流想让用户发现新类别，直接提高冷门内容的排序分数却可能带来不感兴趣的内容。论文发现，模型对缺少用户交互信号的探索候选容易高估效果；另一方面，每次精排已经评出一批高分内容，只因展示位置有限而没有曝光，这些候选随后被丢弃。</p><h4>核心方法</h4><p>URED 在精排后记录高分但没有展示的候选，连同类别、分数和时间保存下来。每天按用户汇总过去 30 天的记录，去掉重复商品，再筛出用户过去 15 天未看过的类别。这里的“发现”按类别近期是否曝光来定义，并不等于用户从未接触过该商品或主题。</p><p>线上请求到来时，系统按用户 ID 从键值存储读出候选，作为额外一路召回，与其他召回结果合并，仍交给原有精排和重排决定是否展示。它不强制插入内容，也不训练新模型。核心思路是给“模型认为相关、但上次没有拿到展示机会”的内容再一次竞争机会。</p><p>积累窗口与类别新颖性窗口是两回事：前者决定能存下多少可用候选，后者决定当前探索目标。长时间积累有助于形成足够大的候选池，但也带来存储、更新与过期处理成本。</p>
+<h4>实验结果</h4><ul><li>在淘宝信息流超过一周的随机分桶实验中，对照组为原推荐链路，实验组增加 URED。新发现类别数相对增加 3.47%，人均新发现类别数增加 1.89%，完整播放量增加 2.62%；作者报告这些变化显著。总播放量增加 0.36% 但不显著，不能把它写成已确认的流量增长。</li><li>将积累时间从 30 天缩短到 1 天，新发现类别数的变化降至 +0.55%，不再显著；去掉高分筛选、改为随机加入探索候选，也只有不显著的 +0.12%。这支持“积累足够的高分未曝光候选”这一组合设计，而不支持随意补入冷门内容。</li><li>作者报告线上端到端时延增量低于 1%。分用户分析中，高活跃用户的探索比例增加 8.91 个百分点，低活跃用户为 −0.03 个百分点、基本不变；有足够历史精排记录是获得收益的重要条件。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：如果已有精排全量候选日志，可先统计各活跃度用户的未曝光候选池大小、类别覆盖和分数校准，再决定是否搭建回收通道。缺少候选供给时，扩大注入额度也不会创造有效内容。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>高分是历史排序模型给出的相关性信号，不是可信度的数学保证；新通道会继承原模型对未曝光内容的偏差。</li><li>候选按天更新，新颖性状态可能在离线筛选与实际曝光之间变化；需要继续使用曝光去重和候选过期机制。</li><li>证据来自淘宝单一平台；低活跃与冷启动用户候选稀少，不能把高活跃用户的收益外推给全体。</li></ul></article><article class="paper" id="paper-2611.05799" data-search="Item Representations Matter: Bridging Hard Semantic IDs and Soft Prototype Mixtures for Generative Retrieval CAP-Mix：让商品共享表示，又不被固定语义编号束缚 Meta Meta 生成式推荐 物品表示">
+<div class="paper-meta"><span class="pill">Meta</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>CAP-Mix：让商品共享表示，又不被固定语义编号束缚</h3><a class="original" href="https://arxiv.org/abs/2611.05799v1" target="_blank" rel="noopener noreferrer">Item Representations Matter: Bridging Hard Semantic IDs and Soft Prototype Mixtures for Generative Retrieval ↗</a>
+
+<p class="muted">论文作者署名包含 Meta。 · 论文更新于 2026-11-04（UTC）</p><p class="reason">适合正在比较语义编号召回与连续向量召回的团队，重点看物品表示的受控对照，而不只看整体模型榜单。</p>
+<h4>研究问题</h4><p>给定用户最近看过或购买的商品，模型要找出他下一步可能选择的商品。给每件商品单独学习一个向量，低频商品能得到的训练信号很少；把相似商品压成共享语义编号，虽然能共享学习信号，却可能丢失细节，并把商品固定在未必适合推荐任务的分组里。论文研究的是：能否同时保留共享能力与商品自身的差异？</p><h4>核心方法</h4><p>CAP-Mix 为每件商品保留一个独有向量，再加上若干共享“原型向量”的加权组合。原型可以理解为多件商品共同使用的表示成分：商品不必只归入一个固定类别，而是可以按不同权重组合多个成分。训练更新原型时，使用它的商品都能受益；独有向量则保留不能被共同成分表达的差异。组合权重、原型和独有向量都随推荐目标一起训练，推理时也不把权重改成硬分组。</p><p>用户最近的商品序列先被编码为一个起始向量，模型再分几步把它移动到预测的下一件商品向量，最后与商品表打分，输出候选。为了避免模型只依赖商品独有向量，训练还要求预测结果能恢复目标商品的原型权重，并防止所有商品只挤在少数原型上。打分时另外融合训练日志中的商品共现关系；这个共现关系预先统计并固定，不从测试交互中更新。</p><p>已有内容向量时，可以用它初始化商品独有部分；只有离线语义编号时，也可以用编号对应的分组概率引导权重，但允许推荐训练修正它。内容编码模型保持冻结，推荐模型与物品表示继续学习。训练结束后，把所有组合折叠成一张普通商品向量表，在线请求只查表，不再运行原型分配网络。</p>
+<h4>实验结果</h4><ul><li>在六个公开数据集上，按完整商品库排名、每个用户留出最后一次交互测试，CAP-Mix 的前五名命中率 HR@5 相对各数据集最强受测基线平均提高 6.9%，衡量目标排位靠前程度的 NDCG@5 平均提高 13.6%。这里的提升是相对比例，不是百分点，也不是线上业务收益。</li><li>更能说明机制的是保持主干一致的物品表对照：只有同一个离线编号器的信息时，软组合相对固定硬分组的 HR@5 提高 4.45%–14.90%。但已有完整内容向量时，收益缩小：Beauty 从 6.69% 到 6.79%，Industrial 从 3.81% 略降到 3.79%。因此不能把总体提升全部归于软组合。</li><li>在单张 H200、FP32、批量 128、三件历史商品并输出前 20 项的解码测试中，吞吐是 TIGER 的 1.9–7.1 倍、MaskGR 的 1.4–161 倍。该范围依赖数据集与基线编号长度，测的是解码吞吐，不是完整线上服务的响应时延。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>可以先保持现有连续召回主干不变，仅对比独立商品表、固定共享分组和可学习软组合，判断收益是否来自跨商品共享；如果内容向量已经很强，这个对照尤其必要。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>实验是公开数据集的下一物品预测，未提供线上 A/B；主干只读取最近三件商品，不能直接推断长序列场景收益。</li><li>前五名优势不代表所有截断位置都领先：在 Steam 的前十名命中率上，CAP-Mix 为 13.94%，低于 MaskGR 的 14.43%。</li><li>服务仍要保存完整商品向量表；在商品规模最大的 Yelp 数据集上，服务参数量略大于 TIGER，软组合并不保证更省内存。</li></ul></article><article class="paper" id="paper-2611.06323" data-search="Generative Retrieval under Real-Time Supply Constraints in Local Commerce 本地生活生成式召回：把当前可配送商家放进解码约束 Alibaba Alibaba 生成式召回 动态供给 约束解码">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>本地生活生成式召回：把当前可配送商家放进解码约束</h3><a class="original" href="https://arxiv.org/abs/2611.06323v1" target="_blank" rel="noopener noreferrer">Generative Retrieval under Real-Time Supply Constraints in Local Commerce ↗</a>
+
+<p class="muted">作者署名为 Rajax Network Technology（阿里巴巴淘宝闪购）。 · 论文更新于 2026-11-04（UTC）</p><p class="reason">适合外卖、本地零售等候选可用性随位置和时间变化的生成式召回服务。</p>
+<h4>研究问题</h4><p>生成式召回通过预测一串语义编号来找商家，但“编号存在”并不意味着商家现在能服务这个用户。距离、天气和交通会改变可配送范围。如果等编号生成完才过滤，有限的候选分支已经浪费在不可用商家上，最终可用结果可能不足。</p><h4>核心方法</h4><p>上游供给服务先根据本次请求生成可服务商家快照，再映射为三段式语义编号。推理服务在 CPU 上把这些编号编成前缀索引：生成第一段后，可以查到哪些第二段仍能通向可服务商家，随后第三段也如此。模型读取用户输入的准备阶段与索引编译重叠，索引上传到 GPU 后供同一请求的所有候选分支共享。配送判断来自上游服务，不由语言模型猜测天气或道路情况。</p><p>解码时，只允许沿合法前缀扩展，但保留原模型给出的概率评分。若先删掉非法编号、再在每个分支内重新归一化概率，剩余候选的相对排序可能被改变。每轮分支选择还必须让前缀状态与模型历史一起跟随被选中的父分支，否则可能把甲商家的约束套到乙分支上。</p><p>生成完再将编号解析为真实商家并去重。一个编号若对应多个实体，仍需检查最终商家是否在供给快照内；快照生成之后发生的供给变化，也要另行做新鲜度检查。该实现改变在线服务约束，不要求每次供给变化都重新训练模型。</p>
+<h4>实验结果</h4><ul><li>在一组明确使用相同搜索宽度的日级商家目录约束案例中，299 个生成候选里被后续过滤的数量从 170 降到 29，可保留商家从 129 增至 270。但距离过滤仍为 26 个。这说明全局目录合法性有用，却不能代替每次请求的配送约束；它也不是请求级新方案的总体收益估计。</li><li>一组输入 30,000 个供给编号的历史压力测试报告，服务端延迟只增加 0.6 毫秒；但在每秒 20 请求时，客户端均值从 27.6 增至 46.7 毫秒。两组测试还来自不同机器和时间段，所以不能将 0.6 毫秒宣传为端到端增量。</li><li>三地真实供给请求回放表明该链路可以处理不同大小的候选集合，但每组仅 20 条记录，输出分支数也不同。论文明确没有证明在相同检索质量下减少 GPU 计算或取得线上业务提升。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：验收动态约束时，应同时记录过滤后可用实体数、供给快照年龄和客户端延迟。只比较索引查询内核耗时，容易漏掉集合传输、编译等待和状态同步成本。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>实现限于三段式商家编号；商品级可用性与更长编号不能直接沿用已有收益结论。</li><li>索引只保证相对于输入快照的编号合法，上游遗漏、过期供给、编号冲突和空集合错误路径仍需单独处理。</li><li>当前仍有全词表计算、稠密掩码与 CPU/GPU 同步；稀疏索引存储不等于稀疏模型计算。</li><li>实验由多个开发阶段的内部记录组成，硬件与版本信息不完整，没有等质量、同机器的完整受控对照。</li></ul></article><article class="paper" id="paper-2611.06777" data-search="WISE: An Agentic Framework for Whole-page Multimodal Search Experience Attribution WISE：先找搜索体验问题，再沿内部链路定位原因 Kuaishou Kuaishou 搜索质量 Agent 轨迹蒸馏">
+<div class="paper-meta"><span class="pill">Kuaishou</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>WISE：先找搜索体验问题，再沿内部链路定位原因</h3><a class="original" href="https://arxiv.org/abs/2611.06777v1" target="_blank" rel="noopener noreferrer">WISE: An Agentic Framework for Whole-page Multimodal Search Experience Attribution ↗</a>
+
+<p class="muted">作者署名包括快手科技。 · 论文更新于 2026-11-04（UTC）</p><p class="reason">适合有搜索链路日志、想自动分析坏案例，或将大模型工具调用轨迹蒸馏给小模型的团队。</p>
+<h4>研究问题</h4><p>搜索请求没有报错、延迟也正常，结果仍可能不相关、陈旧或重复。只看结果页能发现体验问题，却很难区分是候选库缺内容、召回没找到，还是相关性打分与排序把内容放错了位置。人工同时检查视频内容和内部日志成本较高。</p><h4>核心方法</h4><p>WISE 先读取查询和实际展示结果中的文本、语音识别、图片等信息，判断哪些结果存在体验问题。只有确认问题后，才开放召回路径、模型分数和各阶段排名等内部日志，继续定位问题来自供给、召回、相关性评分、排序还是重排。这样避免用系统自身的高分去替代对内容质量的判断；证据不足时保留问题、将归因标为未确定。</p><p>训练时，大模型教师执行这套工具流程，专家标注用于检查最终诊断。轨迹出错后，ReTrace 保留错误之前的记录，从最早可修复的决策开始改写后续步骤；需要补证据就真正调用工具，不能编造观察。小模型用修复后的决策做监督微调，输入只包含当时能看到的历史，不包含教师使用的专家答案。</p><p>微调后仍失败的案例再分两类：若缺证据、工具不能做所需动作，或状态结构无法保存正确结果，就修改执行框架中的提示、工具接口或状态管理；若支持条件充分而模型判断错误，才固定框架、用 GRPO 强化学习更新模型。每次更新都重新跑完整诊断，防止局部修好却破坏其他环节。最终输出是问题及其链路位置，不是直接修改线上搜索排序。</p>
+<h4>实验结果</h4><ul><li>在包含 12,000 条快手搜索请求、其中 2,000 条作为独立测试集的 WISE-Bench 上，Qwen3.5-4B 的端到端完全正确率从基础流程的 20.25% 升到监督微调后的 58.25%，再升到联合框架与策略优化后的 69.85%。这个指标要求有无问题、问题条目集合及其归因同时正确；它不是点击率，也不检查全部证据文本质量。</li><li>35B-A3B 模型的对应端到端指标最终达到 75.20%。收益并非所有指标同步上升：4B 模型在后续优化中，单条结果的问题识别准确率从 83.91% 略降到 83.48%，尽管整条诊断流程的成功率提高。</li><li>与让教师重写整条轨迹相比，局部修复将教师生成量从 32.0k token 降至 20.4k，减少 36.25%；二者的整案例归因完全正确率均为 57.87%。这是训练数据构造成本的比较，不是线上小模型推理加速。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：做 API 大模型到小模型的轨迹蒸馏时，应保留每一步真实可见的工具结果，并用独立标注检查决策；仅把最后答案改对，可能留下前后矛盾的训练样本。</li><li>工程推断：先区分“模型没判断对”和“框架没给足信息”，可以减少把工具或上下文缺陷错误归因于模型能力的训练投入。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>任务依赖内部召回与排序日志，以及专家诊断标注；只有公开结果页时，无法复现完整链路归因。</li><li>轨迹定位描述的是可见记录中的错误传播，没有反事实重放就不能把它当作严格的因果证明。</li><li>评测集中于快手短视频搜索，页面多样性问题较少；向其他内容形态迁移需要重设标注与工具接口。</li></ul></article><article class="paper" id="paper-2611.05643" data-search="Data-Efficient Scaling-Law Discovery for Recommendation Systems via Coupled Hyperparameter Scaling Axia：用少量训练试验，决定推荐模型应该加深、加宽还是扩大表示 Meta Meta 推荐系统 模型扩展 计算预算">
+<div class="paper-meta"><span class="pill">Meta</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>Axia：用少量训练试验，决定推荐模型应该加深、加宽还是扩大表示</h3><a class="original" href="https://arxiv.org/abs/2611.05643v1" target="_blank" rel="noopener noreferrer">Data-Efficient Scaling-Law Discovery for Recommendation Systems via Coupled Hyperparameter Scaling ↗</a>
+
+<p class="muted">论文作者署名包含 Meta。 · 论文更新于 2026-11-03（UTC）</p><p class="reason">适合维护多套推荐或广告模型、每次扩容都要重新调结构的团队；重点看搜索预算、上线算力约束和生产收益的统计口径。</p>
+<h4>研究问题</h4><p>推荐模型扩容不能只增加总参数量：商品表示、特征交互和序列处理可能相互制约。单独加宽某一层未必有效，全面遍历所有参数又需要大量昂贵训练。团队真正需要回答的是：给定新的线上算力预算，应该把容量分配到哪些部分，以及哪些配置值得先训练。</p><h4>核心方法</h4><p>第一步是把模型改造成能一致扩缩的模板。论文把原始结构参数归为三个控制方向：表示维度、交互深度，以及同时调整多个相关模块宽度的“交互宽度”。这样每个候选配置都是一套结构协调的模型，而不必独立搜索所有层的大小。三个方向是本文模板和试验预算下的经验选择，不是通用定律。</p><p>第二步先测计算量，再花成本测效果。系统对 64 个配置测推理浮点运算量，用这些较便宜的信息筛出可能满足服务预算的配置；随后完成 16 次初始训练，得到真实质量。Axia 用概率预测模型估计未试配置的质量、成本和预测不确定性，再选出四个值得训练的配置。完成新训练后，把实测结果回填，必要时继续下一轮。这里训练的是候选推荐模型，搜索器负责决定训练谁。</p><p>第三步按部署目标选择候选：若只想在现有算力内换一个更好的模型，就优先寻找预算内的质量提升；若在考虑扩容，就同时探索多个成本档位，给团队一组“再省算力就会损失效果”的候选方案。最后依靠完整训练和上线 A/B 决定采用哪一档，预测曲线本身不等于上线收益。</p>
+<h4>实验结果</h4><ul><li>在一个代表模型、每次推理不超过 160 MFLOPs 的受控比较中，Axia 用 20 次完整训练，所得归一化熵 NE 相对随机搜索降低 0.070%，相对默认 Ax 贝叶斯优化降低 0.059%。NE 是按背景事件率归一化的预测损失，越低越好；这些不是点击率提升。</li><li>Meta 的两个生产周期共完成 34 次模型迭代，相对各自被替换的线上配置，离线 NE 平均改善 0.66%。两个周期的线上主要业务指标提升分别为 0.07% 与 0.29%；论文所报 0.36% 是这两个周期提升的加总，并非另做一次统一 A/B 得到的总效果。</li><li>同样 20 次训练预算下，三个搜索方向的效果优于一个、两个或六个方向，说明开放更多结构自由度不一定更好：试验太少时，搜索可能根本来不及找到好配置。这个结论限于文中的代表模型及预算。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>在接入自动搜索器之前，可先整理哪些结构参数必须联动，并建立便宜的服务成本测量。把大量明显超预算的配置挡在完整训练之前，可能比单纯替换搜索算法更有价值。</li><li>评估时应同时保留“固定试验数、固定上线预算”的对照与真实部署记录，避免把新增算力、结构变化和搜索算法收益混为一谈。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>34 次生产迭代的服务预算为前代的 1.2–10 倍，属于整个扩容工作流的观察性结果，不能解释为同等算力下搜索器单独带来 0.66% 收益。</li><li>论文披露一个带成本预估的 Ax 基线存在参数对数标记丢失问题，因此 Axia 对该基线的差距可能夸大其他算法改进的贡献。</li><li>代表模型的消融、内部数据与保密的绝对质量数值限制了复现；线上时延也不完全由 FLOPs 决定，迁移时需要加入实际硬件和时延约束。</li></ul></article><article class="paper" id="paper-2611.05596" data-search="RAGCompass: Generalizable Retriever Routing via Reranking RAGCompass：先看检索结果，再决定用哪一路证据回答 Meta Meta RAG 检索路由 效用监督">
+<div class="paper-meta"><span class="pill">Meta</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>RAGCompass：先看检索结果，再决定用哪一路证据回答</h3><a class="original" href="https://arxiv.org/abs/2611.05596v1" target="_blank" rel="noopener noreferrer">RAGCompass: Generalizable Retriever Routing via Reranking ↗</a>
+
+<p class="muted">论文作者署名包含 Meta。 · 论文更新于 2026-11-03（UTC）</p><p class="reason">适合同时维护关键词、向量或图检索的 RAG 团队，重点看训练标签、完整查询集收益和多路检索成本。</p>
+<h4>研究问题</h4><p>问答系统可以用关键词、向量或知识图谱寻找材料，但没有一种检索方式对所有问题都最好。只根据问题文本选择检索器，看不到它这一次究竟找回了什么；检索器或知识库更新后，原来的选择规则也可能失效。</p><h4>核心方法</h4><p>每次请求先运行所有候选检索器，各自返回一组段落。一个共享的 Qwen3-Reranker-0.6B 模型分别阅读“问题＋这组段落”，判断哪组材料更有助于回答。最终只把选中的一组送给回答模型，在线只生成一次答案。</p><p>训练时，先让固定的回答模型分别使用各路材料作答，将答案与标准答案比较，得到每组材料的效用标签；据此微调重排模型，而不是只教它识别主题相关的文档。然后冻结重排模型，训练一个小型比较模块，对各组表示作联合选择。两部分都不绑定某个检索器的身份，因此新加入的检索器也能凭返回的内容参与比较。</p>
+<h4>实验结果</h4><ul><li>四个问答数据集、五路检索器的筛选子集中，答案 F1 从最佳固定检索器的 0.2782 提高到 0.3552；F1 衡量生成答案与标准答案的重合程度。但该子集只占全部查询的 18.7%，要求最优两路的答案 F1 相差至少 0.05。回到全部查询，相对各自最佳固定检索器的绝对增益为 0.0228，不能把子集上的约 28% 相对提升当成全量收益。</li><li>消融中，单独使用微调后的重排打分器已有 0.3412 F1，比较模块再增加 0.0140。仅将训练目标从文档相关性换成答案效用，完整模型由 0.3341 提高到 0.3552，说明监督信号比堆叠比较结构更值得优先验证。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：先离线测量不同检索器在真实查询上是否互补，再决定是否训练路由器。若多数查询各路结果相近，增加检索调用和重排的成本可能难以换来足够收益。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>报告的 0.222 秒路由耗时在单张 L40S 的指定批量下测得；所谓 3.9% 额外开销不包含从运行一路变成运行全部五路的检索成本。</li><li>主要比较中的若干路由基线经过简化重实现；迁移实验只测试有限的语料、检索器和一次回答模型替换，不能据此认定任意系统更新都无需重训。</li></ul></article><article class="paper" id="paper-2611.05690" data-search="Turbocharging PiPNN for Proximity and k-NN Graph Building PiPNN II / GPiPNN：让向量检索建图更适合 CPU 和 GPU 批量计算 Google Google 向量检索 索引构建 系统优化">
+<div class="paper-meta"><span class="pill">Google</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>PiPNN II / GPiPNN：让向量检索建图更适合 CPU 和 GPU 批量计算</h3><a class="original" href="https://arxiv.org/abs/2611.05690v1" target="_blank" rel="noopener noreferrer">Turbocharging PiPNN for Proximity and k-NN Graph Building ↗</a>
+
+<p class="muted">论文作者署名包含 Google。 · 论文更新于 2026-11-03（UTC）</p><p class="reason">适合需要频繁重建向量索引的团队，重点看建图与在线查询的区分、量化误差和硬件约束。</p>
+<h4>研究问题</h4><p>图索引把每个向量连接到一小组邻居，查询时沿这些连接快速寻找相似对象。传统建图往往要反复在尚未完成的图上搜索，内存访问零散。即使在线查询很快，离线构建仍可能耗时很长，妨碍数据更新和参数试验。</p><h4>核心方法</h4><p>PiPNN 先把向量划成许多相互重叠的小块，在块内批量比较距离，再汇总每个向量的候选邻居并删去冗余连接。重叠使一个向量能从不同局部范围获得候选；这些小块内的计算比逐点遍历全图更适合矩阵运算。</p><p>本次 CPU 版本 PiPNN II 用低精度表示减少数据搬运，并在计算距离的同时保留最好的少量候选，避免把完整距离矩阵写入内存后再读回来选优。GPU 版本 GPiPNN 进一步把大小不一的递归任务整理成批量任务，用排序合并候选；最后剪枝时尽量复用已算出的邻居距离。若目标是直接得到每个点的 k 个近邻，还可汇总局部候选直接输出近邻图，省去“先建搜索索引、再逐点查询”的步骤。</p>
+<h4>实验结果</h4><ul><li>CPU 评测中，PiPNN II 相对量化版 Vamana 的索引构建加速比，跨数据集几何平均为 5.9 倍；作者同时比较查询吞吐量与召回率曲线，以避免只用更差的索引换构建速度。这是建图收益，不是在线查询提速 5.9 倍。</li><li>单张 H100 80GB 上，GPiPNN 的 8 位版本在 13 个不超过千万规模的索引构建测试中，相对 Jasper 几何平均加速 13.3 倍。另一个任务是直接构建 10 近邻图：在平均找回至少 90% 真实近邻的要求下，相对 NN-Descent 的几何平均加速为 2.91 倍，两类任务不能混用数字。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：若向量库更新慢主要卡在建图，可先在固定召回率与查询吞吐约束下比较新构建器；同时拆分量化、数据搬运和候选选优耗时，判断系统瓶颈是否与论文相同。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>GPU 实现针对 H100 的 Hopper 指令与单机显存设计；CPU 十亿规模实验使用 TB 级内存机器，不能直接照搬到普通硬件。</li><li>4 位量化在若干更难的 10 近邻图任务上达不到 90% 召回门槛。GPU 近似剪枝还会保留更多边，采用时应检查自己的索引存储格式与查询成本。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>读到“效果更好、成本更低”时，先补齐三个问题</h3><p>第一，收益对哪些请求成立？RAGCompass 的主要提升来自检索器之间有明显差异的查询子集；实时供给约束检索依赖某一时刻的可用商家快照。把方法放进自己的流量前，应先确认这类请求有多少，以及输入信息能否及时获得。</p><p>第二，比较时哪些条件变了？Axia 的生产迭代允许增加服务算力，因此生产收益不能全部归于搜索算法；CAP-Mix 的物品表示对照则有助于分清共享表示与整体模型配置的贡献。可以优先找预算一致、主干一致的对照，再看完整系统部署是否仍有价值。</p><p>第三，成本从哪里开始算、在哪里结束？PiPNN 的重点是建图，RAGCompass 的路由耗时不包含额外运行全部检索器的成本，实时供给检索还涉及约束准备与传输。这些都可能是有用的改造，但需要把新增计算放回真实服务流程中测量。</p><p>据此形成的实践建议是：先固定要改善的业务指标与最低质量要求，再选择一个可独立比较的环节；记录效果、算力、时延和更新成本，最后通过实际流量验证。这样才能判断论文里的优势是否能转化为本系统的收益。</p><div class="sources"><a href="#paper-2611.05596">RAGCompass：先看检索结果，再决定用哪一路证据回答</a> · <a href="#paper-2611.06323">本地生活生成式召回：把当前可配送商家放进解码约束</a> · <a href="#paper-2611.05643">Axia：用少量训练试验，决定推荐模型应该加深、加宽还是扩大表示</a> · <a href="#paper-2611.05799">CAP-Mix：让商品共享表示，又不被固定语义编号束缚</a> · <a href="#paper-2611.05690">PiPNN II / GPiPNN：让向量检索建图更适合 CPU 和 GPU 批量计算</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
