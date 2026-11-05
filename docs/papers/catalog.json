@@ -246,7 +246,7 @@
       "stats": {
         "format": "arxiv_tex",
         "converter": "LaTeXML",
-        "text_chars": 73081,
+        "text_chars": 72477,
         "sections": 60,
         "figures": 14,
         "tables": 13,
@@ -424,7 +424,7 @@
           "table_cells_translated": 121
         }
       },
-      "source_sha256": "d7837b48805bd1a41d4cff62e2d92fed00b8ed207cd20cc43548f6b311658715"
+      "source_sha256": "f1dc24bd2558f5a17d38f5874339033d7017ac7d599cac14b90d8131c88da74c"
     },
     {
       "short_name": "GEAR",
