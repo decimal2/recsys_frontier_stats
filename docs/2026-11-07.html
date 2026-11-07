@@ -1,0 +1,149 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-11-07</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-11-07</h1><div class="metrics"><div><strong>5</strong>全文解读</div><div><strong>4</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><article class="trend"><h3>先问最终要做什么决定，再选择训练目标</h3><p>DCD 面对的是点击后选网页还是 App：分别把两边转化率预测得更准，不一定更会选入口，因此它改为学习两种行动的相对优势。E-GenRM 面对的是两个购物回答选哪个：它先从用户上下文提炼需求，再用证据判断候选是否满足这些需求。两者共同提醒，训练目标应接上最终选择；但前者报告的是广告主价值，后者首先衡量偏好判断准确率，不能把各自的提升数字直接比较。</p><div class="sources"><a href="#paper-2611.01287">DCD：点击广告后去网页还是 App，也需要个性化选择</a> · <a href="#paper-2611.03008">E-GenRM：用真实购物行为训练会核验证据的奖励模型</a></div></article><article class="trend"><h3>指标变化与业务解释之间，还需要一层验证</h3><p>类别看板审计发现，整体均值校准得更准，类别排序和选类决策却未必可靠改善。FocalSwap 则把“替换搜索信息后排序变了”和“原来的搜索信息更有用”分开：删除所有搜索与换入相似的真实搜索，会得到不同的贡献估计。这两篇研究的共同价值是检查结论能走多远。工程上可以分别记录输入变化、指标变化和最终选择的变化，再用对应的对照验证；这是本期样本给出的实践推断，并非一种已经证明适用于所有系统的校正方案。</p><div class="sources"><a href="#paper-2611.05006">类别看板审计：均值更准，不代表推荐资源分配更好</a> · <a href="#paper-2611.06044">FocalSwap：搜索增强推荐的收益，真的来自最近一次搜索吗？</a></div></article><article class="trend"><h3>蒸馏的监督形式和教师来源，决定了它能解决什么问题</h3><p>E-GenRM 先学习教师生成的评估过程，再用偏好标签与事实反馈优化自己生成的评估。这与 OPD 效率研究中的做法不同：后者让学生自己生成内容，由冻结教师在这些前缀上提供词元概率。该研究发现，外部强教师并不稳定胜过直接强化学习；更有利的设置是合并从同一基础模型训练出的领域专家。两篇分别支持监督构造和教师选择的考量，不能串成一条已经在电商小模型上验证的通用训练配方。</p><div class="sources"><a href="#paper-2611.03008">E-GenRM：用真实购物行为训练会核验证据的奖励模型</a> · <a href="#paper-2611.08453">OPD 与 GRPO 的算力账：强教师不一定划算，同源专家合并更有优势</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2611.01287">DCD：点击广告后去网页还是 App，也需要个性化选择</a><span>Meta 把点击后的去向选择交给一个学习相对优势的轻量模型；在网页与 App 的线上对照中，第三代方案的广告主价值比固定打开网页提高 0.54%。</span></li><li><a href="#paper-2611.05006">类别看板审计：均值更准，不代表推荐资源分配更好</a><span>在相同用户与视频上对照推荐曝光和随机插入日志，拆开整体水平误差、类别排序误差与实际选类损失，揭示“校准有效”能证明到哪一步。</span></li><li><a href="#paper-2611.06044">FocalSwap：搜索增强推荐的收益，真的来自最近一次搜索吗？</a><span>在固定推荐样本上同时做搜索遮蔽和匹配替换，可以区分“模型会响应搜索输入”与“真实搜索确实改善排序”；只看遮蔽实验可能得出过强的归因结论。</span></li><li><a href="#paper-2611.03008">E-GenRM：用真实购物行为训练会核验证据的奖励模型</a><span>先把跨会话购物行为变成带依据的偏好比较，再训练模型逐条检查需求和商品事实；它用于指导购物助手后训练，缺少关键事实时才主动检索。</span></li><li><a href="#paper-2611.08453">OPD 与 GRPO 的算力账：强教师不一定划算，同源专家合并更有优势</a><span>逐词教师监督并不自动降低训练成本；这组实验中更可靠的用途，是把从同一基础模型训练出的多个领域专家合并成一个模型，并把训练教师的费用一起计算。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>逐篇解读</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2611.01287" data-search="Dynamic Click Destinations: Personalizing Post Ad-Click Landing Experiences DCD：点击广告后去网页还是 App，也需要个性化选择 Meta Meta 广告推荐 落地页决策 策略蒸馏">
+<div class="paper-meta"><span class="pill">Meta</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>DCD：点击广告后去网页还是 App，也需要个性化选择</h3><a class="original" href="https://arxiv.org/abs/2611.01287v1" target="_blank" rel="noopener noreferrer">Dynamic Click Destinations: Personalizing Post Ad-Click Landing Experiences ↗</a>
+
+<p class="muted">作者首页统一署名 Meta Platforms，全部作者列有 meta.com 邮箱。 · 论文更新于 2026-10-31（UTC）</p><p class="reason">适合拥有多个合法落地入口、能够追踪转化反馈的广告团队。重点看如何把“分别预测两边转化率”改成“直接学习选哪边”，以及如何用大模型的预测训练轻量决策模型；这里的大模型是容量更大的推荐模型，并非语言模型。</p>
+<h4>研究问题</h4><p>广告系统通常决定展示哪条广告，但用户点击之后打开网页，还是跳到已经安装的 App，同样会影响转化。网页能保持稳定的浏览流程；App 可以利用已有登录状态和支付信息，却增加切换成本。因此，即便是同一条广告，不同用户也未必适合相同入口。</p><p>仅把所有点击统一改为打开 App 并不能解决问题：论文的线上实验中，这样做让总体广告主价值下降 1.05%，但购买等更靠近最终转化的广告子群略有收益。真正需要预测的是当前这次点击换入口是否更好，而不只是这个用户本来有多容易转化。</p><h4>核心方法</h4><p>系统在点击发生时读取用户、广告、广告主、设备和展示位置等上下文，在可用的网页与 App 两个入口中选择一个，并记录实际落地去向和后续转化。各代方案都采用 DLRM 类推荐网络；论文没有公开网络宽度等详细结构。</p><p>早期由于几乎只有网页流量，第一代先学习“从网页出发的用户，最后是否转到 App 完成转化”，把它作为跳转依据。积累两种入口的数据后，第二代分别预测“打开网页会转化的概率”和“打开 App 会转化的概率”，再比较两者。但这种训练容易把精力放在预测总体购买倾向，未必学好两种入口之间的细微差别。</p><p>第三代先用一个容量更大的转化预测模型，为同一次点击估计两种入口的转化得分。取两个得分在转换成概率之前的差值，再经缩放和 sigmoid 映射到 0–1，作为“App 相对更好”的软标签。随后训练一个轻量单输出模型学习这个标签；线上由轻量模型打分，超过阈值才跳到 App，否则保留网页。阈值控制有多少流量被切换。</p><p>大模型在这里提供训练监督，线上决策使用轻量模型的单一输出。作者借鉴了强化学习中比较动作优势的思路，称为 A2C-inspired；实际描述的是用预测差生成标签的监督学习，没有多步环境交互，也不是直接运行完整的 A2C 强化学习算法。</p>
+<h4>实验结果</h4><ul><li>个性化入口优于统一切换。在每轮持续三周、实验组与对照组各占平台用户流量 10% 的测试中，以固定打开网页为基线，固定打开 App 的广告主价值下降 1.05%；第一、二、三代 DCD 分别提升 0.06%、0.42%、0.54%。广告主价值是对转化事件按价值加权后的总和，权重可以来自报告值、模型值或代理值，不等同于单纯转化率或已实现收入。</li><li>对准“选择哪边”的目标还能带来增量。第三代比第二代高出 0.12 个百分点，指相对于同一基线的价值提升幅度之差。论文还报告第三代开发迭代中，离线预测指标的改善方向与线上价值变化方向一致；但没有披露迭代次数或相关系数，不能据此认定离线指标可以代替线上试验。</li><li>入口决策可能向前影响广告排序：把 DCD 预测的落地去向加入广告转化预估模型后，该特征的重要性进入前三。这个结果说明它携带有用信号，但论文没有单独报告加入该特征带来的线上价值增幅。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>如果已有多个落地入口，可先评估各用户群在不同入口上的结果差异，再决定是否建设个性化路由。总体平均最差的入口也可能对部分用户更好；工程上应保留默认入口和可调阈值，通过受控实验逐步扩大适用流量。</li><li>蒸馏不必总是复制两个模型输出。当线上最终只需要二选一时，可以尝试让轻量模型学习两种行动的相对优势。不过，必须检查提供标签的预测模型在两个入口上是否可靠，不能把它生成的软标签视为已经观测到的个体因果收益。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>实证仅覆盖网页与已安装 App 的二选一；多个落地页、原生页面与外站等场景只是扩展方向，没有对应实验结果。</li><li>每次点击只能观察实际选中入口的转化。论文没有充分展开日志选择偏差的校正和探索流量设计；第三代监督仍依赖上游预测模型，不能保证学到每个用户的真实因果收益。</li><li>没有公开详细网络结构、线上推理时延、置信区间或各子群完整收益，因此迁移前仍需重新校验成本、统计不确定性和人群差异。</li></ul></article><article class="paper" id="paper-2611.05006" data-search="When Category Means Move: A Paired-Support Audit of Recommendation Logs with Random Insertions 类别看板审计：均值更准，不代表推荐资源分配更好 Alibaba Alibaba 推荐评估 曝光偏差 类别运营">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>类别看板审计：均值更准，不代表推荐资源分配更好</h3><a class="original" href="https://arxiv.org/abs/2611.05006v1" target="_blank" rel="noopener noreferrer">When Category Means Move: A Paired-Support Audit of Recommendation Logs with Random Insertions ↗</a>
+
+<p class="muted">Yu Zhang 等四位作者均署名 AMap Alibaba Group。 · 论文更新于 2026-11-03（UTC）</p><p class="reason">适合负责内容供给、品类运营和推荐实验分析的工程师，重点看为何平均误差显著降低后，排名和选类决策仍可能没有可靠改善。</p>
+<h4>研究问题</h4><p>平台常用各内容类别的平均观看比例判断哪些内容更值得引入或推广。但推荐策略已经决定了谁看到什么，以及同一类别中哪些视频获得更多曝光。一个类别的平均值高，可能是受众和曝光构成不同，不能直接解释成该类别本身更好。论文审计的是这种看板误差，不是提出新的推荐模型或估计类别的因果效果。</p><h4>核心方法</h4><p>输入是常规推荐日志与随机插入视频的日志，输出是各类别统计量的偏差、偏差构成，以及依据看板选择热门类别时的损失。作者先对齐日期、入口、用户和视频，只在两份日志共同覆盖的范围内比较；主实验留下12,472名用户、5,486个视频和38个类别。这里“对齐”是使用相同用户和视频集合，不是把每次曝光配成同一时刻的随机对照试验。</p><p>比较时先拆开两件事：所有类别整体被抬高多少，以及减去整体水平后，各类别之间的高低关系还差多少。一个简单诊断是先减去每位用户在常规日志中的平均观看水平，再按类别汇总，并用随机日志的总体均值补回水平。这能移除一部分用户整体观看倾向，却不能自动修复用户偏好差异、每类内部的视频曝光比例或位置影响；因为借用了当期随机日志，它也不是可以直接宣称上线有效的校正器。</p><p>作者再将差异拆成“同一视频在两类日志中的表现不同”和“视频的曝光占比不同”，单独记录被共同覆盖筛选排除的内容。最后做真正面向后续时段的检验：只用较早时段估计一个整体修正量或每类各自的修正量，将这些参数固定后应用到后一周，再用后期随机日志验收。除均值误差，还检查选前5、10或20个类别时，所选集合相对随机参考最优集合损失了多少平均观看表现。</p>
+<h4>实验结果</h4><ul><li>平均值校准的收益主要来自整体水平。主实验中，用户去均值并补回随机总体均值后，各类别绝对平均误差从0.1935降到0.0387，下降80.0%；但去除整体水平后的误差只下降21.0%，类别排名相关性的变化也不显著。点击和长观看两个指标甚至出现排名相关性下降，因此不能把“均值更准”写成“排序更准”。</li><li>历史校准可以在短期后续数据中发挥作用。固定早期估计的每类别修正量后，后一周绝对平均误差为0.0251，优于只改整体水平的0.0531；检验对象限于返回并同时出现在两种测试日志中的用户。该结果支持一次短期迁移，不等于能长期稳定校准全平台。</li><li>没有得到稳健的选类决策收益证据。按曝光行加权的用户去均值在选前10类时有名义改善，但同时校正六组比较后区间包含零；将随机数据分开用于选参考集合与评价集合后，各组区间也都包含零。前5类和前20类不能据此前10类结果推断同样受益。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>如果看板用于决定扶持哪些类别，可把“总体均值误差”“类别间相对差异”和“最终选出的类别损失”分开验收。先保留一小部分随机探索数据，冻结历史校准再看未来表现，避免用当期参考值修正后又用同一参考值证明上线有效。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>研究仅覆盖KuaiRand一个短视频平台和有限时间窗口；主要筛选留下约一半原始常规日志用户，并排除了约四分之一随机插入曝光，不代表全部用户或完整生产信息流。</li><li>随机插入日志缺少原列表位置和被替换视频；同一视频的残余差异可能混有用户状态、时刻和位置因素，分解比例不是因果贡献。</li><li>去均值不能解决每类内部的视频选择偏差；即使有真实曝光概率，重叠不足也可能让加权估计方差过大。</li></ul></article><article class="paper" id="paper-2611.06044" data-search="Do Search-Augmented Recommenders Use the Latest Search Episode? FocalSwap：搜索增强推荐的收益，真的来自最近一次搜索吗？ Huawei Huawei 搜索增强推荐 归因评估">
+<div class="paper-meta"><span class="pill">Huawei</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>FocalSwap：搜索增强推荐的收益，真的来自最近一次搜索吗？</h3><a class="original" href="https://arxiv.org/abs/2611.06044v1" target="_blank" rel="noopener noreferrer">Do Search-Augmented Recommenders Use the Latest Search Episode? ↗</a>
+
+<p class="muted">Jiandong Ding 的论文首页署名为 Huawei Technologies Co., Ltd. · 论文更新于 2026-11-04（UTC）</p><p class="reason">适合正在把搜索日志接入推荐系统的团队：重点看如何保持目标、候选和模型不变，再判断最新搜索与累积搜索历史各自贡献了什么。</p>
+<h4>研究问题</h4><p>用户搜索过某类商品后，推荐模型可能给出更相关的结果。但整体指标上涨并不能证明模型利用了“刚刚那次搜索”：收益也可能来自更早的搜索历史，或训练时学到的长期兴趣。常用的删掉搜索特征再测一次，还可能把模型送入不常见的输入状态，因而混淆了信息价值与输入扰动。</p><h4>核心方法</h4><p>FocalSwap 是离线审计协议，不是新的推荐模型。它取出一条已有推荐记录，固定用户搜索之前的历史、被评估的目标商品、候选集合和已训练的打分模型，只改搜索输入，然后重新排序。这样观察到的差别来自指定输入的变化，而不是换了候选或重新训练。</p><p>干预分别覆盖两个范围：只替换最新一次搜索所在的位置，或者替换全部搜索历史。每个范围再设置两种对照：填入中性编号，或换成日志中真实出现过、商品类别和行为规模相近的搜索。后一种对照保留了粗粒度特征，让测试更接近常见输入，但不保证两次搜索具有完全相同的意图。</p><p>审计分别统计“目标排名是否变化”“原输入比对照多带来多少倒数排名收益”以及“真实搜索是否比匹配搜索更常获胜”。倒数排名是目标名次的倒数，目标越靠前越高；排名经常变化也可能有升有降，平均收益仍接近零。作者先用人为植入的搜索信号和明确使用当前查询的任务检查协议能否检测出已知依赖，再审计 SESRec、UniSAR 的推荐模型。模型在每次干预比较中保持冻结，不需要把审计器放入在线服务。</p>
+<h4>实验结果</h4><ul><li>最新搜索的正贡献没有得到主要检验支持。SESRec 和三个独立训练的 UniSAR 模型，在最新搜索位置的中性遮蔽或类别匹配对照下，相应贡献置信区间均跨过零。这表示当前实验尚未建立正收益，不等于证明最新搜索完全没有作用。</li><li>全部搜索历史的归因明显依赖对照。在 UniSAR 的同一批 66,139 条可匹配记录上，中性遮蔽得到的平均倒数排名贡献为 +0.002016 至 +0.005427，区间都在零以上；换成类别和行为特征匹配的真实搜索后，贡献变为 −0.001177 至 −0.000354，其中一个模型显著为负，另两个区间跨零。两种对照的配对差异均显著，换五组匹配对象后结论仍在。</li><li>“会改变排序”仍不等于“对排序有帮助”：遮蔽全部搜索使约 59.7%–61.7% 的目标排名变化，匹配替换也使 44.1%–44.8% 变化，但两者的平均收益方向不同。这是固定候选集合内的离线排序结果，不是线上点击或转化提升。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>接入搜索特征后，可在同一批推荐记录上同时跑遮蔽与匹配替换，再按最近一次和全部历史分开汇报。若收益只对遮蔽成立，应先检查模型是否只是依赖粗粒度搜索状态，避免把整个模块的收益解释成即时意图理解。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>匹配替换不是严格的用户意图等价实验。两种对照的差异可能同时来自匹配搜索保留了有用信息，以及中性输入扰乱了模型；论文没有将这两种机制单独识别。</li><li>UniSAR 全部搜索可匹配样本只占原测试记录的 42.1%；固定候选和目标的审计也不测搜索对召回集合或后续用户行为的影响，不能直接推出系统级因果收益。</li><li>结论限于所审计的数据、训练检查点和输入接口，不能据此断言所有搜索增强推荐模型都不使用最新搜索。</li></ul></article><article class="paper" id="paper-2611.03008" data-search="E-GenRM: Generative Reward Modeling for Open-Ended E-Commerce Shopping Agents E-GenRM：用真实购物行为训练会核验证据的奖励模型 Alibaba Alibaba 购物Agent 奖励模型 偏好学习">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>E-GenRM：用真实购物行为训练会核验证据的奖励模型</h3><a class="original" href="https://arxiv.org/abs/2611.03008v1" target="_blank" rel="noopener noreferrer">E-GenRM: Generative Reward Modeling for Open-Ended E-Commerce Shopping Agents ↗</a>
+
+<p class="muted">Ying Sun 等作者署名 Taobao &amp; Tmall Group of Alibaba。 · 论文更新于 2026-11-02（UTC）</p><p class="reason">适合准备将大模型评判过程蒸馏到专用模型、或为购物Agent构建奖励信号的团队，重点看监督如何构造、事实反馈如何约束评判，以及奖励模型与最终服务Agent的区别。</p>
+<h4>研究问题</h4><p>购物助手面对的是跨多轮累积的预算、规格和个人偏好，回答只匹配最后一句问题往往不够。只收集现有助手的对话，又容易反复学习其已经支持的任务。论文要训练一个专门的评估模型：给它当前可见的交互历史、商品证据和两个候选回答，让它判断哪个回答更符合这位用户的购物需求。</p><h4>核心方法</h4><p>数据从整个平台的购物活动构造，而不只来自助手对话。作者以购买为终点向前整理浏览、搜索、筛选、比较等行为，将它们翻译成多轮任务，并构造两个候选回答：一个符合后续行为，另一个在某一需求、事实或偏好上有可控差异。购买等后续信息用于建立标签，不放进决策时的模型输入，避免让模型提前看到结果。教师模型据当前上下文写出需求清单、各项权重、两份回答的逐项评分与证据，过滤后形成训练示范。</p><p>三阶段首先训练的是奖励模型E-GenRM，不是直接训练购物助手。第一阶段让Qwen模型学习教师的完整评估过程，使用低秩适配更新；第二阶段由模型自己生成评估过程，用GRPO更新全部参数，同时奖励最终偏好判断正确、以及逐项事实能够被可见证据支持。缺失的引用不给事实分，能直接检查的数值比较按结构化数据核对。第三阶段沿用这两个目标，增加“都满足明确条件、但个人偏好不同”的困难对比，让模型分清仅仅合格与真正适合用户。教师和事实核验器提供监督，不是这三阶段被优化的对象。</p><p>另一个检索扩展继续训练奖励模型的工具选择：如果缺少决定性商品事实，就查商品百科或评论；信息已经够用时，额外调用会受罚。得到证据后仍按同一份需求清单比较回答。训练好的奖励模型随后用于购物助手的DPO偏好数据构造或GRPO奖励计算；线上实验服务的是经过它后训练的购物助手，不能将结果解释为每次请求都运行完整的奖励模型评估流程。</p>
+<h4>实验结果</h4><ul><li>在373个人工标注购物决策上，27B奖励模型不检索时偏好准确率为82.57%，高于最强基线80.43%；加入主动检索后为87.40%。准确率要求交换两份候选回答的次序后都选对，不是购买转化率。检索前的Hard和OOD子集并非各自超过所有基线，整体领先不能理解为每一类任务都最优。</li><li>工具训练主要减少不必要的查询。在相同的一次自主调用预算下，训练后调用率由95.84%降至22.12%，总体准确率由86.33%升至87.40%；但Hard子集由80.00%降至76.36%。因此是总体质量与工具成本的改善，仍需监控复杂任务是否少查了关键信息。</li><li>9B消融中，完整评估过程监督比仅学偏好标签提高5.36个百分点；第三阶段加入个性化困难样例，比普通继续强化学习再提高5.09个百分点，但对教师参考需求的文字召回率下降6.27个百分点。这说明偏好判断与复现教师清单并不是同一个优化目标。</li><li>淘宝购物助手的14天A/B实验报告有效购物协助率提高1.39个百分点、满意度提高2.33个百分点，P99时延相对下降17.88%。这些是助手经过奖励模型指导后训练的系统结果，不能据此给27B奖励模型本身估算在线延迟，也不能把百分点当成相对增长比例。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>如果要把API大模型的评判过程迁移到小模型，值得先整理“当前可见输入—需求—证据—候选比较”的示范，而不是只存长篇推理文本。可以先验证小模型能否在候选换序、缺失证据和困难偏好对比中保持判断一致，再决定是否加事实反馈的强化学习。本文只实验9B和27B，不能据此保证1.7B模型达到同样结果。</li><li>检索开关应同时看准确率和实际调用率，并单独留出复杂任务测试。只用总体准确率验收，可能掩盖预算节省来自困难样本少取证的风险。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>评判基准只有373个决策步骤、231名用户，困难与分布外子集分别为55和56个样例；数据及线上业务依赖淘宝场景，其他平台和更小模型需重新验证。</li><li>示范翻译、困难样例筛选和事实反馈都依赖教师或核验模型；500条训练样例抽检通过率为94.2%，监督过程仍可能带入标签及解释错误。</li><li>论文没有给出奖励模型本身的推理成本，也没有足够细节将线上时延变化归因到某一训练阶段；上线成本应按实际评判与检索链路另测。</li></ul></article><article class="paper" id="paper-2611.08453" data-search="Unpacking the Compute Efficiency of Strong-to-Weak OPD against GRPO OPD 与 GRPO 的算力账：强教师不一定划算，同源专家合并更有优势 Salesforce Salesforce 模型蒸馏 训练成本 强化学习">
+<div class="paper-meta"><span class="pill">Salesforce</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>OPD 与 GRPO 的算力账：强教师不一定划算，同源专家合并更有优势</h3><a class="original" href="https://arxiv.org/abs/2611.08453v1" target="_blank" rel="noopener noreferrer">Unpacking the Compute Efficiency of Strong-to-Weak OPD against GRPO ↗</a>
+
+<p class="muted">论文首页将 Zeyu Leo Liu、Yang Li、Shafiq Joty、Semih Yavuz 等作者署名为 Salesforce AI Research。 · 论文更新于 2026-11-05（UTC）</p><p class="reason">适合准备将大模型能力迁移到小模型的团队：先分清只拿到回答文本，还是能查询学生生成前缀上的教师概率，再比较达到目标质量的完整训练成本。</p>
+<h4>研究问题</h4><p>小模型可以依靠答案是否正确的奖励做强化学习，也可以让强模型对生成过程逐词给出监督。后者信号更密集，看起来需要更少训练样本；但教师每次前向计算也收费，学生若越写越长，成本还会进一步增加。因此，训练步数更少或教师更强，都不足以证明蒸馏更省算力。</p><h4>核心方法</h4><p>论文对比两条训练路线，学生都从自己的当前策略生成回答，更新的都是学生参数。GRPO 根据同一道题多条回答的正确与否形成相对奖励；OPD 则冻结教师，让教师读取学生已经生成的前缀，为接下来的词给出概率，再用反向 KL 损失让学生分布向教师靠近。主要实现只在学生概率最高的 16 个候选词上计算这个分布差异，不使用最终答案奖励。</p><p>比较时，作者尽量对齐学生起点、题目、每题采样数和共享超参数，并把累计生成 token 对应的浮点运算量作为成本。OPD 要额外计入教师逐 token 的前向计算；它不是把教师提前写好的推理文本做一轮监督微调。评测的 mean@16 是每题独立采样 16 次后的平均正确率，也不是“16 次中至少一次答对”。</p><p>接着，作者改用同一个基础学生经过 GRPO 训练后的检查点作为教师，再从原来的基础学生重新开始蒸馏。单领域里，这只是把已经训练出来的能力学回另一个副本。更有实际意义的版本是：分别训练数学、代码等领域的专家，冻结它们；统一学生生成回答时，按题目所属领域调用对应专家给监督。训练完成后只部署合并后的学生，领域专家只服务于训练阶段。</p>
+<h4>实验结果</h4><ul><li>外部强教师没有稳定的算力优势。Qwen3-1.7B-Base 在完整 DAPO 数学训练集的默认对齐设置下，GRPO 的域内与域外正确率均高于所测外部教师 OPD。一个重要例外是把 OPD 每题采样从 8 条改为 1 条：在单领域数学上它可以超过 GRPO，但代码和多领域任务没有保留这一优势。</li><li>“50 倍省算力”仅描述蒸馏阶段。Qwen3-4B-Base 以自己的数学 GRPO 检查点为教师时，约 0.2 EFLOP 的蒸馏即可达到该教师的 33.9% 数学域外平均正确率，而原 GRPO 达到这一水平约需 10.1 EFLOP；前者每题采样 1 条，后者 8 条。教师训练成本没有包含在 0.2 中，因此不能把它写成端到端便宜 50 倍。</li><li>多专家合并才出现包含教师成本的优势。数学和代码两位专家的训练约花 10.7 EFLOP，再加约 0.55 EFLOP 蒸馏即可恢复专家水平；以达到同一联合模型质量为目标，相比把混合样本直接用于联合 GRPO，总运算量少 42.0%。这是 Qwen3-4B-Base 两领域设置中的结果，不是任意教师、任意小模型都成立的比例。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>如果可获得的 API 只返回回答或推理文本，应先把这些经过筛选的文本用于监督微调基线；这与论文的逐 token 概率蒸馏是不同路线。要复现此处 OPD，还需能对学生自行生成的前缀查询指定候选词的教师概率，不能仅凭一份 trace 就宣称具备所需监督。</li><li>若已经有多个从同一基础模型训练出的领域专家，可以小规模验证“分别训练，再合并”的路线。账本应同时记录教师训练、教师打分、学生训练和生成长度，并与同质量的联合训练比较；不要按教师总榜分数直接选蒸馏教师。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>主要研究普通反向 KL 的 OPD，不覆盖所有混合奖励、轨迹重加权或异步蒸馏方法；外部教师的失败不能推广为蒸馏整体不可行。</li><li>FLOPs 是按生成 token 的模型前向/反向计算估算，排除了共享提示上下文，不等于实际 GPU 时间、API 账单或端到端部署成本。</li><li>任务以可验证的数学、代码及少量知识与指令任务为主，没有验证推荐业务、工具链 trace 或 Qwen3-1.7B 上的多专家合并收益。</li><li>同源教师与学生更接近只是有限实验中的解释线索，尚不是可保证迁移成功的普适诊断规则。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>把 API 大模型的评判过程迁移到小模型，先确认能拿到哪种监督</h3><p>如果接口只能返回文本，可以保存当前可见输入、候选回答、需求清单、依据和最终选择，作为监督微调示范。E-GenRM 提供了这类数据构造的例子：不能把购买等未来结果泄露进输入，也不能只保留一段难以核验的长解释。它的实证规模是9B和27B，尚不能保证1.7B具备相同的事实核验和长上下文能力。</p><p>如果准备采用本文讨论的概率分布 OPD，还需要教师对学生自己生成的前缀提供指定词元的概率。仅有教师自行生成的文本，或只返回教师自己输出词元的概率，都不自动满足这个条件。Salesforce 的实验包含 Qwen3-1.7B，但也显示外部教师更大、更强，不保证学生在相同计算预算下学得更好；它评估的数学和代码任务也不等同于购物评判。</p><p>工程推断是先做一个范围明确的验证：用同一份独立测试集，比较原始小模型、只学习最终选择的小模型，以及学习结构化评估过程的小模型。测试应包含候选换序、证据缺失和细微偏好差异，并同时记录正确率、输出长度和调用成本。只有确认监督微调的具体不足以及可用反馈后，再考虑增加强化学习或 OPD。计算预算应计入教师调用；合并自训专家时，还应计入专家训练本身。</p><div class="sources"><a href="#paper-2611.03008">E-GenRM：用真实购物行为训练会核验证据的奖励模型</a> · <a href="#paper-2611.08453">OPD 与 GRPO 的算力账：强教师不一定划算，同源专家合并更有优势</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
