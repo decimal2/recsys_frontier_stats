@@ -1,0 +1,149 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-11-08</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-11-08</h1><div class="metrics"><div><strong>5</strong>全文解读</div><div><strong>5</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><article class="trend"><h3>自动优化不只要会提出改动，还要决定哪些实验值得继续</h3><p>DualEvolve 用实验过程反馈改进推荐研发规则，但替换当前模型仍须通过固定的任务收益和训练成本门槛。ParetoSaddler 则允许中间版本暂时更贵，或在有限范围内牺牲质量，只要另一目标的进步有足够证据；最终才按部署要求选择。两者都在改善实验筛选，但接受规则并不相同。工程上应先说明筛选对象是下一轮研究候选，还是准备上线的版本，再决定是否容许暂时退让。</p><div class="sources"><a href="#paper-2611.04439">DualEvolve：让推荐研发 Agent 同时改算法和实验规则</a> · <a href="#paper-2611.02079">ParetoSaddler：优化Agent时，别过早淘汰暂时更贵的有效改动</a></div></article><article class="trend"><h3>学生在哪些状态学习，以及学习什么目标，是两件事</h3><p>HERO 面对热门商品占据生成路径的问题：它使用热门和长尾教师分工，并补入学生尚未生成的真实长尾路径。D²-OPD 面对的是概率监督本身可能调整过头：它在学生访问的前缀上，分别控制目标分布的调整方向和幅度。前者补学习覆盖，后者改学习目标；不能用数学基准的平均成绩替代推荐长尾命中验收，也不能把两篇都称为“换更大的教师”。</p><div class="sources"><a href="#paper-2611.03272">HERO：分别向热门和长尾教师学习，并补上学生走不到的商品路径</a> · <a href="#paper-2611.07241">D²-OPD：让学生学习更好的概率目标，同时限制偏离教师的幅度</a></div></article><article class="trend"><h3>成本结论要覆盖实际多出来的计算</h3><p>Dory 的循环计算可以减少输出长度，但生成计算总量仍可能增加。D²-OPD 报告了监督计算与更新的额外时间，却没有证明全训练比强化学习便宜。ParetoSaddler 能降低最终框架的每任务token费用，但寻找框架本身更贵。三者衡量的是不同阶段的成本。实践推断是分别记录准备与优化开销、每次执行开销和预期调用量，再判断节约能否摊平前期投入。</p><div class="sources"><a href="#paper-2611.03998">Dory1.0-4B：让同一组层多算几遍，用计算深度换能力</a> · <a href="#paper-2611.07241">D²-OPD：让学生学习更好的概率目标，同时限制偏离教师的幅度</a> · <a href="#paper-2611.02079">ParetoSaddler：优化Agent时，别过早淘汰暂时更贵的有效改动</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2611.04439">DualEvolve：让推荐研发 Agent 同时改算法和实验规则</a><span>冻结大模型参数，用内层实验修改推荐代码、外层反馈修改工作规则；推荐模型能否替换旧版本，仍由不可修改的验证指标和成本门槛决定。</span></li><li><a href="#paper-2611.02079">ParetoSaddler：优化Agent时，别过早淘汰暂时更贵的有效改动</a><span>固定大模型权重，反复修改提示词、工具和执行控制；中途保留质量或成本有可信进步的候选，最后再按部署要求选方案。</span></li><li><a href="#paper-2611.03272">HERO：分别向热门和长尾教师学习，并补上学生走不到的商品路径</a><span>把热门与长尾商品交给各自擅长的教师，在学生生成路径之外补充真实长尾路径监督；1688线上实验相对原生成式推荐器的GMV提高3.412%。</span></li><li><a href="#paper-2611.07241">D²-OPD：让学生学习更好的概率目标，同时限制偏离教师的幅度</a><span>把蒸馏目标“往哪个方向调整”和“最多调整多远”分开控制；1.7B学生的数学平均成绩有所提高，但并非每个基准都超过先监督微调再蒸馏。</span></li><li><a href="#paper-2611.03998">Dory1.0-4B：让同一组层多算几遍，用计算深度换能力</a><span>同一个4B模型可以按请求选择循环次数；多算几轮能提高部分Agent任务成功率并减少输出，但每个词的计算更重，不能把少输出直接当成更省总算力。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>逐篇解读</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2611.04439" data-search="DualEvolve: Dual-Level Self-Evolution of Mechanism and Orchestration for Recommendation DualEvolve：让推荐研发 Agent 同时改算法和实验规则 Meituan Meituan 推荐算法研发 自动实验 Agent工作流">
+<div class="paper-meta"><span class="pill">Meituan</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>DualEvolve：让推荐研发 Agent 同时改算法和实验规则</h3><a class="original" href="https://arxiv.org/abs/2611.04439v1" target="_blank" rel="noopener noreferrer">DualEvolve: Dual-Level Self-Evolution of Mechanism and Orchestration for Recommendation ↗</a>
+
+<p class="muted">Chenxu Wang、Wenxuan Yang等作者署名Meituan。 · 论文更新于 2026-11-03（UTC）</p><p class="reason">适合已经用代码Agent开展推荐实验的团队，重点看如何把“模型效果好不好”和“实验过程是否可靠”分开反馈，以及怎样避免Agent改动评估规则。</p>
+<h4>研究问题</h4><p>推荐算法自动研发通常让Agent提出改动、运行训练，再根据最终指标选择候选。但一次没有涨分的实验也可能很有价值：它能排除错误假设、提示训练尚未收敛，或者说明某条方向不值得继续。只用最终分数反馈，难以区分这些有效探索与反复试错。</p><h4>核心方法</h4><p>输入是现有推荐模型与训练代码、固定数据划分和评估器，以及实验日志。内层由冻结的大模型承担诊断、提出假设、改代码、分析结果等角色，真正训练候选推荐模型。先用较短训练筛选，再给胜出候选完整训练；只有验证收益超过预先校准的噪声门槛，才替换当前最佳模型。训练更慢的候选还要提供更大的收益，数据加载、指标计算和替换门槛均不允许修改。</p><p>外层检查的是实验过程：假设有没有依据、对照是否公平、是否区分负结果与执行失败，以及有没有探索新方向。固定评估模型依据日志给出过程分，另一个Agent据此提出修改全局实验规则或局部技能步骤。选择器在“保持规则”“改全局规则”“改技能”之间抽样探索，再用下一轮过程分相对历史水平的变化更新各类动作的估计价值。具体修改文字仍由大模型提出。</p><p>框架还保存当前任务的失败经验和有希望但未充分训练的候选，并从固定的论文知识快照检索方法。整个过程不更新语言模型权重；被训练的是候选推荐模型，被修改的是算法代码和Agent使用的文字规则。最终输出是经固定评估通过的推荐实现，研发Agent与过程评分器不需要进入推荐线上服务。</p>
+<h4>实验结果</h4><ul><li>在4个数据集、4种初始推荐算法的16个设置中，所选最终模型在64项设置—指标比较上的均值均高于Base、OpenEvolve和DeepEvolve。相对DeepEvolve，各设置的相对提升取宏平均后，前5个候选的命中率（HR@5）提高7.6%，同时考虑命中位置的排序质量指标NDCG@5提高9.0%。评测每次只在1个正样本与99个随机负样本中排序，不能直接当作全量商品召回或线上收益。</li><li>过程反馈在两个消融设置中优于只反馈任务涨分，但幅度依赖任务。例如Baby/NGCF的HR@5为0.2784，只用任务涨分反馈时为0.2212；CDs&amp;Vinyl/GRU4Rec则为0.5689与0.5621。主表每个设置只运行一次搜索，再用三个初始化种子重训最终模型；只有三个代表设置另外做了独立搜索重复。</li><li>四个成本设置中，LLM token用量比DeepEvolve的估算值少49%–63%，但耗时并非全部更短：ML-1M/SASRec为11.2小时，对照为10.5小时；这个设置的短训练阶段已达295轮，完整训练为300轮，筛选几乎没有训练预算优势。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>可以先固定数据、指标和模型替换条件，再允许Agent修改实验策略。把一次失败究竟是代码错误、训练不足还是假设不成立记录清楚，比让Agent只追逐当前最高分更有利于后续实验；这项流程建议仍需在自己的任务和预算下检验。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>结果来自有限规模的离线数据与采样负例，没有生产推荐线上实验；主表多项显著性检验未作多重比较校正。</li><li>过程评分与人类标注总体一致率为83.1%，校正偶然一致后的Cohen κ为0.432，不能把过程评分视为客观真值；过程高分也不会直接触发模型晋升。</li><li>规则迁移只在一个目标设置验证，报告的目标侧收益不包含先前获取源规则的成本；低保真筛选也确实漏过一个完整训练后更优的候选。</li></ul></article><article class="paper" id="paper-2611.02079" data-search="ParetoSaddler: Pareto-Guided Optimization of Agent Harnesses for Quality and Cost ParetoSaddler：优化Agent时，别过早淘汰暂时更贵的有效改动 Microsoft Microsoft Agent优化 调用成本 执行框架">
+<div class="paper-meta"><span class="pill">Microsoft</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>ParetoSaddler：优化Agent时，别过早淘汰暂时更贵的有效改动</h3><a class="original" href="https://arxiv.org/abs/2611.02079v1" target="_blank" rel="noopener noreferrer">ParetoSaddler: Pareto-Guided Optimization of Agent Harnesses for Quality and Cost ↗</a>
+
+<p class="muted">Jue Zhang、Menglin Xia、Chetan Bansal等作者明确署名Microsoft。 · 论文更新于 2026-11-01（UTC）</p><p class="reason">适合已有可重复任务、想降低Agent调用费用但暂不训练小模型的团队。重点看如何分开“值得继续改的版本”和“可以部署的版本”，以及如何避免被单次偶然成功误导。</p>
+<h4>研究问题</h4><p>Agent的效果不仅由模型决定，提示词、工具接口、上下文处理和何时停止也会影响结果。自动优化这些外围配置时，一个修复可能让Agent不再提前退出，从而完成更多工作，却暂时增加调用费用。如果每一轮都要求立即满足最终成本目标，这类修复会在后续降本之前被淘汰。另一方面，同一任务的多次运行本来就可能质量、费用差别很大，单次更好也未必代表改动有效。</p><h4>核心方法</h4><p>输入是一套Agent执行框架、一批任务，以及它们的执行轨迹、质量评分和token费用；输出是可部署的框架版本或一组不同质量—成本选择。底层任务模型与推理设置固定，外部优化器读取轨迹，修改提示词、工具实现和控制逻辑，不更新模型参数。</p><p>每轮先选一个已有版本作为父版本，提出新改动，再让父子版本在同一小批任务上各运行多次。论文默认每题三次，用这些观测做贝叶斯bootstrap：反复给已记录的运行结果重新加权，估计“质量提高或费用下降”的证据是否稳定。这些重采样复用现有结果，不额外调用模型。</p><p>中途筛选允许一种指标进步、另一种指标暂时退让。实验里，降本时最多允许质量下降10个百分点；质量提高时没有设置局部涨价上限。满足支持度阈值的版本才进入更大开发集评估，并保留在候选库里，供后续改进继续使用。候选库也保留暂时不在当前最优边界上的版本，不只保存眼下最便宜或最准确的一个。</p><p>优化预算用完后，才根据部署偏好正式选择，例如在质量下限之上找最便宜的版本，或保留多个互有取舍的版本。最终运行的是选定执行框架和原任务模型；离线优化器与反复评估不是每次线上请求都要经过的步骤。</p>
+<h4>实验结果</h4><ul><li>在按任务领域隔离的ClawMark测试集上，偏质量的最终版本把归一化任务评分从70.86%提高到81.35%，每任务模型token费用从1.17美元降至1.01美元。这里的质量是评分规则得分，不是全部任务成功率；测试只有22个任务，每个固定框架重复运行三次。</li><li>在GAIA2的300个未参与优化任务上，单次运行成功率的三次重复均值由56.22%提高到62.89%，每任务token费用从0.78美元降至0.45美元。相比只优化质量的AutoSaddler，质量高5.56个百分点、费用也更低。但费用按论文固定价卡计算，不包含工具服务、基础设施和离线寻找这个框架的成本。</li><li>多次评估有帮助，也有取舍。在ClawMark上，每题三次的优化流程选出的偏质量版本为81.35%、1.01美元；每题只运行一次时为75.71%、0.97美元。前者更准确但这一端点略贵，不能概括成多次评估必然同时降低最终费用。</li><li>离线优化本身更贵。GAIA2中，Pareto方案的优化器侧每个改动平均估算费用为9.62美元，高于只优化质量的6.01美元；两者均提出25次改动。这项开销与最终任务执行费用分开报告，实际采用时还需计入反复评估成本，再判断后续调用量能否摊平。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>可给自动改进流程保留两套标准：中途看是否产生值得继续研究的质量或成本进步，最终部署才执行严格服务约束。用少量固定任务比较父子版本，保留执行trace和多个候选，避免一次暂时涨价就切断后续改进路径。</li><li>先估算优化会被复用多少次，再决定是否值得做重复评估。若框架只运行少数任务，离线搜索费用可能超过节省；若是长期重复业务，可同时报告每任务节省和一次性优化开销，按真实调用量验收。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>每题仅三次运行仍容易漏掉罕见失败；bootstrap刻画的是固定小批任务上的执行波动，不包含抽到哪些任务的不确定性。</li><li>ClawMark只测试初始阶段，未评估多日后续适应；主实验大多是单次完整优化，额外稳定性复验只对GAIA2的Pareto流程进行一次。</li><li>局部质量涨价不设上限是本文的探索策略，不代表适合有硬预算或时延上限的生产流程；部署仍需独立验收。</li><li>论文只优化任务评分和token费用，未证明所有工具成本、实际响应时间或其他部署要求同样改善。</li></ul></article><article class="paper" id="paper-2611.03272" data-search="Diverse-Teacher On-Policy Distillation for Generative Recommendation HERO：分别向热门和长尾教师学习，并补上学生走不到的商品路径 Alibaba Alibaba 生成式推荐 在策略蒸馏 长尾推荐">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>HERO：分别向热门和长尾教师学习，并补上学生走不到的商品路径</h3><a class="original" href="https://arxiv.org/abs/2611.03272v1" target="_blank" rel="noopener noreferrer">Diverse-Teacher On-Policy Distillation for Generative Recommendation ↗</a>
+
+<p class="muted">Yujiao Zhao与Chuanyu Xu署名Alibaba Group。 · 论文更新于 2026-11-02（UTC）</p><p class="reason">适合已有商品语义编号和生成式推荐器的团队，重点看蒸馏如何继承热门偏好，以及“换教师”和“补训练路径”分别解决什么问题。</p>
+<h4>研究问题</h4><p>生成式推荐把商品表示成一小串编号，模型根据用户历史逐步生成编号，再映射回商品。学生如果总生成热门商品路径，教师就主要在这些路径上给监督；若教师本身也偏向热门商品，循环会进一步缩小学生能看到的长尾信号。只看总体命中率，可能发现不了这种曝光集中。</p><h4>核心方法</h4><p>先按训练期交互次数将目标商品分成热门与长尾。训练两个同构教师：热门教师使用全部热门样本加10%的长尾样本，长尾教师反过来训练；两者都从头接受真实商品编号的监督训练，之后冻结。学生从已有监督训练检查点出发。教师并不比学生架构更大，专长来自不同的数据组成。</p><p>每条训练样本按真实目标商品的组别选择教师，而不是按学生当前生成的商品选择。学生用受合法商品前缀树约束的束搜索生成32条编号路径；教师在这些学生生成的前缀上给出下一编号的完整概率分布，学生用前向KL损失学习该分布。这一步让训练覆盖学生实际会走到的状态，但仍可能到不了正确的长尾路径。</p><p>为补这个缺口，所有样本继续学习真实商品编号的交叉熵目标；长尾目标再额外沿真实编号路径，让学生匹配长尾教师的概率分布。三个损失共同更新学生，教师和商品编号保持固定，梯度不穿过束搜索。推理只运行一个学生，不需要事先知道目标属于热门还是长尾，也不在线调用两位教师。</p>
+<h4>实验结果</h4><ul><li>1688首页“猜你喜欢”的15天、用户级随机分组线上实验中，相对没有HERO后训练的原生成式推荐器，GMV相对提高3.412%，95%置信区间为[0.759%, 6.065%]，p=0.0104。GMV包括直接和间接转化的成交额；论文报告响应时间没有实质变化，但未给出具体时延数值。</li><li>1688离线点击Hit@240从标准OPD基线GKD的0.5786升至0.5819，长尾点击Hit@240从0.5301升至0.5416。这里衡量的是一页推荐的240个候选中是否至少命中一个目标，不是点击率；长尾指标限定长尾目标。头尾曝光相对需求的偏离也从0.7150降至0.3920。</li><li>两个改动并非简单互换。去掉长尾真实路径的额外KL监督后，1688长尾命中率从0.5416降至0.5329；若对所有样本只用长尾教师，长尾命中率为0.5344，但总体点击命中率降至0.5463。四个数据集的总体与长尾命中均领先主表基线，但MovieLens-1M上最常被推荐的五个商品所占槽位比例仍高于BEAR，因此不能说每项多样性指标都最优。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>如果现有蒸馏只提高总体命中，可以同时检查热门曝光份额、长尾命中率和正确长尾前缀是否会被生成。只有先确认是教师偏好还是路径覆盖不足，才容易判断需要分组教师、补充真实路径，还是两者同时采用。</li><li>这类OPD需要教师对学生生成前缀输出概率分布，不能直接用普通聊天API返回的长篇文本替代。它也不是“大模型压缩成小模型”的必要范例：本文教师和学生同构，主要是在一个模型中合并不同商品群的专长。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>离线蒸馏对照按相同步数训练，并未完整对齐FLOPs或计入两位教师的训练成本；不能从命中改善推出训练更便宜。</li><li>头尾划分依赖训练期频次，需求份额来自已记录的点击或后续交互，仍受既有曝光影响；该指标不是对用户真实需求的无偏测量。</li><li>公共数据的长尾命中排除了训练中从未出现的商品，部分分组分析还要求至少两次交互，结果不能等同于新品冷启动能力。</li></ul></article><article class="paper" id="paper-2611.07241" data-search="D²-OPD: Separating Direction and Distance in Extrapolative On-Policy Distillation D²-OPD：让学生学习更好的概率目标，同时限制偏离教师的幅度 Amazon Amazon 模型蒸馏 小模型 训练目标">
+<div class="paper-meta"><span class="pill">Amazon</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>D²-OPD：让学生学习更好的概率目标，同时限制偏离教师的幅度</h3><a class="original" href="https://arxiv.org/abs/2611.07241v1" target="_blank" rel="noopener noreferrer">D²-OPD: Separating Direction and Distance in Extrapolative On-Policy Distillation ↗</a>
+
+<p class="muted">Dingmin Wang署名AWS AI Lab，Hengzhi Pei署名Amazon AGI。 · 论文更新于 2026-11-04（UTC）</p><p class="reason">适合已经能访问教师词元概率、正在排查蒸馏不稳定或收益不足的团队。重点看目标分布怎么构造，以及为什么需要同时约束调整幅度和保留学生低概率词的学习信号。</p>
+<h4>研究问题</h4><p>普通在策略蒸馏让学生先自己生成回答，再在它实际走到的前缀上学习教师对下一个词的概率。进一步的做法会放大教师相对原始模型的概率变化，希望得到比直接模仿教师更有效的监督。但同一个放大系数用在不同前缀上，可能有时几乎不动，有时却把教师本来很少选择的词推得过高，导致训练不稳或回答变长。</p><h4>核心方法</h4><p>D²-OPD仍让当前学生生成回答。对每个已生成前缀，它读取强教师、教师后训练前的参考模型、初始学生三个固定模型的概率；只有当前学生被更新。教师概率最高的16个候选词构成目标的支持集合，目标只在这个集合上归一化。</p><p>随后构造调整方向：一条信号比较强教师与其原始参考模型，表示教师后训练改变了哪些词的偏好；另一条比较强教师与初始学生，反映学生起点与教师的差距。两条信号按当前前缀自适应加权，在论文定义的概率距离中更接近教师的参照获得更高权重。如果没有教师原始检查点，就以初始学生兼任参照，此时只有一条独立方向。</p><p>方向确定后，再单独限制新目标与教师的分布差异不能超过上限。若原定调整太激进，就缩小步幅，直到满足这个约束。这限制了外推的幅度，却不是证明目标一定比教师正确；距离上限仍是需要选择的超参数。</p><p>最后用正向KL让学生学习新目标：即使某个目标词在学生里概率很低，也能得到有效梯度。这里保留学生在完整词表上的概率，不把学生重新归一化到这16个词内，因此同时学习“把概率移到这批候选词上”和“在候选词之间正确分配”。上述教师和参照模型用于训练，部署时运行训练好的学生。</p>
+<h4>实验结果</h4><ul><li>在Qwen3-8B教师到4B-Base学生的设置中，三个数学基准的平均成绩由普通OPD的27.57%提高到47.19%，比最强对照TOP-D高9.45个百分点。评测是每题采样16次后的平均正确率，再对AIME24、AIME25、AMC23取平均，不是16次中至少一次答对的比例。</li><li>对Qwen3-1.7B-Base，直接使用本方法达到22.31%，高于发布的SFT+OPD方案20.80%，无需先做该监督冷启动。但收益主要来自AMC23：49.84%对37.81%；在AIME24和AIME25上反而分别只有9.79%和7.29%，低于对照的14.58%和10.00%。因此不能据平均分宣称每类数学题都更强。</li><li>约束并非可有可无。在4B学生消融中，去掉硬距离上限使平均成绩从47.19%降到43.30%；完全不调整教师分布、只用正向KL时为34.22%。改善来自多个设计共同作用，不能全部归因于更换KL方向。</li><li>计算成本有增加：在两张A100 40GB上固定同一批回答，监督计算与学生更新每步从普通OPD的33.42秒变为38.48秒，约增加15%。该计时排除了生成回答，且只在热身后测量三步；论文没有给出对GRPO的同质量总FLOPs比较。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>若普通概率蒸馏效果差，可先检查教师与学生高概率词是否重叠、外推目标是否偏移过大，再比较不外推的正向KL与完整方法。需要在独立业务测试集上看分项退让，不能只看一个平均分。</li><li>只有API文本trace时，不能直接复现这套训练：它要求读取学生自行生成前缀上的教师候选词概率，还要获得参考模型的相应概率。文本示范的监督微调应作为另一条基线；训练成本需把各个参照模型打分和学生生成都算进去。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>仅测试Qwen3家族的三个教师—学生组合和三个英语数学基准，没有验证推荐判断、工具使用或其他模型家族。</li><li>每种配置主结果来自一次训练的最终检查点，没有多随机种子置信区间；1.7B的两个AIME指标仍落后于SFT+OPD。</li><li>距离上限和软惩罚需要调节；缺少教师原始检查点时，不能单独利用教师后训练变化这条信号。</li><li>与普通OPD比质量更好，不等于全流程更省算力；本研究不能直接推翻其他论文关于默认OPD与GRPO计算效率的比较。</li></ul></article><article class="paper" id="paper-2611.03998" data-search="Dory1.0-4B: A Looped Normalized-GPT Dory1.0-4B：让同一组层多算几遍，用计算深度换能力 NVIDIA NVIDIA 循环语言模型 推理预算 Agent服务">
+<div class="paper-meta"><span class="pill">NVIDIA</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>Dory1.0-4B：让同一组层多算几遍，用计算深度换能力</h3><a class="original" href="https://arxiv.org/abs/2611.03998v1" target="_blank" rel="noopener noreferrer">Dory1.0-4B: A Looped Normalized-GPT ↗</a>
+
+<p class="muted">作者Boris Ginsburg的NVIDIA官方介绍列明研究员身份；论文将模型归入Nemotron Labs并链接NVIDIA发布页。 · 论文更新于 2026-11-02（UTC）</p><p class="reason">适合权重显存有限、希望按任务调节计算预算的团队。重点看共享层循环如何训练、两轮与四轮的成本差异，以及减少KV缓存时保留了多少能力。</p>
+<h4>研究问题</h4><p>提高语言模型处理复杂任务的能力，常见做法是扩大模型或让它输出更长的推理过程。前者增加权重存储，后者增加生成与缓存成本。Dory尝试第三条路：参数数量不变，让同一组层在内部表示上重复计算，再输出下一个词。它研究的是专门训练的循环模型，不是给任意现有小模型加一个推理开关。</p><h4>核心方法</h4><p>模型先用输入模块得到当前文本的表示，中间的共享模块再循环执行1至4次，最后由输出模块预测下一个词。每轮使用同一组参数，并重新加入输入模块的表示，再做归一化，以免重复计算时丢掉原始输入。输入和输出模块各执行一次，所以循环次数改变的是每个词的有效计算深度，而不是增加模型权重。</p><p>训练先按一轮预训练，再在续训和监督微调中混合不同循环次数，让同一个检查点适应不同预算。为控制反向传播的内存，较早循环不保留梯度，只让最后一次共享模块调用以及输入、输出模块参与梯度计算；共享参数仍会更新，并非永久冻结前几轮对应的另一套层。强化学习阶段按任务奖励优化模型，部分任务使用大模型评分；先用单轮模型估计题目难度，再让较难题以更高概率分配到较深循环，混入随机分配保留覆盖。这是训练期课程，不是已经部署的自动难度路由器。</p><p>上线时可以对同一检查点指定循环次数。普通实现为每一轮保存历史词的注意力键值缓存；作者另提供只保留最后一轮缓存的方式，让缓存量不随循环次数增加，代价是早轮会读取与训练时不同轮次的历史表示。还有独立测试的自推测解码：同一模型先用一轮提出几个词，再用四轮批量核验，复用部分缓存与计算。论文分别测试这两项优化，没有证明组合后可直接相乘获得加速。</p>
+<h4>实验结果</h4><ul><li>增加循环对Agent任务有明显帮助，但不是普遍改善。相同后训练检查点从一轮改为四轮，SWE-Bench Verified的修复成功率由50.3%升至61.8%，Terminal-Bench v2.1由12.5%升至22.2%；知识问答AA-Omniscience准确率仍为10.03%。四轮在Terminal-Bench仍低于Qwen3.5-9B的24.0%，不能概括成4B全面超过更大模型。</li><li>输出减少只抵消了部分额外计算。在四个Agent基准上，四轮相对一轮的输出词元数缩减到约原来的1/1.3至1/2.5；按“输出词元数×每词经过的层数”估计，四轮生成计算仍是一轮的1.07–2.04倍。两轮约为1.03–1.25倍，通常获得更好的边际收益；这项估算不等于实际请求时延或完整Agent成本。</li><li>只保留末轮缓存可让注意力KV内存保持一轮规模，但并非无损。四轮设置下，AA-LCR长上下文准确率由72.94%降至70.81%，Terminal-Bench由22.19%降至20.22%；其余受测指标的变化较小。该结果节省的是注意力缓存，不代表整个服务的所有显存都不随工作量变化。</li><li>自推测解码相对普通四轮解码，在六个基准上的平均模型请求耗时加速1.11–1.53倍，包含输入预填充和生成；不含初始化、最初排队、工具执行和评测器处理。它使用每轮独立缓存，因此不能同时把这组速度结果当作末轮缓存方案的结果。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>可先在自己的任务上比较同一模型的一轮、两轮和四轮，分别记录成功率、生成长度、首词与总请求时延、缓存峰值，再设置预算。若两轮已获得大部分收益，默认两轮、只给特定任务更多循环可能更合算；这需要业务测量，不能仅依据论文的输出长度选择。</li><li>如果目标是在本地小模型上执行较长工具流程，循环模型提供了不同于扩大参数量的选择。但迁移现有Qwen3-1.7B时，不能直接套用其数字：Dory经过专门的循环续训和后训练，论文没有验证把任意既有模型直接重复执行若干层就能获得同样能力。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>各项结论来自Dory这一训练体系；模型经过约6.3万亿词元预训练及长上下文扩展，再进行监督微调和强化学习，小参数不意味着训练成本低。</li><li>更深循环的收益依任务而异，基础模型在四轮后趋于饱和；知识准确率几乎不变，部分推理指标两轮还略高于四轮。</li><li>量化、末轮缓存和自推测解码分别报告了效果，不能把各自的最佳内存与速度数字拼成一个已联合验证的配置。论文没有证明真实在线自动路由到最合适循环次数。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>模型参数、执行规则、推理深度：三类改进该怎样分别验证</h3><p>当一个系统表现不好，先定位问题发生在哪一环。如果模型能完成任务，却经常漏掉步骤、乱用工具或过早退出，可以先研究固定模型权重的执行规则优化。DualEvolve 与 ParetoSaddler 都保留真实实验结果来筛选改动，而不是只让模型评价自己的方案；前者用于推荐研发，后者用于任务执行框架，二者的结果不能直接互换。</p><p>如果问题是学生的训练覆盖或监督目标不足，就需要修改训练。HERO 显式补上长尾路径，D²-OPD 在教师概率附近构造受约束的新目标；两者都要求访问教师在学生前缀上的概率信息。只有 API 输出的文本示范时，并不能直接复现这些损失，仍需先确认接口和训练环境能提供什么监督。</p><p>如果准备增加单次请求的推理计算，Dory 展示了专门训练的循环模型如何用共享参数多算几轮。它不是对任意模型都可直接添加的功能，也没有证明一个在线路由器能自动选择最佳循环次数。工程推断是将三类改动分开建立对照：训练改动看独立测试集与分组表现，规则改动看重复执行的质量和费用，推理深度改动看实际请求时延、显存和任务成功率。先确认收益来自哪里，再考虑组合。</p><div class="sources"><a href="#paper-2611.04439">DualEvolve：让推荐研发 Agent 同时改算法和实验规则</a> · <a href="#paper-2611.02079">ParetoSaddler：优化Agent时，别过早淘汰暂时更贵的有效改动</a> · <a href="#paper-2611.03272">HERO：分别向热门和长尾教师学习，并补上学生走不到的商品路径</a> · <a href="#paper-2611.07241">D²-OPD：让学生学习更好的概率目标，同时限制偏离教师的幅度</a> · <a href="#paper-2611.03998">Dory1.0-4B：让同一组层多算几遍，用计算深度换能力</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
