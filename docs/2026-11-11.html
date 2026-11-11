@@ -1,0 +1,149 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-11-11</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-11-11</h1><div class="metrics"><div><strong>5</strong>全文解读</div><div><strong>4</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><article class="trend"><h3>生成候选之前，先明确哪些结果在当前请求下合法</h3><p>TS-GEAR 把地理位置放进商家编号前缀，减少生成远处商家的预算浪费；LEGIT 则在每个生成步骤查询目录、配送范围、菜单归属与已选内容，动态屏蔽不合法的后续编号。两者处理的约束精度不同：地理格子是近似邻域，目录索引可以表达更具体的请求条件。实践上应分别验收候选覆盖、精确业务资格和最终排序，不能只因编号或页面格式正确就认为结果可用。</p><div class="sources"><a href="#paper-2611.12180">TS-GEAR：先生成附近商家，再优化一组广告候选的整体价值</a> · <a href="#paper-2611.10357">LEGIT：生成整页店铺与商品时，动态约束怎样做得又准又快</a></div></article><article class="trend"><h3>提速往往来自重新安排数据与执行步骤</h3><p>RecoGEM 把短编号生成的不同步骤编译成更合适的计算配置，并在候选剪枝后整理缓存。MV-IVF 将访问同一分区的查询集中处理，减少重复读取文档向量。LEGIT 的部分收益也来自让CPU范围查询与GPU前向计算重叠。共同线索是先找重复搬运、过细的计算启动和不合适的数据形状；这些结果依赖负载及硬件，单个算子或最高加速值不能替代整个请求的计时。</p><div class="sources"><a href="#paper-2611.12296">RecoGEM：按商品编号的生成步骤，重新组织推荐推理服务</a> · <a href="#paper-2611.09040">MV-IVF：直接按整组向量建索引，让批量检索少搬运数据</a> · <a href="#paper-2611.10357">LEGIT：生成整页店铺与商品时，动态约束怎样做得又准又快</a></div></article><article class="trend"><h3>筛选方法需要接上最终验证方式</h3><p>Meta 的缩放研究用多组小实验估计完整训练收益，但仍出现高概率外推失败。TS-GEAR 中，随机采样评估相近的训练方法，在去重束搜索下产生了不同的候选覆盖。两篇分别说明：小规模训练与完整训练、采样输出与实际解码，都可能改变结论。工程推断是先保留真实放大验证和部署解码的对照，再决定某种便宜代理是否足以筛选候选。</p><div class="sources"><a href="#paper-2611.13539">推荐实验缩放规律：用多组小实验判断新改动是否值得放大</a> · <a href="#paper-2611.12180">TS-GEAR：先生成附近商家，再优化一组广告候选的整体价值</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2611.12180">TS-GEAR：先生成附近商家，再优化一组广告候选的整体价值</a><span>把商家编号拆成地理与内容两部分，按当前查询和位置筛选历史兴趣，再奖励整组候选新增的有效覆盖；淘宝闪购将其作为新增召回通道投入服务。</span></li><li><a href="#paper-2611.12296">RecoGEM：按商品编号的生成步骤，重新组织推荐推理服务</a><span>快手将候选状态和模型热更新交给专门运行时，并按短编号、宽束搜索的计算形状优化引擎；收益来自服务架构与算子协同。</span></li><li><a href="#paper-2611.13539">推荐实验缩放规律：用多组小实验判断新改动是否值得放大</a><span>把不同模型规模和数据量下的结果拟合成曲线，再外推完整训练的收益与不确定性；单次小实验的输赢可能反转，外推本身也会误判。</span></li><li><a href="#paper-2611.09040">MV-IVF：直接按整组向量建索引，让批量检索少搬运数据</a><span>用向量集合表示文档和聚类中心，先找有希望的分区再精排；把访问同一分区的查询集中计算，在给定近似召回率下提高CPU吞吐。</span></li><li><a href="#paper-2611.10357">LEGIT：生成整页店铺与商品时，动态约束怎样做得又准又快</a><span>将位置可达、店铺菜单和页面去重转成商品编号树上的范围查询；在Uber Eats目录实验中，CPU并行准备合法编号比直接在GPU逐组检查更快，但结果限于特定硬件与负载。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>逐篇解读</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2611.12180" data-search="TS-GEAR: Taobao Shangou GEnerative Ad Retrieval TS-GEAR：先生成附近商家，再优化一组广告候选的整体价值 Alibaba Alibaba 生成式广告检索 地理约束 集合奖励">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>TS-GEAR：先生成附近商家，再优化一组广告候选的整体价值</h3><a class="original" href="https://arxiv.org/abs/2611.12180v1" target="_blank" rel="noopener noreferrer">TS-GEAR: Taobao Shangou GEnerative Ad Retrieval ↗</a>
+
+<p class="muted">作者首页均署名Alibaba Group。 · 论文更新于 2026-11-09（UTC）</p><p class="reason">适合做本地生活、即时零售召回的团队。重点看怎样让有限生成预算少浪费在远处商家，以及为什么单条候选得分高不代表整组候选更有用。</p>
+<h4>研究问题</h4><p>用户工作日常在公司附近点餐，周末在家搜索同样的“牛肉”，想要的可能变成生鲜食材。只按内容生成商家编号，容易找出远处的历史常去店；事后过滤虽能删掉它们，却已经浪费候选生成预算。即使候选都相关，一组近似重复的店也可能挤掉有价值的其他选择。</p><h4>核心方法</h4><p>输入当前查询、实时位置与历史行为，输出一组待下游广告排序的商家。每家商店用六个编号表示：前三个是逐层缩小区域的地理编码，后三个是对商家内容向量做残差量化得到的语义编号。内容向量先由领域数据微调的嵌入模型生成。服务时把用户所在大格及相邻八格作为前缀范围，提前确定前两个地理编号，再生成更细位置和内容编号；这是近似区域限制，不能保证每家店都满足精确配送条件。</p><p>历史行为先做上下文编码，再分别用当前查询和当前位置匹配过去行为的语义与地理信息，合并成用户表示。解码地理编号时还注入当前位置，帮助决定先探索哪些附近格子；行为较少时，另一道门控让表示更多依赖当前查询。随后用束搜索保留多条可能的商家编号路径。</p><p>训练先用点击商家的真实编号监督整个编码器—解码器，再从收敛检查点做强化学习，并保留该检查点作为分布约束参照。奖励结合点击、订单和高点击率商家的历史信号，订单权重最高。GMPO还检查一个采样结果为整组去重候选增加多少覆盖，减弱重复候选反复占据生成结果的问题。更新的是检索模型，参照模型不更新；线上运行完成后训练的0.1B模型，结果与关键词、向量等其他召回通道一起进入排序和竞价。</p>
+<h4>实验结果</h4><ul><li>在线增量来自整个新增通道。淘宝闪购主搜索广告做了7天、覆盖20%流量的A/B实验，相对原有系统，广告曝光相对增加3.8%、广告收入增加4.2%，两项均报告p&lt;0.01。系统同时使用原有多通道召回，因此不能把这组数字解释成TS-GEAR单独替换某个生成模型的纯算法收益。</li><li>在20公里过滤、最多保留50个可达候选的工业离线测试中，“至少命中一个点击商家”的比例从OneLoc的0.5929升至0.8080；5公里时则只有0.7778到0.7869。原始前50候选的20公里内占比为95.8%，高于OneLoc的35.4%，但仍未达到100%，地理前缀约束不能替代精确可达性校验。</li><li>后训练评估必须接上实际解码。在去重beam@100协议下，GMPO相对预训练模型的点击、较高点击率商家、订单覆盖分别提高1.8%、0.7%、4.9%；普通GRPO的前两项反而下降0.6%与2.9%。随机采样评测下两者却很接近，表明只看采样奖励可能掩盖束搜索候选过度集中的问题。这里是离线行为目标覆盖，不是线上点击率或订单增长。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：先分别验收候选在业务约束内的比例，以及过滤后目标命中率，再决定把约束前移到编码、解码还是后过滤。对候选集合做后训练时，应同时用真实上线的束搜索宽度与去重流程评估，避免采样时有效、确定性取优时却反复选到相似候选。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>九格地理前缀是粗粒度邻域，不等于结合天气、骑手运力和商家配送边界的精确履约判断；论文的有效率也明确留下范围外候选。</li><li>公共Foursquare数据没有真实查询和实时用户位置，使用占位查询及最近签到地点代理位置，不能用其结果证明真实搜索场景下所有机制都有效。</li><li>强化学习仍依赖历史曝光、点击和订单信号，新增商家与稀疏区域可能获得更少曝光；查询融合在总体消融中的改善也很小，并非所有组件都有同等贡献。</li><li>线上70毫秒是部署预算，论文未给出独立的训练成本对照或完整时延分布；同时缺少同结构模型接精确推理期距离掩码的完整对照，无法把全部优势唯一归因于编号设计。</li></ul></article><article class="paper" id="paper-2611.12296" data-search="RecoGEM: A Serving System for Production-Scale Generative Recommendation RecoGEM：按商品编号的生成步骤，重新组织推荐推理服务 Kuaishou Kuaishou 生成式推荐服务 推理优化 在线更新">
+<div class="paper-meta"><span class="pill">Kuaishou</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>RecoGEM：按商品编号的生成步骤，重新组织推荐推理服务</h3><a class="original" href="https://arxiv.org/abs/2611.12296v1" target="_blank" rel="noopener noreferrer">RecoGEM: A Serving System for Production-Scale Generative Recommendation ↗</a>
+
+<p class="muted">Yunfeng Zhao、Fangyu Zhang、Liang Zeng等作者首页署名Kuaishou Technology。 · 论文更新于 2026-11-09（UTC）</p><p class="reason">适合已经部署生成式召回或推荐、发现通用语言模型服务引擎难以满足时延的团队。重点看每一步候选保留、缓存整理和版本一致性如何进入服务接口。</p>
+<h4>研究问题</h4><p>生成式推荐通常只生成几个商品编号，却要同时保留数百条候选路径。每走一步，系统都要从大量分支选出幸存者、整理对应缓存，再继续计算；不同编号位置的张量形状也不同。推荐模型和编号词表还会频繁更新，单次请求若混用了不同版本，生成编号可能映射到错误商品。</p><h4>核心方法</h4><p>输入用户上下文后，计算引擎先形成各步共享的上下文表示，再逐步生成商品语义编号，即用一小串编号定位商品。专门运行时负责每步保留哪些候选、搬运它们的历史注意力缓存，以及把结果接到下一步。编译引擎负责张量计算，两者通过自动生成的部署契约约定权重、输入输出、批量和执行流程；这项工作不训练新的推荐模型。</p><p>系统利用每个编号位置可预先推断的形状，分别编译更窄的执行配置，同时保留请求批大小的动态性。注意力算子将许多互相独立、前缀很短的候选行成组处理，每行仍独立归一化，减少长序列算子的固定开销。候选选择先在每条父路径内部保留前K个分支，再从所有保留分支中选全局前K个；被局部删除的分支本行已有K个更高分项，因此两阶段仍保留精确的全局取优结果。</p><p>候选剪枝后，运行时只把幸存者缓存复制到下一步的紧凑缓冲区。模型或词表更新先在活跃请求之外构建并校验新引擎与契约；切换时短暂停止接纳新请求，等已发请求完成旧版本，再原子切换。目标是每条请求始终使用一致的模型、词表和策略，减少热更新引起的尾延迟尖峰。</p>
+<h4>实验结果</h4><ul><li>在0.2B的OneModel、请求批量32设置中，完整RecoGEM达到1053 QPS、P99时延30.8毫秒；对照GeneralGen为366 QPS、89.0毫秒，吞吐为其2.88倍。4B的OneRec-v2同批量达到526 QPS、61.5毫秒，对照为286 QPS、112.5毫秒，吞吐为其1.84倍。GeneralGen沿用其他系统模块，但采用统一形状配置与通用GPU算子，比较支持架构与算子组合收益。</li><li>分步骤编译本身就有贡献：OneModel批量32下，在保留专用算子的前提下，将所有步骤共用形状配置改为逐步配置，平均解码时延从39.5降至30.4毫秒。这是解码均值，与前一条端到端P99不是同一指标。</li><li>生产集群历史峰值达到60000 QPS，报告P99低于80毫秒；代表性24小时曲线也在流量波动和更新期间保持该界限。早期直接在线重建并发布引擎的做法曾在更新期间出现2–3倍尾延迟尖峰。这里是集群运行证据，不能用60000 QPS替代单实例吞吐，也不是用户体验或业务收入A/B结果。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：先按编号步骤记录张量形状、候选数量、缓存整理与选择耗时，再决定是否做专用引擎。若瓶颈主要来自宽束搜索和短前缀算子的固定开销，单纯缩小模型可能并非最有效的优化；模型、编号与策略还应作为一个兼容版本验证和切换。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>结果依赖快手的短编号、宽候选生成工作负载，未证明同样优化适合长文本生成或任意推荐模型；分布式模型并行仍是未来方向。</li><li>论文未明确给出端到端实验所用GPU型号。适配TensorRT-LLM的对照还在CPU做束搜索，差距包含实现路径差异，不能解释为所有同类服务框架的上限。</li><li>注意力微基准的最高154.4倍加速仅对应极短前缀和特定批次形状，不是整个请求的加速；容量或业务质量提升也没有独立报告。</li><li>热更新依然需要短暂停止新请求接纳并等待在途请求完成；跨GPU版本一致切换、故障恢复等更复杂运维条件未作完整实验。</li></ul></article><article class="paper" id="paper-2611.13539" data-search="Exploiting Feature-invariant Scaling Laws for Efficient A/B Experimentation in Recommendation Systems 推荐实验缩放规律：用多组小实验判断新改动是否值得放大 Meta Meta 推荐实验 缩放规律">
+<div class="paper-meta"><span class="pill">Meta</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>推荐实验缩放规律：用多组小实验判断新改动是否值得放大</h3><a class="original" href="https://arxiv.org/abs/2611.13539v1" target="_blank" rel="noopener noreferrer">Exploiting Feature-invariant Scaling Laws for Efficient A/B Experimentation in Recommendation Systems ↗</a>
+
+<p class="muted">Sammy Nammari、Jiahao Su、Xiaoqiang Luo等作者官方署名Meta。 · 论文更新于 2026-11-10（UTC）</p><p class="reason">适合需要批量筛选架构、优化器或输入特征改动的推荐研发团队，重点看怎样用多个低成本观测做决策，以及何时应该停止相信外推。</p>
+<h4>研究问题</h4><p>一个新特征在小模型、少量数据上无效，到了完整训练却可能有用。例如电影类别信息会增加输入负担，小规模实验可能先变差，足够训练后才带来收益。若每个想法都完整重训，成本很高；若只看一次小实验，又容易错过有效改动。论文研究如何在两者之间做离线筛选。</p><h4>核心方法</h4><p>输入是已知完整训练表现的基线，以及对某项新改动运行的多组小实验。每组改变模型参数规模、训练数据量，记录验证损失。作者发现，不同改动往往仍能用同一类幂律曲线描述，但每个改动要分别拟合系数；“规律不变”并不是所有改动共用一条曲线。</p><p>方法在对数空间拟合模型规模、数据量与损失的关系，并估计训练噪声。随后把曲线外推到目标规模，得到预期损失的分布，再计算“比基线好到有实际价值的程度”的概率。例如可以要求损失至少下降1%，且该事件的估计概率超过90%，才安排更高成本验证。这些概率以所假设的函数形式和噪声模型成立为条件。</p><p>实验训练的是不同规模的推荐候选，拟合器只是利用实验结果做统计推断；它不生成新模型结构，也不进入线上推荐服务。Wukong和HSTU同时缩放模型与数据；语言模型推荐实验固定预训练模型规模，只改变微调数据量，因此其成本节约不能直接套用双轴缩放的估算。</p>
+<h4>实验结果</h4><ul><li>覆盖Wukong、HSTU及语言模型推荐三类模型、40余项改动。HSTU的时间间隔偏置使完整训练后的前10项命中率由0.3567升至0.3603，相对提高1.01%；这是MovieLens-20M离线结果，没有报告线上用户A/B收益。论文标题中的A/B实验主要指候选与基线训练比较。</li><li>小规模结论确实会翻转。Llama推荐模型加入电影类别后，完整训练损失下降0.5%；外推其损失至少下降0.05%的概率，在只用0.1–0.4规模时为12.7%，加入0.5规模为60.2%，加入0.6规模才达到91.1%。多跑一档可能改变是否继续验证的判断。</li><li>高置信外推仍可能出错。HSTU改用softmax注意力时，0.1–0.5规模观测给出的“损失至少下降1%”概率为91.2%，但完整训练的损失反而增加1.0%。因此，曲线拟合好、预测概率高，都不能替代完整训练或实际部署验收。</li><li>在模型规模与数据量均按0.1、0.2、0.3、0.4、0.5比例缩小时，作者按参数量乘数据量估算，总成本约为一次完整训练的55%。这是理想化双轴缩放账本，不是所有模型的实测GPU时间，也不包含已经训练好的完整基线成本。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>可先对历史已知有效和无效的改动做回放，检查外推的误报、漏报和概率是否可靠，再将其用于新实验排序。对接近门槛、曲线明显弯折或不同规模结论反复变化的候选，应追加观测而非仅按一个概率自动淘汰。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>幂律与较稳定的训练噪声是关键假设。Qwen-0.5B加入电影类别时出现明显非幂律曲线；作者推测新增约30%上下文可能超过小模型容量，尚未给出普遍失效检测器。</li><li>模型与数据缩放会改变训练动态；外推区间不自动覆盖函数选错、特征引起的容量瓶颈和生产分布变化。附录已存在高概率误报案例。</li><li>语言模型实验从100部候选电影中排序，HSTU从全电影集合排序，两者命中率不能直接横比；最终业务收益仍需相应线上实验。</li></ul></article><article class="paper" id="paper-2611.09040" data-search="MV-IVF: Multi-Vector Retrieval via Multi-Vector Clustering MV-IVF：直接按整组向量建索引，让批量检索少搬运数据 Google Google 多向量检索 索引优化">
+<div class="paper-meta"><span class="pill">Google</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>MV-IVF：直接按整组向量建索引，让批量检索少搬运数据</h3><a class="original" href="https://arxiv.org/abs/2611.09040v1" target="_blank" rel="noopener noreferrer">MV-IVF: Multi-Vector Retrieval via Multi-Vector Clustering ↗</a>
+
+<p class="muted">Lars Gottesbüren和Rajesh Jayaram的官方作者署名为Google Research。 · 论文更新于 2026-11-06（UTC）</p><p class="reason">适合使用ColBERT类多向量表示、需要保留较完整前列候选且有批量查询的检索团队，重点看索引路由、数据复用与召回口径。</p>
+<h4>研究问题</h4><p>多向量检索把一句查询和一篇文档分别表示成多条词元向量。打分时，对每条查询向量寻找文档里最相似的一条，再把这些相似度相加，称为MaxSim。这比一个向量表达整篇文档更细，但逐篇计算很贵。先用单向量代理找候选再重排，可能找得到最相似的一篇，却漏掉本应进入前列的其他文档。</p><h4>核心方法</h4><p>离线建索引时，每篇文档保留整组向量，聚类中心也由一小组代表向量组成。算法交替将文档分配给最近的中心、重新计算中心；中心更新可以复用普通向量聚类，实际实现采用余弦相似度下的近似更新。递归划分后形成树，内部节点存代表向量，叶节点存文档集合。此过程构建索引，不训练新的文本编码模型。</p><p>查询时，先计算查询向量组与各节点代表组的MaxSim，沿最有希望的分支寻找少量叶分区，只对其中的文档打分，再重排候选。搜索预算控制探查多少分区；提前停止依据代表中心的分数，是经验启发式，不保证不漏掉全局最优文档。</p><p>批量查询不再逐条重复读同一分区，而是先收集访问这个分区的查询，让数据留在缓存中连续计算。系统同时使用不同精度：树路由用4位近似打分，叶分区粗排用1位，最终重排用8位；还将冗余查询向量合并，减少后续交互计算。改进来自索引结构与这套执行优化共同作用，线上仍需编码、路由和候选打分。</p>
+<h4>实验结果</h4><ul><li>在恢复精确MaxSim前10篇文档中至少90%的工作点，相比单向量候选基线SVH，单核查询时延的几何平均加速为1.55倍，全CPU核批量吞吐提高4.01倍；分别覆盖8个可比较数据集。最大值8.03倍与173.53倍属于个别数据集，不能当作所有请求的收益。</li><li>对另两种基线，在同一90%前10召回标准下，相比MUVERA的几何平均时延加速为1.33倍、吞吐为2.19倍；相比直接在多向量文档上建图的MV-Vamana，分别为1.22倍与2.07倍。批量优势更突出，但图索引在部分大数据集、需要找回前100篇时仍有更好的单查询时延曲线。</li><li>低位宽和执行优化是重要组成。在fiqa上，未优化版本在100毫秒预算内达不到90%的前10召回率；仅加1位叶打分就至少加速5.37倍，完整优化组合至少加速17.2倍。这里比较的是同一MV-IVF内部实现，不应当作索引算法相对其他系统的独立增益。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>若服务既需要前列候选覆盖又能形成批次，可先按真实批大小、查询长度和目标召回量比较索引。把“至少找到精确第一名”与“找回精确前10或前100”分开画曲线，避免只优化容易的第一名命中而损失候选多样性。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>召回率相对于固定ColBERTv2表示下的精确MaxSim排名，不是人工相关文档召回或线上点击指标；不衡量编码器质量。</li><li>主实验使用双路88核或144核的大内存Intel服务器，时延主表单核、吞吐主表全核；没有把这些CPU结果验证为GPU部署、动态更新或端到端在线服务收益。 搜索实验从已生成的向量开始，不能据此给文本编码在内的总响应时间作同倍数推断。</li><li>最大加速来自限定的参数网格和可达到的工作点；FastPLAID与IGP外部实现仅在两个数据集比较，不能概括为所有生产实现。量化和查询压缩也需要按实际召回预算重新校准。</li></ul></article><article class="paper" id="paper-2611.10357" data-search="LEGIT: Live Eligibility Gating over Identifier Tries for Constrained Decoding of Heterogeneous Pages LEGIT：生成整页店铺与商品时，动态约束怎样做得又准又快 Uber Uber 生成式推荐 约束解码 服务性能">
+<div class="paper-meta"><span class="pill">Uber</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>LEGIT：生成整页店铺与商品时，动态约束怎样做得又准又快</h3><a class="original" href="https://arxiv.org/abs/2611.10357v1" target="_blank" rel="noopener noreferrer">LEGIT: Live Eligibility Gating over Identifier Tries for Constrained Decoding of Heterogeneous Pages ↗</a>
+
+<p class="muted">Felix Fang、Zheng Liu、Robert Saliba三位作者均署名Uber Technologies, Inc. · 论文更新于 2026-11-07（UTC）</p><p class="reason">适合将店铺与商品、商家与货品等层级结果放进同一次生成的团队。重点看如何表达动态资格与去重，以及为什么很小的约束计算放在GPU上反而可能更慢。</p>
+<h4>研究问题</h4><p>生成式推荐用一串短编号表示真实商品，模型逐个生成编号就能选出结果。若一次要写出整页“店铺—菜单项”，仅保证页面格式正确还不够：店铺必须能配送到当前地址，商品必须属于该店菜单，同一店铺或连锁品牌不能重复，菜单项也要去重。这些规则既随请求变化，又随已经生成的内容变化；固定语法不能独立表达全部合法结果。</p><h4>核心方法</h4><p>输入是查询、位置、商品目录与当前已生成页面，输出是每一步允许选择的编号。离线构建店铺与商品两棵前缀树，并建立“位置到店铺”“店铺到商品”“店铺到连锁品牌”三个索引。叶子按深度优先遍历编号，使树中每个前缀下面的所有候选都对应一个连续整数区间。</p><p>生成时先取得请求可达的店铺，或当前店铺拥有的菜单项，再排除已经用过的编号。检查某个下一编号是否合法，就变成：它对应的区间里，是否仍有符合资格且未被排除的叶子。资格与排除集合都按叶子编号排序，通过二分查找计数即可；如果当前根节点已经没有候选，就禁止开启新的店铺或商品槽位，避免生成到一半走进死路。</p><p>优化服务时不改变模型前向和允许的编号集合。直接GPU实现为不同前缀组反复启动很小的计算，再把结果读回CPU判断是否为空，等待与启动开销可能超过查询本身。较快方案在CPU上用只保存实际子节点的数组做范围查询、缓存已用集合和前缀位置，让这些查询与GPU的模型前向重叠，最后批量传入合法编号并修改输出分数。该研究比较约束服务实现，没有新增模型训练或教师蒸馏阶段。</p>
+<h4>实验结果</h4><ul><li>约束有实际必要。移除目录前缀树、资格索引和去重限制后，页面仍能解析且能填满槽位，但生成的店铺全部不存在；只移除位置与菜单索引时，99.7%的店铺不在可达范围，商品全部不在对应菜单。页面格式正确不能替代业务有效性。</li><li>低负载下，完整CPU方案相对直接GPU约束实现的每输出词元耗时下降65.9%，95%区间为[64.3%,67.5%]，约为原速度的2.93倍；加约束后的成本仍约为完全无约束生成的1.7倍。主要设置为0.6B模型、单张B200与4个CPU核心，20店铺页面的中位输出长度843个词元。最快方案的效果经中间实现组合估计，未与最初对照在同一轮直接配对，区间也未覆盖构建版本差异。</li><li>相同数据布局不能直接跨设备照搬：把节点保存成不同长度的实际子列表，在CPU上比GPU填充列表对照快9.7%，但在GPU上反而慢113.4%。将并发上限压到每步只有一行时，单纯CPU查树没有节省；多组前缀同时处理时才体现减少逐组启动和等待的收益。</li><li>独立目录检查覆盖125,800个主实验页面中的122,026个非空页面，约240万店铺与1185万菜单项在存在性、位置可达、菜单归属和相应去重检查中未发现违规。检查没有覆盖每个连锁品牌只能出现一次，也没有验证共享编号最终映回哪个具体店铺或商品；这些仍需额外验收。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>对整页生成系统，可先把请求资格和页面状态写成可独立验证的集合规则，再优化执行位置。用目录表连接做旁路检查，有助于发现所有实现共同带入的约束错误；若多个条目共享编号，最后解析为具体条目也必须再次验证资格。</li><li>如果性能分析显示约束只有少量算术、却频繁启动GPU和读回状态，可以先尝试CPU数组查询、缓存增量状态与批量传输，并同时测轻负载和饱和负载。饱和时减少排队造成的巨大降幅，不能直接解释成单步模型解码同幅加速。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>主要排名来自单一外卖目录、一个0.6B模型和一种硬件配比；基准仅使用一种较粗的位置网格，合法集合比生产设置更小，20店铺页面又是生产长度的两倍。更少CPU核心、不同页长或宽束搜索可能改变结论。</li><li>每词元耗时按包含排队的整请求时间除以输出长度计算，不能单独拆出首词时间或纯解码时间；饱和负载的97.9%降幅主要包含消除队列的效果。</li><li>研究衡量速度与部分目录有效性，未评测推荐相关性、点击或成交收益；多应用场景只是规则映射示例。</li><li>目录与索引仅比对叶子数量，尚未实现完整目录指纹；相同数量不能保证来自同一快照，版本一致性需要补强。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>评估生成式推荐：候选质量、业务合法性与服务成本分开验收</h3><p>第一步看模型是否找到值得推荐的候选。TS-GEAR 同时利用查询、当前位置和历史行为，并在训练中优化整组候选的覆盖。但其线上收益来自接入既有多通道系统后的整体变化，不能单独归因到某个组件。MV-IVF 的召回率则表示恢复固定向量打分下的精确前列结果，不能直接当作用户相关性改善。</p><p>第二步看候选能否在当前请求中使用。TS-GEAR 的地理前缀只能缩小范围，后续仍需精确校验。LEGIT 展示了随位置、菜单和已生成内容变化的约束实现；其目录检查也明确留下连锁去重与共享编号映回具体条目的验证缺口。业务约束清单应与实际检查范围逐项对应。</p><p>第三步再看请求成本和更新过程。RecoGEM 的单实例吞吐、集群峰值、解码均值和端到端P99各有不同含义；LEGIT 的计时还可能包含排队。采用前应在自己的批大小、并发、CPU与GPU配比下测完整请求，并检查模型与目录更新期间的版本一致性。Meta 的小实验外推可帮助安排训练预算，但高概率预测仍需更高保真验证。以上是本期研究给出的工程推断，各论文没有联合验证一套通用部署方案。</p><div class="sources"><a href="#paper-2611.12180">TS-GEAR：先生成附近商家，再优化一组广告候选的整体价值</a> · <a href="#paper-2611.09040">MV-IVF：直接按整组向量建索引，让批量检索少搬运数据</a> · <a href="#paper-2611.10357">LEGIT：生成整页店铺与商品时，动态约束怎样做得又准又快</a> · <a href="#paper-2611.12296">RecoGEM：按商品编号的生成步骤，重新组织推荐推理服务</a> · <a href="#paper-2611.13539">推荐实验缩放规律：用多组小实验判断新改动是否值得放大</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
