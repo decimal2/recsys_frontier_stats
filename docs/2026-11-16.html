@@ -1,0 +1,189 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-11-16</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-11-16</h1><div class="metrics"><div><strong>10</strong>全文解读</div><div><strong>9</strong>优先团队</div><div><strong>0</strong>待重试</div></div><nav><a href="#trends">样本观察</a><a href="#briefs">今日速览</a><a href="#digest">全文解读</a><a href="#topic">今日专题</a></nav><section id="trends"><h2><span class="no">01</span>当日样本观察</h2><div class="trends"><article class="trend"><h3>推荐目标正在从一次命中，扩展到长期变化和连续行为</h3><p>KuaiRecV2 让模型每天面对新视频，检查新内容适应与旧兴趣遗忘；TraGR 预测未来多次交互，而不是只列出下一次的候选；TriGen 则研究用户刚点开一件商品后，后续推荐该怎样调整。它们回答的是不同时间尺度的问题。一次命中率高，并不能自动说明模型会持续适应，也不能说明它预测的整段行为合理。</p><div class="sources"><a href="#paper-2611.16795">KuaiRecV2：把每日新视频、遗忘与多行为目标放进同一个推荐基准</a> · <a href="#paper-2611.16159">TraGR：预测未来多次交互时，把未选中的可能性也传给下一步</a> · <a href="#paper-2611.16395">TriGen：点开一件商品后，让即时兴趣持续参与后续商品生成</a></div></article><article class="trend"><h3>把更多商品展示出来，还要确认它们对用户有用</h3><p>ReSID 尝试让长尾商品的生成路径留下来，再用部分编号匹配找回候选；它在部分数据上提高长尾召回，却降低了总体召回。KuaiRecV2 也展示了命中率与目录覆盖可能朝不同方向变化。工程上可以分别检查“有没有推荐更多不同商品”和“这些商品是否命中真实需求”，再决定愿意接受多大的总体质量取舍。</p><div class="sources"><a href="#paper-2611.16404">ReSID：让不热门商品的生成路径活下来，再用局部编号找回候选</a> · <a href="#paper-2611.16795">KuaiRecV2：把每日新视频、遗忘与多行为目标放进同一个推荐基准</a></div></article><article class="trend"><h3>让复杂判断提供训练帮助，不等于每次服务都做同样的计算</h3><p>AntEmbed 将带分析的检索结果教给直接编码查询的分支；RACE 在训练时计算排序不确定性，再教早层预测器决定少算哪些部分；动作序列对齐蒸馏让教师参考相近的成功路线纠正学生。共同思路是让训练监督更有针对性。但部署条件各不相同：AntEmbed 的候选索引仍使用增强分析，RACE 仍运行小型预测器，而动作蒸馏的部署学生不再调用教师。</p><div class="sources"><a href="#paper-2611.16405">AntEmbed：让带推理和不带推理的查询共用一个检索向量空间</a> · <a href="#paper-2611.18244">RACE：先估计这次排序有多难，再决定保留多少通道和历史</a> · <a href="#paper-2611.13135">动作序列对齐蒸馏：给失败轨迹选一个走得相近的成功参考</a></div></article><article class="trend"><h3>压缩信息之前，要知道后面的判断需要什么</h3><p>RecMem 把旧交互压成固定记忆，CURATOR 从检索结果中选出支持回答的原文，ModHarness-RL 用程序整理工具历史。三者都在减少后续模型要读取的内容，保留标准却分别是下一商品预测、证据支持和任务完成。不能只按压缩比例比较优劣；采用前要确认被删除的信息会不会影响最终结果，并区分首次准备与重复使用的成本。</p><div class="sources"><a href="#paper-2611.17921">RecMem：把旧行为压进固定记忆，让长历史推荐不用每次重读全部记录</a> · <a href="#paper-2611.16366">CURATOR：一次共同评估多段证据，再按上下文预算选取原文</a> · <a href="#paper-2611.18533">ModHarness-RL：边训练Agent，边改进压缩历史和纠错提示的程序</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>今日速览</h2><ol class="briefs"><li><a href="#paper-2611.16795">KuaiRecV2：把每日新视频、遗忘与多行为目标放进同一个推荐基准</a><span>按天更新模型和七天视频候选池，同时衡量命中、多样性和多行为表现；论文显示静态离线领先并不意味着持续更新后仍然稳定。</span></li><li><a href="#paper-2611.16404">ReSID：让不热门商品的生成路径活下来，再用局部编号找回候选</a><span>从商品编号、束搜索剪枝和最终匹配三处减少长尾商品丢失；允许部分编号不一致能找回更多候选，但总体召回仍存在退让。</span></li><li><a href="#paper-2611.17921">RecMem：把旧行为压进固定记忆，让长历史推荐不用每次重读全部记录</a><span>用16个可更新记忆槽保存旧历史，预测只读取记忆与最近200次交互；成本更稳定，但前列命中仍低于直接读取长历史的模型。</span></li><li><a href="#paper-2611.16395">TriGen：点开一件商品后，让即时兴趣持续参与后续商品生成</a><span>把刚点击的商品作为明确触发信号，在历史编码、兴趣融合和编号解码中持续使用，平衡长期偏好与这次点击带来的意图变化。</span></li><li><a href="#paper-2611.16159">TraGR：预测未来多次交互时，把未选中的可能性也传给下一步</a><span>在商品内部并行预测编号、在商品之间更新行为状态，同时反馈所选商品与候选概率摘要，学习连续几次未来交互而非一屏替代候选。</span></li><li><a href="#paper-2611.18244">RACE：先估计这次排序有多难，再决定保留多少通道和历史</a><span>从推荐模型的早层表示预测剪枝力度，难样本多保留计算，简单样本同时压缩前馈通道和行为序列；端侧推理无需反向更新。</span></li><li><a href="#paper-2611.16405">AntEmbed：让带推理和不带推理的查询共用一个检索向量空间</a><span>先对齐原始输入与推理增强输入，再把增强分支的检索判断蒸馏给直接编码分支；查询可按预算选择是否先生成分析，而候选库保持同一套索引。</span></li><li><a href="#paper-2611.16366">CURATOR：一次共同评估多段证据，再按上下文预算选取原文</a><span>让一个小型决策模型同时判断多段证据，并针对候选变多、有效证据稀疏的情况训练；紧上下文预算下可以改善下游回答，但筛选本身也有成本。</span></li><li><a href="#paper-2611.13135">动作序列对齐蒸馏：给失败轨迹选一个走得相近的成功参考</a><span>成功轨迹不一定适合纠正当前学生；按工具动作的有序公共子序列选参考，并只蒸馏失败轨迹，可以减少不相容示范对多轮Agent的干扰。</span></li><li><a href="#paper-2611.18533">ModHarness-RL：边训练Agent，边改进压缩历史和纠错提示的程序</a><span>把交互记录保存为结构化状态，用确定性程序整理上下文和触发纠错；压缩规则先固定，纠错规则随策略训练更新，规则执行不需要每轮再调用大模型。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>逐篇解读</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2611.16795" data-search="KuaiRecV2: Benchmarking Large-Scale Continual Learning for Diversified and Multi-task Recommendation KuaiRecV2：把每日新视频、遗忘与多行为目标放进同一个推荐基准 Kuaishou Kuaishou 持续学习 生成式推荐 推荐评测">
+<div class="paper-meta"><span class="pill">Kuaishou</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>KuaiRecV2：把每日新视频、遗忘与多行为目标放进同一个推荐基准</h3><a class="original" href="https://arxiv.org/abs/2611.16795v1" target="_blank" rel="noopener noreferrer">KuaiRecV2: Benchmarking Large-Scale Continual Learning for Diversified and Multi-task Recommendation ↗</a>
+
+<p class="muted">Shuchang Liu、Hantao Shu等作者署名Kuaishou Technology。 · 论文更新于 2026-11-12（UTC）</p><p class="reason">适合为生成式推荐建设持续学习验收集的团队，重点看每日更新、旧任务回测，以及准确率和覆盖率之间的取舍。</p>
+<h4>研究问题</h4><p>真实短视频推荐每天都有新内容加入、旧内容离开，用户偏好也在变化。一次训练后在固定候选库中测命中率，既看不到模型适应新内容的速度，也看不到它是否遗忘旧兴趣。只奖励点击，还可能把点赞、长观看和多样性挤出目标。</p><h4>核心方法</h4><p>这是一套数据与评测流程。作者在快手采集30天行为，保留窗口内至少100次交互的用户，并为每条交互提供观看、点赞、评论、不喜欢等标签。视频附有固定模型提取的多模态向量和八层语义编号；这些特征模型没有使用所发布的30天交互或留出行为训练。FullMonth用于连续更新，Small取前两天用于快速离线比较。</p><p>连续流程从第一天训练模型，第二天继承前一天参数，只用新一天数据继续训练；用户跨日的历史接起来，每天的候选池只包含过去七天创建的视频。默认每天对每位用户留出最后一次交互做验证，其余用于当天训练，并保留逐日轨迹。另将后续检查点拿回第一天的固定验证集，观察旧偏好的保留。</p><p>每次检索只生成一份候选，然后在同一份结果上评价各种行为，避免每项任务各跑一个模型。除前K项命中率和考虑位置的排序指标，还看全站商品覆盖、曝光集中程度和编号各层的分支多样性。作者提供监督训练和基于多行为奖励的强化学习基线；这些是待比较的训练策略，基准本身不会自动消除遗忘或多目标冲突。</p>
+<h4>实验结果</h4><ul><li>数据规模足以暴露长周期问题：FullMonth含124,055名用户、约2,490万视频、4.84亿交互；Small含约245万视频和3,896万交互。它提供30天持续更新环境，七天指每日候选视频的创建时间范围，不是只收集七天行为。</li><li>命中更高可以伴随覆盖更低。Small上MiniOneRec的HR@50为0.06263，优于LLaDA-Rec的0.01731；但前50结果的商品覆盖率仅0.001880，后者为0.009886。两项分别表示目标进入前50的比例，以及推荐结果覆盖目录的比例，不能只按命中率判断推荐是否足够多样。模型大小与训练配置也有差别。</li><li>多行为强化学习需要持续适应数据。第20天加入奖励优化会改善当时表现，但RL-only在第21天候选池变化后明显退化；先监督适应新数据、再强化学习的交替方案更稳定。论文同时报告5%历史回放改善第一天任务保留，但仍存在显著遗忘；这些是受测基线的离线观察，不是强化学习普遍失败的结论。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：把每日新候选池上的效果、固定旧任务回测和目录覆盖同时放进发布验收。若当日奖励上涨而下一天退化，先检查新内容适应和回放策略，再增加奖励项。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>至少100次交互的筛选偏向活跃用户，且省略用户画像；不能代表低活跃、新用户或完整线上服务。</li><li>语义编号的分支数不等同于人工业务类别多样性；Gini只对至少出现一次的商品计算，不能忽略从未曝光的部分。</li><li>公开日志没有重新执行推荐策略的真实用户反馈，按日留一协议也无法完全复制在线时序与曝光偏差；论文没有给出线上A/B收益。</li></ul></article><article class="paper" id="paper-2611.16404" data-search="ReSID: Rethinking Long-Tail Retrieval in Generative Recommendation through Item Reachability ReSID：让不热门商品的生成路径活下来，再用局部编号找回候选 Alibaba Alibaba 长尾召回 生成式推荐 约束搜索">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>ReSID：让不热门商品的生成路径活下来，再用局部编号找回候选</h3><a class="original" href="https://arxiv.org/abs/2611.16404v1" target="_blank" rel="noopener noreferrer">ReSID: Rethinking Long-Tail Retrieval in Generative Recommendation through Item Reachability ↗</a>
+
+<p class="muted">Muyu Zou、Yi Xu等作者署名Alibaba International Digital Commerce Group。 · 论文更新于 2026-11-12（UTC）</p><p class="reason">适合已经使用商品语义编号、却发现长尾商品早早退出搜索的召回团队。重点看候选在何处丢失，以及扩大匹配范围后的相关性和计算代价。</p>
+<h4>研究问题</h4><p>生成式召回把商品写成一小串编号。热门商品的路径概率更高，有限的搜索分支容易被它们占满；长尾商品即使有几个编号预测正确，也可能因整串不完全匹配而被丢掉。只在训练中增加长尾权重，未必能修复后续剪枝与匹配造成的损失。</p><h4>核心方法</h4><p>先改商品编号。把文本向量映射到若干独立子空间，各自量化成一个编号，再拼成完整商品标识。每个位置单独表示一部分内容，而不是逐层量化上一层残差；局部编号出错时，其他位置仍可能保留可用语义。随后用真实交互监督训练标准生成式推荐器。</p><p>解码时冻结这个推荐器，保留多条候选路径的束搜索增加两种引导：扣除一部分由训练频次估计的热门分支先验，给长尾留下空间；再用用户历史向量与该前缀下商品的相似程度，优先保留与此用户有关的分支。用户向量只额外训练一个轻量投影，商品文本向量与基础编码器保持固定。这样不是随机增加多样性，而是争取让相关的长尾路径继续参与后续生成。</p><p>最后允许生成串与真实商品串有少量位置不一致，再按不一致数量和路径得分排序。在大目录实现中，用“位置—编号”倒排表累计相同位置，避免逐个扫描全部商品；前缀语义分数用预计算中心近似，同一用户状态可复用缓存。模型输出的是后续排序使用的候选，训练和服务都要维护新的编号与匹配结构。</p>
+<h4>实验结果</h4><ul><li>长尾改善伴随总体取舍。在公开Amazon Industrial类目，长尾目标的Recall@200由OneRec的14.68%升至21.22%；总体却由36.66%降到33.77%。这里衡量目标商品是否进入前200，不是点击率。“Industrial”是公开商品类目，不能把这条结果误当成内部工业日志。</li><li>部分匹配是关键。在Office消融中，关闭这一步后，长尾Recall@200从20.54%降到6.97%。同样接近99%的目录曝光覆盖下，真实用户语义比交换用户语义的长尾召回更高，说明把更多商品放入候选并不自动意味着与用户有关。</li><li>线上12天用户随机A/B中，每组分配15%流量；在保持其他召回通道和下游排序不变时，将TIGER式生成召回替换为ReSID，广告收入、点击率、GMV相对提高1.3%、1.1%、0.8%，长尾曝光份额相对提高4.0%，均报告p&lt;0.05。收益对应这次完整通道替换，不能只归因于某一编号改动。</li><li>窄束搜索降低了受测服务成本，但计时有不同范围。内部日志设置在L20、批量512下，编码、生成、匹配和排序合计平均63.75毫秒/批；10.3毫秒是另一套在线单请求引擎结果。前者与后者不能直接相除当作加速比，论文总体对照还跨CPU公开数据与GPU内部数据。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：先把长尾目标丢失拆成“正确前缀被剪掉”和“完整串差几个编号未匹配”，再决定改搜索还是改匹配。增加容错时要同时监控总体召回、长尾召回和新增候选相关性，避免只靠目录覆盖提高判断成功。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>长尾定义依数据集而异：公开类目按训练出现次数，内部数据按累计点击；已见长尾不等于从未见过的新品。</li><li>主要实验仅一个随机种子；公开数据上总体召回和排序指标仍会落后强基线，不能概括为全指标领先。</li><li>对照的束宽不同，收益来自完整系统组合；部分匹配、索引和用户语义缓存都有实际运维成本，理论偏差解释也依赖明确假设。</li></ul></article><article class="paper" id="paper-2611.17921" data-search="RecMem: Recurrent Memory Compression for Long-Sequence Generative Recommendation RecMem：把旧行为压进固定记忆，让长历史推荐不用每次重读全部记录 Alibaba Alibaba 历史压缩 用户记忆 生成式推荐">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>RecMem：把旧行为压进固定记忆，让长历史推荐不用每次重读全部记录</h3><a class="original" href="https://arxiv.org/abs/2611.17921v1" target="_blank" rel="noopener noreferrer">RecMem: Recurrent Memory Compression for Long-Sequence Generative Recommendation ↗</a>
+
+<p class="muted">Gaoyang Guo、Wen Chen、Jian Wu、Yuning Jiang署名Taobao &amp; Tmall Group of Alibaba。 · 论文更新于 2026-11-13（UTC）</p><p class="reason">适合用户历史很长、且能够长期保存每个用户状态的推荐团队，重点看压缩后保留了哪些预测信息，以及冷启动建记忆和有缓存预测的不同开销。</p>
+<h4>研究问题</h4><p>推荐模型每次读取上千次交互，可以找到很早以前的兴趣线索，却要反复承担长序列计算。只看最近200次又会丢掉旧信息。RecMem尝试固定一份小记忆，在新行为到来时更新，而不是让历史摘要越存越多。</p><h4>核心方法</h4><p>将最近200次交互保留原样，更早的记录按每200次分段。每处理一段，编码器同时读取上一份记忆、新段内容和16个记忆查询槽，写出候选新记忆；每个槽各有一个门控，决定保留多少旧状态、写入多少新内容。最终每个用户只保留16个向量，预测器读取这些向量和最近200次交互，对候选商品打分。</p><p>编码器与预测器共享较低层，较高层分开；用真实下一商品的对比训练同时更新两者，使压缩保留与预测有关的信息。另加一致性训练：同样的最后两段历史，一路分两次更新，另一路合起来更新，让前一路的推荐分布接近只提供训练目标、不接收这项误差更新的后一路。它使用当前模型自身的结果，不依赖外部教师；这个损失只约束受测预测，不保证记忆完全无损。</p><p>服务时持久缓存用户记忆，每积满一段新行为只更新一次，后续预测读取固定大小的输入。没有缓存时仍须顺序处理全部旧段，因此首次建记忆的总计算随历史增长。缓存模型状态也需要处理版本、失效与存储，论文的延迟测试没有覆盖这些线上基础设施。</p>
+<h4>实验结果</h4><ul><li>MerRec标准协议中，固定216个预测输入位置的RecMem-Stream，Recall@10为42.36%，低于读取最近1200次交互的HSTU-1200的48.18%；Recall@200为72.20%对74.44%。压缩保留了更多宽候选覆盖，却牺牲前列精度，不能写成“质量无损”。只看最近200次的独立训练基线为40.93%和67.74%，说明旧记忆仍提供额外信息。</li><li>同一个训练检查点在6,442名固定用户上继续测试到一万次交互，没有重新训练；四段位置区间的Recall@10在40.519%–40.689%之间，未见总体崩溃。这支持该用户群和测试长度下的稳定性，不能推出无限历史都不会遗忘。</li><li>准备好历史状态后，单GPU、批量64、历史长度2000的模型计算测试中，预测耗时为7.653毫秒/批，HSTU-1200为106.613毫秒/批；每用户保留记忆8KiB。测试使用随机初始化架构与合成商品ID，含全目录打分和前200选择，但不含网络、远程状态存储与调度。</li><li>冷构建并不免费。批量1、历史2000时，建记忆需41.4毫秒，更新一个200行为段约4.61毫秒，之后有缓存预测约3.81毫秒。固定的是保留状态和单次增量预算，不能用热预测耗时代表第一次请求。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：分别测最近窗口基线、全历史基线和固定记忆模型，在同一用户群比较前列命中、宽候选召回、冷构建、增量更新与热预测。对历史很长但访问稀少的用户，还应把缓存命中和重建费用算进成本。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>实证集中在MerRec的ID推荐与HSTU骨干，未验证多模态文本历史或真实生产部署；主对照只覆盖有限种子。</li><li>理论稳定界需要完整更新算子满足收缩及近似组合一致性，门控或输出分布KL本身没有证明这些条件；稳定状态也不等于保留所有历史语义。</li><li>一万次评估只用单一检查点和固定高历史用户群；模型记忆大小固定，但商品库向量、最近原始窗口和用户状态服务仍占资源。</li></ul></article><article class="paper" id="paper-2611.16395" data-search="TriGen: A Generative Paradigm for Trigger-Induced Recommendation TriGen：点开一件商品后，让即时兴趣持续参与后续商品生成 Alibaba Alibaba 触发推荐 生成式推荐 即时兴趣">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>TriGen：点开一件商品后，让即时兴趣持续参与后续商品生成</h3><a class="original" href="https://arxiv.org/abs/2611.16395v1" target="_blank" rel="noopener noreferrer">TriGen: A Generative Paradigm for Trigger-Induced Recommendation ↗</a>
+
+<p class="muted">Muyu Zou、Haibo Xing、Jinxin Hu等作者官方署名Alibaba International Digital Commerce Group。 · 论文更新于 2026-11-12（UTC）</p><p class="reason">适合商品详情页相似推荐、点击后展开信息流的团队，重点看如何保留长期偏好又让本次点击改变生成方向，以及真正触发场景与模拟触发的差别。</p>
+<h4>研究问题</h4><p>用户从通用信息流点开一只手表，后续推荐既要围绕这次兴趣，也不能抛弃他原来的风格和购物习惯。只把手表当作历史中又一个商品，长历史可能冲淡它；只围绕手表生成，又可能对偶然点击过度反应。TriGen研究这种点击触发的后续推荐。</p><h4>核心方法</h4><p>输入包括原有行为历史和刚点击的触发商品，输出目标商品的语义编号，即逐步定位商品的一小串离散代码。第一条编码路径在固定长度历史尾部放入触发商品，并用相对位置注意力让它与近期行为交互。工业设置重复三次，因此也会占去最老的三个历史位置；公共数据历史较短，只插入一次。重复次数是配置，不是模型自动推断的真实意图强度。</p><p>另一条条件路径读取未注入触发的原始历史：一支用触发商品查询相关历史，另一支用可学习的默认查询汇总既有偏好。门控根据两支表示，为每个编号位置决定如何混合即时兴趣和历史偏好；它并非直接在已经注入触发的编码输出上再做同样汇总。</p><p>解码器不仅在开始时接收条件，还给每个编号位置使用独立投影，并把该位置的条件加入输入。这样每一步都能利用触发与历史的混合信息，同时通过交叉注意力读取第一条编码路径。编号映射预先构建后冻结；推荐编码器、门控和解码器用真实目标编号做监督训练，推理用合法编号前缀树约束的束搜索。论文没有在这套推荐训练中增加教师蒸馏或强化学习阶段。</p>
+<h4>实验结果</h4><ul><li>五天线上A/B直接比较已部署的“生成模型加单次触发追加”与TriGen，两组各分配10%随机生产流量，上下游保持相同。六国按流量加权，收入相对增加3.27%、GMV增加0.90%，整体报告双侧p&lt;0.05。收入六国均正向，GMV只有四国增加；不能把汇总收益理解为每个市场都受益。</li><li>工业离线多正例召回中，Recall@10为15.50%，高于相同生成骨干的简单触发追加方案12.15%；NDCG@10为7.33%对5.62%。公共Amazon数据用最近一次历史交互模拟触发，TriGen的Recall@10为13.22%，略低于追加方案13.26%，因此公开实验并非所有指标最佳。</li><li>持续引导与自适应融合都有贡献。工业数据把双路径改成均匀平均，Recall@10从15.50%降到11.87%；只在起始位置注入条件为12.93%，所有位置共享同一投影为13.85%。这些对照支持逐位置条件设计，但不证明每个编号层都有人工可解释的类别或属性含义。</li><li>线上推理时延约10.5毫秒，论文称与对照基本一致；没有给出完整延迟分布或置信区间。实验发生在2026年6月28日至7月2日，11月12日是论文首次提交时间，不能当作刚发生的业务试验。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：若业务有明确的“点击后进入新信息流”事件，可把触发与一般历史分开记录，并分别测偶然点击、强意图点击和历史稀疏用户。重复触发会占用固定上下文预算，应该同时监控丢失旧行为后的质量，而不是一味增加重复次数。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>Amazon没有真实触发字段，以最近交互做代理，不能直接量化真实即时意图；工业多正例召回与公共单目标协议也不宜横比绝对分数。</li><li>每个请求只建模一个触发商品，没有验证多个同时到来的触发信号如何冲突或融合。</li><li>语义编号量化存在碰撞，公共评测会把生成编号展开到所有对应商品；编号层级是残差量化层，不保证逐层对应固定业务标签。</li></ul></article><article class="paper" id="paper-2611.16159" data-search="From Tokens to Behaviors: Rethinking Generative Recommendation for User Trajectory Prediction TraGR：预测未来多次交互时，把未选中的可能性也传给下一步 Kuaishou Kuaishou 生成式推荐 行为轨迹预测 概率反馈">
+<div class="paper-meta"><span class="pill">Kuaishou</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>TraGR：预测未来多次交互时，把未选中的可能性也传给下一步</h3><a class="original" href="https://arxiv.org/abs/2611.16159v1" target="_blank" rel="noopener noreferrer">From Tokens to Behaviors: Rethinking Generative Recommendation for User Trajectory Prediction ↗</a>
+
+<p class="muted">Hanchen Yang、Qingpeng Cai等作者官方署名Kuaishou Technology。 · 论文更新于 2026-11-12（UTC）</p><p class="reason">适合研究多步用户行为预测的团队，重点看“同一时刻的候选列表”和“连续未来交互”有何区别，以及传递概率信息需要承担多少目录计算。</p>
+<h4>研究问题</h4><p>预测用户下一次购买的前十个候选，和预测接下来三次会依次买什么，是两个任务。后一任务中，早期预测会成为后面预测的输入；若只传入选中的一件商品，就丢掉了模型当时仍认为可能的其他行为，也可能让一次错误不断影响后续。</p><h4>核心方法</h4><p>模型先把历史商品编码成行为状态。每个商品由固定的一组语义编号表示；同一商品的多个编号位置并行预测，再将编号概率组合成整个商品目录上的分布，从中选出当前步骤的商品。随后才更新一次行为状态，继续预测下一次交互，从而分开“描述一件商品”和“推进到下一次行为”这两层过程。</p><p>状态更新不仅接收已选商品，还接收全目录候选的加权摘要。权重同时考虑候选概率和它与已选商品的相似度，使下一步知道当前选择附近还有哪些可信方向；已选商品本身保留独立贡献。这个摘要每步扫描全目录，成本随商品数和表示维度增长，并非无需候选打分。</p><p>第一阶段用真实未来序列监督商品及编号预测。第二阶段让模型从自己的概率分布采样轨迹，再依据是否命中该位置的真实目标、训练日志是否支持相邻商品转移来优化；后续预测的奖励也回传给早先的离散选择。训练更新编码器、编号预测头和状态转换，固定编号映射、反馈向量表、转移统计和一份监督阶段参考模型；参考模型只约束训练分布。推理时仅运行训练好的模型，每步贪心选商品，并继续使用概率反馈。</p>
+<h4>实验结果</h4><ul><li>四个公共数据集的主表36项比较均领先。以Beauty的三步预测为例，未来各位置前10命中率的算术均值为0.0629，高于最强对照RPG-M的0.0539；三位置目标各自都进入其前50候选的轨迹比例为0.0435，对照为0.0336。这不是模型一次就完整生成正确三件商品的比例，也不是线上推荐点击率。</li><li>候选概率反馈确有作用。ML-1M五步任务中，仅传递已选商品的模型，其位置NDCG@10几何均值为0.0972，完整反馈为0.1074；只用相似度、不用候选概率则为0.0978。奖励训练的两部分也需要配合，单独加入后续信用或转移奖励并非每个指标都单调提升。</li><li>更长轨迹仍更难。对3、5、7、10步分别重训的实验中，所有方法随跨度增长而下降；TraGR在Last-FM三步设置的SNDCG@10略低于LPDO，五步及更长的两项主指标才均领先。这里不是同一检查点任意加长输出仍保持质量的证明。</li><li>效率存在比较对象差异。单张H200、批量64、整个测试集工作量计时中，TraGR比LPDO和自实现GCB更快，比GCB峰值显存更低；但比RPG更慢、显存更高，也比LPDO占用更多显存。论文没有在正文提供这些柱状图的精确数值，因此不估读加速倍数。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：先按真实业务确定是否需要预测有顺序的多次交互，再比较只传商品与传概率摘要的增益。若目录很大，应单独评估全目录归一化、摘要聚合与冻结参考模型的训练开销，避免只看并行编号预测节省的解码步数。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>主要目录最大约1.2万商品，远小于许多生产系统；每步全目录概率摘要需要O(Nd)计算和O(Nd)反馈表，论文把更高效候选聚合作为后续工作。</li><li>Beauty和Cell Phones因需要完整未来窗口，保留用户分别只有原始统计的约23%和12%；结果对应这些可评估用户，不代表全体短历史用户。</li><li>没有线上实验；GCB无公开实现，由作者按论文复现，且部分生成基线用beam100、TraGR用贪心，速度比较同时包含模型与解码策略差异。</li></ul></article><article class="paper" id="paper-2611.18244" data-search="RACE: Ranking-Uncertainty Aware Capacity-Adaptive Customization for Efficient Sequential Recommendation RACE：先估计这次排序有多难，再决定保留多少通道和历史 Huawei Huawei 序列推荐 端侧推理 动态剪枝">
+<div class="paper-meta"><span class="pill">Huawei</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>RACE：先估计这次排序有多难，再决定保留多少通道和历史</h3><a class="original" href="https://arxiv.org/abs/2611.18244v1" target="_blank" rel="noopener noreferrer">RACE: Ranking-Uncertainty Aware Capacity-Adaptive Customization for Efficient Sequential Recommendation ↗</a>
+
+<p class="muted">Hui Zang等作者官方署名Huawei Technologies Co., Ltd. · 论文更新于 2026-11-13（UTC）</p><p class="reason">适合研究端侧重排或有限预算序列推荐的团队，重点看如何把完整模型的不确定性转成早层资源预测，以及压缩比例如何落实到真实硬件。</p>
+<h4>研究问题</h4><p>同一用户最近的行为有时很集中，有时兴趣分散。所有请求都使用同样大小的推荐模型，可能在简单请求上浪费计算，又让困难请求容量不足。固定剪枝比例也难以兼顾这种差异；每次在设备上微调则要承担反向传播和更新延迟。</p><h4>核心方法</h4><p>输入是历史交互序列，输出下一商品的排序。训练时，作者用一个可同时估计商品分数均值和方差的贝叶斯预测层，判断前20个候选的两两顺序有多不稳定。顺序越难确定，资源分配目标越保守。由于真正算出这个信号要走完整个模型，再用一个轻量两层网络学习：只看第一个推荐编码块的表示，就预判后面该剪多少。这个训练目标从模型自身产生并停止梯度，不需要人工标注难度。</p><p>推理时先计算早层表示，预测本次请求的剪枝比例，再执行两种定制。每个后续块根据当前兴趣表示给前馈网络的计算通道（中间特征分量）打分，保留较重要的通道；同时利用注意力中近期行为对历史项的贡献，逐层保留较重要的交互。比例越大剪得越多，例如0.8表示约剪掉80%的通道。困难请求预测的比例较小，因此保留更多通道和行为。</p><p>训练用硬掩码配合梯度近似学习通道选择，序列侧以掩码模拟删除；推理才真正丢弃未保留的历史项。推荐主干、通道打分器和剪枝预测器在训练中共同学习，整表排序不确定性的计算只用于训练监督。设备上运行早层预测及剪枝后的前向，不为每次请求重训个性化模型。</p>
+<h4>实验结果</h4><ul><li>全商品排序的准确率与计算量可以同时改善。四个公共数据集上，SASRec主干的平均NDCG@5相对未压缩模型提高40.87%，主干FLOPs约降为原来的1/2.37。Douban上NDCG@5为0.0261，高于最强对照APG的0.0224；NDCG同时考虑前列是否命中以及命中位置。这些是离线排序结果，不能换算成线上点击增长。</li><li>具体时延来自模拟端侧重排：预先从云端取得50个候选，在4核CPU上测量。RACE每次推理5.780毫秒，Finetune为9.732毫秒，DIET为10.518毫秒；RACE主干和辅助计算分别为0.7549与0.0490 MFLOPs。Finetune对照还包含设备侧反向传播成本，40.6%的时延降幅不能理解成相对任意纯前向推荐器的加速。</li><li>预算收紧会付出小幅质量代价。在SASRec/Douban上，不重训而使用更严格测试预算，FLOPs从0.7928降到0.6266，NDCG@5从0.0261降到0.0259；这支持可调取舍，不代表计算减少完全无损。序列打分消融中，Amazon-Game/BSARec的另一种Masked Mean方案NDCG为0.0477，也略高于RACE的0.0476。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：先在目标设备上确认通道屏蔽能否实际跳过矩阵运算，以及动态序列长度是否破坏批量效率，再决定采用何种剪枝粒度。FLOPs账本与单机CPU测试应分别复现，不能直接外推到手机功耗或网络端到端时延。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>主实验最长历史仅20项、四个公共数据集且经过10-core筛选；没有长历史、真实手机型号、功耗或线上用户实验。</li><li>排序不确定性是实例难度的模型内部代理，训练目标依赖当前模型的均值、方差和批内标准化；论文未证明它在所有分布上都校准，也没有证明保留更多容量总能修复困难样本。</li><li>主表报告主干FLOPs，辅助开销仅在另一个效率表展开；不能只按主干倍数估计完整服务收益。</li></ul></article><article class="paper" id="paper-2611.16405" data-search="AntEmbed: Dual-Mode Multimodal Embedding Model for Efficient and Fine-Grained Retrieval AntEmbed：让带推理和不带推理的查询共用一个检索向量空间 Ant Group Ant Group 多模态检索 向量蒸馏 推理增强">
+<div class="paper-meta"><span class="pill">Ant Group</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>AntEmbed：让带推理和不带推理的查询共用一个检索向量空间</h3><a class="original" href="https://arxiv.org/abs/2611.16405v1" target="_blank" rel="noopener noreferrer">AntEmbed: Dual-Mode Multimodal Embedding Model for Efficient and Fine-Grained Retrieval ↗</a>
+
+<p class="muted">Hua Chen、Jinxiong Chang等作者在官方作者栏署名Ant Group。 · 论文更新于 2026-11-12（UTC）</p><p class="reason">适合想用大模型分析改善多模态检索、又不愿为两种查询模式维护两套索引的团队，重点看监督形式与在线推理开销分别在哪里。</p>
+<h4>研究问题</h4><p>直接把图片、文本或文档编码成向量很快，但容易漏掉细粒度差异。先让多模态模型分析意图和候选特征再编码，检索可能更准，却增加生成成本；如果两种模式学成两个向量空间，又要分别维护候选索引。</p><h4>核心方法</h4><p>先构造两种等价视图：原始输入，以及原始输入拼上检索相关的分析。外部Qwen3-VL-30B-A3B为查询梳理意图；对候选，则结合现成检索器找到的五个近邻，分析它与易混对象的区别。这些分析是训练监督，不是商品相关性的人工真值。</p><p>第一阶段用同一个专用标记的位置来提取向量，将原始查询和增强查询都与原始、增强的正候选配对；每个正视图都要比负候选更匹配。这样约束跨模式的一致性，防止模型仅在各模式内部学好匹配。模型以2B或8B多模态骨干进行低秩适配训练。</p><p>第二阶段从第一阶段复制出教师和学生：教师接收增强输入并保持固定，学生接收原始查询。学生既学习教师对候选的相似度分布，也让查询向量靠近增强查询向量，并继续做多正例训练。计算蒸馏误差时，候选表示只提供对照；继续进行的正负样本匹配训练仍会更新学生模型。这里蒸馏的是向量与检索分布，不是语言模型逐词概率。</p><p>评测实际只建一套由推理增强候选编码得到的索引。查询可以直接编码，或先由外部推理模型生成分析再编码。直接查询免去此次生成，候选侧的增强分析与建库成本仍然存在；复杂查询是否自动切换模式，论文没有训练路由器。</p>
+<h4>实验结果</h4><ul><li>MMEB-v2的78项任务上，8B增强查询模式总分81.5，比DME-9B的78.4高3.1分；直接查询模式只有73.1，低于Qwen3-VL-Embedding-8B的77.8。收益需要与模式成本一起看，不能把增强模式最高分当成直接编码分支的表现。总分混合图像、视频Hit@1和文档NDCG@5，不是统一的检索准确率。</li><li>蒸馏能改善直接查询，但幅度有限。2B模型第一阶段总分69.1，第二阶段联合分布蒸馏和向量对齐后为70.2；只用其中一项分别为69.4和69.5。这支持两种监督互补，不支持所有推理能力都已转移到直接编码分支。</li><li>MMEB-v3总分55.6高于表中基线，但模型不支持音频，11项音频任务按零分计入190项总分；新增任务使用增强查询模式。它在工具检索、GUI等类别有结果，不等于已经验证完整Agent任务成功率。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>工程推断：API模型能返回可核验的检索意图和候选差异分析时，可先把这些文本作为增强输入，训练共享向量空间，再用相似度分布与查询向量做蒸馏。验收应分别测直接查询质量、增强查询质量、候选建库和索引刷新费用。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>没有报告在线延迟、总训练算力、建索引费用或自动路由的收益；不能凭“无需额外查询推理”推断全流程无成本。</li><li>增强分析来自外部模型和近邻检索器，错误也可能进入监督；推理文本更强带来的分数提高不等于更可靠的事实依据。</li><li>基线主要引用公开排行榜，训练数据与预算未完全对齐；8B直接模式仍落后强直接编码基线，线上推荐与收入未验证。</li></ul></article><article class="paper" id="paper-2611.16366" data-search="CURATOR: Scalable Fine-grained Evidence Selection for Retrieval-Augmented Generation using Decision Models CURATOR：一次共同评估多段证据，再按上下文预算选取原文 Amazon Amazon RAG 证据选择 决策模型">
+<div class="paper-meta"><span class="pill">Amazon</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>CURATOR：一次共同评估多段证据，再按上下文预算选取原文</h3><a class="original" href="https://arxiv.org/abs/2611.16366v1" target="_blank" rel="noopener noreferrer">CURATOR: Scalable Fine-grained Evidence Selection for Retrieval-Augmented Generation using Decision Models ↗</a>
+
+<p class="muted">作者官方署名包含AWS AI Labs或Amazon Web Services。 · 论文更新于 2026-11-12（UTC）</p><p class="reason">适合已有检索池、但上下文拥挤且证据分散的RAG团队。先测紧预算下的证据完整性与最终回答，再决定共同评分的额外延迟是否值得。</p>
+<h4>研究问题</h4><p>检索返回的段落常混有背景和无关内容，直接交给回答模型会占用上下文。单独看一句话又可能看不出它在多跳问题中的作用。逐句判断时都附上全部上下文可以补足联系，却会反复计算同一份内容；同时判断多句虽快，现成模型在候选增多时又更容易混淆证据与干扰。</p><h4>核心方法</h4><p>输入问题和已经检索到的句子、短文本或表格单元，模型为每个候选同时输出“是否支持回答”的得分。按分数排序后，在给定词元预算内逐个保留原文；放不下的候选跳过。它负责检索之后的证据筛选，最终回答仍由另一个模型生成。</p><p>训练以标注支持证据构造8至128个候选的共同判断任务，混合不同有效证据比例。正例与负例分别平均计算损失，避免大量无关句子淹没少数正例；无法可靠确定的标签仍保留在上下文，但不参与监督。训练仅更新原4.54B决策模型中约380万参数，包括全注意力层的低秩适配器和决策读出，其余主干冻结。</p><p>为保留原有能力，训练还混入一般分类和选择题，同时学习真实标签与冻结原模型的分布。这部分是通用任务回放，证据标签本身来自数据标注，并不是直接照抄原模型的证据判断。部署使用适配后的决策模型；候选太多时分组评分再合并排序，不能把任意大候选池都理解为一次模型调用。</p>
+<h4>实验结果</h4><ul><li>在QAMPARI的1024词元预算下，标注证据召回由原共同决策模型的42.79%提高到54.66%；逐句附全上下文判断为48.44%。评分平均耗时分别为0.925秒、0.909秒和20.065秒，因此21.7倍加速针对昂贵的逐句全上下文对照；BGE逐句重排仅需0.301秒，CURATOR并非所有对照中最快。该开发集与检查点选择数据重叠。</li><li>相同检索池和120B回答模型下，MuSiQue的128词元预算回答匹配率为48.7%，高于最强对照40.3%；金融问答MultiHiertt为48.4%，对照42.4%。到2048词元时优势明显缩小，MultiHiertt甚至以55.1%略低于逐句重排的55.2%，不能将紧预算收益扩展为所有上下文长度均领先。</li><li>跨领域证据选择也有改善：512词元预算下，法律合同CUAD的完整证据集覆盖率为79.8%，逐句Qwen重排为67.6%。但标注证据更齐全与回答更正确并非同比例变化，仍取决于回答模型怎样使用证据。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>适合已有检索池、但上下文拥挤且证据分散的RAG团队。先测紧预算下的证据完整性与最终回答，再决定共同评分的额外延迟是否值得。</li><li>工程推断：训练候选规模和正例稀疏程度应接近服务负载；分组评分后应单独检查跨组分数是否可比，不宜只在小候选池上验收。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>QAMPARI主效率表使用参与检查点选择的开发集；部分消融还改变训练数据或更新次数，不能完全分离每个设计的独立贡献。</li><li>召回以数据集标注为准，候选池本身也可能缺证据；分组后的候选不再共享完整上下文，跨组分数校准可能变化。</li><li>回放后七个通用任务没有检测到退化，但缺少严格匹配的无回放能力保留对照；论文没有验证多轮Agent持续增量筛选或生产端到端成本。</li></ul></article><article class="paper" id="paper-2611.13135" data-search="Which Successes Make Good References? Action-Sequence Alignment for Multi-Turn On-Policy Distillation 动作序列对齐蒸馏：给失败轨迹选一个走得相近的成功参考 Amazon Amazon Agent蒸馏 OPD 轨迹选择">
+<div class="paper-meta"><span class="pill">Amazon</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>动作序列对齐蒸馏：给失败轨迹选一个走得相近的成功参考</h3><a class="original" href="https://arxiv.org/abs/2611.13135v1" target="_blank" rel="noopener noreferrer">Which Successes Make Good References? Action-Sequence Alignment for Multi-Turn On-Policy Distillation ↗</a>
+
+<p class="muted">作者官方署名包含AWS AI Labs或Amazon Web Services。 · 论文更新于 2026-11-09（UTC）</p><p class="reason">适合能保存工具动作、重放环境并获得成功判定的Agent蒸馏团队。优先比较参考与当前轨迹是否相容，而不是仅按教师回答长度或文字相似度选示范。</p>
+<h4>研究问题</h4><p>同一个工具任务可能有多种正确解法。学生已经移动了某个物体或改写了数据库后，教师若参照另一条走法纠正它，后续建议可能不再符合当前环境状态。只挑最短或文字最相似的成功轨迹，无法保证保留学生已经做对的步骤。</p><h4>核心方法</h4><p>先为每个训练任务离线采集四条教师轨迹，只保留环境奖励确认成功的参考。训练时学生自行与环境交互；对失败轨迹，比较它和同任务每条成功参考的动作序列。最长公共子序列（LCS）衡量两者按相同先后顺序执行了多少相同动作，允许中间夹着额外操作，因此不会像严格前缀比较那样在第一次岔路后丢掉后续全部一致性。</p><p>选分数最高的参考交给冻结教师。教师同时读取学生当前历史和该参考，为学生已经生成的响应提供概率监督；学生仍只看自己的历史，训练使它在这些历史下的输出概率接近教师。只更新失败轨迹，成功轨迹不再被强行拉向另一种正确走法；没有成功参考时退回普通无参考监督。每条失败轨迹各自选择最匹配的成功参考。</p><p>部署仅使用训练好的学生，不再读取成功参考或调用教师。动作相同只是环境状态相容的代理：即使动作看起来相近，初始状态不同或中间操作留下不可逆的影响，也可能让两条路线无法相互参考。</p>
+<h4>实验结果</h4><ul><li>ALFWorld未见房间测试中，3B学生成功率从普通OPD的78.4%升至85.8%，7B从83.6%升至94.0%。参考选择方法总体更稳定，但不是每个任务类别都最高；例如3B的Examine为61.1%，低于普通OPD的77.8%。</li><li>航空客服任务中，4B学生单次平均成功率从51.2%升至65.4%，四次都成功的比例从26.7%升至38.3%。2B的四次全成功比例由30.0%升至41.7%，但单次与至少一次成功两个指标略低于BM25参考选择。航空测试仅20个任务，四次试验后再对三个随机种子取均值。</li><li>将同一航空训练检查点直接迁移到40个零售任务，4B单次成功率从56.2%升至69.4%，没有继续训练。把已成功轨迹也加入LCS蒸馏则各项指标下降；3B ALFWorld未见成功率从失败专训的85.8%降到72.4%，说明学习对象的选择同样重要。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>适合能保存工具动作、重放环境并获得成功判定的Agent蒸馏团队。优先比较参考与当前轨迹是否相容，而不是仅按教师回答长度或文字相似度选示范。</li><li>工程推断：只有API文本轨迹还不足以直接复现本文OPD，训练还需要教师在学生历史与参考条件下为学生响应打概率分；可以先把LCS筛选用于示范质量分析，再验证接口是否提供所需监督。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>动作序列相似不保证隐藏环境状态相同；不可逆副作用、不同初始状态或随机工具返回会削弱相容性代理。</li><li>普通OPD主对照更新所有轨迹，参考方法只更新失败轨迹；收益包含参考选择和更新范围两项变化，需结合失败专训消融理解。</li><li>只测试ALFWorld和模拟客服，航空训练仅30个任务、测试20个；论文未报告同质量算力节约，离线收集参考和在线教师评分均需成本。</li></ul></article><article class="paper" id="paper-2611.18533" data-search="ModHarness-RL: Recasting Harnesses as Learnable and Evolving Programs for Agentic RL ModHarness-RL：边训练Agent，边改进压缩历史和纠错提示的程序 LinkedIn LinkedIn Agent训练 上下文压缩 执行框架">
+<div class="paper-meta"><span class="pill">LinkedIn</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>ModHarness-RL：边训练Agent，边改进压缩历史和纠错提示的程序</h3><a class="original" href="https://arxiv.org/abs/2611.18533v1" target="_blank" rel="noopener noreferrer">ModHarness-RL: Recasting Harnesses as Learnable and Evolving Programs for Agentic RL ↗</a>
+
+<p class="muted">多位作者官方署名LinkedIn，论文注明相关工作在LinkedIn实习期间完成。 · 论文更新于 2026-11-13（UTC）</p><p class="reason">适合工具输出结构稳定、错误能写成明确检测规则的Agent训练。先保存结构化交互，再分别检验“留下什么上下文”和“何时提醒”，不要只看最终长提示是否更完整。</p>
+<h4>研究问题</h4><p>Agent强化学习常在一套固定提示和上下文管理规则下训练。训练早期反复犯的错误，后期可能已自行学会；一直追加相同提醒可能变成噪声。另一方面，大量工具输出挤占上下文，在线调用强模型总结又增加成本。需要同时调整Agent能力和它实际看到的信息。</p><h4>核心方法</h4><p>系统记录每轮的简短推理、工具名称与参数、返回内容，保留完整原始状态。一个压缩程序据此重排和截取要展示的历史，另一个程序检查重复调用等可识别条件，满足时追加短提示。被压缩掉的内容仍在原始记录里，后续构建上下文时可以再次使用；两种程序执行均不调用模型。</p><p>先让外部大模型读取基础策略轨迹，生成多个压缩程序，检查能否执行、是否删掉关键信息，并在预先留出、不用于更新模型的训练任务上选一个。这个压缩程序随后固定，保持策略训练时的上下文处理稳定。Agent模型参数按GRPO更新；每隔若干步，大模型从新轨迹提出纠错触发程序，再到全部历史轨迹上运行，检查错误是在下降、持续还是增加。只有持续问题值得安装纠错提示。</p><p>裁判先筛选触发器，再把拟安装提示作为一组，在相同当前策略、工具和上下文预算下验证；优于已有规则才更新。训练输出是模型和最终执行程序的组合，部署两者一起运行；外部大模型负责训练期间的程序生成和判断，其文字不是学生的逐词监督目标。这与直接蒸馏外部模型的推理文本有不同的更新机制。</p>
+<h4>实验结果</h4><ul><li>CodeSearch要求找出修复涉及的文件、模块和实体，以三者F1平均评分，未实际修复代码。上下文受限的8B学生从固定执行框架的0.333升至0.412，相对提高24%；充足上下文从0.403升至0.460，相对提高14%。两种模型和两种预算四个设置均超过固定框架。</li><li>压缩不应总随训练重写：4B、充足上下文设置，持续演化压缩程序得0.360，固定压缩并演化纠错的完整方法为0.424；8B受限设置分别为0.279与0.412。保持输入表示稳定可能有用，但这是给定任务和程序搜索方式下的消融证据。</li><li>相比每次用GPT-5-mini压缩历史，确定性程序的模型调用与词元开销估计约低两个数量级；但四个设置中只在两个得分更高，另两个最多低约5%。这些成本含估算与缩放项。重复回放计算中，真正需要重新预填充的词元在四个配置中有三个下降，最大35%，不等于全部请求时延或整个训练预算下降35%。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>适合工具输出结构稳定、错误能写成明确检测规则的Agent训练。先保存结构化交互，再分别检验“留下什么上下文”和“何时提醒”，不要只看最终长提示是否更完整。</li><li>工程推断：把候选规则回放到历史轨迹，区分正在自行消失的问题与持续问题，再决定是否添加提示；规则加入后仍应重新跑独立任务，历史回放本身不能证明策略会改善。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>完整方法和所有第三方对照只在CodeSearch深入比较；ALFWorld与BIRD SQL主要检验单个程序，不能据此宣称完整流程在三领域均领先。</li><li>误差条来自同一训练检查点的重复评测，不等于多个独立训练实验；程序晋升使用较小留出集合，仍可能接受略差的程序。</li><li>程序生成依赖专有GPT-5-mini，所有方法训练200步、单节点八张H100；程序执行省调用不能推出完整训练成本低。</li><li>确定性触发器更适合结构化可验证操作，对开放对话中难用规则表达的语义错误，适用性有限。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>今日专题</h2><div class="topic"><h3>把大模型的过程迁移到小模型：先保存能检查的判断依据</h3><p>如果手里已有API调用轨迹，第一步是把过程整理成可复用的记录：当时能看到什么、调用了哪个工具、输入参数是什么、工具返回了什么，以及最后是否完成任务。保留失败过程同样重要；动作序列对齐研究正是根据学生已经做过的操作，挑选更适合它的成功参考，而不是随意挑一份成功答案。动作接近仍可能掩盖环境状态差异，不能只凭文本相似就认定两条路线等价。</p><p>接着确认希望小模型学会哪件事。AntEmbed 学习的是检索向量和候选相似程度，CURATOR 学习的是哪些原文支持回答；ModHarness-RL 的外部模型则生成上下文处理程序，学生还要在环境里接受奖励训练。这些方法不能都概括成“把长推理文本喂给小模型”。如果只有文本轨迹，可以先建立监督训练对照；要复现本文的在策略概率蒸馏，还需要教师在学生走到的历史上为学生响应提供概率。</p><p>最后，把是否学会和是否划算分开验证。可以在独立任务上检查成功率、换一种输入后的稳定性、错误类型、上下文长度与实际调用成本。RecMem 的热缓存预测、AntEmbed 的直接查询、确定性程序的执行都可能较便宜，但前期建状态、建索引或生成程序仍有开销。上述试验安排属于工程推断；本期论文没有直接验证一套能把任意API任务迁移到1.7B模型的通用方案。</p><div class="sources"><a href="#paper-2611.13135">动作序列对齐蒸馏：给失败轨迹选一个走得相近的成功参考</a> · <a href="#paper-2611.16405">AntEmbed：让带推理和不带推理的查询共用一个检索向量空间</a> · <a href="#paper-2611.16366">CURATOR：一次共同评估多段证据，再按上下文预算选取原文</a> · <a href="#paper-2611.18533">ModHarness-RL：边训练Agent，边改进压缩历史和纠错提示的程序</a> · <a href="#paper-2611.17921">RecMem：把旧行为压进固定记忆，让长历史推荐不用每次重读全部记录</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
