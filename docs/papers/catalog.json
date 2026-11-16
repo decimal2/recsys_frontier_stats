@@ -220,6 +220,54 @@
       "source_sha256": "963b9ad957bef6f588e362255b75c5abf23ab45f2ff3316107256842fe1a5fcc"
     },
     {
+      "arxiv_id": "2610.14625",
+      "version": "v1",
+      "short_name": "RSI Two Perspectives",
+      "title_en": "From Existing Methods to New Research Ideas: Two Perspectives on Recursive Self-Improvement",
+      "title_zh": "从现有方法到研究新思路：递归自我改进的两个视角",
+      "companies": [
+        "PrismShadow"
+      ],
+      "topics": [
+        "递归自我改进",
+        "智能体",
+        "综述",
+        "持续学习"
+      ],
+      "collection": "RL_Training",
+      "arxiv_url": "https://arxiv.org/abs/2610.14625v1",
+      "published_date": "2026-10-10",
+      "published_date_source": "https://arxiv.org/abs/2610.14625",
+      "url": "papers/2610.14625/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 96603,
+        "sections": 41,
+        "figures": 5,
+        "tables": 4,
+        "table_cells": 1036,
+        "mathml": 63,
+        "graphics": 5,
+        "references": 169,
+        "warnings": [
+          "Warning:expected:<number> Missing number (Dimension), treated as zero. at framework.tex; line 20 col 0",
+          "Warning:not_parsed:UNKNOWN>RELOP MathParser failed to match rule 'Anything'",
+          "Warning:not_parsed:UNKNOWN>RELOP MathParser failed to match rule 'Anything' at String; line 0 col 0",
+          "Warning:not_parsed:PUNCT.UNKNOWN.POSTSUBSCRIPT>CLOSE MathParser failed to match rule 'Anything'",
+          "Warning:not_parsed:PUNCT.UNKNOWN.POSTSUBSCRIPT>CLOSE MathParser failed to match rule 'Anything' at String; line 0 col 0"
+        ],
+        "translation": {
+          "language": "zh-CN",
+          "source_version": "2610.14625v1",
+          "translated_nodes": 2194,
+          "translator": "decimal2",
+          "scope": "Full main text and literature catalogue appendix"
+        }
+      },
+      "source_sha256": "d1018213538488471e9db251335b4badc382e29beefe36eb19f719bf0e94b1e5"
+    },
+    {
       "short_name": "ReplaySSM",
       "arxiv_id": "2610.13778",
       "version": "v1",
@@ -1104,7 +1152,7 @@
           "original_executable_listings_preserved": 2
         }
       },
-      "source_sha256": "dd1133a0cac4937a583ace78bc2b412f16f85173f3e5be4360696d09a7ece473"
+      "source_sha256": "bf342e78fdad7c38a6f33989000cf3fac790113f74130b6382b115f7cf899a4a"
     },
     {
       "short_name": "SequenceO1",

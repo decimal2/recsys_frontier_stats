@@ -1012,6 +1012,27 @@
       "collection": "RL_Training",
       "published_date": "2026-09-14",
       "published_date_source": "https://arxiv.org/abs/2609.14858"
+    },
+    {
+      "arxiv_id": "2610.14625",
+      "version": "v1",
+      "short_name": "RSI Two Perspectives",
+      "title_en": "From Existing Methods to New Research Ideas: Two Perspectives on Recursive Self-Improvement",
+      "title_zh": "从现有方法到研究新思路：递归自我改进的两个视角",
+      "companies": [
+        "PrismShadow"
+      ],
+      "topics": [
+        "递归自我改进",
+        "智能体",
+        "综述",
+        "持续学习"
+      ],
+      "collection": "RL_Training",
+      "arxiv_url": "https://arxiv.org/abs/2610.14625v1",
+      "published_date": "2026-10-10",
+      "published_date_source": "https://arxiv.org/abs/2610.14625",
+      "html_snapshot": "docs/papers/2610.14625/index.html"
     }
   ]
 }
