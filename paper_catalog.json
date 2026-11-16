@@ -991,6 +991,27 @@
       "published_date_source": "https://arxiv.org/abs/2412.06464v3",
       "license": "CC BY 4.0",
       "license_url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "short_name": "Dream-RSI",
+      "arxiv_id": "2609.14858",
+      "version": "v2",
+      "title_zh": "Dream-RSI：通过不断演化的世界实现递归自我改进",
+      "title_en": "Dream-RSI: Recursive Self-Improvement through Evolving Worlds",
+      "companies": [
+        "Google"
+      ],
+      "topics": [
+        "智能体",
+        "递归自我改进",
+        "探索策略",
+        "离线优化"
+      ],
+      "arxiv_url": "https://arxiv.org/abs/2609.14858v2",
+      "html_snapshot": "docs/papers/2609.14858/index.html",
+      "collection": "RL_Training",
+      "published_date": "2026-09-14",
+      "published_date_source": "https://arxiv.org/abs/2609.14858"
     }
   ]
 }

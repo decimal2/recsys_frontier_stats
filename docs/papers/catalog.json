@@ -922,6 +922,191 @@
       "source_sha256": "422fb0d620c2402070d2d1a7b8e31c4e3793d2134ef93b9dca51107fd87d79da"
     },
     {
+      "short_name": "Dream-RSI",
+      "arxiv_id": "2609.14858",
+      "version": "v2",
+      "title_zh": "Dream-RSI：通过不断演化的世界实现递归自我改进",
+      "title_en": "Dream-RSI: Recursive Self-Improvement through Evolving Worlds",
+      "companies": [
+        "Google"
+      ],
+      "topics": [
+        "智能体",
+        "递归自我改进",
+        "探索策略",
+        "离线优化"
+      ],
+      "arxiv_url": "https://arxiv.org/abs/2609.14858v2",
+      "collection": "RL_Training",
+      "published_date": "2026-09-14",
+      "published_date_source": "https://arxiv.org/abs/2609.14858",
+      "url": "papers/2609.14858/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 113169,
+        "sections": 25,
+        "figures": 8,
+        "tables": 3,
+        "table_cells": 238,
+        "mathml": 232,
+        "graphics": 10,
+        "references": 56,
+        "warnings": [
+          "Warning:missing_file:fontawesome5 Can't find binding for package fontawesome5 at main.tex; line 17 col 11",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at intro_RSI.tex; line 20 col 1154",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at intro_RSI.tex; line 20 col 1409",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at intro_RSI.tex; line 20 col 1423",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at intro_RSI.tex; line 20 col 1495",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 18 col 203",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 18 col 220",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 18 col 314",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 18 col 331",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 34 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 34 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 34 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 34 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 34 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 34 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 34 col 0",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at experiments.tex; line 34 col 0",
+          "Warning:missing_file:compat.ltxml Can't find package compat.ltxml at String; line 0 col 0",
+          "Info:unexpected:sort&compress Unexpected option 'sort&compress' passed to natbib.sty at natbib.sty.ltxml; line 101",
+          "Info:unexpected:round Unexpected option 'round' passed to natbib.sty at natbib.sty.ltxml; line 101",
+          "Warning:missing_file:fontawesome5 Can't find package fontawesome5 at String; line 0 col 0"
+        ],
+        "source_compiled_figures": [
+          {
+            "source": "Figures/kernelbench_scaling_curves_add_paceevolve.tex",
+            "tikz_index": 0,
+            "source_sha256": "6c43aefdb7c1c2d6bd0b186662725dc9f762b30a40875bf0e0931f373d979c68",
+            "rendered_pdf": "Figures/kernelbench_scaling_curves_add_paceevolve-0.pdf",
+            "rendered_sha256": "9fd3111dfa4702a7d36ed7de8ec6cf82902849b174c4567fc24f8143978163ae",
+            "provenance": "Compiled original fixed-v2 TikZ using pdflatex -no-shell-escape; data and labels preserved",
+            "version": "2609.14858v2",
+            "layout_repair": "Original plot clip=true truncated annotations; use tiny font and a line break after fewer; data, coordinates and all label words/numbers preserved."
+          },
+          {
+            "source": "Figures/scaling_lasso.tex",
+            "tikz_index": 0,
+            "source_sha256": "30d31161d9ca5fc92f19a182f483d47c652ab1db23fcdc25c93f5ad18c2afb30",
+            "rendered_pdf": "Figures/scaling_lasso-0.pdf",
+            "rendered_sha256": "992158b4ab6e87bc0c9bd6892128fe442cbff944092587ff23cab0f0370918bf",
+            "provenance": "Compiled original fixed-v2 TikZ using pdflatex -no-shell-escape; data and labels preserved",
+            "version": "2609.14858v2"
+          },
+          {
+            "source": "Figures/scaling_harness_optimization.tex",
+            "tikz_index": 1,
+            "source_sha256": "355c0e671c540549013b3f47ad972620fe74346536fce2760ed2a0afee381ff4",
+            "rendered_pdf": "Figures/scaling_harness_optimization-1.pdf",
+            "rendered_sha256": "c5546f8a33b4400768c319cb8b6f17032a8650f48c24fa47c1ca5c5f4abab0bf",
+            "provenance": "Compiled original fixed-v2 TikZ using pdflatex -no-shell-escape; data and labels preserved",
+            "version": "2609.14858v2"
+          },
+          {
+            "source": "Figures/scaling_harness_optimization.tex",
+            "tikz_index": 0,
+            "source_sha256": "355c0e671c540549013b3f47ad972620fe74346536fce2760ed2a0afee381ff4",
+            "rendered_pdf": "Figures/scaling_harness_optimization-0.pdf",
+            "rendered_sha256": "0024ccb88a1080ef366989e31c67681f28b9985f9c17c5aefbff71d68e96d9e2",
+            "provenance": "Compiled original fixed-v2 TikZ using pdflatex -no-shell-escape; data and labels preserved",
+            "version": "2609.14858v2"
+          },
+          {
+            "source": "Figures/history_as_guidance_vs_replay_simulator.tex",
+            "tikz_index": 0,
+            "source_sha256": "ec02e58b0608fce377330606031481045164bc4fb274a6cb3a612cd8e43d278a",
+            "rendered_pdf": "Figures/history_as_guidance_vs_replay_simulator-0.pdf",
+            "rendered_sha256": "b5e25069f8acae3e31bdb8a37ad413be919c61ee79f7203c24c845777d680674",
+            "provenance": "Compiled original fixed-v2 TikZ using pdflatex -no-shell-escape; data and labels preserved",
+            "version": "2609.14858v2"
+          },
+          {
+            "source": "Figures/policy_analysis.tex",
+            "tikz_index": 1,
+            "source_sha256": "a00b55351213f177d2a0d4f8eaa5028893b1902869a7a1231e32d47efb7e3e84",
+            "rendered_pdf": "Figures/policy_analysis-1.pdf",
+            "rendered_sha256": "03d64060e117ee6cf0d2a6959a84ab9a4e047eda1b6a0dda64d366bf177589c1",
+            "provenance": "Compiled original fixed-v2 TikZ using pdflatex -no-shell-escape; data and labels preserved",
+            "version": "2609.14858v2"
+          },
+          {
+            "source": "Figures/policy_analysis.tex",
+            "tikz_index": 0,
+            "source_sha256": "a00b55351213f177d2a0d4f8eaa5028893b1902869a7a1231e32d47efb7e3e84",
+            "rendered_pdf": "Figures/policy_analysis-0.pdf",
+            "rendered_sha256": "f8b69adabed3965caa6c41d635c2237c283be8602b9ca591b3f6293da8c18fc7",
+            "provenance": "Compiled original fixed-v2 TikZ using pdflatex -no-shell-escape; data and labels preserved",
+            "version": "2609.14858v2"
+          },
+          {
+            "source": "Figures/pacevolve_evolve.tex",
+            "tikz_index": 0,
+            "source_sha256": "80ede5280873f5e24445d9442b78f2c5784bf734625c5886dc7e9e4816817f63",
+            "rendered_pdf": "Figures/pacevolve_evolve-0.pdf",
+            "rendered_sha256": "bb0232409d70e55a8d03c34f12cc839a9ad5b3cff956d35f16a0cd775ff41295",
+            "provenance": "Compiled original fixed-v2 TikZ using pdflatex -no-shell-escape; data and labels preserved",
+            "version": "2609.14858v2"
+          }
+        ],
+        "render_repairs": [
+          {
+            "type": "source_tikz_annotation_layout",
+            "figure": "Figure3 Kernel engineering",
+            "source": "arxiv2609.14858v2 source Figures/kernelbench_scaling_curves_add_paceevolve.tex",
+            "source_sha256": "6c43aefdb7c1c2d6bd0b186662725dc9f762b30a40875bf0e0931f373d979c68",
+            "reason": "Original plot clip=true truncated annotations; use tiny font and a line break after fewer; data, coordinates and all label words/numbers preserved.",
+            "version": "v2",
+            "page": 1,
+            "crop_bounds": null,
+            "rendered_pdf_sha256": "9fd3111dfa4702a7d36ed7de8ec6cf82902849b174c4567fc24f8143978163ae",
+            "previous_rendered_pdf_sha256": "9a2465afd3ee79f6d28e9899872d774fe69c793b287975b160a61abc268a51d5",
+            "asset": "assets/af9abb17bcbf13cd.svg",
+            "asset_sha256": "8eed47635345e45f86a290d5437e7bd099e86f14308dbbdb746e4383f2cfae19"
+          }
+        ],
+        "literal_listings": [
+          {
+            "source": "appendix/prompt/exploration_prompt.txt",
+            "sha256": "e1e07c2d98f2143cce1f064449423ebab99a7dd416995b96b6a3fbbd2965dfb3",
+            "chars": 2188,
+            "line_count": 28,
+            "repair": "Restore exact literal source to remove LaTeXML listings typographic quote conversion and recover original whitespace; retain outer caption and anchor."
+          },
+          {
+            "source": "appendix/prompt/replay_learning_prompt.txt",
+            "sha256": "fcbad7aad4e3d9e7781b432495e4976376284685187fd10864edd0de7580e685",
+            "chars": 14798,
+            "line_count": 273,
+            "repair": "Restore exact literal source to remove LaTeXML listings typographic quote conversion and recover original whitespace; retain outer caption and anchor."
+          },
+          {
+            "source": "appendix/discovered_programs/lasso/code.cpp",
+            "sha256": "584c8160207858a59eb58e204cb7a21d6c0a85d626cc02cee51299746579205e",
+            "chars": 41794,
+            "line_count": 847,
+            "repair": "Restore exact literal source to remove LaTeXML listings typographic quote conversion and recover original whitespace; retain outer caption and anchor."
+          },
+          {
+            "source": "appendix/discovered_programs/kernel/convdiv/code.trition",
+            "sha256": "30206b44d77e16729b4032d283d295f1ae38569f0aa2cd89338f2a93d1d700d6",
+            "chars": 7496,
+            "line_count": 227,
+            "repair": "Restore exact literal source to remove LaTeXML listings typographic quote conversion and recover original whitespace; retain outer caption and anchor."
+          }
+        ],
+        "translation": {
+          "language": "zh-CN",
+          "source_version": "2609.14858v2",
+          "translated_nodes": 874,
+          "complete_chinese_prompt_counterparts": 2,
+          "original_executable_listings_preserved": 2
+        }
+      },
+      "source_sha256": "dd1133a0cac4937a583ace78bc2b412f16f85173f3e5be4360696d09a7ece473"
+    },
+    {
       "short_name": "SequenceO1",
       "arxiv_id": "2609.08443",
       "version": "v1",
