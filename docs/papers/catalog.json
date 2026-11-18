@@ -992,7 +992,7 @@
       "stats": {
         "format": "arxiv_tex",
         "converter": "LaTeXML",
-        "text_chars": 73760,
+        "text_chars": 73800,
         "sections": 22,
         "figures": 49,
         "tables": 16,
@@ -1018,13 +1018,15 @@
               "type": "table_symbol_encoding",
               "location": "Human Reviewers Evaluation table",
               "source": "tables/human_eval.tex lines 10-15",
-              "reason": "LaTeXML rendered text-mode < and > as ¡ and ¿; translated cells state the comparison explicitly, e.g. 人类评分低于 ScientistTwo",
+              "reason": "LaTeXML rendered text-mode < and > as ¡ and ¿; translated cells express the reviewers’ pairwise preference.",
               "version": "v1"
             }
-          ]
+          ],
+          "license": "CC BY 4.0",
+          "license_source": "https://creativecommons.org/licenses/by/4.0/"
         }
       },
-      "source_sha256": "aab392e57e57556514ab635f5c9914bb4fda1556e7e2b0aeea85aa1ed94cbaff"
+      "source_sha256": "8dc6da23e8737620f816f0065469699e16388c11d23fde1db501fcc5fc8c92ee"
     },
     {
       "short_name": "Dream-RSI",
