@@ -1,6 +1,27 @@
 {
   "papers": [
     {
+      "short_name": "ScientistTwo",
+      "arxiv_id": "2609.19644",
+      "version": "v1",
+      "title_zh": "ScientistTwo：以自主 AI 开拓人类知识前沿",
+      "title_en": "ScientistTwo: Pioneering the Human Knowledge Frontier with Autonomous AI",
+      "companies": [
+        "Google"
+      ],
+      "topics": [
+        "AI 科学家",
+        "自主科研",
+        "多智能体",
+        "科学发现"
+      ],
+      "collection": "RL_Training",
+      "arxiv_url": "https://arxiv.org/abs/2609.19644v1",
+      "html_snapshot": "docs/papers/2609.19644/index.html",
+      "published_date": "2026-09-17",
+      "published_date_source": "https://arxiv.org/abs/2609.19644"
+    },
+    {
       "short_name": "OneTrans",
       "arxiv_id": "2510.26104",
       "version": "v3",

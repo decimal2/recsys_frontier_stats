@@ -93,6 +93,10 @@ const cases = [
   {id:'2607.24653', target:'S5.SS1.SSS2.p3.p2', name:'kimi-k3-kcp-diagram'},
   {id:'2607.24653', target:'S6.T3', name:'kimi-k3-internal-evaluation'},
   {id:'2607.24653', target:'A6.F16', name:'kimi-k3-chat-template'},
+  {id:'2609.19644', target:'S4.T2', name:'scientisttwo-agent-comparison'},
+  {id:'2609.19644', target:'S3.F4.g1', name:'scientisttwo-seed-ideas', widths:[390]},
+  {id:'2609.19644', target:'A1.T12', name:'scientisttwo-benchmark-table'},
+  {id:'2609.19644', target:'S3.E1', name:'scientisttwo-pipeline-equation'},
 ];
 let browser, server;
 

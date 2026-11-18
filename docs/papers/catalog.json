@@ -970,6 +970,63 @@
       "source_sha256": "422fb0d620c2402070d2d1a7b8e31c4e3793d2134ef93b9dca51107fd87d79da"
     },
     {
+      "short_name": "ScientistTwo",
+      "arxiv_id": "2609.19644",
+      "version": "v1",
+      "title_zh": "ScientistTwo：以自主 AI 开拓人类知识前沿",
+      "title_en": "ScientistTwo: Pioneering the Human Knowledge Frontier with Autonomous AI",
+      "companies": [
+        "Google"
+      ],
+      "topics": [
+        "AI 科学家",
+        "自主科研",
+        "多智能体",
+        "科学发现"
+      ],
+      "collection": "RL_Training",
+      "arxiv_url": "https://arxiv.org/abs/2609.19644v1",
+      "published_date": "2026-09-17",
+      "published_date_source": "https://arxiv.org/abs/2609.19644",
+      "url": "papers/2609.19644/index.html",
+      "stats": {
+        "format": "arxiv_tex",
+        "converter": "LaTeXML",
+        "text_chars": 73760,
+        "sections": 22,
+        "figures": 49,
+        "tables": 16,
+        "table_cells": 668,
+        "mathml": 314,
+        "graphics": 63,
+        "references": 140,
+        "warnings": [
+          "Warning:not_parsed:MULOP.ADDOP>NUMBER MathParser failed to match rule 'Anything' at appendix.tex; line 247 col 81",
+          "Warning:not_parsed:NUMBER>MULOP MathParser failed to match rule 'Anything' at appendix.tex; line 277 col 12",
+          "Warning:not_parsed:MULOP.ADDOP>NUMBER MathParser failed to match rule 'Anything' at appendix.tex; line 287 col 70",
+          "Warning:not_parsed:MULOP.ADDOP>NUMBER MathParser failed to match rule 'Anything' at appendix.tex; line 288 col 21",
+          "Info:unexpected:sort&compress Unexpected option 'sort&compress' passed to natbib.sty at natbib.sty.ltxml; line 101",
+          "Info:unexpected:round Unexpected option 'round' passed to natbib.sty at natbib.sty.ltxml; line 101"
+        ],
+        "translation": {
+          "language": "zh-CN",
+          "source_version": "2609.19644v1",
+          "translated_nodes": 757,
+          "method": "block templates with protected MathML/citations/code; parallel section translation",
+          "text_repairs": [
+            {
+              "type": "table_symbol_encoding",
+              "location": "Human Reviewers Evaluation table",
+              "source": "tables/human_eval.tex lines 10-15",
+              "reason": "LaTeXML rendered text-mode < and > as ¡ and ¿; translated cells state the comparison explicitly, e.g. 人类评分低于 ScientistTwo",
+              "version": "v1"
+            }
+          ]
+        }
+      },
+      "source_sha256": "aab392e57e57556514ab635f5c9914bb4fda1556e7e2b0aeea85aa1ed94cbaff"
+    },
+    {
       "short_name": "Dream-RSI",
       "arxiv_id": "2609.14858",
       "version": "v2",
