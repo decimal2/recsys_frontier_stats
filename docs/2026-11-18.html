@@ -1,0 +1,189 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>推荐研究日报 · 2026-11-18</title>
+<style>
+:root{
+  --bg:#f7f7f5;--surface:#ffffff;--ink:#1f2421;--muted:#6b726e;
+  --line:#e3e6e2;--accent:#0f766e;--accent-soft:#e5f3f0;--chip:#eef1ee;
+  --notice-bg:#fdf6e3;--notice-line:#e7d9b8;--topic-bg:#173a35;--topic-ink:#eaf3f0;--topic-link:#7fd4c8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141615;--surface:#1c1f1d;--ink:#e8eae7;--muted:#9aa39d;
+    --line:#2e3330;--accent:#5ec4b8;--accent-soft:#16302d;--chip:#262a28;
+    --notice-bg:#2e2a1c;--notice-line:#4a4130;--topic-bg:#122b27;--topic-ink:#e2efeb;--topic-link:#7fd4c8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{max-width:1000px;margin:0 auto;padding:28px 24px 18px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px}
+.brand{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.12em}
+header span{font-size:12.5px;color:var(--muted)}
+.site-nav{margin:0;padding:0;border:0;gap:8px 22px;font-size:14px}
+.site-nav a{padding:4px 0;color:var(--muted)}
+.site-nav a[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+main{max-width:1000px;margin:0 auto;padding:8px 24px 40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;line-height:1.3;letter-spacing:-.01em;margin:6px 0 14px}
+h2{display:flex;align-items:baseline;gap:14px;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+h2 .no{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.22em}
+h3{font-size:17.5px;line-height:1.5;margin:0 0 8px}
+h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+p{margin:8px 0}
+.lede{color:var(--muted);font-size:15.5px}
+.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;flex-wrap:wrap;gap:40px;margin:22px 0;padding:16px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{font-size:12.5px;color:var(--muted)}
+.metrics strong{display:block;font-size:26px;line-height:1.2;color:var(--ink)}
+.notice{margin:16px 0;padding:12px 16px;font-size:14px;background:var(--notice-bg);
+  border:1px solid var(--notice-line);border-radius:10px}
+nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:26px 0 0;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px}
+section{margin-top:44px;scroll-margin-top:16px}
+.trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.trend p{font-size:14.5px}
+.sources{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.briefs{list-style:none;margin:0;padding:0;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px}
+.briefs li{padding:14px 20px;border-top:1px solid var(--line)}
+.briefs li:first-child{border-top:none}
+.briefs li a{font-weight:600;color:var(--ink)}
+.briefs li a:hover{color:var(--accent);text-decoration:none}
+.briefs li span{display:block;margin-top:2px;font-size:13.5px;color:var(--muted)}
+input{width:100%;margin:0 0 18px;padding:12px 16px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 1px 2px rgb(0 0 0/.03);padding:26px 30px;margin:20px 0}
+.paper-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;
+  font-size:12.5px;color:var(--muted)}
+.paper-meta>span{color:var(--accent);letter-spacing:.08em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:600}
+.original{display:inline-block;margin:2px 0 4px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.reason{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14.5px}
+.paper ul{margin:6px 0;padding-left:22px}
+li{margin:5px 0}
+.insight{margin:18px 0;padding:14px 18px;background:var(--chip);border-radius:10px}
+.insight h4{margin-top:4px;color:var(--accent)}
+.insight small{margin-left:6px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.topic{padding:24px 26px;border-radius:12px;background:var(--topic-bg);color:var(--topic-ink)}
+.topic a{color:var(--topic-link)}
+.archive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:20px}
+.edition{display:block;padding:20px 22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink)}
+.edition:hover{border-color:var(--accent);text-decoration:none}
+.edition h2{margin:4px 0 6px;font-size:18px}
+.edition p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0}
+.section-heading>a{font-size:13.5px;white-space:nowrap}
+.library-preview{display:grid;gap:12px}
+.library-preview .edition h3{margin:4px 0 6px}
+.library-preview .edition .original{display:block;font-size:12.5px}
+.reading-link{display:inline-block;font-size:13px;margin:4px 0 8px;font-weight:600}
+.empty{margin-top:20px;padding:36px 30px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:12px}
+.steps{padding:14px 0;color:var(--accent);font-size:14px;font-weight:600}
+[hidden]{display:none!important}
+@media (max-width:640px){
+  header{padding:22px 18px 14px}
+  main{padding:4px 18px 32px}
+  h1{font-size:25px}
+  .metrics{gap:24px}
+  .paper{padding:20px 18px}
+  .topic{padding:20px}
+}
+</style></head><body class="">
+<header><a class="brand" href="index.html">REC / PAPER LAB</a><nav class="site-nav" aria-label="主导航"><a href="daily/index.html" aria-current="page">日报</a><a href="papers/index.html">论文阅读</a></nav></header>
+<main><div class="eyebrow">推荐系统 · 相关检索 · LLM</div><h1>推荐研究日报 · 2026-11-18</h1><div class="metrics"><div><strong>10</strong>全文解读</div><div><strong>7</strong>家公司</div><div><strong>0</strong>待重试</div></div><p class="muted">收录范围为北京时间 2026 年 11 月 10–18 日首次提交的论文。</p><nav><a href="#trends">样本观察</a><a href="#briefs">本期速览</a><a href="#digest">全文解读</a><a href="#topic">本期专题</a></nav><section id="trends"><h2><span class="no">01</span>本期样本观察</h2><div class="trends"><article class="trend"><h3>提升生成式推荐，先辨认质量损失发生在哪一步</h3><p>CONCORD-Rec 针对的是部分编号已经生成后，哪种历史模态还能帮助缩小目标范围。GainReason 在文字推理阶段给每句分配预测贡献，GBPO 则关心候选得分如何变成稳定的 token 更新。CG2R 直接在商品打分时纳入簇先验。几篇论文的对照提示，模态冲突、推理无用和训练不稳定需要不同的诊断。各自的离线指标涉及不同目录和候选协议，增益大小不宜横比。</p><div class="sources"><a href="#paper-2611.23710">CONCORD-Rec：用目录约束衡量多模态线索该信多少</a> · <a href="#paper-2611.21441">GainReason：用下一件商品预测检验每句推荐推理</a> · <a href="#paper-2611.19742">GBPO：给生成式推荐的强化学习更新加上梯度边界</a> · <a href="#paper-2611.22163">CG2R：商品簇先验如何参与下一件商品打分</a></div></article><article class="trend"><h3>推理提速同时取决于复用内容和请求形态</h3><p>KVUse 避免跨请求反复编码同一画像或商品，靠独立写入器解决片段拼接后的上下文偏差。华为的 OpenOneRec 实验减少一次请求内部的共享前缀读取和主机同步。TokenFormer V2 在排序骨干内部缩小注意力交互范围，同时保留逐条行为读出。工程评估可按请求重复率、历史长度和束宽分组，再分别看吞吐、尾延迟和缓存成本。</p><div class="sources"><a href="#paper-2611.21920">KVUse：把用户画像的注意力缓存直接复用于排序</a> · <a href="#paper-2611.23339">OpenOneRec 推理：在昇腾上消除宽束搜索的重复读写</a> · <a href="#paper-2611.19074">TokenFormer V2：长行为序列分组计算，预测时仍读逐条行为</a></div></article><article class="trend"><h3>线上收益需要结合分流方式和覆盖范围解释</h3><p>IntentFlow 的对照是小红书图文搜索中的用户级实验。TokenFormer V2 在视频号广告下比较排序骨干，COTTI 比较飞猪实时流量中模型替换的结果。CLEAR 的当天兴趣响应率是部署观测。各篇的点击、转化、GMV 与兴趣覆盖回答不同问题。COTTI 的新颖品类召回下降尤其说明，整体在线收益可以和局部体验退让同时出现。</p><div class="sources"><a href="#paper-2611.20448">IntentFlow：小红书图文搜索先识别用户想找什么</a> · <a href="#paper-2611.19074">TokenFormer V2：长行为序列分组计算，预测时仍读逐条行为</a> · <a href="#paper-2611.22597">COTTI：让转化率模型适应促销前后的人群变化</a> · <a href="#paper-2611.19110">CLEAR：用户改了兴趣，推荐系统如何真正响应</a></div></article></div></section><section id="briefs"><h2><span class="no">02</span>本期速览</h2><ol class="briefs"><li><a href="#paper-2611.23710">CONCORD-Rec：用目录约束衡量多模态线索该信多少</a><span>在填补商品语义编号的每一步，模型学习判断历史图文等线索能否缩小正确候选范围。</span></li><li><a href="#paper-2611.22597">COTTI：让转化率模型适应促销前后的人群变化</a><span>飞猪在训练中对齐平日和促销的行为表示，在服务时按活动时间与预测波动调整转化分数。</span></li><li><a href="#paper-2611.23339">OpenOneRec 推理：在昇腾上消除宽束搜索的重复读写</a><span>把多条候选路径放在同一条张量序列上共享前缀缓存，再把三步生成合成一次编译执行。</span></li><li><a href="#paper-2611.22163">CG2R：商品簇先验如何参与下一件商品打分</a><span>历史序列先预测下一件商品向量，再用用户对语义簇的偏好微调分数，保留全目录候选。</span></li><li><a href="#paper-2611.21920">KVUse：把用户画像的注意力缓存直接复用于排序</a><span>只训练写缓存的适配器，排序仍用冻结大模型，避免给每个候选反复编码相同的画像。</span></li><li><a href="#paper-2611.21441">GainReason：用下一件商品预测检验每句推荐推理</a><span>奖励模型推理中让正确商品更可能的句子，并训练生成器真正利用这段推理。</span></li><li><a href="#paper-2611.20448">IntentFlow：小红书图文搜索先识别用户想找什么</a><span>同时识别图片与文字背后的搜索目的，再用同一套意图标准训练召回与重排。</span></li><li><a href="#paper-2611.19742">GBPO：给生成式推荐的强化学习更新加上梯度边界</a><span>按候选得分的相对高低奖励或压低商品编号，把每次更新限制在类似二元交叉熵的范围内。</span></li><li><a href="#paper-2611.19110">CLEAR：用户改了兴趣，推荐系统如何真正响应</a><span>把用户看得懂的兴趣条目接到召回、排序和曝光控制，让明确修改能影响后续推荐。</span></li><li><a href="#paper-2611.19074">TokenFormer V2：长行为序列分组计算，预测时仍读逐条行为</a><span>用局部注意力和少量跨组通信压低开销，保留预测头对原始事件粒度的访问。</span></li></ol></section><section id="digest"><h2><span class="no">03</span>逐篇解读</h2><input id="search" type="search" placeholder="筛选标题、机构、标签…" aria-label="筛选论文"><article class="paper" id="paper-2611.23710" data-search="CONCORD-Rec: Catalog-Conditioned Modality Utility for Semantic-ID Diffusion Recommendation CONCORD-Rec：用目录约束衡量多模态线索该信多少 Tencent Tencent 多模态推荐 扩散生成 语义 ID">
+<div class="paper-meta"><span class="pill">Tencent</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>CONCORD-Rec：用目录约束衡量多模态线索该信多少</h3><a class="original" href="https://arxiv.org/abs/2611.23710v1" target="_blank" rel="noopener noreferrer">CONCORD-Rec: Catalog-Conditioned Modality Utility for Semantic-ID Diffusion Recommendation ↗</a>
+
+<p class="muted">Haopeng Jin、Jinwen Luo 的机构标为 Tencent。 · 论文更新于 2026-11-18（UTC）</p><p class="reason">适合多模态召回团队关注如何构造对照，区分门控收益和多花推理算力的收益。</p>
+<h4>研究问题</h4><p>用户历史中的图片、文字、音频或视频可能缺失或互相冲突。给所有历史模态固定权重，会让错误的内容线索把下一件商品推向错误的编号，特别是在模型只填了一部分编号、剩余候选还很多时。</p><h4>核心方法</h4><p>先用历史商品编号和时间形成行为表示，另用冻结的编码器提取各模态特征。训练时把用户分折，在其他折训练教师，再对当前折的同一个部分遮盖状态，分别保留与移除某种线索，比较教师分给目标商品所在编号分区的概率损失。损失差说明这条线索在眼下能帮多少。</p><p>学生用这些差值学习按编号位置分配模态权重，内容不可信时可退回行为表示。推理不运行教师。每填一组编号，就用倒排索引保留仍符合这些编号的真实商品，再从可行商品中选择下一组编号。</p>
+<h4>实验结果</h4><ul><li>在论文的匹配对照中，干净、缺失和冲突条件下的 NDCG@20 分别绝对增加 0.002664、0.004662 和 0.007992。冲突时的提升更大，支持按条件选择模态。</li><li>四步模型的 NDCG@20 为 0.068798，P95 为 16.25 ms。均匀融合的十六步对照为 0.067000、51.00 ms。同为四步时，均匀融合的 P95 是 15.00 ms，说明门控本身增加计算。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>若线索冲突来自旧商品图或错配内容，可先用同一批目标和候选同时构造干净、缺失与冲突版本，区分门控收益和增加推理步数的收益。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>实验为离线评估，冲突由受控干预生成；延迟的硬件标识和查询清单在论文中未给出。</li></ul></article><article class="paper" id="paper-2611.22597" data-search="COTTI: Contrastive Training and Time-Aware Inference for Robust Industrial Recommendation under Promotional Drift COTTI：让转化率模型适应促销前后的人群变化 Alibaba Alibaba 转化率排序 促销漂移 线上 A/B">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★★</span></div>
+<h3>COTTI：让转化率模型适应促销前后的人群变化</h3><a class="original" href="https://arxiv.org/abs/2611.22597v1" target="_blank" rel="noopener noreferrer">COTTI: Contrastive Training and Time-Aware Inference for Robust Industrial Recommendation under Promotional Drift ↗</a>
+
+<p class="muted">Maolei Huang 的机构标为 Alibaba Group, Beijing, China。 · 论文更新于 2026-11-17（UTC）</p><p class="reason">适合负责活动期转化排序的团队，重点看线上收益、新颖品类召回和服务开销的取舍。</p>
+<h4>研究问题</h4><p>机酒推荐的促销会同时改变折扣、流量来源和下单时点。平日训练得到的转化规律到大促会突变，简单沿用以往促销的模型又可能过度偏向过去常买的品类。</p><h4>核心方法</h4><p>训练时，模型从平日和活动两个视角编码用户，把同一用户的两种表示拉近。监督损失再按当前行为与历史行为的一致性分配样本权重，改变不同样本对模型的影响。</p><p>请求到来后，模型按预先公布的活动时间和历史活动窗口判断自己处于哪个阶段，再用多次预测的波动调整分数。这个时间信号提前可得，在测试时不使用活动当天才会知道的流量峰值。</p>
+<h4>实验结果</h4><ul><li>2025 年 12 月 1–10 日，试验使用 25% 的实时流量。以 HDR 为对照，加权平均 CVR 增加 3.14%，千次曝光收入增加 2.68%。单看在线分数调整的开销，P99 增加 2.2 ms。</li><li>完整模型比移除历史一致性权重的版本在熟悉品类中多找回购买项，但在新颖品类的购买项召回减少 0.0008，虽然该组 AUC 增加 0.0028。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>大促模型上线前可把新颖品类的购买项召回与整体转化一起看，并把在线分数调整的 P99 单独纳入预算。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>论文未披露随机化单位、各组样本量和聚合权重。全量上线后的走势图没有并行对照。</li></ul></article><article class="paper" id="paper-2611.23339" data-search="Optimize the Cob, Then the Kernel: Optimizing Beam Search for Generative Recommendation Inference OpenOneRec 推理：在昇腾上消除宽束搜索的重复读写 Huawei Huawei 生成式推荐 推理服务 束搜索">
+<div class="paper-meta"><span class="pill">Huawei</span><span>阅读优先级 ★★★★★</span></div>
+<h3>OpenOneRec 推理：在昇腾上消除宽束搜索的重复读写</h3><a class="original" href="https://arxiv.org/abs/2611.23339v1" target="_blank" rel="noopener noreferrer">Optimize the Cob, Then the Kernel: Optimizing Beam Search for Generative Recommendation Inference ↗</a>
+
+<p class="muted">Shing Wai Pun、Kai Wu 等共同署名 Huawei Technologies Co., Ltd.。 · 论文更新于 2026-11-17（UTC）</p><p class="reason">适合推理工程师对照主机同步、注意力内核和端到端耗时的分解。</p>
+<h4>研究问题</h4><p>生成式推荐常有很长的用户历史，却只生成三段商品编号。普通 vLLM 把宽束搜索的每个分支当独立批项，重复读相同历史的注意力缓存。每一步还要在主机和加速卡之间交接候选路径。</p><h4>核心方法</h4><p>把各步扩展出来的分支接到同一个历史前缀后面，用树形注意力遮罩让每条分支只看自己的祖先。预生成可复用的遮罩部分，并按已知的输入长度、束宽和输出长度提前分配缓存。</p><p>再把三步展开成固定执行图，让设备端连续计算和选优，减少每步回主机的开销。图编译进一步融合算子，可选的编号词表限制只计算合法候选编号。</p>
+<h4>实验结果</h4><ul><li>OpenOneRec-1.7B、束宽 128、输入 1,024 token 时，端到端由原生 vLLM 的 244.7 ms 降至 59.1 ms；带定制算子的 vLLM 为 59.9 ms。</li><li>束宽 512、输入 1,024 token 时，后两步注意力算子耗时由 114.484 ms 降至 9.790 ms。带定制算子的版本为 7.442 ms，但算子最快与端到端最快并非同一比较。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>如果服务也是固定几步、宽束和长前缀，可先拆分主机同步与设备计算，确认瓶颈后再决定是否投入定制算子。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>结果基于 OpenOneRec 与昇腾工作负载，收益会随束宽、输入长度和图可复用程度改变。</li></ul></article><article class="paper" id="paper-2611.22163" data-search="Cluster-Guided Decoding with Trust-Region Constraints for Personalized Recommendation CG2R：商品簇先验如何参与下一件商品打分 Amazon Amazon 序列推荐 语义聚类 候选打分">
+<div class="paper-meta"><span class="pill">Amazon</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>CG2R：商品簇先验如何参与下一件商品打分</h3><a class="original" href="https://arxiv.org/abs/2611.22163v1" target="_blank" rel="noopener noreferrer">Cluster-Guided Decoding with Trust-Region Constraints for Personalized Recommendation ↗</a>
+
+<p class="muted">Gezheng Wen、Chao Shen、Raviteja Anantha 的机构标为 Amazon。 · 论文更新于 2026-11-17（UTC）</p><p class="reason">适合试验类目偏好先验的召回工程师，重点看软加权与候选硬过滤的差别。</p>
+<h4>研究问题</h4><p>只凭预测的下一件商品向量匹配目录，可能忽视某个用户经常探索的品类。先硬选品类虽然更容易控制候选，却可能在召回阶段淘汰有用的跨品类商品。</p><h4>核心方法</h4><p>先为商品学习语义簇层级，再将商品内容与簇信息融合成一个商品向量。序列模型读取用户点击历史，生成下一件商品的预测向量。</p><p>并行估计用户对各簇的偏好，具体历史再对它作调整。训练和推理都把商品向量匹配分与簇先验的对数加权相加。层级训练后固定，序列模型、融合表示和先验强度继续训练。论文实验把额外的分布约束权重设为零，实际起作用的是评分中的软先验。</p>
+<h4>实验结果</h4><ul><li>Google Local Washington 的 Recall@10 从最强基线 PMF 的 0.0696 到 0.1577，Steam 上从 0.2962 到 0.4067。两组属于不同密度和目录规模的公开数据。</li><li>单 GPU 离线请求平均 1.6–2.5 ms，而报告的经典或神经基线范围为 0.14–2.55 ms。该法在这些条件下并非总是更快。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>若簇权重能帮助首阶段，小规模可先验证软加分，按长尾品类测覆盖。待确认收益后再测试对簇的硬剪枝。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>公开基准过滤了少于五次交互的用户和商品，不能直接外推到真实全冷启动。更大规模的硬簇剪枝未做实证。</li></ul></article><article class="paper" id="paper-2611.21920" data-search="KVUse: Reusable-KV User Memory for Efficient LLM Recommenders KVUse：把用户画像的注意力缓存直接复用于排序 Meta Meta 推荐推理 KV 缓存 用户记忆">
+<div class="paper-meta"><span class="pill">Meta</span><span>阅读优先级 ★★★★★</span></div>
+<h3>KVUse：把用户画像的注意力缓存直接复用于排序</h3><a class="original" href="https://arxiv.org/abs/2611.21920v1" target="_blank" rel="noopener noreferrer">KVUse: Reusable-KV User Memory for Efficient LLM Recommenders ↗</a>
+
+<p class="muted">Xin Guo、Qiang Zhang 等署名 Meta Recommendation Systems。 · 论文更新于 2026-11-16（UTC）</p><p class="reason">适合正在部署画像驱动的大模型排序团队，重点看缓存怎么写、何时能重叠传输。</p>
+<h4>研究问题</h4><p>候选排序会反复读同一用户画像和商品描述。普通前缀缓存无法复用所有片段，直接拼接原始 KV 也会把片段写入时的位置和上下文一起带进新请求，损害排序。</p><h4>核心方法</h4><p>先用原模型完整重算，得到画像更新和候选评分的教师信号。基座始终冻结，分别训练写画像和写商品描述的低秩适配器，学习写出能被直接复用的注意力键值缓存。</p><p>更新链路生成新画像时同时写下新缓存，商品缓存可预先生成。评分链路关闭适配器，从存储取出两类缓存，只计算没有覆盖的 token。已知下一批请求时，可以把下一批缓存传输与当前计算重叠。</p>
+<h4>实验结果</h4><ul><li>Amazon Books 的四轮画像更新中，KVUse 相对完整重算的 NDCG@10 差值为 −0.0195 至 +0.0246，均未达到统计显著。直接拼接原 KV 的排序损失更明显。</li><li>Amazon Books 的饱和排序吞吐从 31.99 到 126.72 用户/秒，约 3.96 倍；无法重叠传输时约 3.40 倍。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>在请求可以提前排队、候选反复共享画像的链路上，可按写入、传输、评分分开测量，同时记录长画像和缓存失效时的尾延迟。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>缓存成本显著高于文本，Llama-3.1-8B-Instruct 在 bfloat16 下约 128 KiB/token。Amazon Books 写入器在 Goodreads 与 Yelp 迁移时出现明显下降。</li></ul></article><article class="paper" id="paper-2611.21441" data-search="Learning to Reason with Predictive Gains for Generative Recommendation GainReason：用下一件商品预测检验每句推荐推理 Alibaba Alibaba 生成式推荐 过程奖励 强化学习">
+<div class="paper-meta"><span class="pill">Alibaba</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>GainReason：用下一件商品预测检验每句推荐推理</h3><a class="original" href="https://arxiv.org/abs/2611.21441v1" target="_blank" rel="noopener noreferrer">Learning to Reason with Predictive Gains for Generative Recommendation ↗</a>
+
+<p class="muted">Lei Kou 等署名 Alibaba International Digital Commercial Group。 · 论文更新于 2026-11-16（UTC）</p><p class="reason">适合评估推理能否改善推荐结果的团队，重点区分跨方法对比和同模型关闭推理的对比。</p>
+<h4>研究问题</h4><p>生成式推荐可以先写用户偏好分析，再逐段输出目标商品的语义编号。只按推理格式或最后命中给奖励，很难知道哪句话补充了有用的信息，也难判断后面的商品预测有没有读这段推理。</p><h4>核心方法</h4><p>先让模型学会编号和基本推理格式。强化学习时按句号等标点切分采样推理，逐句比较加入前后正确商品编号的对数概率。模型获得的分是概率变化，而非句子的写法。训练用受约束的注意力复用前缀计算，将每句得分分配给本句 token。</p><p>再给累计增益接近零的推理增加一个预测训练目标，促使模型把已有推理用到输出商品编号。推理上线没有已知正确答案，因此只生成推理并预测编号，不计算训练奖励。</p>
+<h4>实验结果</h4><ul><li>相对每个数据集的最强基线，工业、Movies、Yelp 三组的平均相对增益为 6.2%、2.7%、6.1%。工业组的 NDCG@5 相对提升 7.7%。</li><li>在 GainReason 内打开推理，相比关闭推理，三个数据集的平均相对增益为 5.8%、2.3%、7.4%。对照中的规则奖励推理在 Movies 上反而会掉点。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>如果现有推理看起来合理但排序不涨，可先比较同一模型在有无推理时对目标商品的评分，再判断问题出在生成的内容还是预测没有利用内容。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>过程监督依赖训练集中已知的下一次交互，并随历史和编号表定义变化。自由文本推理仍占输出预算，离线改善需要另测在线成本。</li></ul></article><article class="paper" id="paper-2611.20448" data-search="IntentFlow: An Intent-Driven Real-Time Multimodal Search System with Image-Text Queries at Xiaohongshu IntentFlow：小红书图文搜索先识别用户想找什么 Xiaohongshu Xiaohongshu 多模态搜索 意图识别 线上 A/B">
+<div class="paper-meta"><span class="pill">Xiaohongshu</span><span>阅读优先级 ★★★★★</span></div>
+<h3>IntentFlow：小红书图文搜索先识别用户想找什么</h3><a class="original" href="https://arxiv.org/abs/2611.20448v1" target="_blank" rel="noopener noreferrer">IntentFlow: An Intent-Driven Real-Time Multimodal Search System with Image-Text Queries at Xiaohongshu ↗</a>
+
+<p class="muted">固定版 main.tex 的 reportaffiliation 为 Xiaohongshu Inc，通讯作者为 Cheng Chen。 · 论文更新于 2026-11-16（UTC）</p><p class="reason">适合有成熟图像索引的搜索团队，重点看如何保持文档索引固定并调整查询侧。</p>
+<h4>研究问题</h4><p>在 UGC 搜索中，用户圈出一件衣服加文字，可能在找同款、搭配方法或类似风格。只按图片相似度召回，容易把不同目的的结果混在前排。</p><h4>核心方法</h4><p>先把搜索目的划分为两级，按每类目的制定哪些候选完全满足、部分满足或不相关的判断标准。用这些分级样本训练多模态向量，已建好的文档索引保持固定，后续只调整查询侧以进入现有向量空间。</p><p>线上并行运行查询编码和意图识别，从固定索引找候选并校正局部相似度。重排读取预测意图、圈选区域及图文证据，按满足程度分档，同一档内由原有线上策略继续排序。</p>
+<h4>实验结果</h4><ul><li>同一用户级 A/B 对照下，意图加重排让前四结果查询点击率相对提升 21.65%；再加入多模态召回后，前四结果查询点击率提升 28.17%，整体查询点击率提升 18.96%。</li><li>线上监控的端到端 P50/P90 为 1,070/1,340 ms，重排为 342/468 ms。设备两条查询处理分支并行，因此单组件耗时不能直接相加。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>图像入口若已有大规模索引，可先固定文档向量试验查询侧适配，并按“找同款”和“找方法”等意图单独看首屏点击。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>A/B 衡量的是小红书这条图文搜索链路的点击与停留。识别和重排联合实验，没有独立识别器的线上效果。</li></ul></article><article class="paper" id="paper-2611.19742" data-search="Exploration of Reinforcement Learning in Generative Recommendation Models GBPO：给生成式推荐的强化学习更新加上梯度边界 Kuaishou Kuaishou 生成式推荐 强化学习 训练稳定性">
+<div class="paper-meta"><span class="pill">Kuaishou</span><span>阅读优先级 ★★★★☆</span></div>
+<h3>GBPO：给生成式推荐的强化学习更新加上梯度边界</h3><a class="original" href="https://arxiv.org/abs/2611.19742v1" target="_blank" rel="noopener noreferrer">Exploration of Reinforcement Learning in Generative Recommendation Models ↗</a>
+
+<p class="muted">Shiyao Wang、Honghui Bao 等署名 Kuaishou。 · 论文更新于 2026-11-15（UTC）</p><p class="reason">适合训练生成式召回策略的团队，重点看梯度稳定性与组内奖励质量的关系。</p>
+<h4>研究问题</h4><p>在已有监督模型上做强化学习时，候选商品的奖励差距会经由策略比率传到每个编号 token。低概率候选的分母很小，容易放大某些更新；硬截断又可能让该继续调整的 token 失去梯度。</p><h4>核心方法</h4><p>用参考策略在合法编号空间生成一组候选，由冻结的奖励模型评分，再把组内相对得分映射为正负优势。将优势符号当成提高或降低所选 token 概率的目标，优势大小决定权重。</p><p>对正、负优势分别设置概率分母的下界，把更新幅值约束在对应的二元交叉熵梯度范围内，同时保留方向。训练更新生成模型；奖励模型和参考采样结果在这一步不参与反向传播。</p>
+<h4>实验结果</h4><ul><li>TIGER 加入 GBPO 后，相对监督微调版在 Beauty、Toys、Sports 的 HR@10 分别增加 0.71、2.21、1.23 个百分点。</li><li>使用单独训练的 SASRec 类教师和二值奖励时，GBPO 在 12 项指标中领跑 9 项，未触发该试验的坍塌或非有限损失条件。Beauty 上另有后训练方法在部分指标更好。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>如果候选更新不稳定，可同时记录组内奖励分布、候选多样性和实际梯度，以及同等训练预算下与监督微调的差距。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>要多次采样、评分和更新；组内优势的质量仍依赖奖励模型、束搜索限制和采样温度。</li></ul></article><article class="paper" id="paper-2611.19110" data-search="CLEAR: Legible and Steerable Recommendation via Grounded Natural-Language Interests CLEAR：用户改了兴趣，推荐系统如何真正响应 Meta Meta 表征与排序 用户控制 线上推荐">
+<div class="paper-meta"><span class="pill">Meta</span><span>阅读优先级 ★★★★★</span></div>
+<h3>CLEAR：用户改了兴趣，推荐系统如何真正响应</h3><a class="original" href="https://arxiv.org/abs/2611.19110v1" target="_blank" rel="noopener noreferrer">CLEAR: Legible and Steerable Recommendation via Grounded Natural-Language Interests ↗</a>
+
+<p class="muted">Qi Guo、Reza Mirghaderi、Iordanis Fostiropoulos 等署名 Meta。 · 论文更新于 2026-11-14（UTC）</p><p class="reason">适合设计可编辑兴趣产品的团队，重点看供给、排序与曝光如何共用兴趣标识。</p>
+<h4>研究问题</h4><p>推荐模型通常把兴趣存在向量里。界面即使列出了推断的兴趣，如果用户删改的对象与召回和曝光统计无关，用户也很难验证自己的修改是否被采纳。</p><h4>核心方法</h4><p>从行为历史生成可展示的自然语言兴趣，把能支撑某项推断的历史事件与该兴趣关联。系统为每个兴趣保留可供服务使用的统一标识，用户显式修改时优先采用其修改。</p><p>新兴趣可以先从专门的内容供给取候选，经主题匹配后参与主排序。系统按兴趣归因展示，并为每个用户的每个兴趣实时统计近期曝光；匹配内容够多时抑制额外分发，供给不足时补召回。用户的真实反馈仍进入常规训练链路。</p>
+<h4>实验结果</h4><ul><li>离线前十兴趣 F1 从 Gemini 2.5 Pro 的 0.3633 到专门 3B 模型的 0.3967，但全画像 F1 为 0.5493，低于 Gemini 的 0.7051。</li><li>Instagram 生产观察中，平均用户新声明的兴趣有 79.6% 当天收到匹配视频。独立多模态评估器判定抽样的兴趣归因曝光中 87.2% 符合主题。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>做可编辑兴趣时，可以先让展示、内容供给和反馈归因共用兴趣标识，再用编辑当天的匹配覆盖和重复曝光共同验收。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>当天响应率是部署观测值；主题符合率来自独立评估器。两项数字均不能单独证明用户满意度因编辑而提高。</li></ul></article><article class="paper" id="paper-2611.19074" data-search="TokenFormer V2: Breaking the Resolution-Complexity Dilemma in Unified Recommendation TokenFormer V2：长行为序列分组计算，预测时仍读逐条行为 Tencent Tencent 广告排序 长行为建模 线上 A/B">
+<div class="paper-meta"><span class="pill">Tencent</span><span>阅读优先级 ★★★★★</span></div>
+<h3>TokenFormer V2：长行为序列分组计算，预测时仍读逐条行为</h3><a class="original" href="https://arxiv.org/abs/2611.19074v1" target="_blank" rel="noopener noreferrer">TokenFormer V2: Breaking the Resolution-Complexity Dilemma in Unified Recommendation ↗</a>
+
+<p class="muted">固定版 main.tex 的 authorpanel 标注 Tencent Inc.，并列出腾讯作者邮箱。 · 论文更新于 2026-11-14（UTC）</p><p class="reason">适合受长历史算量限制的广告排序团队，重点看分组交互如何保留原始行为粒度。</p>
+<h4>研究问题</h4><p>广告转化排序要同时处理密集行为历史和用户、商品等非序列字段。全局注意力的开销随历史变长而快速增长；只保留每段历史的汇总又可能丢掉关键的单次浏览或点击。</p><h4>核心方法</h4><p>把历史按位置分成连续小组，组内让行为和非序列字段交互。随着层数推进，合并相邻组，让远距离行为有更大的交互范围。</p><p>每层用少量中继和读出 token 同步跨组信息，也把其他组的行为上下文送回非序列字段。读出层仍可访问逐条编码的行为，不必把整段历史先压成一个摘要。</p>
+<h4>实验结果</h4><ul><li>在 TAAC 2026 对照中，论文报告对比的八种主干中 AUC 最高、log loss 最低，前向浮点运算量约为 MixFormer 的 19.5%。这是前向算量，不能等同于线上请求缩短比例。</li><li>微信视频号广告的 pCVR 排序 A/B 中，论文报告 GMV 相对提升 2.33%，线上 AUC 提升 0.16%。两组共享特征输入、训练流、出价策略和服务预算。</li></ul>
+<div class="insight"><h4>工程启发 <small>分析推断</small></h4><ul><li>有长行为但线上预算紧时，可用相同特征验证分组交互与完整历史读出，并给长历史用户单看收益与尾延迟。</li></ul></div>
+<h4>局限与阅读提醒</h4><ul><li>线上数据来自视频号广告的特定应用与预算，公开基准的计算量节省不能直接外推为通用延迟。</li></ul></article></section><section id="topic"><h2><span class="no">04</span>本期专题</h2><div class="topic"><h3>哪些用户意图值得进入线上排序约束</h3><p>同样是加入一个“用户想要什么”的信号，IntentFlow 用查询表达的即时目标划分相关性，CLEAR 用用户明确编辑的长期兴趣调节供给和曝光，COTTI 则用已知活动阶段修正转化分数。三者的信号有效期和控制对象各不相同。</p><p>如果产品需要支持可编辑兴趣，可以从“编辑当天能否收到匹配内容、是否集中在少数主题”两项验证。对一次性图文搜索，按意图组看首屏点击和召回更合适。对大促排序则可同时观察转化、跨品类召回和时延，把活动结束后的校准表现列入复盘。这些是基于本期论文的工程推断。</p><div class="sources"><a href="#paper-2611.20448">IntentFlow：小红书图文搜索先识别用户想找什么</a> · <a href="#paper-2611.19110">CLEAR：用户改了兴趣，推荐系统如何真正响应</a> · <a href="#paper-2611.22597">COTTI：让转化率模型适应促销前后的人群变化</a></div></div></section></main>
+<script>const search=document.querySelector('#search'); if(search) search.addEventListener('input',()=>{
+ const q=search.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLowerCase().includes(q)});
+});</script></body></html>
